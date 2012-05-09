@@ -1,7 +1,7 @@
 <project xmlns="http://expath.org/ns/project"
          name="http://w3.org/2002/xmlspec/"
          abbrev="xmlspec"
-         version="1.13">
+         version="1.13.0">
 
    <title>The W3C XMLSpec format</title>
 
@@ -10,6 +10,10 @@
    <xslt>
       <import-uri>http://w3.org/2002/xmlspec/xmlspec.xsl</import-uri>
       <file>xmlspec.xsl</file>
+   </xslt>
+   <xslt>
+      <import-uri>http://w3.org/2002/xmlspec/diffspec.xsl</import-uri>
+      <file>diffspec.xsl</file>
    </xslt>
    <xsd>
       <import-uri>http://w3.org/2002/xmlspec/xmlspec.xsd</import-uri>
