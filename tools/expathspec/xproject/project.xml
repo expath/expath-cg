@@ -7,6 +7,8 @@
 
    <home>https://github.com/fgeorges/expath-cg/tree/master/tools/expathspec/</home>
 
+   <dependency package="http://w3.org/2002/xmlspec/"/>
+
    <rnc>
       <import-uri>http://expath.org/ns/xmlspec/xmlspec.rnc</import-uri>
       <file>xmlspec.rnc</file>
