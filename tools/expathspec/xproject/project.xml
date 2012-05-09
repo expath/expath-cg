@@ -1,0 +1,15 @@
+<project xmlns="http://expath.org/ns/project"
+         name="http://expath.org/lib/xmlspec"
+         abbrev="expathspec"
+         version="1.0.0">
+
+   <title>The EXPathSpec format, an extension of W3C XMLSpec</title>
+
+   <home>https://github.com/fgeorges/expath-cg/tree/master/tools/expathspec/</home>
+
+   <rnc>
+      <import-uri>http://expath.org/ns/xmlspec/xmlspec.rnc</import-uri>
+      <file>xmlspec.rnc</file>
+   </rnc>
+
+</project>
