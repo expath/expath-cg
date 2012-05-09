@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Packaging System -- Review Version</title><link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/TR/base.css" /><style type="text/css">
+code           { font-family: monospace; }
+
+div.constraint,
+div.issue,
+div.note,
+div.notice     { margin-left: 2em; }
+
+ol.enumar      { list-style-type: decimal; }
+ol.enumla      { list-style-type: lower-alpha; }
+ol.enumlr      { list-style-type: lower-roman; }
+ol.enumua      { list-style-type: upper-alpha; }
+ol.enumur      { list-style-type: upper-roman; }
+
+
+div.exampleInner pre { margin-left: 1em;
+                       margin-top: 0em; margin-bottom: 0em}
+div.exampleOuter {border: 4px double gray;
+                  margin: 0em; padding: 0em}
+div.exampleInner { background-color: #d5dee3;
+                   border-top-width: 4px;
+                   border-top-style: double;
+                   border-top-color: #d3d3d3;
+                   border-bottom-width: 4px;
+                   border-bottom-style: double;
+                   border-bottom-color: #d3d3d3;
+                   padding: 4px; margin: 0em }
+div.exampleWrapper { margin: 4px }
+div.exampleHeader { font-weight: bold;
+                    margin: 4px}
+
+            div.diff-add  { background-color: #FFFF99; }
+            div.diff-del  { text-decoration: line-through; }
+            div.diff-chg  { background-color: #99FF99; }
+            div.diff-off  {  }
+
+            span.diff-add { background-color: #FFFF99; }
+            span.diff-del { text-decoration: line-through; }
+            span.diff-chg { background-color: #99FF99; }
+            span.diff-off {  }
+
+            td.diff-add   { background-color: #FFFF99; }
+            td.diff-del   { text-decoration: line-through }
+            td.diff-chg   { background-color: #99FF99; }
+            td.diff-off   {  }
+         
+      
+      code.function { font-weight: bold; }
+      code.type { font-style: italic; }
+      body {
+        background-image: url(http://expath.org/images/logo-candidate.png);
+      }
+   </style></head><body><div><p>The presentation of this document has been augmented to
+            identify changes from a previous version. Three kinds of changes
+            are highlighted: <span class="diff-add">new, added text</span>,
+            <span class="diff-chg">changed text</span>, and
+            <span class="diff-del">deleted text</span>.</p><hr /></div><p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p><div class="head">
+<h1><a name="title" id="title"></a>Packaging System</h1>
+<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 9 May 2012</h2><dl><dt>This version:</dt><dd>
+         <span class="diff-chg"><a href="http://expath.org/spec/pkg/20120509">http://expath.org/spec/pkg/20120509</a></span>
+      </dd><dt>Latest version:</dt><dd>
+         <a href="http://expath.org/spec/pkg">http://expath.org/spec/pkg</a>
+      </dd><dt>Previous versions:</dt><dd>
+         <span class="diff-add"><a href="http://expath.org/spec/pkg/20101111">http://expath.org/spec/pkg/20101111</a></span><br />
+         <a href="http://expath.org/spec/pkg/20100107">http://expath.org/spec/pkg/20100107</a><br />
+         <a href="http://expath.org/spec/pkg/20091118">http://expath.org/spec/pkg/20091118</a><br />
+         <a href="http://expath.org/spec/pkg/20090901">http://expath.org/spec/pkg/20090901</a><br />
+      </dd><dt>Editor:</dt><dd>Florent Georges, <a href="http://h2oconsulting.be/">H2O Consulting</a></dd></dl><p>This document is also available in these non-normative formats: <span class="diff-chg"><a href="http://expath.org/spec/pkg/20120509.xml">XML</a></span> and <span class="diff-chg"><a href="http://expath.org/spec/pkg/20120509/diff">Revision markup</a></span>.</p><div class="diff-add"><p class="copyright">Copyright © 2009-2012 Florent Georges, published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+               License Agreement (CLA)</a>. A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is
+            available.</p></div><div class="diff-add"><p class="copyright">This specification was published by the <a href="http://www.w3.org/community/expath/">EXPath Community Group</a>. It is not a
+            W3C Standard nor is it on the W3C Standards Track. Please note that under the <a href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+               License Agreement (CLA)</a> there is a limited opt-out and other conditions apply.
+            Learn more about <a href="http://www.w3.org/community/">W3C Community and Business
+               Groups</a>.</p></div></div><hr /><div>
+<h2><a name="abstract" id="abstract"></a>Abstract</h2><p>This proposal defines a packaging system for various core XML technologies: XSLT,
+            XQuery, and XProc. The goal is to define it in a way generic enough so to adapt it to
+            other technologies in the future (such as XML Schema, XForms, etc.) using the same
+            framework. Besides enabling the delivery of libraries written in standard XSLT, XQuery
+            and XProc, it provides support for extensions specific to some processors, as well as
+            enabling new processors to be supported by using the same framework.</p></div><div class="toc">
+<h2><a name="contents" id="contents"></a>Table of Contents</h2><p class="toc">1 <a href="#intro">Introduction</a><br />
+2 <a href="#concepts">Concepts</a><br />
+3 <a href="#descriptor">Package descriptor</a><br />
+    3.1 <a href="#structure">Overall structure</a><br />
+    3.2 <a href="#components">Components</a><br />
+        3.2.1 <a href="#xslt">XSLT</a><br />
+        3.2.2 <a href="#xquery">XQuery</a><br />
+        3.2.3 <a href="#xproc">XProc</a><br />
+        3.2.4 <a href="#xsd">XML Schema</a><br />
+        3.2.5 <a href="#relaxing">RelaxNG</a><br />
+        3.2.6 <a href="#schematron">Schematron</a><br />
+        3.2.7 <a href="#nvdl">NVDL</a><br />
+        3.2.8 <a href="#dtd">DTD</a><br />
+        3.2.9 <a href="#resource">Resource</a><br />
+    3.3 <a href="#notsupported">Not supported file kinds</a><br />
+4 <a href="#behaviour">DEPRECATED: Processor behaviour</a><br />
+    4.1 <a href="#pipelines">XProc pipelines</a><br />
+5 <a href="#versioning">Versioning and dependency management</a><br />
+    5.1 <a href="#pkgdep">Package dependency</a><br />
+    5.2 <a href="#procdep">Processor dependency</a><br />
+    5.3 <a href="#enforcement">Dependency enforcement</a><br />
+6 <a href="#resolution">URI resolution</a><br />
+7 <a href="#ondisk">On-disk repository layout</a><br />
+8 <a href="#example">Example</a><br />
+9 <a href="#extensibility">Extensibility</a><br />
+</p>
+<h3><a name="appendices" id="appendices"></a>Appendices</h3><p class="toc">A <a href="#expath-pkg.xsd">Package descriptor schema</a><br />
+B <a href="#packages.xsd">Package list schema</a><br />
+C <a href="#references">References</a><br />
+</p></div><hr /><div class="body"><div class="div1">
+<h2><a name="intro" id="intro"></a>1 Introduction</h2><p>XSLT, XQuery and XProc are amazing programming languages. But they lack a large choice
+            of libraries, and when such libraries do exist, this is a challenge to install. There is
+            no automatic install process, the rules are different for each processor, library
+            authors do not follow the same rules regarding the info they provide, the cataloging,
+            the way they reference third-party libraries, etc.</p><p>All those problems (well, most of them) can be addressed by a packaging system that
+            is broadly adopted by processor vendors and library authors. The cornerstone of
+            such a system is the packaging format: a description of the information to be provided
+            by the library authors and how to provide and structure them.</p></div><div class="div1">
+<h2><a name="concepts" id="concepts"></a>2 Concepts</h2><p>A <b>package</b> is a set of files fulfilling a common purpose. A package could for
+            instance provide XML schemas for a particular document type, alongside a set of XSLT
+            stylesheets to format the same document type to HTML or XSL-FO. Or a package can simply
+            provide an XQuery library module containing a set of functions (directly supporting the
+            notion of <em>library</em>). Those files composing a package (stylesheets, schemas,
+            pipelines, queries, etc.) are called its <b>components</b>.</p><p>A package has a unique name (a URI) as well as a convenient short name, also known as
+            its <b>abbrev</b> (an NCName), used in contexts where a URI is not suitable (or simply
+            not convenient) and where the uniqueness of the name is not necessary. A package has a
+            set of dependencies too. A dependency is another package, identified by its full name, a
+            package depends on.</p><p>A package provides all those infos as well as its components as a single file. This is
+            then very convenient to organize packages, publish them, give them to a processor to
+            install them, etc.</p><p>A <b>component</b> can be of one out of several types: an XSLT stylesheet, <span class="diff-del"><span>an XML schema, a RELAX NG schema, an XProc pipeline, but also any other
+               type a particular implementation chose to support. It is identified by a <b>public
+                  URI</b>.</span></span>
+            <span class="diff-add"><span>an XQuery main or library module, an XProc pipeline, an XML schema, a
+               RELAX NG schema (XML or compact syntax), a Schematron schema, an NVDL schema, or a
+               plain resource file. An implementation can add support for additional types. A
+               component is identified by a <b>public URI</b>.</span></span> This public URI is used to
+            access the component from the outside of the package. Each component type has its own
+               <b>URI space</b>, within which a component's URI has to be unique (so two different
+            components can have the same public URI if they are of different types, but this is not
+            recommended).</p><p>All the components composing the package, alongside an additional <b>package
+               descriptor</b>, are used to create a ZIP file. This file <em>is</em> the
+            physical package, and can be used to distribute the package to the users. The package
+            descriptor is a plain XML file, named <code>expath-pkg.xml</code> at the root of the ZIP
+            file, and containing information about the package (like its name and its version
+            number) and about the components it provides and how to reference them.</p></div><div class="div1">
+<h2><a name="descriptor" id="descriptor"></a>3 Package descriptor</h2><p>The package descriptor is an XML file, named <code>expath-pkg.xml</code> and located at
+            the root of the ZIP file. It describe the whole package, and all of its components.
+            Alongside this descriptor, the root of the ZIP file contains a directory named <span class="diff-del"><span>after the module abbrev, which contains</span></span>
+            <span class="diff-add"><span><code>content</code>, containing</span></span> the components and any
+            other file the package needs. All the relative URIs used to identify components are
+            relative to the <span class="diff-del"><span>package</span></span>
+            <span class="diff-add"><span>content</span></span> directory. See <a href="#expath-pkg.xsd"><b>A Package descriptor schema</b></a> for a
+            normative schema.</p><div class="note"><p class="prefix"><b>Note:</b></p><p>Because this package format is designed to be extensible and used as a building block
+               by other specifications, the ZIP file can contain another entries at top-level. They
+               are just ignored when the package is deployed as a simple package following this
+               specification.</p></div><div class="div2">
+<h3><a name="structure" id="structure"></a>3.1 Overall structure</h3><p>All the elements in the package descriptor are defined in the namespace
+                  <code>http://expath.org/ns/pkg</code>. All the elements defined in this
+               specification or used in samples and in text are in this namespace, even if no prefix
+               is used. The root element is <code>package</code>, and contains, besides some naming
+               and versionning attributes, a title, an optional home URI, an optional list of
+               dependencies on other packages and on processors, and a list of components:</p><div class="exampleInner"><pre>
+&lt;package name = uri
+         abbrev = string
+         version = string
+         spec = string&gt;
+   title,
+   home?,
+   dependency*,
+   (xslt
+   |xquery
+   |xproc
+   |xsd
+   |rng
+   |rnc)*
+&lt;/package&gt;</pre></div><p><code>name</code> is the name of the package. A package is named using an <span class="diff-del"><span>absolute URI, except any <code>file:</code> scheme URIs</span></span>
+               <span class="diff-add"><span>IRI, as defined by <a href="#rfc3987">[RFC 3987]</a>, excepted any IRI using
+                  the <code>file:</code> scheme</span></span> (most frequent choices are
+                  <code>http:</code> and <code>urn:</code> scheme URIs). <span class="diff-add"><span>Note
+                  that the definition of IRI excludes relative references.</span></span>
+               <code>abbrev</code> is the package abbrev, and <code>version</code> its version.
+                  <span class="diff-del"><span>The package directory must have the exact same name as the
+                  abbrev.</span></span>
+               <code>spec</code> is the version of the packaging specification the package conforms
+               to. The current specification requires the package to use the spec number
+                  <code>1.0</code> (no forward compatibility rules are defined, a processor
+               conforming to this specification has to generate an error if the spec number is
+               different than the string <code>1.0</code>). The package then contains a title, which
+               is a plain string, intended to be a simple description of the package for humans, and
+               a home which is a URI to find more informations about the package. It then contains
+               the list of its dependencies and the list of its components.</p><div class="exampleInner"><pre>
+&lt;dependency package = uri
+            processor = string
+            versions = string
+            semver = string
+            semver-min = string
+            semver-max = string&gt;
+   <em>empty</em>
+&lt;/dependency&gt;</pre></div><p>Dependencies are set by using the name of other packages this package depends on. The
+               dependency can also define the version of the package or the set of processors it
+               depends on by using one of the few available strategies; see <a href="#versioning"><b>5 Versioning and dependency management</b></a> for a complete description of them.</p></div><div class="div2">
+<h3><a name="components" id="components"></a>3.2 Components</h3><p>This section describes the standard component kinds supported by this specification,
+               and how they contribute to the package descriptor document type. <span class="diff-add"><span>Every component has the same basic information: it associates a public URI to a
+                  specific file within the content directory. The <code>file</code> element contains
+                  a path, relative to the package content directory. Both elements in a component
+                  are of type <code>anyURI</code>.</span></span></p><div class="div3">
+<h4><a name="xslt" id="xslt"></a>3.2.1 XSLT</h4><p>An XSLT file is associated a <em>public import URI</em>. This is the URI to use
+                  in an XSLT import instruction (aka <code>xsl:import</code>) to import the XSLT
+                  file provided in the package. This file is configured with the element
+                     <code>xslt</code>.</p><div class="exampleInner"><pre>
+&lt;xslt&gt;
+   import-uri,
+   file
+&lt;/xslt&gt;</pre></div><div class="diff-del"><p>The element <code>file</code> contains the path to the file within the
+                  package structure, relative to the package directory. Both elements
+                     <code>import-uri</code> and <code>file</code> are of type
+                  <code>anyURI</code>.</p></div></div><div class="div3">
+<h4><a name="xquery" id="xquery"></a>3.2.2 XQuery</h4><p>An XQuery library module is referenced by its namespace URI. Thus the
+                     <code>xquery</code> element associates a namespace URI to an XQuery file. An
+                  importing module just need to use an import statement of the form <code>import
+                     module namespace xx = "&lt;namespace-uri&gt;";</code>.</p><p>An XQuery main module is associated a public URI. Usually an XQuery package will
+                  provide functions through library modules, but in some cases one can want to
+                  provide main modules as well.</p><div class="exampleInner"><pre>
+&lt;xquery&gt;
+   (namespace
+   |import-uri),
+   file
+&lt;/xquery&gt;</pre></div><p>Note that there is no way to set any location hint (as the <code>at</code> clause
+                  in the import statement.) To use this packaging system, an XQuery library module
+                  must be referenced by its target namespace.</p></div><div class="div3">
+<h4><a name="xproc" id="xproc"></a>3.2.3 XProc</h4><p>An XProc pipeline, like an XSLT stylesheet, is associated a <em>public import
+                     URI</em>, aimed to be used in an XProc <code>p:import</code> statement.</p><div class="exampleInner"><pre>
+&lt;xproc&gt;
+   import-uri,
+   file
+&lt;/xproc&gt;</pre></div></div><div class="div3">
+<h4><a name="xsd" id="xsd"></a>3.2.4 XML Schema</h4><p>An XML schema can be imported using its target namespace. It is not possible
+                  to set several files as several sources for the schema. If the schema is
+                  spread over multiple files, there must be one top-level file that includes the
+                  other files.</p><div class="exampleInner"><pre>
+&lt;xsd&gt;
+   (namespace
+   |import-uri),
+   file
+&lt;/xsd&gt;</pre></div><p>The <code>import-uri</code> can be used to define a schema location for this
+                  schema component. This can be useful for schema without target namespace, or for
+                  some specific usages, like when using <code>xs:redefine</code>.</p></div><div class="div3">
+<h4><a name="relaxing" id="relaxing"></a>3.2.5 RelaxNG</h4><p>A RelaxNG schema, like an XSLT stylesheet, is associated a public import URI,
+                  aimed to be used in an <em>import</em> statement (either the
+                     <em>include</em> element for an RNG schema or an <em>import</em>
+                  directive for an RNC schema.)</p><div class="exampleInner"><pre>
+&lt;rng&gt;
+   import-uri,
+   file
+&lt;/rng&gt;
+
+&lt;rnc&gt;
+   import-uri,
+   file
+&lt;/rnc&gt;</pre></div></div><div class="div3">
+<h4><a name="schematron" id="schematron"></a>3.2.6 Schematron</h4><p>A Schematron schema is associated a public URI.</p><div class="exampleInner"><pre>
+&lt;schematron&gt;
+   import-uri,
+   file
+&lt;/schematron&gt;</pre></div></div><div class="div3">
+<h4><a name="nvdl" id="nvdl"></a>3.2.7 NVDL</h4><p>An NVDL script is associated a public URI.</p><div class="exampleInner"><pre>
+&lt;nvdl&gt;
+   import-uri,
+   file
+&lt;/nvdl&gt;</pre></div></div><div class="diff-add"><div class="div3">
+<h4><a name="dtd" id="dtd"></a>3.2.8 DTD</h4><p>A DTD file is associated a public URI.</p><div class="exampleInner"><pre>
+&lt;dtd&gt;
+   public-id?,
+   system-id,
+   file
+&lt;/dtd&gt;</pre></div></div></div><div class="diff-add"><div class="div3">
+<h4><a name="resource" id="resource"></a>3.2.9 Resource</h4><p>A resource file is associated a public URI. This can be any kind of file. It has
+                  to be used in accordance to its content. For instance accessing a text file
+                  through <code>fn:unparsed-text()</code> is correct, while using
+                     <code>fn:doc()</code> is not (it will raise an error because it parses the
+                  content as XML).</p><div class="exampleInner"><pre>
+&lt;resource&gt;
+   public-uri,
+   file
+&lt;/resource&gt;</pre></div></div></div></div><div class="div2">
+<h3><a name="notsupported" id="notsupported"></a>3.3 Not supported file kinds</h3><p>Documentation (like result of XSLStyle or xqDoc) is not taken into account in the
+               packaging format, though that could be used by IDEs for instance to provide
+               documentation for functions in an editor with a live completion feature. Some support
+               for documentation can of course be added as a product-specific feature to the package
+               descriptor.</p></div></div><div class="div1">
+<h2><a name="behaviour" id="behaviour"></a>4 <span class="diff-add"><span>DEPRECATED:</span></span> Processor behaviour</h2><div class="diff-add"><div class="note"><p class="prefix"><b>Note:</b></p><p>This section is deprecated, either to remove it completely or to rewrite it (in case
+               some pieces should be kept here). Most of this material should be moved to the new
+               section "URI resolving").</p></div></div><p>A <b>processor</b> is any program that use packaged components. For instance, an XSLT
+            processor uses XSLT stylesheets (as well as XML schemas for an XSLT 2.0 SA processor),
+            an XML database can use XQuery modules, XSLT stylesheets or any other kind of component,
+            etc. But processors include also IDEs, editors, and any program that could want to use
+            packaged components and that supports this specification.</p><p>The installed package list is implementation-defined. Each implementation (for a
+            specific processor) can define its own way to install and remove packages, as long as it
+            properly documents it. A processor should use, when appropriate, the <b>on-disk
+               repository layout</b> as defined below.</p><p>Whether or not such a repository exists (or several repositories), the implementation
+            must define an installed packages list. How this is done is outside the scope of this
+            spec. An XML IDE could provide a way to select packages to activate for a specific
+            scenario, or a web server container could activate packages on a per-web application
+            basis.</p><p>When a reference to a file of a specific kind is done via an absolute URI, a processor
+            must look up for this URI in the corresponding URI space in the repository. How the
+            repository is set to the processor is implementation-defined (a processor can also use a
+            list of repositories, and enable or disable some libraries in any implementation-defined
+            way.)</p><p>The URI space to use is defined by the nature of the reference. An XSLT
+               <code>href</code> attribute on <code>xsl:import</code> will use the <code>xslt</code>
+            URI space, while it will use the <code>xsd</code> space for
+               <code>xsl:import-schema</code>.</p><div class="div2">
+<h3><a name="pipelines" id="pipelines"></a>4.1 XProc pipelines</h3><p>An XProc processor in particular has to pay great attention to the space it uses
+               regarding the step that is being evaluated. Any <code>xsl:import</code> instruction
+               encountered on the <code>stylesheet</code> port of the step <code>p:xslt</code> has
+               to be looked for in the <code>xslt</code> space (regardless if the stylesheet
+               document is inlined in the pipeline, computed, loaded from the file system or
+               retrieved from the Internet, or if the containing stylesheet has been imported
+               itself.)</p><p>The XProc elements <code>p:document</code> and <code>p:data</code>, as well as the
+               step <code>p:load</code> are handled specially. They can be used to access any kind
+               of resource, including but not limited to components in a repository. The user has to
+               tell explicitly the processor what kind of component is looked for by using the
+                  <code>pkg:kind</code> extension attribute. For instance, a stylesheet can be
+               loaded from a repository as input to the step <code>xslt</code> as following:</p><div class="exampleInner"><pre>
+&lt;p:xslt&gt;
+   &lt;p:input port="stylesheet"&gt;
+      &lt;p:document href="..." pkg:kind="xslt"/&gt;
+   &lt;/p:input&gt;
+   ...
+&lt;/p:xslt&gt;</pre></div></div></div><div class="div1">
+<h2><a name="versioning" id="versioning"></a>5 Versioning and dependency management</h2><p>Every package has a name (a URI) and a version number. It can also have a set of
+            dependencies on other packages, identified by their names. Each dependency can also
+            define a specific version (or range of versions) of the package it depends on. In
+            addition to depending on other packages, a package can also depend on a specific
+            processor (or on one among a set of specifc processors). This section uses the following
+            example package to illustrate those concepts:</p><div class="exampleInner"><pre>
+&lt;package name="http://example.org/app" version="1.0" ...&gt;
+
+   &lt;dependency package="http://external.org/library"/&gt;
+   &lt;dependency package="http://partner.com/lib-2" semver="2"/&gt;
+   &lt;dependency processor="saxon" version="pe"/&gt;
+
+   &lt;!-- rest of package descriptor skipped --&gt;
+   ...
+
+&lt;/package&gt;</pre></div><p>At first glance, we can see that this package (which is named
+               <code>http://example.org/app</code> and has the version number <code>1.0</code>),
+            depends on the package <code>http://external.org/library</code> (no specific version),
+            on the package <code>http://partner.com/lib-2</code> (version 2, whatever minor revision
+            numbers) and on the Saxon processor, Professional Edition. The rest of this section
+            explains in details the rules behind those dependencies, how to represent them, and
+            their semantics.</p><p>The remainder of this section will use the term <em>primary</em> for the current
+            package, described by this package decriptor, and <em>secondary</em> for a package
+            it depends on.</p><div class="div2">
+<h3><a name="pkgdep" id="pkgdep"></a>5.1 Package dependency</h3><p>A dependency on another package (usually called a <b>library</b>), is represented
+               by the element <code>dependency</code>, with an attribute <code>package</code> which
+               is the name of the library the package depends on. The dependency can be versioned;
+               that is, only some versions of the library are acceptable for this package.</p><p>The versionning attributes are <code>versions</code>, <code>semver</code>,
+                  <code>semver-min</code> and <code>semver-max</code>. They are all mutually
+               exclusive, except <code>semver-min</code> and <code>semver-max</code>. If no
+               versionning attribute is set on the dependency, any version of the secondary package,
+               identified by its name (the URI in the <code>package</code> attribute), is
+               acceptable. If the <code>versions</code> attribute is used, it defines the exact set
+               of acceptable versions for the secondary package, separated by spaces.</p><p>The other versionning attributes use <a href="#semver">[SemVer]</a> to define the set of
+               acceptable versions for the secondary package. We use only the syntax of SemVer, and
+               define in addition the format of a SemVer template as being either a SemVer version
+               number or a subpart of it (i.e. only the major version, or the major and the minor
+               versions, or the major, the minor and the patch version). For instance 1.9 is a valid
+               SemVer template (because it does not have any patch number), while 1.9.0 and 1.9.23
+               are actual version numbers compatible with this template.</p><p>If the <code>semver</code> attribute is used, the secondary package version must be
+               compatible with this template. If <code>semver-min</code> is used, the secondary
+               package version must be either compatible with that SemVer template, or greater than
+               it. If <code>semver-max</code> is used, the secondary package version must be either
+               compatible with that SemVer template, or lower than it. For instance, with
+                  <code>semver-min="2.3"</code> and <code>semver-max="3"</code>, any version of the
+               secondary package which is equal or above 2.3.0 and strictly below 4.0.0 is valid
+               (that is, 2.3.0, 3.0.0, 3.99.87, etc.)</p></div><div class="div2">
+<h3><a name="procdep" id="procdep"></a>5.2 Processor dependency</h3><p>In addition to depending on other packages, a dependency can tell which processor(s)
+               is (are) needed for this package:</p><div class="exampleInner"><pre><span class="diff-del"><span>&lt;dependency processor="saxon"/&gt;</span></span>
+<span class="diff-add"><span>&lt;dependency processor="http://saxon.sf.net/he"/&gt;</span></span></pre></div><p>If there is several such dependencies, the package is supported by a specific
+               processor as soon as one of the proc dependencies does match. The meaning of the
+               versionning attributes on processor dependencies is defined by each processor.</p></div><div class="div2">
+<h3><a name="enforcement" id="enforcement"></a>5.3 Dependency enforcement</h3><p>How those rules are enforced is implementation-defined. For instance a command line
+               tool to install a package in a repository can generate an error if the required
+               dependencies are not installed, try to install them automagically from the web, or
+               just emit a warning install the package hoping the dependencies to be installed later
+               on, and provide an option to select the behaviour to use. Another implementation can
+               enforce the dependencies at compile- or at run-time. An implementation SHOULD provide
+               a way to enforce those rules, but can also provide an option to ignore them.</p><p>From the above text, a version number is not defined to have any particular
+               semantics, except when used with one of the several SemVer attributes. The only
+               constraint is that a version number cannot contain any whitespace character (as
+               defined by the <a href="#xml">[XML]</a> recommendation). A library author SHOULD use
+               version numbers compatible with SemVer though, unless there is a justification not to
+               use it.</p></div></div><div class="diff-add"><div class="div1">
+<h2><a name="resolution" id="resolution"></a>6 URI resolution</h2><p>At the end of the day, having packages installed in a repository is interesting only if
+            one is able to use the installed components. This can be done by invoking directly the
+            component, e.g. an XProc pipeline directly from the command-line or an XSLT stylesheet
+            from an IDE, or most of the time by importing the component from within user's own
+            components. For instance, a user can import the FunctX XSLT implementation in his/her
+            own stylesheet, by refering to it only by its public import URI, provided the FunctX
+            package is available to the processor the user uses to evaluate the overall
+            transform.</p><p>In order to promote interoperability, this specification defines a standard URI
+            resolving mechanism, and how to import installed components from within user's own
+            components. In order to stay generic enough though, the initial list of available
+            package at runtime, as well as the way to set the initial options of this algorithm, are
+            implementation-defined. Indeed, the way to set the available package list will be
+            different on an application server and on an IDE, or on a standalone processor and on an
+            XML database. The same way, although the algorithm defines a set of options to control
+            its behaviour, the way to set those is out of the scope of this specification; a .Net
+            API, an IDE and a webapp container, to mention only them, have very different mechanism
+            to let the user or developer set options.</p><p>A <b>public component</b> is a component which is part of a package, and is associated
+            a public import URI within the package descriptor. A public component as a associated
+            URI space, as explained earlier. A <b>universe</b> is a set of packages available to
+            some processor, at some point in time, in some context. As described later, a universe
+            can be e.g. the latest version of every packages installed in a specific repository;
+            another example is a single package (e.g. used as a web application) and all its
+            explicit dependencies, recursively.</p><p>The way to define a universe is implementation-defined, but implementations SHOULD allow
+            a user to create a universe from either: a repository or a set of repositories (actually
+            choosing the latest version for each package in the repository), or from an explicit set
+            of packages, given their names (actually choosing the latest version for each package in
+            the list), or from an expicit set of packages, given their names and their version
+            numbers (or if no explicit version number is available, choose the latest version for
+            the given package). In the two later cases, an implementation SHOULD provide the user
+            with the ability of including explicit package dependencies as well, either recursively
+            or direct dependencies only. A universe SHOULD NOT contain several packages with the
+            same name but different versions. A universe can not contain several packages with the
+            same name and the same version number, because in that case their are considered the
+            same package regardless they actually are duplicated in the repository (this is the
+            responsability of the user to prevent inconsistencies in that case).</p><p>TODO: Define what's a processor, what's compilation, and the case or 'resource'... (that
+            is, the context of a resolution)</p><p>When a processor, whilst compiling a component, encounters an import statement, it
+            SHOULD perform the following steps:</p><ul><li><p>if the URI of the imported module is relative or uses the file URI scheme, then
+                  the usual resolving mechanism of the processor is used (if the import statement
+                  appears within a component from a package, it must resolve relatively to that
+                  component, according to the original package structure),</p></li><li><p>depending on the context of the import statement, the processor determines the URI
+                  space to look into,</p></li><li><p>if there is a public component in the correct URI space in the initial universe,
+                  the processor uses it,</p></li><li><p>if there is nothing corresponding in the universe, the usual resolving mechanism
+                  of the processor is used (for instance trying to resolve the URI as a URL or
+                  generating an error).</p></li></ul><p>The rule to define the proper URI space to look into in order to resolve the URI of an
+            import statement</p></div></div><div class="div1">
+<h2><a name="ondisk" id="ondisk"></a>7 On-disk repository layout</h2><p>This section defines a standard structure for on-disk repositories. An implementation
+            can choose not to support this kind of repository and to define its own one (or even to
+            not define it publicly, just to provide the ability to install and remove packages, in a
+            clearly documented way.) However, there are several advantages to support this
+            structure, the most obvious one is to be able to benefit from existing tools to manage
+            such repositories as well as existing libraries to access those repositories.</p><p>The repository is a directory on the file system, within which the packages are
+            installed. Each package results in a subdirectory in the repository, where the content
+            of the XAR file is unzipped. Next to those package directories, there is also a
+            subdirectory named <code>.expath-pkg/</code>, which contains administrative information
+            about the packages installed in this repository. <span class="diff-del"><span>The package
+               directories should be named after the package abbreviation (the <code>abbrev</code>
+               attribute in the package descriptor) and the version number, separated by a dash. A
+               package directory name must not contain the space character.</span></span></p><div class="note"><p class="prefix"><b>Note:</b></p><div class="diff-add"><p>The package directories SHOULD be named after the package abbreviation
+               (the <code>abbrev</code> attribute in the package descriptor) and the version number,
+               separated by a dash. A package directory name must not contain the space
+               character.</p></div><p>Because these directory names cannot be ensured to be unique among every packages
+               installed in the repository, and because the processors will in some case have to
+               translate some characters (depending on the rules of the filesystem they put the
+               repository on), they cannot be used as a perfect mapping between package
+               abbreviations and directories. It is only described here as a note, in the hope that
+               the several implementations will use similar naming strategies, meaningful for
+               humans.</p></div><p>The repository maintains a list of installed packages. For each of them, this list
+            contains its name (the name URI), its subdirectory name, and its version number. This
+            list is maintained within two files: <code>.expath-pkg/packages.xml</code> and
+               <code>.expath-pkg/packages.txt</code>. Both contain the same information, the former
+            in an XML format and the later as plain text. The XML format looks like the following
+            (see <a href="#packages.xsd"><b>B Package list schema</b></a> for a normative schema):</p><div class="exampleInner"><pre>
+&lt;packages xmlns="http://expath.org/ns/repo/packages"&gt;
+   &lt;package name="http://example.org/some/package"
+            dir="some-package-2.3"
+            version="2.3"/&gt;
+   &lt;package name="http://example.com/some-library"
+            dir="some-lib-0.1"
+            version="0.1"/&gt;
+   &lt;package ...
+&lt;/packages&gt;</pre></div><p>The text file is a line-separated file (either line termination can be used:
+               <code>\r</code>, <code>\n</code> or <code>\n\r</code>, though the standard Internet
+            line termination is preferred: <code>\n\r</code>). Each line represent a package, and is
+            a space-separated record. The first field is the package directory (the name if the
+            subdirectory within the repository where the package has been unzipped), the second one
+            is the package name (the name URI), and the last one is the version number. <span class="diff-del"><span>The two first fields cannot contain any space character. The version
+               number is the only one that can contain a space character (though this is not
+               recommended).</span></span>
+            <span class="diff-add"><span>No one of those fields can contain any space character.</span></span>
+            Every field is separated by exactly one space character (the Unicode character with code
+            point #x20). This file then looks like:</p><div class="exampleInner"><pre>
+some-package-2.3 http://example.org/some/package 2.3
+some-lib-0.1 http://example.com/some-library 0.1
+...</pre></div><p>The overall repository thus looks like:</p><div class="exampleInner"><pre>
+[repository-dir]/
+   .expath-pkg/
+      packages.txt
+      packages.xml
+   some-package-2.3/
+<span class="diff-del"><span>      query.xq
+      style.xsl</span></span>
+<span class="diff-add"><span>      expath-pkg.xml
+      content/
+         query.xq
+         style.xsl</span></span>
+   some-lib-0.1/
+<span class="diff-del"><span>      ...</span></span>
+<span class="diff-add"><span>      expath-pkg.xml
+      content/
+         ...</span></span></pre></div><div class="note"><p class="prefix"><b>Note:</b></p><p>Because the package descriptor is unzipped in the package directory, as well as the
+               rest of the files contained in the package, this is easy to find the mapping between
+               package directories and package names and versions: just look into the package
+               descriptor into every package directory, and you will find what you are looking for.
+               But in order to allow other programs to access easily the list of installed packages,
+               we provide the list in <code>.expath-pkg/packages.xml</code>. And because shell
+               scripts must be able to access that list as well, a second file, text-oriented, is
+               provided; of course this is redundant information, but it is maintained automatically
+               by the repository manager, so the redundancy is not an issue.</p></div><p>In addition to this structure, a specific processor can store information in
+            subdirectories (both in the repository level or within each package directories),
+            provided those directories start with a dot, and are named unambiguously with the name
+            of the processor. For instance <code>[repository]/.saxon/</code>
+            <span class="diff-add"><span>for repository-wide config for Saxon</span></span>, or
+               <code>[repository]/[some-pkg]/.exist/</code>
+            <span class="diff-add"><span>for config for eXist for a specific package</span></span>.</p></div><div class="div1">
+<h2><a name="example" id="example"></a>8 Example</h2><p>This section provides a non-normative example to illustrate the concepts defined here.
+            Instead of using a <em>hello world</em> example, it describes the packaging of the
+            existing FunctX library <a href="#functx">[FunctX]</a>. This library consists of a standard
+            XQuery 1.0 library module and a standard XSLT 2.0 stylesheet (both provide the same set
+            of functions to either XQuery or XSLT, but this is not relevant to packaging.)</p><p>The first thing to do is to create a ZIP file with both of those components, alongside a
+               <em>package descriptor</em>. The constraints are: 1) the package descriptor is
+            named <code>expath-pkg.xml</code> at the root of the package, <span class="diff-add"><span>and</span></span> 2) the library content is in a directory <span class="diff-add"><span>named
+                  <code>content</code></span></span> at the root of the package (aka the <em><span class="diff-del"><span>package</span></span>
+               <span class="diff-add"><span>content</span></span> directory</em>)<span class="diff-del"><span>, and 3) the
+               name of this directory must be the value of the <code>abbrev</code> attribute, and
+               must be a valid NCName</span></span>. The structure <span class="diff-del"><span>(the content) of
+               the package directory</span></span>
+            <span class="diff-add"><span>of the content directory</span></span> is completely free. In our case,
+            let's just put both component files directly in the <span class="diff-del"><span>package</span></span>
+            <span class="diff-add"><span>content</span></span> directory, and define the module name as
+               <code>functx</code>:</p><div class="exampleInner"><pre>
+expath-pkg.xml
+<span class="diff-del"><span>functx/</span></span>
+<span class="diff-add"><span>content/</span></span>
+   functx.xql
+   functx.xsl</pre></div><p>The XQuery library module's target namespace is defined by the module itself. For the
+            XSLT stylesheet, we have to define its <em>public URI</em>, used to identify it
+            within an <code>xsl:import</code> (or any other means, for instance within XProc or an
+            IDE scenarii system). Let's define it as <code>http://www.functx.com/functx.xsl</code>.
+            The package descriptor thus looks like the following:</p><div class="exampleInner"><pre>
+&lt;package xmlns="http://expath.org/ns/pkg"
+         spec="1.0"
+         name="http://www.functx.com"
+         abbrev="functx"
+         version="1.0"&gt;
+   &lt;title&gt;FunctX library&lt;/title&gt;
+   &lt;xquery&gt;
+      &lt;namespace&gt;http://www.functx.com&lt;/namespace&gt;
+      &lt;file&gt;functx.xql&lt;/file&gt;
+   &lt;/xquery&gt;
+   &lt;xslt&gt;
+      &lt;import-uri&gt;http://www.functx.com/functx.xsl&lt;/import-uri&gt;
+      &lt;file&gt;functx.xsl&lt;/file&gt;
+   &lt;/xslt&gt;
+&lt;/package&gt;</pre></div><p>We just have to create a ZIP file with this structure and content. The convention is to
+            call this file <code>functx-1.0.xar</code> (that is,
+               [<em>abbrev</em>]-[<em>version</em>].xar). That's all for the package itself.
+            If the target processor supports the on-disk repository layout, here is what the
+            repository could look like after the package has been installed:</p><div class="exampleInner"><pre>
+[repository-dir]/
+   .expath-pkg/
+      packages<span class="diff-add"><span>.txt</span></span>
+      packages.xml
+   functx-1.0/
+      expath-pkg.xml
+<span class="diff-del"><span>      functx/</span></span>
+<span class="diff-add"><span>      content/</span></span>
+         functx.xql
+         functx.xsl</pre></div><p>The content of <code>.expath-pkg/packages.xml</code> is:</p><div class="exampleInner"><pre>
+&lt;packages xmlns="http://expath.org/ns/repo/packages"&gt;
+   &lt;package name="http://www.functx.com"
+            dir="functx-1.0"
+            version="1.0"/&gt;
+&lt;/packages&gt;</pre></div><p>The content of <code>.expath-pkg/packages.txt</code> is:</p><div class="exampleInner"><pre>
+functx-1.0 http://www.functx.com 1.0</pre></div><p>The package directory <code>functx-1.0/</code> has been named after the abbrev and the
+            version number. Its content is simply the content of the XAR file, unzipped. A user can
+            then import the FunctX library from either an XQuery module or an XSLT stylesheet by
+            using respectively an import statement:</p><div class="exampleInner"><pre>
+import module namespace fx = "http://www.functx.com";</pre></div><p>or an import instruction:</p><div class="exampleInner"><pre>
+&lt;xsl:import href="http://www.functx.com/functx.xsl"/&gt;</pre></div></div><div class="div1">
+<h2><a name="extensibility" id="extensibility"></a>9 Extensibility</h2><p>The package format defined in this specification is a complete system to package
+            libraries, for the right definition of a library. But a specfic kind of
+               <em>library</em> can require more information. For instance, a web application is
+            also a set of components, but requiring more configuration. An additional descriptor
+            format for such applications could be defined and added to this packaging framework to
+            define a specialized kind of packages. By building upon this packaging format, the new
+            format would benefit from the existing mechanism to map public URIs to components.</p><p>Another extensibility point is the definition of additional component types. The
+            component types defined here are the standard types, but an implementation may support
+            additional implementation-defined types.</p><p>More generally, an implementation may define any extension element <span class="diff-add"><span>or
+               attribute</span></span> in the package descriptor to achieve its purposes, providing that
+            the <span class="diff-del"><span>new</span></span> elements <span class="diff-add"><span>and attributes</span></span>
+            it defines are neither in the EXPath Packaging namespace nor in the null namespace
+               <span class="diff-add"><span>(an attribute on an extension element can be in no namespace, but
+               an attribute on a standard element must be in a specific namespace)</span></span>.</p></div></div><div class="back"><div class="div1">
+<h2><a name="expath-pkg.xsd" id="expath-pkg.xsd"></a>A Package descriptor schema</h2><div class="exampleInner"><pre>&lt;xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:pkg="http://expath.org/ns/pkg"
+           targetNamespace="http://expath.org/ns/pkg"
+           elementFormDefault="qualified"&gt;
+
+   &lt;xs:element name="package"&gt;
+      &lt;xs:complexType&gt;
+         &lt;xs:sequence&gt;
+            &lt;xs:element name="title" type="pkg:title-type"/&gt;
+            &lt;xs:element ref="pkg:dependency" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;
+               &lt;xs:element name="xquery" type="pkg:query-type"/&gt;
+               &lt;xs:element name="xslt"   type="pkg:component-type"/&gt;
+               &lt;xs:element name="xproc"  type="pkg:component-type"/&gt;
+               &lt;xs:element name="xsd"    type="pkg:component-type"/&gt;
+               &lt;xs:element name="rng"    type="pkg:component-type"/&gt;
+               &lt;xs:element name="rnc"    type="pkg:component-type"/&gt;
+            &lt;/xs:choice&gt;
+         &lt;/xs:sequence&gt;
+         &lt;xs:attribute name="name"    type="xs:anyURI" use="required"/&gt;
+         &lt;xs:attribute name="abbrev"  type="xs:NCName" use="required"/&gt;
+         &lt;xs:attribute name="version" type="xs:string" use="required"/&gt;
+         &lt;!-- In the 1.0 version of the spec, fix it to '1.0'. --&gt;
+         &lt;xs:attribute name="spec"    fixed="1.0"      use="required"/&gt;
+      &lt;/xs:complexType&gt;
+   &lt;/xs:element&gt;
+
+   &lt;xs:element name="dependency"&gt;
+      &lt;xs:complexType&gt;
+         &lt;xs:attribute name="name"    type="xs:anyURI"/&gt;
+         &lt;xs:attribute name="version" type="xs:token"/&gt;
+         &lt;xs:attribute name="versions"&gt;
+            &lt;xs:simpleType&gt;
+               &lt;xs:list itemType="xs:token"/&gt;
+            &lt;/xs:simpleType&gt;
+         &lt;/xs:attribute&gt;
+         &lt;xs:attribute name="semver"     type="pkg:semver"/&gt;
+         &lt;xs:attribute name="semver-min" type="pkg:semver"/&gt;
+         &lt;xs:attribute name="semver-max" type="pkg:semver"/&gt;
+      &lt;/xs:complexType&gt;
+   &lt;/xs:element&gt;
+
+   &lt;!-- TODO: Make it more precise, using a regex. --&gt;
+   &lt;xs:simpleType name="semver"&gt;
+      &lt;xs:restriction base="xs:token"/&gt;
+   &lt;/xs:simpleType&gt;
+
+   &lt;xs:simpleType name="title-type"&gt;
+      &lt;xs:restriction base="xs:string"/&gt;
+   &lt;/xs:simpleType&gt;
+
+   &lt;xs:complexType name="component-type"&gt;
+      &lt;xs:sequence&gt;
+         &lt;xs:element name="import-uri" type="xs:anyURI"/&gt;
+         &lt;xs:element name="file"       type="xs:anyURI"/&gt;
+      &lt;/xs:sequence&gt;
+   &lt;/xs:complexType&gt;
+
+   &lt;xs:complexType name="query-type"&gt;
+      &lt;xs:sequence&gt;
+         &lt;xs:element name="namespace" type="xs:anyURI"/&gt;
+         &lt;xs:element name="file"      type="xs:anyURI"/&gt;
+      &lt;/xs:sequence&gt;
+   &lt;/xs:complexType&gt;
+
+&lt;/xs:schema&gt;
+</pre></div></div><div class="div1">
+<h2><a name="packages.xsd" id="packages.xsd"></a>B Package list schema</h2><div class="exampleInner"><pre>&lt;xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:p="http://expath.org/ns/repo/packages"
+           targetNamespace="http://expath.org/ns/repo/packages"
+           elementFormDefault="qualified"&gt;
+
+   &lt;xs:element name="packages"&gt;
+      &lt;xs:complexType&gt;
+         &lt;xs:sequence&gt;
+            &lt;xs:element ref="p:package" minOccurs="0" maxOccurs="unbounded"/&gt;
+         &lt;/xs:sequence&gt;
+      &lt;/xs:complexType&gt;
+   &lt;/xs:element&gt;
+
+   &lt;xs:element name="package"&gt;
+      &lt;xs:complexType&gt;
+         &lt;!-- TODO: Get those definitions from expath-pkg.xsd
+              (or instead shared them between both schemas). --&gt;
+         &lt;xs:attribute name="name"    type="xs:anyURI" use="required"/&gt;
+         &lt;xs:attribute name="dir"     type="xs:string" use="required"/&gt;
+         &lt;xs:attribute name="version" type="xs:string" use="required"/&gt;
+      &lt;/xs:complexType&gt;
+   &lt;/xs:element&gt;
+
+&lt;/xs:schema&gt;
+</pre></div></div><div class="div1">
+<h2><a name="references" id="references"></a>C References</h2><dl><dt class="label"><a name="functx" id="functx"></a>FunctX</dt><dd><a href="http://www.functx.com/">FunctX</a> library
+               of functions for XQuery and XSLT 2.0, Datypic.</dd><dt class="label"><span class="diff-add"><a name="rfc3987"></a>RFC 3987</span></dt><dd><div class="diff-add"><a href="http://www.ietf.org/rfc/rfc3987.txt">RFC
+                  3987: Internationalized Resource Identifiers (IRIs)</a>. M. Duerst and M.
+               Suignard, editors. Internet Engineering Task Force. January, 2005.</div></dd><dt class="label"><a name="semver" id="semver"></a>SemVer</dt><dd><a href="http://semver.org/">Semantic Versioning</a>,
+               Tom Preston-Werner.</dd><dt class="label"><a name="xml" id="xml"></a>XML</dt><dd><a href="http://www.w3.org/TR/xml/">Extensible Markup
+                  Language (XML) 1.0</a>, Tim Bray et al.</dd></dl></div></div><script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+         </script><script type="text/javascript">
+            try {
+               var pageTracker = _gat._getTracker("UA-5463082-2");
+               pageTracker._trackPageview();
+            } catch(err) {}
+         </script></body></html>

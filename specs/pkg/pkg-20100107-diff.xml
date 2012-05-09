@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?oxygen RNGSchema="http://www.w3.org/XML/1998/06/schema/xmlspec.rng" type="xml"?>
+
+<spec role="editors-copy">
+   <header>
+      <title>Packaging System</title>
+      <w3c-designation>w3c-designation</w3c-designation>
+      <w3c-doctype>EXPath Candidate Module</w3c-doctype>
+      <pubdate diff="chg">
+         <day>7</day>
+         <month>January</month>
+         <year>2010</year>
+      </pubdate>
+      <publoc>
+         <loc href="http://expath.org/spec/pkg/20100107" diff="chg"/>
+      </publoc>
+      <altlocs>
+         <loc href="http://expath.org/spec/pkg/20100107.xml">XML</loc>
+         <loc href="http://expath.org/spec/pkg/20100107/diff">Revision markup</loc>
+      </altlocs>
+      <latestloc>
+         <loc href="http://expath.org/spec/pkg"/>
+      </latestloc>
+      <prevlocs>
+         <loc href="http://expath.org/spec/pkg/20091118" diff="add"/>
+         <loc href="http://expath.org/spec/pkg/20090901"/>
+      </prevlocs>
+      <authlist>
+         <author>
+            <name>Florent Georges</name>
+            <affiliation>H2O Consulting</affiliation>
+         </author>
+      </authlist>
+      <copyright>
+         <p/>
+      </copyright>
+      <abstract>
+         <p>This proposal defines a packaging system for various core XML technologies: XSLT,
+            XQuery, and XProc. The goal is to define it in a way enough generic so to adapt it to
+            other technologies in the future (such as XML Schema, XForms, etc.) using the same
+            framework. Besides enabling the delivery of libraries written in standard XSLT, XQuery
+            and XProc, it provides support for extensions specific to some processors, as well as
+            enabling new processors to be supported by using the same framework.</p>
+      </abstract>
+      <status>
+         <p>Must be ignored, but is required by the schema...</p>
+      </status>
+      <langusage>
+         <language>langusage</language>
+      </langusage>
+      <revisiondesc>
+         <p>revisiondesc</p>
+      </revisiondesc>
+   </header>
+   <body>
+      <div1>
+         <head>Introduction</head>
+         <p>XSLT, XQuery and XProc are amazing programming languages. But they lack a large choice
+            of libraries, and when such libraries do exist, this is a challenge to install. There is
+            no automatic install process, the rules are different for each processor, library
+            authors do not follow the same rules regarding the info they provide, the cataloging,
+            the way they reference third-party libraries, etc.</p>
+         <p>All those problems (well, most of them) can be addressed by a packaging system that
+            would be broadly adopted by processor vendors and library authors. The cornerstone of
+            such a system is the packaging format: a description of the information to be provided
+            by the library authors and how to provide and structure them.</p>
+      </div1>
+      <div1>
+         <head>Concepts</head>
+         <p diff="add">A <kw>package</kw> is a set of files fulfilling a common purpose. A package
+            could for instance provide XML schemas for a particular document type, alongside a set
+            of XSLT stylesheets to format the same document type to HTML or XSL-FO. Or a package can
+            simply provide an XQuery library module containing a set of functions (directly
+            supporting the notion of <emph>library</emph>). Those files composing a package
+            (stylesheets, schemas, pipelines, queries, etc.) are called its <kw>components</kw>.</p>
+         <p diff="add">A package has a unique name (a URI) as well as a convenient short name, also
+            known as its <kw>abbrev</kw> (an NCName), used in contexts where a URI is not suitable
+            (or simply not convenient) and where the uniqueness of the name is not necessary. A
+            package has a set of dependencies too. A dependency is another package, identified by
+            its full name, a package depends on. [[ TODO: Introduce other kinds of dependencies, for
+            instance collections... ? ]]</p>
+         <p diff="add">A package provides all those infos as well as its components as a single
+            file. This is then very convenient to organize packages, publish them, give them to a
+            processor to install them, etc.</p>
+         <p diff="add">A <kw>component</kw> can be of one out of several types: an XSLT stylesheet,
+            an XML schema, a RELAX NG schema, an XProc pipeline, but also any other type a
+            particular implementation chose to support. Its is identified by a <kw>public URI</kw>.
+            This public URI is used to access the component from the outside of the package. Each
+            component type has its own <kw>URI space</kw>, within which a component's URI has to be
+            unique (so two different components can have the same public URI if they are of
+            different types, but this is not recommended).</p>
+         <p diff="add">All the components composing the package, alongside an additional <kw>package
+               descriptor</kw>, are used to create a ZIP file. This file <emph>is</emph> the
+            physical package, and can be used to distribute the package to the users. The package
+            descriptor is a plain XML file, named <code>expath-pkg.xml</code> at the root of the ZIP
+            file, and containing information about the package (like its name and its version
+            number) and about the components it provides and how to reference them.</p>
+         <p diff="del">A library is a set of files fulfilling a common purpose. An XSLT library can
+            for instance provide a set of template rules and functions to help formating a
+            particular XML document type. A package is a way to bundle those files into a single ZIP
+            file, following a defined structure and providing more information within the
+               <kw>package descriptor</kw>. The package descriptor is a plain XML file, named
+               <code>expath-pkg.xml</code> at the root of the ZIP file, and containing information
+            about the library (like its name and its version number) and about the files it provides
+            and how to reference them (for instance stylesheets and query modules.)</p>
+         <p diff="del">The ZIP file structure (aka the package structure) must have exactly two
+            entries at the top level: the package descriptor and one directory entry. This directory
+            contains all the library files, and all file references in the package descriptor are
+            relative to this directory. This directory is called the <kw>library directory</kw>.</p>
+         <p diff="del">All the elements in the package descriptor are defined in the namespace
+               <code>http://expath.org/mod/expath-pkg</code>. All the elements defined in this
+            specification or used in samples and in text are in this namespace, even if no prefix is
+            used. The root element is <code>package</code>, and contains exactly one child element
+               <code>module</code>:</p>
+         <eg diff="del">
+&lt;package>
+   module
+&lt;/package>
+
+&lt;module name = NCName
+        version = string>
+   title,
+   (xslt
+   |xquery
+   |xproc
+   |xsd
+   |rng
+   |rnc
+   |...)+
+&lt;/module></eg>
+         <p diff="del"><code>name</code> is the library name. The top-level directory in the package
+            structure must have the exact same name. The module has also a version number, and a
+            human-readable title. It then provides information about one or several files. Those
+            files are called the <kw>components</kw>. In addition to those standard file
+            descriptors, it can also contain elements specific to some processors (for instance an
+            element for Saxon, eXist, etc.) Details are provided below.</p>
+         <p diff="del">The components are the files <emph>exported</emph> by the module. But the
+            whole library directory must be preserved. Indeed, it can contain other, private files,
+            aimed to be used only from within library files, not from the outside.</p>
+         <p diff="del">The components are accessed from the outside of the package by using a URI.
+            This URI is the <kw>public URI</kw>, and absolute URI, which cannot be of scheme
+               <code>file:</code>. Its exact usage depends on the kind of component (for instance,
+            with XSLT it is aimed at be used in xsl:import, and in XQuery this is the target
+            namespace of an XQuery library module.) Each kind of component defines its own <kw>URI
+               space</kw>. So to uniquely identify a component in the repository, one needs the
+            public URI and the URI space to use.</p>
+      </div1>
+      <div1>
+         <head>Package descriptor</head>
+         <p diff="add">The package descriptor is an XML file, named <code>expath-pkg.xml</code> and
+            located at the root of the ZIP file. It describe the whole package, and all of its
+            components. Alongside this descriptor, the root of the ZIP file contains a directory
+            named after the module name (see below) which contains the components and any other file
+            the package needs. All the relative URIs used to identify components are relative to the
+            package directory.</p>
+         <note diff="add">
+            <p>Because this package format is designed to be extensible and used as a building block
+               by other specifications, the ZIP file can contain another entries at top-level. They
+               are just ignored when the package is deployed as a simple package following this
+               specification.</p>
+         </note>
+         <div2 diff="add">
+            <head>Overall structure</head>
+            <p>All the elements in the package descriptor are defined in the namespace
+                  <code>http://expath.org/ns/pkg</code>. All the elements defined in this
+               specification or used in samples and in text are in this namespace, even if no prefix
+               is used. The root element is <code>package</code>, and contains a name, an optional
+               list of dependencies to other packages, and exactly one child element
+                  <code>module</code>:</p>
+            <eg>
+&lt;package name = uri>
+   dependency*,
+   module
+&lt;/package>
+
+&lt;dependency name = uri>
+   <emph>empty</emph>
+&lt;/dependency></eg>
+            <p><code>name</code> is the name of the package. A package is named using an absolute
+               URI, except any <code>file:</code> scheme URIs (most frequent choices are
+                  <code>http:</code> and <code>urn:</code> scheme URIs). Dependencies are set by
+               using the name of other packages this package depends on. The <code>module</code>
+               content model is:</p>
+            <eg>
+&lt;module name = NCName
+        version = string>
+   title,
+   (xslt
+   |xquery
+   |xproc
+   |xsd
+   |rng
+   |rnc
+   |...)+
+&lt;/module></eg>
+            <p><code>name</code> is a short module name. The package directory must have the exact
+               same name. The module has also a version number, and a human-readable title. It then
+               provides information about one or several components. In addition to those standard
+               components, it can also contain elements specific to some processors (for instance an
+               element for Saxon, eXist, etc.)</p>
+            <p>The following is the description of the standard component kinds supported by this
+               specification, and how they contribute to the package descriptor document type.</p>
+         </div2>
+         <div2>
+            <head>XSLT</head>
+            <p>An XSLT file is associated a <emph>public import URI</emph>.This is the URI to use in
+               an XSLT import instruction (aka <code>xsl:import</code>) to import the XSLT file
+               provided in the package. This file is configured with the element
+               <code>xslt</code>.</p>
+            <eg>
+&lt;xslt>
+   import-uri,
+   file
+&lt;/xslt></eg>
+            <p>The element <code>file</code> contains the path to the file within the package
+               structure, relative to the <phrase diff="chg">package</phrase> directory. Both
+               elements <code>import-uri</code> and <code>file</code> are of type
+                  <code>anyURI</code>.</p>
+         </div2>
+         <div2>
+            <head>XQuery</head>
+            <p>An XQuery library module is referenced by its namespace URI. Thus the
+                  <code>xquery</code> element associates a namespace URI to an XQuery file. An
+               importing module just need to use an import statement of the form <code>import module
+                  namespace xx = "&lt;namespace-uri>";</code>.</p>
+            <p diff="add">An XQuery main module is associated a public URI. Usually an XQuery
+               package will provide functions through library modules, but in some cases one can
+               want to provide main modules as well.</p>
+            <eg diff="add">
+&lt;xquery>
+   (namespace
+   |import-uri),
+   file
+&lt;/xquery></eg>
+            <eg diff="del">
+&lt;xquery>
+   namespace,
+   file
+&lt;/xquery></eg>
+            <p>Note that there is no way to set any location hint (as the <code>at</code> clause in
+               the import statement.) To use this packaging system, an XQuery library module must be
+               referenced by its target namespace.</p>
+         </div2>
+         <div2>
+            <head>XProc</head>
+            <p>An XProc pipeline, like an XSLT stylesheet, is associated a <emph>public import
+                  URI</emph>, aimed to be used in an XProc <code>p:import</code> statement.</p>
+            <eg>
+&lt;xproc>
+   import-uri,
+   file
+&lt;/xproc></eg>
+         </div2>
+         <div2>
+            <head>XML Schema</head>
+            <p>An XML schema can be imported using its target namespace. Like for XQuery, there is
+               no way to use any <code>schemaLocation</code> instead. There is neither the ability
+               to set several files as several sources for the schema. If the schema is spread over
+               multiple files, there must be one top-level file that includes the other files.</p>
+            <eg>
+&lt;xsd>
+   namespace,
+   file
+&lt;/xsd></eg>
+            <p>(TODO: Should we support schemas with empty target namespace? I am not sure this is a
+               good idea in a packaging system...) (TODO: This does not support
+                  <code>xs:redefine</code>, as it requires a hint, not a target namespace)</p>
+         </div2>
+         <div2>
+            <head>RelaxNG</head>
+            <p>A RelaxNG schema, like an XSLT stylesheet, is associated a public import URI, aimed
+               to be used in an <emph>import</emph> statement (either the <emph>include</emph>
+               element for an RNG schema or an <emph>import</emph> directive for an RNC schema.)</p>
+            <eg>
+&lt;rng>
+   import-uri,
+   file
+&lt;/rng>
+
+&lt;rnc>
+   import-uri,
+   file
+&lt;/rnc></eg>
+         </div2>
+         <div2>
+            <head>Schematron</head>
+            <p>A Schematron schema is associated a public URI.</p>
+            <eg>
+&lt;schematron>
+   import-uri,
+   file
+&lt;/schematron></eg>
+         </div2>
+         <div2>
+            <head>NVDL</head>
+            <p>An NVDL script is associated a public URI.</p>
+            <eg>
+&lt;nvdl>
+   import-uri,
+   file
+&lt;/nvdl></eg>
+         </div2>
+         <div2>
+            <head>Not supported file kinds</head>
+            <p>Documentation (like result of XSLStyle or xqDoc) is not taken into account in the
+               packaging format, though that could be used by IDEs for instance to provide
+               documentation for functions in an editor with a live completion feature. Some support
+               for documentation can of course be added as a product-specific feature to the package
+               descriptor.</p>
+         </div2>
+      </div1>
+      <div1>
+         <head>Processor behaviour</head>
+         <p>A <kw>processor</kw> is any program that use packaged components. For instance, an XSLT
+            processor uses XSLT stylesheets (as well as XML schemas for an XSLT 2.0 SA processor),
+            an XML database can use XQuery modules, XSLT stylesheets or any other kind of component,
+            etc. But processors include also IDEs, editors, and any program that could want to use
+            packaged components and that supports this specification.</p>
+         <p>The installed package list is implementation-defined. Each implementation (for a
+            specific processor) can define its own way to install and remove packages, as long as it
+            properly documents it. A processor should use, when appropriate, the <kw>on-disk
+               repository layout</kw> as defined below.</p>
+         <p diff="add">Whether or not such a repository exists (or several repositories), the
+            implementation must define an installed packages list. How this is done is outside the
+            scope of this spec. An XML IDE could provide a way to select packages to activate for a
+            specific scenario, or a web server container could activate packages on a per-web
+            application basis.</p>
+         <p>When a reference to a file of a specific kind is done via an absolute URI, a processor
+            must look up for this URI in the corresponding URI space in the repository. How the
+            repository is set to the processor is implementation-defined (a processor can also use a
+            list of repositories, and enable or disable some libraries in any implementation-defined
+            way.)</p>
+         <p>The URI space to use is defined by the nature of the reference. An XSLT
+               <code>href</code> attribute on <code>xsl:import</code> will use the <code>xslt</code>
+            URI space, while it will use the <code>xsd</code> space for
+               <code>xsl:import-schema</code>.</p>
+         <div2>
+            <head>XProc pipelines</head>
+            <p>An XProc processor in particular has to pay great attention to the space it use
+               regarding the step that is beng evaluated. Any <code>xsl:import</code> instruction
+               encountered on the <code>stylesheet</code> port of the step <code>p:xslt</code> has
+               to be looked for in the <code>xslt</code> space (regardless if the stylesheet
+               document is inlined in the pipeline, computed, loaded from the file system or
+               retrieved from the Internet, or if the containing stylesheet has been imported
+               itself.)</p>
+            <p>The XProc elements <code>p:document</code> and <code>p:data</code>, as well as the
+               step <code>p:load</code> are handled specially. They can be used to access any kind
+               of resource, including but not limited to components in a repository. The user has to
+               tell explicitely the processor what kind of component is looked for by using the
+                  <code>pkg:kind</code> extension attribute. For instance, a stylesheet can be
+               loaded from a repository as input to the step <code>xslt</code> as following:</p>
+            <eg>
+&lt;p:xslt>
+   &lt;p:input port="stylesheet">
+      &lt;p:document href="..." pkg:kind="xslt"/>
+   &lt;/p:input>
+   ...
+&lt;/p:xslt></eg>
+         </div2>
+      </div1>
+      <div1>
+         <head>On-disk repository layout</head>
+         <p>This section defines a standard structure for on-disk repositories. An implementation
+            can choose to not support this kind of repository and to define its own one (or even to
+            not define it publicly, just to provide the ability to install and remove packages, in a
+            clearly documented way.) However, there are several advantages to support this
+            structure, the most obvious one is to be able to benefit from existing tools to manage
+            such repositories as well as existing libraries to access those repositories.</p>
+         <p>The resolving machinery is based on OASIS XML Catalogs <bibref ref="catalogs"/>. The
+            repository is a simple directory, each subdirectory of which is an installed package
+            (aka a <kw>package dir</kw>.) The only exception to this is the subdirectory
+               <code>.expath-pkg/</code> which is dedicated to store working information about the
+            installed packages, among which the catalogs (aka the <kw>admin dir</kw>.)</p>
+         <eg>
+[repository-dir]/
+   .expath-pkg/
+      xquery-catalog.xml
+      xslt-catalog.xml
+      lib1/
+         xquery-catalog.xml
+         xslt-catalog.xml
+      lib2/
+         ...
+   lib1/
+      query.xq
+      style.xsl
+   lib2/
+      ...</eg>
+         <p>The <emph>package dirs</emph> are really simple: they are simply an unzipped version of
+            the XAR file. The name of the directory is simply the same as the name of the module in
+            the package. The <emph>admin dir</emph> contains a catalog for each URI space (the
+            catalog for one specific URI space can not be there if there is no one file in that URI
+            space in the whole repository.) The name of such a catalog is
+               <code>[space]-catalog.xml</code> where [space] is either <code>xslt</code>,
+               <code>xquery</code>, <code>rnc</code>, etc. Those catalogs are called <kw>repository
+               catalogs</kw>. It also contains a subdirectory for each installed package, with the
+            same naming convention. In turn, those directories contain catalog files, containing the
+            mappings defined in the corresponding package descriptors (pointing to the actual files
+            installed in the <emph>package dirs</emph>.) Those are called the <kw>package
+               catalogs</kw>. They follow the same naming convention than the <emph>repository
+               catalogs</emph> (divided by URI spaces.) The repository catalogs just include the
+            several package catalogs for the same URI space.</p>
+         <p>[ ... TODO ... ]</p>
+      </div1>
+      <div1 diff="add">
+         <head>Example</head>
+         <p>This section provides a non-normative example to illustrate the concepts defined here.
+            Instead of using a <emph>hello world</emph> example, it describes the packaging of the
+            existing FunctX library <bibref ref="functx"/>. This library consists of a standard
+            XQuery 1.0 library module and a standard XSLT 2.0 stylesheet (both provide the same set
+            of functions to either XQuery or XSLT, but this is not relevant to packaging.)</p>
+         <p>The first thing to do is to create a ZIP file with both of those components, alongside a
+               <emph>package descriptor</emph>. The constraints are: 1/ the package descriptor is
+            named <code>expath-pkg.xml</code> at the root of the package, 2/ the library content is
+            in a directory at the root of the package (aka the <emph>package directory</emph>), and
+            3/ the name of this directory must be the value of the name attribute of the
+               <code>module</code> element, and must be a valid NCName. The structure (the content)
+            of the package directory is completely free. In our case, let's just put both component
+            files directly in the package directory, and define the module name as
+               <code>functx</code>:</p>
+         <eg>
+expath-pkg.xml
+functx/
+   functx.xql
+   functx.xsl</eg>
+         <p>The XQuery library module's target namespace is defined by the module itself. For the
+            XSLT stylesheet, we have to define its <emph>public URI</emph>, used to identify it
+            within an <code>xsl:import</code> (or any other means, for instance within XProc or an
+            IDE scenarii system). Let's define it as <code>http://www.functx.com/functx.xsl</code>.
+            The package descriptor thus looks like the following:</p>
+         <eg>
+&lt;package xmlns="http://expath.org/ns/pkg">
+   &lt;module name="functx" version="1.0">
+      &lt;title>FunctX library&lt;/title>
+      &lt;xquery>
+         &lt;namespace>http://www.functx.com&lt;/namespace>
+         &lt;file>functx.xql&lt;/file>
+      &lt;/xquery>
+      &lt;xslt>
+         &lt;import-uri>http://www.functx.com/functx.xsl&lt;/import-uri>
+         &lt;file>functx.xsl&lt;/file>
+      &lt;/xslt>
+   &lt;/module>
+&lt;/package></eg>
+         <p>We just have to create a ZIP file with this structure and content. The convention is to
+            call this file <code>functx-1.0.xar</code> (that is,
+               [<emph>name</emph>]-[<emph>version</emph>].xar). That's all for the package
+            itself.</p>
+         <p>If the target processor supports the on-disk repository layout, here is what the
+            repository could look like after the package has been installed:</p>
+         <eg>
+[repository-dir]/
+   .expath-pkg/
+      xquery-catalog.xml
+      xslt-catalog.xml
+      functx/
+         xquery-catalog.xml
+         xslt-catalog.xml
+   functx/
+      functx.xql
+      functx.xsl</eg>
+         <p>The package directory has been copied verbatim, and two new catalogs have been created
+            for the package, pointing to the components in the package directory. The top-level
+            catalogs in the admin directory (one per URI space) just point to the other
+            package-specific catalogs. Here is for instance the content of
+               <code>.expath-pkg/xslt-catalog.xml</code>, initiating the catalog list for the URI
+            space for XSLT (in our case the catalog for the URI space for XSLT of the single
+            installed package):</p>
+         <eg>
+&lt;catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+   &lt;nextCatalog catalog="functx/xslt-catalog.xml"/>
+&lt;/catalog></eg>
+         <p>The catalogs at the package-level point to the actual components by using a relative
+            path within the repository. The following is for example the content of the catalog
+               <code>.expath-pkg/functx/xslt-catalog.xml</code>:</p>
+         <eg>
+&lt;catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+   &lt;!-- TODO: Should there be a system entry as well? -->
+   &lt;uri name="http://www.functx.com/functx.xsl"
+        uri="../../functx/functx.xsl"/>
+&lt;/catalog></eg>
+         <p>A user can then import the FunctX library from either an XQuery module or an XSLT
+            stylesheet by using respectively an import statement:</p>
+         <eg>
+import module namespace fx = "http://www.functx.com/";</eg>
+         <p>or an import instruction:</p>
+         <eg>
+&lt;xsl:import href="http://www.functx.com/functx.xsl"/></eg>
+      </div1>
+      <!--div1>
+         <head>Processor-specific files</head>
+         <p>Bla-bla...</p>
+         <div2>
+            <head>Saxon</head>
+            <p>Bla-bla...</p>
+            <p>... classes for <loc
+                  href="http://www.saxonica.com/documentation/extensibility/functions.html"
+                  >extension functions</loc> (both Java and .Net?), classes for <loc
+                  href="http://www.saxonica.com/documentation/extensibility/instructions.html"
+                  >extension instructions</loc>, classes for <loc
+                  href="http://www.saxonica.com/documentation/extensibility/localizing.html"
+                  >localizing numbers and dates</loc>, URI resolvers, etc.</p>
+         </div2>
+         <div2>
+            <head>Xalan</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>eXist</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>MarkLogic</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>Zorba</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>Calabash</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>Calumet</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>xmlsh</head>
+            <p>Bla-bla...</p>
+         </div2>
+      </div1-->
+      <div1 diff="add">
+         <head>Extensibility</head>
+         <p>The package format defined in this specification is a complete system to package
+            libraries, for the right definition of a library. But a specfic kind of
+               <emph>library</emph> can require more information. For instance, a web application is
+            also a set of components, but requiring more configuration. An additional descriptor
+            format for such applications could be defined and added to this packaging framework to
+            define a specialized kind of packages. By building upon this packaging format, the new
+            format would benefit from the existing mechanism to map public URIs to components.</p>
+         <p>Another extensibility point is the definition of additional component types. The
+            component types defined here are the standard types, but an implementation may support
+            additional implementation-defined types.</p>
+         <p>More generally, an implementation may define any extension element in the package
+            descriptor to achieve its purposes, providing that the new elements it defines are
+            neither in the EXPath Packaging namespace nor in the null namespace.</p>
+      </div1>
+      <div1>
+         <head>Editorial notes</head>
+         <ulist>
+            <item>
+               <p>Should the package system define a set of XPath functions? Instead of just
+                  defining the package format and letting everything else as implementation-defined,
+                  should it in addition define a module of functions to install, delete, and more
+                  generally manage packages from within a processor?</p>
+               <p>Drawback: potential problems if the processor requires to be stopped?</p>
+               <p>Advantages: enables writing tools on top of the system (one single graphical
+                  package manager for one system, simply using the XPath functions, as well as easy
+                  integration within IDEs; or even other systems could be more easily be built on
+                  top of it, like a packaging system for XRX applications for instance.)</p>
+            </item>
+            <item>
+               <p>Should we add a generic "xml" URI space, for any XML document?</p>
+            </item>
+            <item diff="del">
+               <p>Add a restriction (actual add a definition of such URIs at the beginning) on
+                  public URIs: require them to be absolute, and maybe only either HTTP or URN (or at
+                  least prohibit the FILE scheme.)</p>
+            </item>
+            <item>
+               <p>Interesting use case with XProc and NVDL: How to configure the XSLT processor in
+                  Calabash with the NVDL URI space for an NVDL implementation for XProc written
+                  using XSLT as a plain library step?</p>
+            </item>
+            <item diff="add">
+               <p>About the <emph>standard directory layout</emph>: should we still use XML
+                  Catalogs, or just a simple format to map public URIs to files? (should really this
+                  repository layout be defined here, anyway?)</p>
+            </item>
+            <item diff="add">
+               <p>Add in the package descriptor an element for a description, or at very least a URL
+                  to the home of the project.</p>
+            </item>
+         </ulist>
+      </div1>
+   </body>
+   <back>
+      <div1>
+         <head>Package descriptor schema</head>
+         <p>[ ... TODO ... ]</p>
+         <!--eg><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../xsd/expath-pkg.xsd" parse="text"/></eg>
+         <p>(+ RNC + RNG) (+ Schematron?, if useful)</p-->
+      </div1>
+      <div1>
+         <head>References</head>
+         <blist>
+            <bibl id="catalogs" key="Catalogs"><loc
+                  href="http://www.oasis-open.org/committees/documents.php?wg_abbrev=entity">XML
+                  Catalogs</loc>, OASIS Standard V1.1, 7 October 2005</bibl>
+            <bibl id="functx" key="FunctX" diff="add"><loc href="http://www.functx.com/"
+                  >FunctX</loc> library of functions for XQuery and XSLT 2.0, Datypic</bibl>
+         </blist>
+      </div1>
+   </back>
+</spec>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Packaging System</title><link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/TR/base.css" /><style type="text/css">
+code           { font-family: monospace; }
+
+div.constraint,
+div.issue,
+div.note,
+div.notice     { margin-left: 2em; }
+
+ol.enumar      { list-style-type: decimal; }
+ol.enumla      { list-style-type: lower-alpha; }
+ol.enumlr      { list-style-type: lower-roman; }
+ol.enumua      { list-style-type: upper-alpha; }
+ol.enumur      { list-style-type: upper-roman; }
+
+
+div.exampleInner pre { margin-left: 1em;
+                       margin-top: 0em; margin-bottom: 0em}
+div.exampleOuter {border: 4px double gray;
+                  margin: 0em; padding: 0em}
+div.exampleInner { background-color: #d5dee3;
+                   border-top-width: 4px;
+                   border-top-style: double;
+                   border-top-color: #d3d3d3;
+                   border-bottom-width: 4px;
+                   border-bottom-style: double;
+                   border-bottom-color: #d3d3d3;
+                   padding: 4px; margin: 0em }
+div.exampleWrapper { margin: 4px }
+div.exampleHeader { font-weight: bold;
+                    margin: 4px}
+
+      code.function { font-weight: bold; }
+      code.type { font-style: italic; }
+      /* h1, h2, h3 { color: #84001C; background: white } */
+      /* a, :link, :visited, a:active { color: #84005C; background: white } */
+      body {
+        background-image: url(http://www.expath.org/images/logo-candidate.png);
+      }
+   </style></head><body><div class="head"><p xmlns:h="http://www.w3.org/1999/xhtml"><a href="http://www.expath.org/"><img src="http://www.expath.org/images/expath-icon.png" alt="EXPath" height="32" width="32" /></a></p>
+<h1><a name="title" id="title"></a>Packaging System</h1>
+<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 1 September 2009</h2><dl><dt>This version:</dt><dd>
+         <a href="http://expath.org/spec/pkg/20090901">http://expath.org/spec/pkg/20090901</a>
+      </dd><dt>Latest version:</dt><dd>
+         <a href="http://expath.org/spec/pkg">http://expath.org/spec/pkg</a>
+      </dd><dt>Editor:</dt><dd>Florent Georges, H²O Consulting</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/pkg/20090901.xml">XML</a>.</p><p class="copyright"></p></div><hr /><div>
+<h2><a name="abstract" id="abstract"></a>Abstract</h2><p>This proposal defines a packaging system for various core XML technologies: XSLT,
+            XQuery, and XProc. The goal is to define it in a way enough generic so to adapt it to
+            other technologies in the future (such as XML Schema, XForms, etc.) using the same
+            framework. Besides enabling the delivery of libraries written in standard XSLT, XQuery
+            and XProc, it provides support for extensions specific to some processors, as well as
+            enabling new processors to be supported by using the same framework.</p></div><div class="toc">
+<h2><a name="contents" id="contents"></a>Table of Contents</h2><p class="toc">1 <a href="#d2e53">Introduction</a><br />
+2 <a href="#d2e60">Editorial notes</a><br />
+3 <a href="#d2e74">Concepts</a><br />
+4 <a href="#d2e112">Standard X* files</a><br />
+    4.1 <a href="#d2e117">XSLT</a><br />
+    4.2 <a href="#d2e147">XQuery</a><br />
+    4.3 <a href="#d2e165">XProc</a><br />
+    4.4 <a href="#d2e178">XML Schema</a><br />
+    4.5 <a href="#d2e190">RelaxNG</a><br />
+    4.6 <a href="#d2e206">Schematron</a><br />
+    4.7 <a href="#d2e213">NVDL</a><br />
+    4.8 <a href="#d2e220">Not supported file kinds</a><br />
+    4.9 <a href="#d2e225">Package example</a><br />
+5 <a href="#d2e230">Processor-specific files</a><br />
+    5.1 <a href="#d2e235">Saxon</a><br />
+    5.2 <a href="#d2e251">Xalan</a><br />
+    5.3 <a href="#d2e256">eXist</a><br />
+    5.4 <a href="#d2e261">MarkLogic</a><br />
+    5.5 <a href="#d2e266">Zorba</a><br />
+    5.6 <a href="#d2e271">Calabash</a><br />
+    5.7 <a href="#d2e276">Calumet</a><br />
+    5.8 <a href="#d2e281">xmlsh</a><br />
+6 <a href="#d2e286">Extensibility</a><br />
+</p>
+<h3><a name="appendices" id="appendices"></a>Appendices</h3><p class="toc">A <a href="#d2e292">Package descriptor schema</a><br />
+B <a href="#d2e299">References</a><br />
+</p></div><hr /><div class="body"><div class="div1">
+<h2><a name="d2e53" id="d2e53"></a>1 Introduction</h2><p>XSLT, XQuery and XProc are amazing programming languages. But they lack a large choice
+            of libraries, and when such libraries do exist, this is a challenge to install. There is
+            no automatic install process, the rules are different for each processor, library
+            authors do not follow the same rules regarding the info they provide, the cataloging,
+            the way they reference third-party libraries, etc.</p><p>All those problems (well, most of them) can be addressed by a packaging system that
+            would be broadly adopted by processor vendors and library authors. The cornerstone of
+            such a system is the packaging format: a description of the information to be provided
+            by the library authors and how to provide and structure them.</p></div><div class="div1">
+<h2><a name="d2e60" id="d2e60"></a>2 Editorial notes</h2><ul><li><p>Should the package system define a set of XPath functions? Instead of just
+                  defining the package format and letting everything else as implementation-defined,
+                  should it in addition define a module of functions to install, delete, and more
+                  generally manage packages from within a processor?</p><p>Drawback: potential problems if the processor requires to be stopped?</p><p>Advantages: enables writing tools on top of the system (one single graphical
+                  package manager for one system, simply using the XPath functions, as well as easy
+                  integration within IDEs; or even other systems could be more easily be built on
+                  top of it, like a packaging system for XRX applications for instance.)</p></li><li><p>Should it be possible to have two different kinds of files with the same public
+                  URI? Put another way, should we have a different URI space for each kind of files?
+                  I think this would be necessary for instance to enable deploying a package with
+                  both an XML schema and an XQuery library module with the same target namespace. I
+                  am not sure this is a best practice, but I am sure that will lead to at least one
+                  company's standard practices...</p></li></ul></div><div class="div1">
+<h2><a name="d2e74" id="d2e74"></a>3 Concepts</h2><p>A library is a set of files fulfilling a common purpose. An XSLT library can for
+            instance provide a set of template rules and functions to help formating a particular
+            XML document type. A package is a way to bundle those files into a single ZIP file,
+            following a defined structure and providing more information within the <em>package
+               descriptor</em>. The package descriptor is a plain XML file, named
+               <code>expath-pkg.xml</code> at the root of the ZIP file, and containing information
+            about the library (like its name and its version number) and about the files it provides
+            and how to reference them (for instance stylesheets and query modules.)</p><p>The ZIP file structure (aka the package structure) must have exactly two entries at the
+            top-level (aka the root): the package descriptor and one directory entry. This directory
+            contains all the library files, and all file references in the package descriptor are
+            relative to this directory. This directory is called the <em>library
+            directory</em>.</p><p>All the elements in the package descriptor are defined in the namespace
+               <code>http://expath.org/mod/expath-pkg</code>. All the elements defined in this
+            specification or used in samples and in text are in this namespace, even if no prefix is
+            used. The root element is <code>package</code>, and contains exactly one child element
+               <code>module</code>:</p><div class="exampleInner"><pre>
+&lt;package&gt;
+   module
+&lt;/package&gt;
+
+&lt;module name = NCName
+        version = string&gt;
+   title,
+   (xsl
+   |xquery
+   |xproc
+   |xsd
+   |rng
+   |rnc
+   |...)+
+&lt;/module&gt;</pre></div><p><code>name</code> is the library name. The top-level directory in the package structure
+            must have the exact same name. The module has also a version number, and a
+            human-readable title. It then provides information about one or several files. In
+            addition to those standard file descriptors, it can also contain elements specific to
+            some processors (for instance an element for Saxon, eXist, etc.) Details are provided
+            below.</p><p>The files configured in the module are the files <em>exported</em> by the module.
+            But the whole library directory must be preserved. Indeed, it can contain other, private
+            files, aimed to be used only from within library files, not from the outside.</p></div><div class="div1">
+<h2><a name="d2e112" id="d2e112"></a>4 Standard X* files</h2><p>Here is the description of the standard file kinds supported by this specification, and
+            how they contribute to the package descriptor document type.</p><div class="div2">
+<h3><a name="d2e117" id="d2e117"></a>4.1 XSLT</h3><p>An XSLT file is associated a <em>public import URI</em>. This URI must be an
+               absolute URI (most often a URN or an HTTP URI.) This is the URI to use in an XSLT
+               import instruction (aka <code>xsl:import</code>) to import the XSLT file provided in
+               the package. This file is configured with the element <code>xsl</code>.</p><div class="exampleInner"><pre>
+&lt;xsl&gt;
+   import-uri,
+   file
+&lt;/xsl&gt;</pre></div><p>The element <code>file</code> contains the path to the file within the package
+               structure, relative to the library directory. Both elements <code>import-uri</code>
+               and <code>file</code> are of type <code>anyURI</code>.</p></div><div class="div2">
+<h3><a name="d2e147" id="d2e147"></a>4.2 XQuery</h3><p>An XQuery library module is referenced by its namespace URI. Thus the
+                  <code>xquery</code> element associates a namespace URI to an XQuery file. An
+               importing module just need to use an import statement of the form <code>import module
+                  namespace xx = "&lt;namespace-uri&gt;";</code>.</p><div class="exampleInner"><pre>
+&lt;xquery&gt;
+   namespace,
+   file
+&lt;/xquery&gt;</pre></div><p>Note that there is no way to set any location hint (as the <code>at</code> clause in
+               the import statement.) To use this packaging system, an XQuery library module must be
+               referenced by its target namespace.</p></div><div class="div2">
+<h3><a name="d2e165" id="d2e165"></a>4.3 XProc</h3><p>An XProc pipeline, like an XSLT stylesheet, is associated a <em>public import
+                  URI</em>, aimed to be used in an XProc <code>p:import</code> statement.</p><div class="exampleInner"><pre>
+&lt;xproc&gt;
+   import-uri,
+   file
+&lt;/xproc&gt;</pre></div></div><div class="div2">
+<h3><a name="d2e178" id="d2e178"></a>4.4 XML Schema</h3><p>An XML schema can be imported using its target namespace. Like for XQuery, there is
+               no way to use any <code>schemaLocation</code> instead. There is neither the ability
+               to set several files as several sources for the schema. If the schema is spread over
+               multiple files, there must be one top-level file that includes the other files.</p><div class="exampleInner"><pre>
+&lt;xsd&gt;
+   namespace,
+   file
+&lt;/xsd&gt;</pre></div><p>(TODO: Should we support schemas with empty target namespace? I am sure this is a
+               good idea in a packaging system...)</p></div><div class="div2">
+<h3><a name="d2e190" id="d2e190"></a>4.5 RelaxNG</h3><p>A RelaxNG schema, like an XSLT stylesheet, is associated a public import URI, aimed
+               to be used in an <em>import</em> statement (either the <em>include</em>
+               element for an RNG schema or an <em>import</em> directive for an RNC schema.)</p><div class="exampleInner"><pre>
+&lt;rng&gt;
+   import-uri,
+   file
+&lt;/rng&gt;
+
+&lt;rnc&gt;
+   import-uri,
+   file
+&lt;/xrnc&gt;</pre></div></div><div class="div2">
+<h3><a name="d2e206" id="d2e206"></a>4.6 Schematron</h3><p>A Schematron schema is associated a public URI.</p><div class="exampleInner"><pre>
+&lt;schematron&gt;
+   import-uri,
+   file
+&lt;/schematron&gt;</pre></div></div><div class="div2">
+<h3><a name="d2e213" id="d2e213"></a>4.7 NVDL</h3><p>An NVDL script is associated a public URI.</p><div class="exampleInner"><pre>
+&lt;nvdl&gt;
+   import-uri,
+   file
+&lt;/nvdl&gt;</pre></div></div><div class="div2">
+<h3><a name="d2e220" id="d2e220"></a>4.8 Not supported file kinds</h3><p>Documentation (like result of XSLStyle or xqDoc) is not taken into account in the
+               packaging format, though that could be used by IDEs for instance to provide
+               documentation for functions in an editor with a live completion feature. Some support
+               for documentation can of course be added as a product-specific feature to the package
+               descriptor.</p></div><div class="div2">
+<h3><a name="d2e225" id="d2e225"></a>4.9 Package example</h3><p>... [ package structure + package descriptor ] ...</p></div></div><div class="div1">
+<h2><a name="d2e230" id="d2e230"></a>5 Processor-specific files</h2><p>Bla-bla...</p><div class="div2">
+<h3><a name="d2e235" id="d2e235"></a>5.1 Saxon</h3><p>Bla-bla...</p><p>... classes for <a href="http://www.saxonica.com/documentation/extensibility/functions.html">extension functions</a> (both Java and .Net?), classes for <a href="http://www.saxonica.com/documentation/extensibility/instructions.html">extension instructions</a>, classes for <a href="http://www.saxonica.com/documentation/extensibility/localizing.html">localizing numbers and dates</a>, URI resolvers, etc.</p></div><div class="div2">
+<h3><a name="d2e251" id="d2e251"></a>5.2 Xalan</h3><p>Bla-bla...</p></div><div class="div2">
+<h3><a name="d2e256" id="d2e256"></a>5.3 eXist</h3><p>Bla-bla...</p></div><div class="div2">
+<h3><a name="d2e261" id="d2e261"></a>5.4 MarkLogic</h3><p>Bla-bla...</p></div><div class="div2">
+<h3><a name="d2e266" id="d2e266"></a>5.5 Zorba</h3><p>Bla-bla...</p></div><div class="div2">
+<h3><a name="d2e271" id="d2e271"></a>5.6 Calabash</h3><p>Bla-bla...</p></div><div class="div2">
+<h3><a name="d2e276" id="d2e276"></a>5.7 Calumet</h3><p>Bla-bla...</p></div><div class="div2">
+<h3><a name="d2e281" id="d2e281"></a>5.8 xmlsh</h3><p>Bla-bla...</p></div></div><div class="div1">
+<h2><a name="d2e286" id="d2e286"></a>6 Extensibility</h2><p>Bla-bla...</p></div></div><div class="back"><div class="div1">
+<h2><a name="d2e292" id="d2e292"></a>A Package descriptor schema</h2><div class="exampleInner"><pre>&lt;xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:pkg="http://expath.org/mod/expath-pkg"
+           targetNamespace="http://expath.org/mod/expath-pkg"
+           elementFormDefault="qualified"&gt;
+
+   &lt;xs:element name="package"&gt;
+      &lt;xs:complexType&gt;
+         &lt;xs:sequence&gt;
+            &lt;xs:element ref="pkg:module" maxOccurs="unbounded"/&gt;
+         &lt;/xs:sequence&gt;
+      &lt;/xs:complexType&gt;
+   &lt;/xs:element&gt;
+
+   &lt;xs:element name="module"&gt;
+      &lt;xs:complexType&gt;
+         &lt;xs:sequence&gt;
+            &lt;xs:element name="title"  type="pkg:title-type"/&gt;
+            &lt;xs:element name="xsl"    type="pkg:style-type" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element name="xquery" type="pkg:query-type" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element name="saxon"  type="pkg:saxon-type" minOccurs="0"/&gt;
+            &lt;xs:element name="exist"  type="pkg:exist-type" minOccurs="0"/&gt;
+         &lt;/xs:sequence&gt;
+         &lt;xs:attribute name="version" type="xs:string"/&gt;
+         &lt;xs:attribute name="name"    type="xs:string"/&gt;
+      &lt;/xs:complexType&gt;
+   &lt;/xs:element&gt;
+
+   &lt;xs:simpleType name="title-type"&gt;
+      &lt;xs:restriction base="xs:string"/&gt;
+   &lt;/xs:simpleType&gt;
+
+   &lt;xs:complexType name="style-type"&gt;
+      &lt;xs:sequence&gt;
+         &lt;xs:element name="import-uri" type="xs:anyURI"/&gt;
+         &lt;xs:element name="file"       type="xs:anyURI"/&gt;
+      &lt;/xs:sequence&gt;
+   &lt;/xs:complexType&gt;
+
+   &lt;xs:complexType name="query-type"&gt;
+      &lt;xs:sequence&gt;
+         &lt;xs:element name="namespace" type="xs:anyURI"/&gt;
+         &lt;xs:element name="file"      type="xs:anyURI"/&gt;
+      &lt;/xs:sequence&gt;
+   &lt;/xs:complexType&gt;
+
+   &lt;xs:complexType name="saxon-type"&gt;
+      &lt;xs:sequence&gt;
+         &lt;xs:element name="function"       minOccurs="0" maxOccurs="unbounded" type="xs:string"/&gt;
+         &lt;xs:element name="library"        minOccurs="0" maxOccurs="unbounded" type="xs:string"/&gt;
+         &lt;xs:element name="xsl"            minOccurs="0" maxOccurs="unbounded" type="pkg:style-type"/&gt;
+         &lt;xs:element name="xquery"         minOccurs="0" maxOccurs="unbounded" type="pkg:query-type"/&gt;
+         &lt;xs:element name="xsl-wrapper"    minOccurs="0" maxOccurs="unbounded" type="pkg:style-type"/&gt;
+         &lt;xs:element name="xquery-wrapper" minOccurs="0" maxOccurs="unbounded" type="pkg:query-type"/&gt;
+         &lt;xs:element name="dep"            minOccurs="0" maxOccurs="unbounded"&gt;
+            &lt;xs:complexType&gt;
+               &lt;xs:sequence&gt;
+                  &lt;xs:element name="title" type="pkg:title-type"/&gt;
+                  &lt;xs:element name="home"  type="xs:anyURI"/&gt;
+                  &lt;xs:element name="href"  type="xs:anyURI" minOccurs="0"/&gt;
+               &lt;/xs:sequence&gt;
+               &lt;xs:attribute name="type" fixed="jar"/&gt;
+            &lt;/xs:complexType&gt;
+         &lt;/xs:element&gt;
+      &lt;/xs:sequence&gt;
+   &lt;/xs:complexType&gt;
+
+   &lt;xs:complexType name="exist-type"&gt;
+      &lt;xs:sequence&gt;
+         &lt;xs:element name="xquery" type="pkg:query-type" maxOccurs="unbounded"/&gt;
+      &lt;/xs:sequence&gt;
+   &lt;/xs:complexType&gt;
+
+&lt;/xs:schema&gt;
+</pre></div><p>(or RNC?)</p></div><div class="div1">
+<h2><a name="d2e299" id="d2e299"></a>B References</h2><dl><dt class="label"><a name="for-ref" id="for-ref"></a>To Display</dt><dd>An <a href="http://www.example.com/">example
+                  reference</a>. Example &amp; Co.</dd></dl></div></div></body></html>

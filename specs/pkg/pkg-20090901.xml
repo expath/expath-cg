@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?oxygen RNGSchema="http://www.w3.org/XML/1998/06/schema/xmlspec.rng" type="xml"?>
+
+<spec role="editors-copy">
+   <header>
+      <title>Packaging System</title>
+      <w3c-designation>w3c-designation</w3c-designation>
+      <w3c-doctype>EXPath Candidate Module</w3c-doctype>
+      <pubdate>
+         <day>1</day>
+         <month>September</month>
+         <year>2009</year>
+      </pubdate>
+      <publoc>
+         <loc href="http://expath.org/spec/pkg/20090901"/>
+      </publoc>
+      <altlocs>
+         <loc href="http://expath.org/spec/pkg/20090901.xml">XML</loc>
+      </altlocs>
+      <latestloc>
+         <loc href="http://expath.org/spec/pkg"/>
+      </latestloc>
+      <!--prevlocs>
+         <loc href="http://expath.org/spec/pkg/2009mmdd"/>
+         <loc href="http://expath.org/spec/pkg/2009mmdd"/>
+         ...
+      </prevlocs-->
+      <authlist>
+         <author>
+            <name>Florent Georges</name>
+            <affiliation>H²O Consulting</affiliation>
+         </author>
+      </authlist>
+      <copyright>
+         <p/>
+      </copyright>
+      <abstract>
+         <p>This proposal defines a packaging system for various core XML technologies: XSLT,
+            XQuery, and XProc. The goal is to define it in a way enough generic so to adapt it to
+            other technologies in the future (such as XML Schema, XForms, etc.) using the same
+            framework. Besides enabling the delivery of libraries written in standard XSLT, XQuery
+            and XProc, it provides support for extensions specific to some processors, as well as
+            enabling new processors to be supported by using the same framework.</p>
+      </abstract>
+      <status>
+         <p>Must be ignored, but is required by the schema...</p>
+      </status>
+      <langusage>
+         <language>langusage</language>
+      </langusage>
+      <revisiondesc>
+         <p>revisiondesc</p>
+      </revisiondesc>
+   </header>
+   <body>
+      <div1>
+         <head>Introduction</head>
+         <p>XSLT, XQuery and XProc are amazing programming languages. But they lack a large choice
+            of libraries, and when such libraries do exist, this is a challenge to install. There is
+            no automatic install process, the rules are different for each processor, library
+            authors do not follow the same rules regarding the info they provide, the cataloging,
+            the way they reference third-party libraries, etc.</p>
+         <p>All those problems (well, most of them) can be addressed by a packaging system that
+            would be broadly adopted by processor vendors and library authors. The cornerstone of
+            such a system is the packaging format: a description of the information to be provided
+            by the library authors and how to provide and structure them.</p>
+      </div1>
+      <div1>
+         <head>Editorial notes</head>
+         <ulist>
+            <item>
+               <p>Should the package system define a set of XPath functions? Instead of just
+                  defining the package format and letting everything else as implementation-defined,
+                  should it in addition define a module of functions to install, delete, and more
+                  generally manage packages from within a processor?</p>
+               <p>Drawback: potential problems if the processor requires to be stopped?</p>
+               <p>Advantages: enables writing tools on top of the system (one single graphical
+                  package manager for one system, simply using the XPath functions, as well as easy
+                  integration within IDEs; or even other systems could be more easily be built on
+                  top of it, like a packaging system for XRX applications for instance.)</p>
+            </item>
+            <item>
+               <p>Should it be possible to have two different kinds of files with the same public
+                  URI? Put another way, should we have a different URI space for each kind of files?
+                  I think this would be necessary for instance to enable deploying a package with
+                  both an XML schema and an XQuery library module with the same target namespace. I
+                  am not sure this is a best practice, but I am sure that will lead to at least one
+                  company's standard practices...</p>
+            </item>
+         </ulist>
+      </div1>
+      <div1>
+         <head>Concepts</head>
+         <p>A library is a set of files fulfilling a common purpose. An XSLT library can for
+            instance provide a set of template rules and functions to help formating a particular
+            XML document type. A package is a way to bundle those files into a single ZIP file,
+            following a defined structure and providing more information within the <emph>package
+               descriptor</emph>. The package descriptor is a plain XML file, named
+               <code>expath-pkg.xml</code> at the root of the ZIP file, and containing information
+            about the library (like its name and its version number) and about the files it provides
+            and how to reference them (for instance stylesheets and query modules.)</p>
+         <p>The ZIP file structure (aka the package structure) must have exactly two entries at the
+            top-level (aka the root): the package descriptor and one directory entry. This directory
+            contains all the library files, and all file references in the package descriptor are
+            relative to this directory. This directory is called the <emph>library
+            directory</emph>.</p>
+         <p>All the elements in the package descriptor are defined in the namespace
+               <code>http://expath.org/mod/expath-pkg</code>. All the elements defined in this
+            specification or used in samples and in text are in this namespace, even if no prefix is
+            used. The root element is <code>package</code>, and contains exactly one child element
+               <code>module</code>:</p>
+         <eg>
+&lt;package>
+   module
+&lt;/package>
+
+&lt;module name = NCName
+        version = string>
+   title,
+   (xsl
+   |xquery
+   |xproc
+   |xsd
+   |rng
+   |rnc
+   |...)+
+&lt;/module></eg>
+         <p><code>name</code> is the library name. The top-level directory in the package structure
+            must have the exact same name. The module has also a version number, and a
+            human-readable title. It then provides information about one or several files. In
+            addition to those standard file descriptors, it can also contain elements specific to
+            some processors (for instance an element for Saxon, eXist, etc.) Details are provided
+            below.</p>
+         <p>The files configured in the module are the files <emph>exported</emph> by the module.
+            But the whole library directory must be preserved. Indeed, it can contain other, private
+            files, aimed to be used only from within library files, not from the outside.</p>
+      </div1>
+      <div1>
+         <head>Standard X* files</head>
+         <p>Here is the description of the standard file kinds supported by this specification, and
+            how they contribute to the package descriptor document type.</p>
+         <div2>
+            <head>XSLT</head>
+            <p>An XSLT file is associated a <emph>public import URI</emph>. This URI must be an
+               absolute URI (most often a URN or an HTTP URI.) This is the URI to use in an XSLT
+               import instruction (aka <code>xsl:import</code>) to import the XSLT file provided in
+               the package. This file is configured with the element <code>xsl</code>.</p>
+            <eg>
+&lt;xsl>
+   import-uri,
+   file
+&lt;/xsl></eg>
+            <p>The element <code>file</code> contains the path to the file within the package
+               structure, relative to the library directory. Both elements <code>import-uri</code>
+               and <code>file</code> are of type <code>anyURI</code>.</p>
+         </div2>
+         <div2>
+            <head>XQuery</head>
+            <p>An XQuery library module is referenced by its namespace URI. Thus the
+                  <code>xquery</code> element associates a namespace URI to an XQuery file. An
+               importing module just need to use an import statement of the form <code>import module
+                  namespace xx = "&lt;namespace-uri>";</code>.</p>
+            <eg>
+&lt;xquery>
+   namespace,
+   file
+&lt;/xquery></eg>
+            <p>Note that there is no way to set any location hint (as the <code>at</code> clause in
+               the import statement.) To use this packaging system, an XQuery library module must be
+               referenced by its target namespace.</p>
+         </div2>
+         <div2>
+            <head>XProc</head>
+            <p>An XProc pipeline, like an XSLT stylesheet, is associated a <emph>public import
+                  URI</emph>, aimed to be used in an XProc <code>p:import</code> statement.</p>
+            <eg>
+&lt;xproc>
+   import-uri,
+   file
+&lt;/xproc></eg>
+         </div2>
+         <div2>
+            <head>XML Schema</head>
+            <p>An XML schema can be imported using its target namespace. Like for XQuery, there is
+               no way to use any <code>schemaLocation</code> instead. There is neither the ability
+               to set several files as several sources for the schema. If the schema is spread over
+               multiple files, there must be one top-level file that includes the other files.</p>
+            <eg>
+&lt;xsd>
+   namespace,
+   file
+&lt;/xsd></eg>
+            <p>(TODO: Should we support schemas with empty target namespace? I am sure this is a
+               good idea in a packaging system...)</p>
+         </div2>
+         <div2>
+            <head>RelaxNG</head>
+            <p>A RelaxNG schema, like an XSLT stylesheet, is associated a public import URI, aimed
+               to be used in an <emph>import</emph> statement (either the <emph>include</emph>
+               element for an RNG schema or an <emph>import</emph> directive for an RNC schema.)</p>
+            <eg>
+&lt;rng>
+   import-uri,
+   file
+&lt;/rng>
+
+&lt;rnc>
+   import-uri,
+   file
+&lt;/xrnc></eg>
+         </div2>
+         <div2>
+            <head>Schematron</head>
+            <p>A Schematron schema is associated a public URI.</p>
+            <eg>
+&lt;schematron>
+   import-uri,
+   file
+&lt;/schematron></eg>
+         </div2>
+         <div2>
+            <head>NVDL</head>
+            <p>An NVDL script is associated a public URI.</p>
+            <eg>
+&lt;nvdl>
+   import-uri,
+   file
+&lt;/nvdl></eg>
+         </div2>
+         <div2>
+            <head>Not supported file kinds</head>
+            <p>Documentation (like result of XSLStyle or xqDoc) is not taken into account in the
+               packaging format, though that could be used by IDEs for instance to provide
+               documentation for functions in an editor with a live completion feature. Some support
+               for documentation can of course be added as a product-specific feature to the package
+               descriptor.</p>
+         </div2>
+         <div2>
+            <head>Package example</head>
+            <p>... [ package structure + package descriptor ] ...</p>
+         </div2>
+      </div1>
+      <div1>
+         <head>Processor-specific files</head>
+         <p>Bla-bla...</p>
+         <div2>
+            <head>Saxon</head>
+            <p>Bla-bla...</p>
+            <p>... classes for <loc
+                  href="http://www.saxonica.com/documentation/extensibility/functions.html"
+                  >extension functions</loc> (both Java and .Net?), classes for <loc
+                  href="http://www.saxonica.com/documentation/extensibility/instructions.html"
+                  >extension instructions</loc>, classes for <loc
+                  href="http://www.saxonica.com/documentation/extensibility/localizing.html"
+                  >localizing numbers and dates</loc>, URI resolvers, etc.</p>
+         </div2>
+         <div2>
+            <head>Xalan</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>eXist</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>MarkLogic</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>Zorba</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>Calabash</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>Calumet</head>
+            <p>Bla-bla...</p>
+         </div2>
+         <div2>
+            <head>xmlsh</head>
+            <p>Bla-bla...</p>
+         </div2>
+      </div1>
+      <div1>
+         <head>Extensibility</head>
+         <p>Bla-bla...</p>
+      </div1>
+   </body>
+   <back>
+      <div1>
+         <head>Package descriptor schema</head>
+         <eg><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../xsd/expath-pkg.xsd" parse="text"/></eg>
+         <p>(or RNC?)</p>
+      </div1>
+      <div1>
+         <head>References</head>
+         <blist>
+            <bibl id="for-ref" key="To Display">An <loc href="http://www.example.com/">example
+                  reference</loc>. Example &amp; Co.</bibl>
+         </blist>
+      </div1>
+   </back>
+</spec>
