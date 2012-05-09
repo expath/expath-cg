@@ -1,0 +1,32 @@
+<project xmlns="http://expath.org/ns/project"
+         name="http://w3.org/2002/xmlspec/"
+         abbrev="xmlspec"
+         version="1.13">
+
+   <title>The W3C XMLSpec format</title>
+
+   <home>http://w3.org/2002/xmlspec/</home>
+
+   <xslt>
+      <import-uri>http://w3.org/2002/xmlspec/xmlspec.xsl</import-uri>
+      <file>xmlspec.xsl</file>
+   </xslt>
+   <xsd>
+      <import-uri>http://w3.org/2002/xmlspec/xmlspec.xsd</import-uri>
+      <file>xmlspec.xsd</file>
+   </xsd>
+   <rng>
+      <import-uri>http://w3.org/2002/xmlspec/xmlspec.rng</import-uri>
+      <file>xmlspec.rng</file>
+   </rng>
+   <rnc>
+      <import-uri>http://w3.org/2002/xmlspec/xmlspec.rnc</import-uri>
+      <file>xmlspec.rnc</file>
+   </rnc>
+   <dtd>
+      <public-id>-//W3C//DTD Specification V2.10//EN</public-id>
+      <system-id>http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd</system-id>
+      <file>xmlspec.dtd</file>
+   </dtd>
+
+</project>
