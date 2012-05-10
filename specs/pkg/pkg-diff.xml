@@ -34,6 +34,10 @@
             <affiliation><loc href="http://h2oconsulting.be/">H2O Consulting</loc></affiliation>
          </author>
       </authlist>
+      <!--
+          The copyright has to be adapted when this spec passes into "Final Report" status.
+          See http://www.w3.org/community/reports/reqs/.
+      -->
       <copyright>
          <p diff="add">Copyright © 2009-2012 Florent Georges, published by the <loc
                href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
