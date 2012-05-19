@@ -1,7 +1,7 @@
 <project xmlns="http://expath.org/ns/project"
          name="http://w3.org/2002/xmlspec/"
          abbrev="xmlspec"
-         version="1.13.0">
+         version="1.14.0">
 
    <title>The W3C XMLSpec format</title>
 

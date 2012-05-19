@@ -6,7 +6,7 @@
 <!-- ====================================================================== -->
 <!-- xmlspec.xsl: An HTML XSL[1] Stylesheet for XML Spec V2.1[2] markup
 
-     Version: $Id: xmlspec.xsl,v 1.54 2005/10/13 15:44:48 NormanWalsh Exp $
+     Version: $Id: xmlspec.xsl,v 1.1 2011/09/07 14:47:12 mdw Exp $
 
      URI:     http://dev.w3.org/cvsweb/spec-prod/html/xmlspec.xsl
 
@@ -17,7 +17,7 @@
               Henry S. Thompson (ht@cogsci.ed.ac.uk)
 
      Date:    Created 07 September 1999
-              Last updated $Date: 2005/10/13 15:44:48 $ by $Author: NormanWalsh $
+              Last updated $Date: 2011/09/07 14:47:12 $ by $Author: mdw $
 
      Copyright (C) 2000, 2001, 2002 Sun Microsystems, Inc. All Rights Reserved.
      This document is governed by the W3C Software License[3] as
@@ -1112,7 +1112,7 @@
               <acronym title="Massachusetts Institute of Technology">MIT</acronym>
             </a>
             <xsl:text>, </xsl:text>
-            <a href="http://www.ercim.org/">
+            <a href="http://www.ercim.eu/">
               <acronym title="European Research Consortium for Informatics and Mathematics">ERCIM</acronym>
             </a>
             <xsl:text>, </xsl:text>
