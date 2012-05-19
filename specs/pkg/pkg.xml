@@ -703,11 +703,11 @@ import module namespace fx = "http://www.functx.com";</eg>
    <back>
       <div1 id="expath-pkg.xsd">
          <head>Package descriptor schema</head>
-         <eg><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../../../pkg/xsd/expath-pkg.xsd" parse="text"/></eg>
+         <eg><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="schema/expath-pkg.xsd" parse="text"/></eg>
       </div1>
       <div1 id="packages.xsd">
          <head>Package list schema</head>
-         <eg><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../../../pkg/xsd/packages.xsd" parse="text"/></eg>
+         <eg><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="schema/packages.xsd" parse="text"/></eg>
       </div1>
       <div1 id="references">
          <head>References</head>

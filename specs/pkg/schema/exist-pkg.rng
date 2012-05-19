@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<grammar ns="http://expath.org/ns/pkg/exist"
+    xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <start>
+        <choice>
+            <choice>
+                <notAllowed/>
+                <element name="package">
+                    <oneOrMore>
+                        <element name="xquery">
+                            <ref name="query-type"/>
+                        </element>
+                    </oneOrMore>
+                </element>
+            </choice>
+            <ref name="dependency"/>
+            <choice>
+                <notAllowed/>
+                <element>
+                    <name ns="http://expath.org/ns/pkg">package</name>
+                    <attribute name="spec">
+                        <value>1.0-alpha1</value>
+                    </attribute>
+                    <attribute name="version">
+                        <data type="string"/>
+                    </attribute>
+                    <attribute name="abbrev">
+                        <data type="string"/>
+                    </attribute>
+                    <attribute name="name">
+                        <data type="anyURI"/>
+                    </attribute>
+                    <element>
+                        <name ns="http://expath.org/ns/pkg">title</name>
+                        <data type="string"/>
+                    </element>
+                    <zeroOrMore>
+                        <ref name="dependency"/>
+                    </zeroOrMore>
+                    <zeroOrMore>
+                        <choice>
+                            <element>
+                                <name ns="http://expath.org/ns/pkg">xquery</name>
+                                <ref name="query-type"/>
+                            </element>
+                            <element>
+                                <name ns="http://expath.org/ns/pkg">xslt</name>
+                                <ref name="component-type"/>
+                            </element>
+                            <element>
+                                <name ns="http://expath.org/ns/pkg">xproc</name>
+                                <ref name="component-type"/>
+                            </element>
+                            <element>
+                                <name ns="http://expath.org/ns/pkg">xsd</name>
+                                <ref name="component-type"/>
+                            </element>
+                            <element>
+                                <name ns="http://expath.org/ns/pkg">rng</name>
+                                <ref name="component-type"/>
+                            </element>
+                            <element>
+                                <name ns="http://expath.org/ns/pkg">rnc</name>
+                                <ref name="component-type"/>
+                            </element>
+                        </choice>
+                    </zeroOrMore>
+                </element>
+            </choice>
+        </choice>
+    </start>
+    <define name="anyURI">
+        <data type="anyURI"/>
+    </define>
+    <define name="component-type">
+        <group>
+            <choice>
+                <notAllowed/>
+                <element>
+                    <name ns="http://expath.org/ns/pkg">import-uri</name>
+                    <ref name="anyURI"/>
+                </element>
+            </choice>
+            <choice>
+                <notAllowed/>
+                <element>
+                    <name ns="http://expath.org/ns/pkg">file</name>
+                    <ref name="anyURI"/>
+                </element>
+            </choice>
+        </group>
+        <empty/>
+    </define>
+    <define name="query-type">
+        <group>
+            <choice>
+                <notAllowed/>
+                <element>
+                    <name ns="http://expath.org/ns/pkg">namespace</name>
+                    <ref name="anyURI"/>
+                </element>
+            </choice>
+            <choice>
+                <notAllowed/>
+                <element>
+                    <name ns="http://expath.org/ns/pkg">file</name>
+                    <ref name="anyURI"/>
+                </element>
+            </choice>
+        </group>
+        <empty/>
+    </define>
+    <define name="dependency">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://expath.org/ns/pkg">dependency</name>
+                <optional>
+                    <attribute name="semver-max">
+                        <data type="token"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="semver-min">
+                        <data type="token"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="semver">
+                        <data type="token"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="versions">
+                        <list>
+                            <zeroOrMore>
+                                <data type="token"/>
+                            </zeroOrMore>
+                        </list>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="version">
+                        <data type="token"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="name">
+                        <data type="anyURI"/>
+                    </attribute>
+                </optional>
+            </element>
+        </choice>
+    </define>
+</grammar>

@@ -1,0 +1,36 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:sp="http://expath.org/ns/pkg/saxon"
+           xmlns:pkg="http://expath.org/ns/pkg"
+           targetNamespace="http://expath.org/ns/pkg/saxon"
+           elementFormDefault="qualified">
+
+   <xs:import namespace="http://expath.org/ns/pkg" schemaLocation="expath-pkg.xsd"/>
+
+   <xs:element name="package">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="jar"            minOccurs="0" maxOccurs="unbounded" type="xs:anyURI"/>
+            <xs:element name="function"       minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+            <xs:element name="library"        minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+            <xs:element name="xslt"           minOccurs="0" maxOccurs="unbounded" type="pkg:component-type"/>
+            <xs:element name="xquery"         minOccurs="0" maxOccurs="unbounded" type="pkg:query-type"/>
+            <xs:element name="xslt-wrapper"   minOccurs="0" maxOccurs="unbounded" type="pkg:component-type"/>
+            <xs:element name="xquery-wrapper" minOccurs="0" maxOccurs="unbounded" type="pkg:query-type"/>
+            <xs:element name="dep"            minOccurs="0" maxOccurs="unbounded">
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="title" type="pkg:title-type"/>
+                     <xs:element name="home"  type="xs:anyURI"/>
+                     <xs:choice minOccurs="0">
+                        <xs:element name="href" type="xs:anyURI"/>
+                        <xs:element name="file" type="xs:anyURI"/>
+                     </xs:choice>
+                  </xs:sequence>
+                  <xs:attribute name="type" fixed="jar"/>
+               </xs:complexType>
+            </xs:element>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
+</xs:schema>

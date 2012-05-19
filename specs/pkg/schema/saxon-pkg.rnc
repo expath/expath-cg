@@ -1,0 +1,64 @@
+default namespace = "http://expath.org/ns/pkg"
+namespace ns1 = "http://expath.org/ns/pkg/saxon"
+
+start =
+  (notAllowed
+   | element ns1:package {
+       element ns1:jar { anyURI }*,
+       element ns1:function { \string }*,
+       element ns1:library { \string }*,
+       element ns1:xslt { component-type }*,
+       element ns1:xquery { query-type }*,
+       element ns1:xslt-wrapper { component-type }*,
+       element ns1:xquery-wrapper { query-type }*,
+       element ns1:dep {
+         attribute type { "jar" }?,
+         element ns1:title { title-type },
+         element ns1:home { anyURI },
+         (element ns1:href { anyURI }
+          | element ns1:file { anyURI })?
+       }*
+     })
+  | dependency
+  | (notAllowed
+     | element package {
+         attribute spec { "1.0-alpha1" },
+         attribute version { xsd:string },
+         attribute abbrev { xsd:string },
+         attribute name { xsd:anyURI },
+         element title { title-type },
+         dependency*,
+         (element xquery { query-type }
+          | element xslt { component-type }
+          | element xproc { component-type }
+          | element xsd { component-type }
+          | element rng { component-type }
+          | element rnc { component-type })*
+       })
+anyURI = xsd:anyURI
+component-type =
+  ((notAllowed
+    | element import-uri { anyURI }),
+   (notAllowed
+    | element file { anyURI })),
+  empty
+\string = xsd:string
+title-type = xsd:string
+query-type =
+  ((notAllowed
+    | element namespace { anyURI }),
+   (notAllowed
+    | element file { anyURI })),
+  empty
+dependency =
+  notAllowed
+  | element dependency {
+      attribute semver-max { xsd:token }?,
+      attribute semver-min { xsd:token }?,
+      attribute semver { xsd:token }?,
+      attribute versions {
+        list { xsd:token* }
+      }?,
+      attribute version { xsd:token }?,
+      attribute name { xsd:anyURI }?
+    }

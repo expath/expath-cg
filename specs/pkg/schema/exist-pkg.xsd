@@ -1,0 +1,17 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:sp="http://expath.org/ns/pkg/exist"
+           xmlns:pkg="http://expath.org/ns/pkg"
+           targetNamespace="http://expath.org/ns/pkg/exist"
+           elementFormDefault="qualified">
+
+   <xs:import namespace="http://expath.org/ns/pkg" schemaLocation="expath-pkg.xsd"/>
+
+   <xs:element name="package">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="xquery" type="pkg:query-type" maxOccurs="unbounded"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
+</xs:schema>

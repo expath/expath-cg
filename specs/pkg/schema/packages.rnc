@@ -1,0 +1,13 @@
+default namespace = "http://expath.org/ns/repo/packages"
+
+start =
+  (notAllowed
+   | element packages { package* })
+  | package
+package =
+  notAllowed
+  | element package {
+      attribute version { xsd:string },
+      attribute dir { xsd:string },
+      attribute name { xsd:anyURI }
+    }

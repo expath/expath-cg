@@ -1,0 +1,41 @@
+default namespace = "http://expath.org/ns/pkg"
+
+start =
+  dependency
+  | (notAllowed
+     | element package {
+         attribute spec { "1.0" },
+         attribute version { xsd:string },
+         attribute abbrev { xsd:NCName },
+         attribute name { xsd:anyURI },
+         element title { xsd:string },
+         dependency*,
+         (element xquery {
+            element namespace { anyURI },
+            element file { anyURI }
+          }
+          | element xslt { component-type }
+          | element xproc { component-type }
+          | element xsd { component-type }
+          | element rng { component-type }
+          | element rnc { component-type })*
+       })
+dependency =
+  notAllowed
+  | element dependency {
+      attribute semver-max { xsd:token }?,
+      attribute semver-min { xsd:token }?,
+      attribute semver { xsd:token }?,
+      attribute versions {
+        list { xsd:token* }
+      }?,
+      attribute version { xsd:token }?,
+      attribute name { xsd:anyURI }?
+    }
+anyURI = xsd:anyURI
+component-type =
+  ((notAllowed
+    | element import-uri { anyURI }),
+   (notAllowed
+    | element file { anyURI })),
+  empty

@@ -1,0 +1,66 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:pkg="http://expath.org/ns/pkg"
+           targetNamespace="http://expath.org/ns/pkg"
+           elementFormDefault="qualified">
+
+   <xs:element name="package">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="title" type="pkg:title-type"/>
+            <xs:element ref="pkg:dependency" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+               <xs:element name="xquery" type="pkg:query-type"/>
+               <xs:element name="xslt"   type="pkg:component-type"/>
+               <xs:element name="xproc"  type="pkg:component-type"/>
+               <xs:element name="xsd"    type="pkg:component-type"/>
+               <xs:element name="rng"    type="pkg:component-type"/>
+               <xs:element name="rnc"    type="pkg:component-type"/>
+            </xs:choice>
+         </xs:sequence>
+         <xs:attribute name="name"    type="xs:anyURI" use="required"/>
+         <xs:attribute name="abbrev"  type="xs:NCName" use="required"/>
+         <xs:attribute name="version" type="xs:string" use="required"/>
+         <!-- In the 1.0 version of the spec, fix it to '1.0'. -->
+         <xs:attribute name="spec"    fixed="1.0"      use="required"/>
+      </xs:complexType>
+   </xs:element>
+
+   <xs:element name="dependency">
+      <xs:complexType>
+         <xs:attribute name="name"    type="xs:anyURI"/>
+         <xs:attribute name="version" type="xs:token"/>
+         <xs:attribute name="versions">
+            <xs:simpleType>
+               <xs:list itemType="xs:token"/>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="semver"     type="pkg:semver"/>
+         <xs:attribute name="semver-min" type="pkg:semver"/>
+         <xs:attribute name="semver-max" type="pkg:semver"/>
+      </xs:complexType>
+   </xs:element>
+
+   <!-- TODO: Make it more precise, using a regex. -->
+   <xs:simpleType name="semver">
+      <xs:restriction base="xs:token"/>
+   </xs:simpleType>
+
+   <xs:simpleType name="title-type">
+      <xs:restriction base="xs:string"/>
+   </xs:simpleType>
+
+   <xs:complexType name="component-type">
+      <xs:sequence>
+         <xs:element name="import-uri" type="xs:anyURI"/>
+         <xs:element name="file"       type="xs:anyURI"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name="query-type">
+      <xs:sequence>
+         <xs:element name="namespace" type="xs:anyURI"/>
+         <xs:element name="file"      type="xs:anyURI"/>
+      </xs:sequence>
+   </xs:complexType>
+
+</xs:schema>

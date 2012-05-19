@@ -1,0 +1,24 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:p="http://expath.org/ns/repo/packages"
+           targetNamespace="http://expath.org/ns/repo/packages"
+           elementFormDefault="qualified">
+
+   <xs:element name="packages">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element ref="p:package" minOccurs="0" maxOccurs="unbounded"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
+   <xs:element name="package">
+      <xs:complexType>
+         <!-- TODO: Get those definitions from expath-pkg.xsd
+              (or instead shared them between both schemas). -->
+         <xs:attribute name="name"    type="xs:anyURI" use="required"/>
+         <xs:attribute name="dir"     type="xs:string" use="required"/>
+         <xs:attribute name="version" type="xs:string" use="required"/>
+      </xs:complexType>
+   </xs:element>
+
+</xs:schema>

@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<grammar ns="http://expath.org/ns/pkg"
+    xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <start>
+        <choice>
+            <ref name="dependency"/>
+            <choice>
+                <notAllowed/>
+                <element name="package">
+                    <attribute name="spec">
+                        <value>1.0</value>
+                    </attribute>
+                    <attribute name="version">
+                        <data type="string"/>
+                    </attribute>
+                    <attribute name="abbrev">
+                        <data type="NCName"/>
+                    </attribute>
+                    <attribute name="name">
+                        <data type="anyURI"/>
+                    </attribute>
+                    <element name="title">
+                        <data type="string"/>
+                    </element>
+                    <zeroOrMore>
+                        <ref name="dependency"/>
+                    </zeroOrMore>
+                    <zeroOrMore>
+                        <choice>
+                            <element name="xquery">
+                                <element name="namespace">
+                                    <ref name="anyURI"/>
+                                </element>
+                                <element name="file">
+                                    <ref name="anyURI"/>
+                                </element>
+                            </element>
+                            <element name="xslt">
+                                <ref name="component-type"/>
+                            </element>
+                            <element name="xproc">
+                                <ref name="component-type"/>
+                            </element>
+                            <element name="xsd">
+                                <ref name="component-type"/>
+                            </element>
+                            <element name="rng">
+                                <ref name="component-type"/>
+                            </element>
+                            <element name="rnc">
+                                <ref name="component-type"/>
+                            </element>
+                        </choice>
+                    </zeroOrMore>
+                </element>
+            </choice>
+        </choice>
+    </start>
+    <define name="dependency">
+        <choice>
+            <notAllowed/>
+            <element name="dependency">
+                <optional>
+                    <attribute name="semver-max">
+                        <data type="token"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="semver-min">
+                        <data type="token"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="semver">
+                        <data type="token"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="versions">
+                        <list>
+                            <zeroOrMore>
+                                <data type="token"/>
+                            </zeroOrMore>
+                        </list>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="version">
+                        <data type="token"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="name">
+                        <data type="anyURI"/>
+                    </attribute>
+                </optional>
+            </element>
+        </choice>
+    </define>
+    <define name="anyURI">
+        <data type="anyURI"/>
+    </define>
+    <define name="component-type">
+        <group>
+            <choice>
+                <notAllowed/>
+                <element name="import-uri">
+                    <ref name="anyURI"/>
+                </element>
+            </choice>
+            <choice>
+                <notAllowed/>
+                <element name="file">
+                    <ref name="anyURI"/>
+                </element>
+            </choice>
+        </group>
+        <empty/>
+    </define>
+</grammar>

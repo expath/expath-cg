@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<grammar ns="http://expath.org/ns/repo/packages"
+    xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <start>
+        <choice>
+            <choice>
+                <notAllowed/>
+                <element name="packages">
+                    <zeroOrMore>
+                        <ref name="package"/>
+                    </zeroOrMore>
+                </element>
+            </choice>
+            <ref name="package"/>
+        </choice>
+    </start>
+    <define name="package">
+        <choice>
+            <notAllowed/>
+            <element name="package">
+                <attribute name="version">
+                    <data type="string"/>
+                </attribute>
+                <attribute name="dir">
+                    <data type="string"/>
+                </attribute>
+                <attribute name="name">
+                    <data type="anyURI"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+</grammar>
