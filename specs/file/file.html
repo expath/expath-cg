@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>File Module</title><link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/TR/base.css" /><style type="text/css">
+code           { font-family: monospace; }
+
+div.constraint,
+div.issue,
+div.note,
+div.notice     { margin-left: 2em; }
+
+ol.enumar      { list-style-type: decimal; }
+ol.enumla      { list-style-type: lower-alpha; }
+ol.enumlr      { list-style-type: lower-roman; }
+ol.enumua      { list-style-type: upper-alpha; }
+ol.enumur      { list-style-type: upper-roman; }
+
+
+div.exampleInner pre { margin-left: 1em;
+                       margin-top: 0em; margin-bottom: 0em}
+div.exampleOuter {border: 4px double gray;
+                  margin: 0em; padding: 0em}
+div.exampleInner { background-color: #d5dee3;
+                   border-top-width: 4px;
+                   border-top-style: double;
+                   border-top-color: #d3d3d3;
+                   border-bottom-width: 4px;
+                   border-bottom-style: double;
+                   border-bottom-color: #d3d3d3;
+                   padding: 4px; margin: 0em }
+div.exampleWrapper { margin: 4px }
+div.exampleHeader { font-weight: bold;
+                    margin: 4px}
+
+      code.function { font-weight: bold; }
+      code.type { font-style: italic; }
+      /* h1, h2, h3 { color: #84001C; background: white } */
+      /* a, :link, :visited, a:active { color: #84005C; background: white } */
+      body {
+        background-image: url(http://expath.org/images/logo-candidate.png);
+      }
+   </style></head><body><p><a href="http://expath.org/"><img src="http://expath.org/images/expath-icon.png" alt="EXPath" height="32" width="32" /></a></p><div class="head">
+<h1><a name="title" id="title"></a>File Module</h1>
+<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 17 May 2010</h2><dl><dt>This version:</dt><dd>
+      <a href="http://expath.org/spec/file/editor">http://expath.org/spec/file/editor</a>
+    </dd><dt>Latest version:</dt><dd>
+      <a href="http://expath.org/spec/file">http://expath.org/spec/file</a>
+    </dd><dt>Previous version:</dt><dd>
+      <a href="http://expath.org/spec/file/20100517">http://expath.org/spec/file/20100517</a><br />
+    </dd><dt>Editor:</dt><dd>Matthias Brantner, 28msec GmbH</dd><dt>Contributor:</dt><dd>Gabriel Petrovay, 28msec GmbH</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/file/editor.xml">XML</a>.</p><p class="copyright"></p></div><hr /><div>
+<h2><a name="abstract" id="abstract"></a>Abstract</h2><p>This proposal provides a file system API for XPath 2.0. It defines extension functions to
+        perform file system related operations such as listing, reading, or writing files. 
+		It has been designed to be compatible with XQuery 1.0 and XSLT 2.0, as well as any other XPath 2.0 usage. </p></div><div class="toc">
+<h2><a name="contents" id="contents"></a>Table of Contents</h2><p class="toc">1 <a href="#d2e59">Introduction</a><br />
+    1.1 <a href="#d2e62">Namespace Conventions</a><br />
+    1.2 <a href="#d2e81">File Paths vs. URIs</a><br />
+    1.3 <a href="#d2e160">Error management</a><br />
+2 <a href="#d2e175">Functions</a><br />
+    2.1 <a href="#d2e178">file:copy</a><br />
+    2.2 <a href="#d2e228">file:exists</a><br />
+    2.3 <a href="#d2e253">file:files</a><br />
+    2.4 <a href="#d2e307">file:is-directory</a><br />
+    2.5 <a href="#d2e329">file:is-file</a><br />
+    2.6 <a href="#d2e351">file:last-modified</a><br />
+    2.7 <a href="#d2e370">file:mkdir</a><br />
+    2.8 <a href="#d2e408">file:mkdirs</a><br />
+    2.9 <a href="#d2e446">file:path-separator</a><br />
+    2.10 <a href="#d2e459">file:path-to-full-path</a><br />
+    2.11 <a href="#d2e476">file:path-to-uri</a><br />
+    2.12 <a href="#d2e492">file:read</a><br />
+    2.13 <a href="#d2e511">file:read-html</a><br />
+    2.14 <a href="#d2e533">file:read-text</a><br />
+    2.15 <a href="#d2e549">file:read-xml</a><br />
+    2.16 <a href="#d2e590">file:remove</a><br />
+    2.17 <a href="#d2e612">file:write</a><br />
+</p>
+<h3><a name="appendices" id="appendices"></a>Appendices</h3><p class="toc">A <a href="#d2e673">References</a><br />
+B <a href="#d2e692">Summary of Error Conditions</a><br />
+</p></div><hr /><div class="body"><div class="div1">
+<h2><a name="d2e59" id="d2e59"></a>1 Introduction</h2><div class="div2">
+<h3><a name="d2e62" id="d2e62"></a>1.1 Namespace Conventions</h3><p>The module defined by this document defines several functions all contained in the namespace
+            <code>http://expath.org/ns/file</code>. 
+			In this document, the <code>file</code> prefix, when used, is bound to this namespace URI. </p><p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>. In this
+          document, the <code>err</code> prefix, when used, is bound to this namespace URI. </p></div><div class="div2">
+<h3><a name="d2e81" id="d2e81"></a>1.2 File Paths vs. URIs</h3><p>In order to make the file API more accessible, paths referring to directories of files are specified as strings. The syntax of such strings is implementation defined. 
+	However, we strongly recommend that the following forms are accepted and interpreted as described below.</p><ul><li><p>Operating system paths (absolute or relative paths are accepted):
+            <ul><li><p><code>C:\Test Dir\my file.xml</code>: An absolute path on Windows platforms.</p></li><li><p><code>C:/Test Dir\my file.xml</code>: An absolute path on Windows platforms that tolerates slashes instead of backslashes.</p></li><li><p><code>C:\\\Test Dir//\\my file.xml</code>: An absolute path on Windows platforms that tolerates an arbitrary number of slashes and backslashes.</p></li><li><p><code>/Test Dir/my file.xml</code>: An absolute path on UNIX-based platforms that tolerates an arbitrary number of slashes.</p></li><li><p><code>//Test Dir////my file.xml</code>: An absolute path on UNIX-based platforms.</p></li><li><p><code>my file.xml</code>: A relative path. The file should be searched for starting with the location pointed by the base URI of the current module.</p></li></ul>
+          </p></li><li><p>File URIs (only absolute paths are accepted):
+            <ul><li><p><code>file:///C:/Test%20Dir/my%20file.xml</code>: An absolute path on Windows platforms.</p></li><li><p><code>file:///C:/Test Dir/my file.xml</code>: An absolute path on Windows platforms. The URI tolerates spaces.</p></li><li><p><code>file:///C:/Test%20Dir///my%20file.xml</code>: An absolute path on Windows platforms. The URI tolerates an arbitrary number of slashes.</p></li><li><p><code>file:///Test%20Dir/my%20file.xml</code>: An absolute path on UNIX-based platforms.</p></li><li><p><code>file://localhost/Test%20Dir/my%20file.xml</code>: A URI that accepts <code>localhost</code> or <code>127.0.0.1</code> as the authority of the URI.</p></li></ul>
+          </p></li></ul><p>In the following, only "paths" is used if referring to a file or directory.</p></div><div class="div2">
+<h3><a name="d2e160" id="d2e160"></a>1.3 Error management</h3><p>Error conditions are identified by an error code (a <code>QName</code>). If such an error
+          condition is reached during the execution of the function, a dynamic error is raised, with
+          the corresponding error code (as if the standard XPath function <code>error</code> had
+          been called). </p><p>Error codes are defined throughout the spec. For too many reasons to enumerate here, the
+          file operations can raise an error. In this case, if the error condition is not mentioned
+          explicitly in the spec, the implementation must raise an error with an appropriate message
+            <a href="#errFS001">[err:FS001]</a>. </p></div></div><div class="div1">
+<h2><a name="d2e175" id="d2e175"></a>2 Functions</h2><div class="div2">
+<h3><a name="d2e178" id="d2e178"></a>2.1 <code>file:copy</code></h3><div class="exampleInner"><pre>
+sequential <code class="function">file:copy</code>($source as <code class="type">xs:string</code>,
+                     $destination as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code>
+sequential <code class="function">file:copy</code>($source as <code class="type">xs:string</code>,
+                     $destination as <code class="type">xs:string</code>,
+                     $overwrite as <code class="type">xs:boolean</code>) as <code class="type">xs:boolean</code></pre></div><p>This function copies a file given a source and a destination. 
+          The operation fails by returning <code>false</code> if the <code>$source</code> path does not point to a file. 
+          If the <code>$overwrite</code> parameter is missing or evaluates to <code>false</code>, the function returns false if the destination already exists.
+          Otherwise, the destination file, if it exists, will be overwritten.
+          The function returns <code>true</code> if the copy operation was successful.
+        </p></div><div class="div2">
+<h3><a name="d2e228" id="d2e228"></a>2.2 <code>file:exists</code></h3><div class="exampleInner"><pre>
+nondeterministic <code class="function">file:exists</code>($fileOrDir as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code></pre></div><p>Tests if a path is already used in the file system. 
+          The function returns <code>true</code> if the file or directory pointed to by the <code>$fileOrDir</code> parameter exists already. Otherwise, the function returns <code>false</code>.</p></div><div class="div2">
+<h3><a name="d2e253" id="d2e253"></a>2.3 <code>file:files</code></h3><div class="exampleInner"><pre>
+nondeterministic <code class="function">file:files</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string*</code>
+nondeterministic <code class="function">file:files</code>($path as <code class="type">xs:string</code>,
+                            $pattern as <code class="type">xs:string</code>) as <code class="type">xs:string*</code>
+nondeterministic <code class="function">file:files</code>($path as <code class="type">xs:string</code>,
+                            $pattern as <code class="type">xs:string</code>,
+                            $recursive as <code class="type">xs:boolean</code>) as <code class="type">xs:string*</code></pre></div><p>Lists all files in a given directory.
+          The order of the files in the result is not defined. 
+		  The special files "." and ".." are never returned. 
+          The returned paths are relative to the provided <code>$path</code>. 
+          If the optional <code>$pattern</code> parameter is provided, only the file having a name that is matching the given regular expression pattern are
+          returned. 
+		  An additional <code>$recursive</code> parameter indicates if the search should recurse in the subdirectories.</p></div><div class="div2">
+<h3><a name="d2e307" id="d2e307"></a>2.4 <code>file:is-directory</code></h3><div class="exampleInner"><pre>
+nondeterministic <code class="function">file:is-directory</code>($dir as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code></pre></div><p>Tests if a path/URI points to a directory. 
+          The function returns <code>true</code> if the path/URI points to a directory.
+          Otherwise, it returns <code>false</code>.
+          On UNIX-based systems, the root and the volumes roots are considered directories.</p></div><div class="div2">
+<h3><a name="d2e329" id="d2e329"></a>2.5 <code>file:is-file</code></h3><div class="exampleInner"><pre>
+nondeterministic <code class="function">file:is-file</code>($file as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code></pre></div><p>Tests if a path points to a regular file.
+          The function returns <code>true</code> if the path points to a regular file.
+          Otherwise, the function returns <code>false</code>.
+        </p></div><div class="div2">
+<h3><a name="d2e351" id="d2e351"></a>2.6 <code>file:last-modified</code></h3><div class="exampleInner"><pre>
+nondeterministic <code class="function">file:last-modified</code>($fileOrDir as <code class="type">xs:string</code>) as <code class="type">xs:dateTime</code></pre></div><p>Retrieves the timestamp of the last modification of the file system item (e.g. file, directory, or symbolic link) pointed by the given path (<code>$fileOrDir</code>).</p></div><div class="div2">
+<h3><a name="d2e370" id="d2e370"></a>2.7 <code>file:mkdir</code></h3><div class="exampleInner"><pre>
+sequential <code class="function">file:mkdir</code>($dir as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code>
+sequential <code class="function">file:mkdir</code>($dir as <code class="type">xs:string</code>,
+                      $create as <code class="type">xs:boolean</code>) as <code class="type">xs:boolean</code></pre></div><p>Creates a directory. 
+			This function is not recursive. 
+			The optional <code>$create</code> parameter indicates that the function should succeed only if the target directory can be created.
+          The function returns <code>true</code> if the operation succeeded.
+          Otherwise, the function returns <code>false</code>.
+        </p></div><div class="div2">
+<h3><a name="d2e408" id="d2e408"></a>2.8 <code>file:mkdirs</code></h3><div class="exampleInner"><pre>
+sequential <code class="function">file:mkdirs</code>($dir as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code>
+sequential <code class="function">file:mkdirs</code>($dir as <code class="type">xs:string</code>,
+                       $create as <code class="type">xs:boolean</code>) as <code class="type">xs:boolean</code></pre></div><p>Creates directories recursively. The optional <code>$create</code> parameter indicates that
+          the function should succeed only if the target directory can be created.
+          The function returns <code>true</code> if the operation succeeded.
+          Otherwise, the function returns <code>false</code>.
+        </p></div><div class="div2">
+<h3><a name="d2e446" id="d2e446"></a>2.9 <code>file:path-separator</code></h3><div class="exampleInner"><pre>
+<code class="function">file:path-separator</code>() as <code class="type">xs:string</code></pre></div><p>This function returns the file path separator used by the operating system. For example, it returns "/" on Unix-based platforms or "\" on Windows platforms.</p></div><div class="div2">
+<h3><a name="d2e459" id="d2e459"></a>2.10 <code>file:path-to-full-path</code></h3><div class="exampleInner"><pre>
+<code class="function">file:path-to-full-path</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><p>Transforms a path into a full operating system path. The resulting URI must have the file://
+          scheme. The operation is performed regardless the existence of a file or directory referred to by the provided path.</p></div><div class="div2">
+<h3><a name="d2e476" id="d2e476"></a>2.11 <code>file:path-to-uri</code></h3><div class="exampleInner"><pre>
+<code class="function">file:path-to-uri</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:anyURI</code></pre></div><p>Transforms a file system path into a URI with the file:// scheme. No checks are performed regardless of the existence of a fil or directory referred to by the provided file system path.</p></div><div class="div2">
+<h3><a name="d2e492" id="d2e492"></a>2.12 <code>file:read</code></h3><div class="exampleInner"><pre>
+nondeterministic <code class="function">file:read</code>($file as <code class="type">xs:string</code>) as <code class="type">xs:base64Binary</code></pre></div><p>Reads the content of a file pointed to by the <code>$file</code> parameter and returns a Base64 representation of the content.</p></div><div class="div2">
+<h3><a name="d2e511" id="d2e511"></a>2.13 <code>file:read-html</code></h3><div class="exampleInner"><pre>
+nondeterministic <code class="function">file:read-html</code>($file as <code class="type">xs:string</code>,
+                                $tidyOptions as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><p>Read the content of the HTML file pointed to by the <code>$file</code> parameters and returns it as a string. 
+         </p></div><div class="div2">
+<h3><a name="d2e533" id="d2e533"></a>2.14 <code>file:read-text</code></h3><div class="exampleInner"><pre>
+nondeterministic <code class="function">file:read-text</code>($file as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><p>Reads the content of a file and returns the string representation of the content.</p></div><div class="div2">
+<h3><a name="d2e549" id="d2e549"></a>2.15 <code>file:read-xml</code></h3><div class="exampleInner"><pre>
+nondeterministic <code class="function">file:read-xml</code>($file as <code class="type">xs:string</code>) as <code class="type">node()</code>
+nondeterministic <code class="function">file:read-xml</code>($file as <code class="type">xs:string</code>,
+                               $tidy as <code class="type">xs:boolean</code>) as <code class="type">node()</code></pre></div><p>Reads a file and returns the parsed an XML document.
+          If the <code>$tidy</code> parameter is present and evaluates to <code>true</code>, the implementation might perform a cleaning step (e.g. as performed by the tidy library) in order to make sure that a valid XML document is obtained.
+          If the <code>$tidy</code> parameter is not present or evaluates to <code>false</code> and the file does not contain a well-formed XML document, an error is raised (TODO error code).
+          Cleaning documents before parsing in order to make them well-formed might be useful for HTML documents.
+        </p></div><div class="div2">
+<h3><a name="d2e590" id="d2e590"></a>2.16 <code>file:remove</code></h3><div class="exampleInner"><pre>
+sequential <code class="function">file:remove</code>($fileOrDir as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code></pre></div><p>Delete a file or a directory from the file system. This operation is not recursive.
+          The function returns <code>false</code> if the operation failed (e.g. if a non-empty directory should be deleted or the file or directory does not exist).
+        Otherwise, the function returns <code>true</code>.</p></div><div class="div2">
+<h3><a name="d2e612" id="d2e612"></a>2.17 <code>file:write</code></h3><div class="exampleInner"><pre>
+sequential <code class="function">file:write</code>($file as <code class="type">xs:string</code>,
+                      $content as <code class="type">item()*</code>,
+                      $serializer-params as <code class="type">node()*</code>) as <code class="type">xs:boolean</code>
+sequential <code class="function">file:write</code>($file as <code class="type">xs:string</code>,
+                      $content as <code class="type">item()*</code>,
+                      $serializer-params as <code class="type">node()*</code>,
+                      $append as <code class="type">xs:boolean</code>) as <code class="type">xs:boolean</code> 
+        </pre></div><p>Write a sequence of items to a file. This operation creates a new file or appends the
+          serialized content to the file pointed by the given path/URI. If the <code>$append</code> flag
+          is true and the file does not exist, a new one is created.</p><p>The <code>$serializer-params</code> parameter is used to set the corresponding serialization parameter defined in <a href="#xserial">[Serialization]</a>, as defined for the XPath 2.1 function fn:serialize().</p><p>The function returns <code>true</code> if the file was written successfully, or <code>false</code> otherwise.</p></div></div></div><div class="back"><div class="div1">
+<h2><a name="d2e673" id="d2e673"></a>A References</h2><dl><dt class="label"><a name="xserial" id="xserial"></a>Serialization</dt><dd>
+          <a href="http://www.w3.org/TR/xslt-xquery-serialization/"> XSLT 2.0 and XQuery 1.0
+            Serialization </a>. Scott Boag, Michael Kay, Joanne Tong, Norman Walsh, and Henry
+          Zongaro, editors. W3C Recommendation. 23 January 2007. </dd><dt class="label"><a name="fo11" id="fo11"></a>F&amp;O 1.1</dt><dd>
+          <a href="http://www.w3.org/TR/xpath-functions-11/"> XPath and XQuery Functions and
+            Operators 1.1 </a>. Michael Kay, editor. W3C Working Draft. 15 January 2009. </dd><dt class="label"><a name="xslt20" id="xslt20"></a>XSLT 2.0</dt><dd>
+          <a href="http://www.w3.org/TR/xslt20/">XSL Transformations (XSLT) Version 2.0</a>.
+          Michael Kay, editor. W3C Recommendation. 23 January 2007. </dd></dl></div><div class="div1">
+<h2><a name="d2e692" id="d2e692"></a>B Summary of Error Conditions</h2><dl><dt class="label"><a name="errFS001" id="errFS001"></a>err:FS001</dt><dd>A file system error occurred.</dd></dl></div></div></body></html>
