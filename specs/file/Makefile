@@ -16,6 +16,12 @@ file.html: file.xml
 file-diff.html: file-diff.xml
 	saxon -s:$< -xsl:$(DIFFSPEC) > $@
 
+file-20100517.html: file-20100517.xml
+	saxon -s:$< -xsl:$(XMLSPEC) > $@
+
+file-20100517-diff.html: file-20100517-diff.xml
+	saxon -s:$< -xsl:$(DIFFSPEC) > $@
+
 file-20120614.html: file-20120614.xml
 	saxon -s:$< -xsl:$(XMLSPEC) > $@
 

@@ -26,15 +26,15 @@
          <loc href="http://expath.org/spec/file/20100517"/>
       </prevlocs>
       <authlist>
-         <author>
+         <author role="editor">
             <name>Christian Grün</name>
             <affiliation>BaseX GmbH</affiliation>
          </author>
-         <author>
+         <author role="editor">
             <name>Matthias Brantner</name>
             <affiliation>28msec GmbH</affiliation>
          </author>
-         <author>
+         <author role="contrib">
             <name>Gabriel Petrovay</name>
             <affiliation>28msec GmbH</affiliation>
          </author>

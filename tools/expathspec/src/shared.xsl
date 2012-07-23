@@ -71,21 +71,25 @@
 
    <!-- override... -->
    <xsl:template match="authlist">
-      <xsl:variable name="editor"   select="author[1]"/>
-      <xsl:variable name="contribs" select="* except $editor"/>
+      <xsl:variable name="editors"  select="author[@role eq 'editor']" as="element()+"/>
+      <xsl:variable name="contribs" select="author[@role eq 'contrib']"/>
       <dt>
-         <xsl:text>Editor:</xsl:text>
+         <xsl:text>Editor</xsl:text>
+         <xsl:if test="exists($editors[2])">
+            <xsl:text>s</xsl:text>
+         </xsl:if>
+         <xsl:text>:</xsl:text>
       </dt>
-      <xsl:apply-templates select="$editor"/>
+      <xsl:apply-templates select="$editors"/>
       <xsl:if test="exists($contribs)">
          <dt>
             <xsl:text>Contributor</xsl:text>
-            <xsl:if test="count($contribs) gt 1">
+            <xsl:if test="exists($contribs[2])">
                <xsl:text>s</xsl:text>
             </xsl:if>
             <xsl:text>:</xsl:text>
          </dt>
-         <xsl:apply-templates select="* except $editor"/>
+         <xsl:apply-templates select="$contribs"/>
       </xsl:if>
    </xsl:template>
 
