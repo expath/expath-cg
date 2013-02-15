@@ -1,297 +1,679 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<spec role="editors-copy" xmlns:ex="http://expath.org/ns/xmlspec">
-  <header>
-    <title>File Module</title>
-    <w3c-designation>w3c-designation</w3c-designation>
-    <w3c-doctype>EXPath Candidate Module</w3c-doctype>
-    <pubdate>
-      <day>17</day>
-      <month>May</month>
-      <year>2010</year>
-    </pubdate>
-    <publoc>
-      <loc href="http://expath.org/spec/file/editor"/>
-    </publoc>
-    <altlocs>
-      <loc href="http://expath.org/spec/file/editor.xml">XML</loc>
-    </altlocs>
-    <latestloc>
-      <loc href="http://expath.org/spec/file"/>
-    </latestloc>
-    <prevlocs>
-      <loc href="http://expath.org/spec/file/20100517"/>
-    </prevlocs>
-    <authlist>
-      <author role="editor">
-        <name>Matthias Brantner</name>
-        <affiliation>28msec GmbH</affiliation>
-      </author>
-      <author role="contrib">
-        <name>Gabriel Petrovay</name>
-        <affiliation>28msec GmbH</affiliation>
-      </author>
-    </authlist>
-    <copyright>
-      <p/>
-    </copyright>
-    <abstract>
-      <p>This proposal provides a file system API for XPath 2.0. It defines extension functions
-         to perform file system related operations such as listing, reading, or writing files. It
-         has been designed to be compatible with XQuery 1.0 and XSLT 2.0, as well as any other
-         XPath 2.0 usage. </p>
-    </abstract>
-    <status>
-      <p/>
-    </status>
-    <langusage>
-      <language>en-US</language>
-    </langusage>
-    <revisiondesc>
-      <p>revisiondesc</p>
-    </revisiondesc>
-  </header>
-  <body>
-    <div1>
-      <head>Introduction</head>
-      <div2>
-        <head>Namespace Conventions</head>
-        <p>The module defined by this document defines several functions all contained in the namespace
-            <code>http://expath.org/ns/file</code>. 
-			In this document, the <code>file</code> prefix, when used, is bound to this namespace URI. </p>
-        <p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>. In this
-          document, the <code>err</code> prefix, when used, is bound to this namespace URI. </p>
-      </div2>
-      <div2>
-        <head>File Paths vs. URIs</head>
-        <p>In order to make the file API more accessible, paths referring to directories of files are specified as strings. The syntax of such strings is implementation defined. 
-	However, we strongly recommend that the following forms are accepted and interpreted as described below.</p>
-        <ulist>
-          <item><p>Operating system paths (absolute or relative paths are accepted):
+<?oxygen RNGSchema="http://expath.org/ns/xmlspec/xmlspec.rnc"?>
+
+<spec role="editors-copy" xmlns:ex="http://expath.org/ns/xmlspec" ex:w3c="true">
+   <header>
+      <title>File Module</title>
+      <w3c-designation>w3c-designation</w3c-designation>
+      <w3c-doctype>EXPath Candidate Module</w3c-doctype>
+      <pubdate>
+         <day>14</day>
+         <month>June</month>
+         <year>2012</year>
+      </pubdate>
+      <publoc>
+         <loc href="http://expath.org/spec/file/20120614"/>
+      </publoc>
+      <altlocs>
+         <loc href="http://expath.org/spec/file/20120614.xml">XML</loc>
+         <loc href="http://expath.org/spec/file/20120614/diff">Revision markup</loc>
+      </altlocs>
+      <latestloc>
+         <loc href="http://expath.org/spec/file"/>
+      </latestloc>
+      <prevlocs>
+         <loc href="http://expath.org/spec/file/20100517"/>
+      </prevlocs>
+      <authlist>
+         <author role="editor">
+            <name>Christian Grün</name>
+            <affiliation>BaseX GmbH</affiliation>
+         </author>
+         <author role="editor">
+            <name>Matthias Brantner</name>
+            <affiliation>28msec GmbH</affiliation>
+         </author>
+         <author role="contrib">
+            <name>Gabriel Petrovay</name>
+            <affiliation>28msec GmbH</affiliation>
+         </author>
+      </authlist>
+      <copyright>
+         <p>Copyright © 2010-2012 Christian Grün, published by the <loc
+               href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
+               href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+               License Agreement (CLA)</loc>. A human-readable <loc
+               href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
+            available.</p>
+         <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
+               >EXPath Community Group</loc>. It is not a W3C Standard nor is it on the W3C
+            Standards Track. Please note that under the <loc
+               href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+               License Agreement (CLA)</loc> there is a limited opt-out and other conditions apply.
+            Learn more about <loc href="http://www.w3.org/community/">W3C Community and Business
+               Groups</loc>.</p>
+      </copyright>
+      <abstract>
+         <p>This proposal provides a file system API for XPath. It defines extension functions to
+            perform file system related operations such as listing, reading, or writing files or
+            directories. It has been designed to be compatible with XQuery 1.0 and XSLT 2.0, as
+            well as any other XPath 2.0 usage.</p>
+      </abstract>
+      <status>
+         <p/>
+      </status>
+      <langusage>
+         <language>en-US</language>
+      </langusage>
+      <revisiondesc>
+         <p>revisiondesc</p>
+      </revisiondesc>
+   </header>
+   <body>
+
+      <!-- *************************************** Introduction ******************************* -->
+      <div1>
+         <head>Introduction</head>
+         <div2>
+            <head>Namespace conventions</head>
+            <p>The module defined by this document defines the functions and variables in the
+               namespace <code>http://expath.org/ns/file</code>. In this document, the
+                  <code>file</code> prefix, when used, is bound to this namespace URI.</p>
+            <p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>. In
+               this document, the <code>err</code> prefix, when used, is bound to this namespace
+               URI.</p>
+         </div2>
+         <div2>
+            <head>File Paths vs. URIs</head>
+            <p>All file paths are specified as strings, and are resolved against the current working
+               directory. An implementation must accept absolute and relative UNIX/Linux and Windows
+               paths as well as absolute file URIs. Some examples: </p>
             <ulist>
-              <item><p><code>C:\Test Dir\my file.xml</code>: An absolute path on Windows platforms.</p></item>
-              <item><p><code>C:/Test Dir\my file.xml</code>: An absolute path on Windows platforms that tolerates slashes instead of backslashes.</p></item>
-              <item><p><code>C:\\\Test Dir//\\my file.xml</code>: An absolute path on Windows platforms that tolerates an arbitrary number of slashes and backslashes.</p></item>
-              <item><p><code>/Test Dir/my file.xml</code>: An absolute path on UNIX-based platforms that tolerates an arbitrary number of slashes.</p></item>
-              <item><p><code>//Test Dir////my file.xml</code>: An absolute path on UNIX-based platforms.</p></item>
-              <item><p><code>my file.xml</code>: A relative path. The file should be searched for starting with the location pointed by the base URI of the current module.</p></item>
+               <item>
+                  <p><code>C:\Test Dir\my file.xml</code>: An absolute path on Windows
+                     platforms.</p>
+               </item>
+               <item>
+                  <p><code>/Test Dir/my file.xml</code>: An absolute path on UNIX-based
+                     platforms.</p>
+               </item>
+               <item>
+                  <p><code>C:\\\Test Dir//\\my file.xml</code>: An absolute path on Windows
+                     platforms that tolerates an arbitrary number of slashes and backslashes.</p>
+               </item>
+               <item>
+                  <p><code>my file.xml</code>: A relative path, pointing to a file in the current
+                     working directory.</p>
+               </item>
+               <item>
+                  <p><code>file:///C:/Test%20Dir/my%20file.xml</code>: An absolute file URI on
+                     Windows platforms.</p>
+               </item>
+               <item>
+                  <p><code>file:///Test%20Dir/my%20file.xml</code>: An absolute path on UNIX-based
+                     platforms.</p>
+               </item>
             </ulist>
-          </p></item>
-          <item><p>File URIs (only absolute paths are accepted):
-            <ulist>
-              <item><p><code>file:///C:/Test%20Dir/my%20file.xml</code>: An absolute path on Windows platforms.</p></item>
-              <item><p><code>file:///C:/Test Dir/my file.xml</code>: An absolute path on Windows platforms. The URI tolerates spaces.</p></item>
-              <item><p><code>file:///C:/Test%20Dir///my%20file.xml</code>: An absolute path on Windows platforms. The URI tolerates an arbitrary number of slashes.</p></item>
-              <item><p><code>file:///Test%20Dir/my%20file.xml</code>: An absolute path on UNIX-based platforms.</p></item>
-              <item><p><code>file://localhost/Test%20Dir/my%20file.xml</code>: A URI that accepts <code>localhost</code> or <code>127.0.0.1</code> as the authority of the URI.</p></item>
-            </ulist>
-          </p></item>
-        </ulist>
-        <p>In the following, only "paths" is used if referring to a file or directory.</p>
-      </div2>
-      
-      <div2>
-        <head>Error management</head>
-        <p>Error conditions are identified by an error code (a <code>QName</code>). If such an error
-          condition is reached during the execution of the function, a dynamic error is raised, with
-          the corresponding error code (as if the standard XPath function <code>error</code> had
-          been called). </p>
-        <p>Error codes are defined throughout the spec. For too many reasons to enumerate here, the
-          file operations can raise an error. In this case, if the error condition is not mentioned
-          explicitly in the spec, the implementation must raise an error with an appropriate message
-            <bibref ref="errFS001"/>. </p>
-      </div2>
-    </div1>
-    <div1>
-      <head>Functions</head>
-      <div2>
-        <head><code>file:copy</code></head>
-        <eg>
-sequential <ex:function>file:copy</ex:function>($source as <ex:type>xs:string</ex:type>,
-                     $destination as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type>
-sequential <ex:function>file:copy</ex:function>($source as <ex:type>xs:string</ex:type>,
-                     $destination as <ex:type>xs:string</ex:type>,
-                     $overwrite as <ex:type>xs:boolean</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
-        <p>This function copies a file given a source and a destination. 
-          The operation fails by returning <code>false</code> if the <code>$source</code> path does not point to a file. 
-          If the <code>$overwrite</code> parameter is missing or evaluates to <code>false</code>, the function returns false if the destination already exists.
-          Otherwise, the destination file, if it exists, will be overwritten.
-          The function returns <code>true</code> if the copy operation was successful.
-        </p>
-      </div2>
-      <div2>
-        <head><code>file:exists</code></head>
-        <eg>
-nondeterministic <ex:function>file:exists</ex:function>($fileOrDir as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
-        <p>Tests if a path is already used in the file system. 
-          The function returns <code>true</code> if the file or directory pointed to by the <code>$fileOrDir</code> parameter exists already. Otherwise, the function returns <code>false</code>.</p>
-      </div2>
-      <div2>
-        <head><code>file:files</code></head>
-        <eg>
-nondeterministic <ex:function>file:files</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type>
-nondeterministic <ex:function>file:files</ex:function>($path as <ex:type>xs:string</ex:type>,
-                            $pattern as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type>
-nondeterministic <ex:function>file:files</ex:function>($path as <ex:type>xs:string</ex:type>,
-                            $pattern as <ex:type>xs:string</ex:type>,
-                            $recursive as <ex:type>xs:boolean</ex:type>) as <ex:type>xs:string*</ex:type></eg>        
-        <p>Lists all files in a given directory.
-          The order of the files in the result is not defined. 
-		  The special files "." and ".." are never returned. 
-          The returned paths are relative to the provided <code>$path</code>. 
-          If the optional <code>$pattern</code> parameter is provided, only the file having a name that is matching the given regular expression pattern are
-          returned. 
-		  An additional <code>$recursive</code> parameter indicates if the search should recurse in the subdirectories.</p>
-      </div2>
-      <div2>
-        <head><code>file:is-directory</code></head>
-        <eg>
-nondeterministic <ex:function>file:is-directory</ex:function>($dir as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
-        <p>Tests if a path/URI points to a directory. 
-          The function returns <code>true</code> if the path/URI points to a directory.
-          Otherwise, it returns <code>false</code>.
-          On UNIX-based systems, the root and the volumes roots are considered directories.</p>
-      </div2>
-      <div2>
-        <head><code>file:is-file</code></head>
-        <eg>
-nondeterministic <ex:function>file:is-file</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
-        <p>Tests if a path points to a regular file.
-          The function returns <code>true</code> if the path points to a regular file.
-          Otherwise, the function returns <code>false</code>.
-        </p>
-      </div2>
-      <div2>
-        <head><code>file:last-modified</code></head>
-        <eg>
-nondeterministic <ex:function>file:last-modified</ex:function>($fileOrDir as <ex:type>xs:string</ex:type>) as <ex:type>xs:dateTime</ex:type></eg>
-        <p>Retrieves the timestamp of the last modification of the file system item (e.g. file, directory, or symbolic link) pointed by the given path (<code>$fileOrDir</code>).</p>
-      </div2>
-      <div2>
-        <head><code>file:mkdir</code></head>
-        <eg>
-sequential <ex:function>file:mkdir</ex:function>($dir as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type>
-sequential <ex:function>file:mkdir</ex:function>($dir as <ex:type>xs:string</ex:type>,
-                      $create as <ex:type>xs:boolean</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
-        <p>Creates a directory. 
-			This function is not recursive. 
-			The optional <code>$create</code> parameter indicates that the function should succeed only if the target directory can be created.
-          The function returns <code>true</code> if the operation succeeded.
-          Otherwise, the function returns <code>false</code>.
-        </p>
-      </div2>
-      <div2>
-        <head><code>file:mkdirs</code></head>
-        <eg>
-sequential <ex:function>file:mkdirs</ex:function>($dir as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type>
-sequential <ex:function>file:mkdirs</ex:function>($dir as <ex:type>xs:string</ex:type>,
-                       $create as <ex:type>xs:boolean</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
-        <p>Creates directories recursively. The optional <code>$create</code> parameter indicates that
-          the function should succeed only if the target directory can be created.
-          The function returns <code>true</code> if the operation succeeded.
-          Otherwise, the function returns <code>false</code>.
-        </p>
-      </div2>
-      <div2>
-        <head><code>file:path-separator</code></head>
-        <eg>
-<ex:function>file:path-separator</ex:function>() as <ex:type>xs:string</ex:type></eg>
-        <p>This function returns the file path separator used by the operating system. For example, it returns "/" on Unix-based platforms or "\" on Windows platforms.</p>
-      </div2>
-      <div2>
-        <head><code>file:path-to-full-path</code></head>
-        <eg>
-<ex:function>file:path-to-full-path</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
-        <p>Transforms a path into a full operating system path. The resulting URI must have the file://
-          scheme. The operation is performed regardless the existence of a file or directory referred to by the provided path.</p>
-      </div2>
-      <div2>
-        <head><code>file:path-to-uri</code></head>
-        <eg>
+            <p>Before further processing, all paths must first be normalized to an
+               implementation-defined representation (which usually is the representation of the
+               underlying operating system). </p>
+         </div2>
+         <div2>
+            <head>Query Execution</head>
+            <p>Functions on File Properties (Section 2) and Input/Output (Section 3) are
+               ·nondeterministic·, which means they are not guaranteed to perform the same actions
+               and produce identical results from repeated calls. As such, a processor must ensure
+               that these functions are not relocated or pre-evaluated and that its results are not
+               cached when compiling and evaluating the query and serializing its results.</p>
+         </div2>
+         <div2>
+            <head>Error Management</head>
+            <p>Error conditions are identified by a code (a <code>QName</code>). When such an error
+               condition is reached during the execution of the function, a dynamic error is thrown,
+               with the corresponding error code (as if the standard XPath function
+                  <code>error</code> had been called).</p>
+            <p>Error codes are defined through the specification. If file operations raise
+               additional, errors, which may be specific to the underlying platform or programming
+               language, the generic error <bibref ref="errFILE9999"/> with an appropriate message
+               is raised.</p>
+            <p>For a list of specific errors see the "Summary of Error Conditions" section of this
+               document.</p>
+         </div2>
+      </div1>
+
+      <!-- *************************************** File properties **************************** -->
+      <div1>
+         <head>File Properties</head>
+         <div2>
+            <head><code>file:exists</code></head>
+            <eg>
+<ex:function>file:exists</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
+            <p>Tests if a path/URI is already used in the file system.</p>
+            <p>The function returns <code>true()</code> if a file or a directory exists at the
+               location pointed by <code>$path</code>.</p>
+         </div2>
+         <div2>
+            <head><code>file:is-dir</code></head>
+            <eg>
+<ex:function>file:is-dir</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
+            <p>Tests if <code>$path</code> points to a directory. On UNIX-based systems the root and
+               the volume roots are considered directories.</p>
+         </div2>
+         <div2>
+            <head><code>file:is-file</code></head>
+            <eg>
+<ex:function>file:is-file</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
+            <p>Tests if <code>$path</code> points to a file.</p>
+         </div2>
+         <div2>
+            <head><code>file:last-modified</code></head>
+            <eg>
+<ex:function>file:last-modified</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:dateTime</ex:type></eg>
+            <p>Returns <code>xs:dateTime</code> representing the last modification time.</p>
+            <p>
+               <div><bibref ref="errFILE0001"/> is raised if <code>$path</code> does not
+                  exist.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:size</code></head>
+            <eg>
+<ex:function>file:size</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:integer</ex:type></eg>
+            <p>Returns the byte size of a file as integer.</p>
+            <p>
+               <div><bibref ref="errFILE0001"/> is raised if <code>$path</code> does not
+                  exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$path</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+      </div1>
+
+      <!-- *************************************** I/O Functions ****************************** -->
+      <div1>
+         <head>Input/Output</head>
+         <div2>
+            <head><code>file:append</code></head>
+            <eg>
+<ex:function>file:append</ex:function>($file as <ex:type>xs:string</ex:type>,
+            $items as <ex:type>item()*</ex:type>) as <ex:type>empty-sequence()</ex:type>
+<ex:function>file:append</ex:function>($file as <ex:type>xs:string</ex:type>,
+            $items as <ex:type>item()*</ex:type>,
+            $params as <ex:type>element(output:serialization-parameters)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Appends a sequence of items to a file. If the file pointed by <code>$file</code> does
+               not exist, a new file will be created.</p>
+            <p><code>$params</code> controls the way the <code>$items</code> items are serialized.
+               The semantics of <code>$params</code> is the same as for the
+                  <code>fn:serialize</code> function in <bibref ref="fo30"/>. This consists of an
+                  <code>output:serialization-parameters</code> element whose format is defined in
+                  <bibref ref="ser30"/>. In contrast to fn:serialize, the encoding stage will not be
+               skipped by this function.</p>
+            <p>The function returns the empty sequence if the operation is successful.</p>
+            <p>
+               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+                     <code>$file</code> does not exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:append-text</code></head>
+            <eg>
+<ex:function>file:append-text</ex:function>($file as <ex:type>xs:string</ex:type>,
+                 $value as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type>
+<ex:function>file:append-text</ex:function>($file as <ex:type>xs:string</ex:type>,
+                 $value as <ex:type>xs:string</ex:type>,
+                 $encoding as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Appends a string to a file. If the file pointed by <code>$file</code> does not exist,
+               a new file will be created.</p>
+            <p>The optional parameter <code>$encoding</code>, if not provided, is considered to be
+                  <code>UTF-8</code>.</p>
+            <p>The function returns the empty sequence if the operation is successful.</p>
+            <p>
+               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+                     <code>$file</code> does not exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+                  not supported by the implementation.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:append-text-lines</code></head>
+            <eg>
+<ex:function>file:append-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>,
+                       $values as <ex:type>xs:string*</ex:type>) as <ex:type>empty-sequence()</ex:type>
+<ex:function>file:append-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>,
+                       $lines as <ex:type>xs:string*</ex:type>,
+                       $encoding as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Appends a sequence of strings to a file, each followed by the system-dependent
+               newline character. If the file pointed by <code>$file</code> does not exist, a new
+               file will be created.</p>
+            <p>The optional parameter <code>$encoding</code>, if not provided, is considered to be
+                  <code>UTF-8</code>.</p>
+            <p>The function returns the empty sequence if the operation is successful.</p>
+            <p>
+               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+                     <code>$file</code> does not exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+                  not supported by the implementation.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:append-binary</code></head>
+            <eg>
+<ex:function>file:append-binary</ex:function>($file as <ex:type>xs:string</ex:type>,
+                   $value as <ex:type>xs:base64Binary</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Appends a Base64 item as binary to a file. If the file pointed by <code>$file</code>
+               does not exist, a new file will be created.</p>
+            <p>The function returns the empty sequence if the operation is successful.</p>
+            <p>
+               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+                     <code>$file</code> does not exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:copy</code></head>
+            <eg>
+<ex:function>file:copy</ex:function>($source as <ex:type>xs:string</ex:type>,
+          $target as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Copies a file or a directory given a source and a target path/URI. The following
+               cases may occur if <code>$source</code> points to a file:</p>
+            <ol type="a">
+               <li> if <code>$target</code> does not exist, it will be created.</li>
+               <li> if <code>$target</code> is a file, it will be overwritten.</li>
+               <li> if <code>$target</code> is a directory, the file will be created in that
+                  directory with the name of the source file. If a file already exists, it will be
+                  overwritten.</li>
+            </ol>
+            <p>The following cases may occur if <code>$source</code> points to a directory:</p>
+            <ol type="a">
+               <li> if <code>$target</code> does not exist, it will be created as directory, and all
+                  files of the source directory are copied to this directory with their existing
+                  local names.</li>
+               <li> if <code>$target</code> is a directory, all files are copied from the source
+                  into the target directory. If a file already exists, it will be overwritten.</li>
+            </ol>
+            <p>Other cases will raise one of the errors listed below.</p>
+            <p>The function returns the empty sequence if the operation is successful. If an error
+               occurs during the operation, no rollback to the original state will be possible </p>
+            <p>
+               <div><bibref ref="errFILE0001"/> is raised if the <code>$source</code> path does not
+                  exist.</div>
+               <div><bibref ref="errFILE0002"/> is raised if <code>$source</code> points to a
+                  directory and <code>$target</code> points to an existing file.</div>
+               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+                     <code>$source</code> does not exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$source</code> points to a file
+                  and <code>$target</code> points to a directory, in which a subdirectory exists
+                  with the name of the source file.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:create-dir</code></head>
+            <eg>
+<ex:function>file:create-dir</ex:function>($dir as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Creates a directory, or does nothing if the directory already exists. The operation
+               will create all non-existing parent directories.</p>
+            <p>The function returns the empty sequence if the operation is successful.</p>
+            <p>
+               <div><bibref ref="errFILE0002"/> is raised if the specified path, or any of its
+                  parent directories, points to an existing file.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:delete</code></head>
+            <eg>
+<ex:function>file:delete</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type>
+<ex:function>file:delete</ex:function>($path as <ex:type>xs:string</ex:type>,
+            $recursive as <ex:type>xs:boolean</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Deletes a file or a directory from the file system.</p>
+            <p>If the optional parameter <code>$recursive</code> is set to <code>true()</code>,
+               sub-directories will be deleted as well.</p>
+            <p>The function returns the empty sequence if the operation is successful.</p>
+            <p>
+               <div><bibref ref="errFILE0001"/> is raised if <code>$path</code> does not
+                  exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  non-empty directory.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:list</code></head>
+            <eg>
+<ex:function>file:list</ex:function>($dir as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type>
+<ex:function>file:list</ex:function>($dir as <ex:type>xs:string</ex:type>,
+          $recursive as <ex:type>xs:boolean</ex:type>) as <ex:type>xs:string*</ex:type>
+<ex:function>file:list</ex:function>($dir as <ex:type>xs:string</ex:type>,
+          $recursive as <ex:type>xs:boolean</ex:type>,
+          $pattern as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg>
+            <p>Lists all files and directories in a given directory. The order of the items in the
+               resulting sequence is not defined. The "." and ".." items are never returned. The
+               returned paths are relative to the provided directory <code>$dir</code>.</p>
+            <p>If the optional parameter <code>$recursive</code> is set to <code>true()</code>, all
+               directories and files will be returned that are found while recursively traversing
+               the given directory.</p>
+            <p>The optional <code>$pattern</code> parameter defines a name pattern in the glob
+               syntax. If this is provided, only the paths of the files and directories whose names
+               are matching the pattern will be returned.</p>
+            <p>An implementation must support at least the following glob syntax for the pattern: <ul>
+                  <li><code>*</code> for matching any number of unknown characters and</li>
+                  <li><code>?</code> for matching one unknown character.</li>
+               </ul>
+            </p>
+            <p>
+               <div><bibref ref="errFILE0003"/> is raised <code>$dir</code> does not point to an
+                  existing directory.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:move</code></head>
+            <eg>
+<ex:function>file:move</ex:function>($source as <ex:type>xs:string</ex:type>,
+          $target as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Moves a file or a directory given a source and a target path/URI. The following cases
+               may occur if <code>$source</code> points to a file:</p>
+            <ol type="a">
+               <li> if <code>$target</code> does not exist, it will be created.</li>
+               <li> if <code>$target</code> is a file, it will be overwritten.</li>
+               <li> if <code>$target</code> is a directory, the file will be created in that
+                  directory with the name of the source file. If a file already exists, it will be
+                  overwritten.</li>
+            </ol>
+            <p>The following cases may occur if <code>$source</code> points to a directory:</p>
+            <ol type="a">
+               <li> if <code>$target</code> does not exist, it will be created as directory, and all
+                  files of the source directory are moved to this directory with their existing
+                  local names.</li>
+               <li> if <code>$target</code> is a directory, all files are moved from the source into
+                  the target directory. If a file already exists, it will be overwritten.</li>
+            </ol>
+            <p>Other cases will raise one of the errors listed below.</p>
+            <p>The function returns the empty sequence if the operation is successful. If an error
+               occurs during the operation, no rollback to the original state will be possible </p>
+            <p>
+               <div><bibref ref="errFILE0001"/> is raised if the <code>$source</code> path does not
+                  exist.</div>
+               <div><bibref ref="errFILE0002"/> is raised if <code>$source</code> points to a
+                  directory and <code>$target</code> points to an existing file.</div>
+               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+                     <code>$source</code> does not exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$source</code> points to a file
+                  and <code>$target</code> points to a directory, in which a subdirectory exists
+                  with the name of the source file.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:read-binary</code></head>
+            <eg>
+<ex:function>file:read-binary</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:base64Binary</ex:type></eg>
+            <p>Returns the content of a file in its Base64 representation.</p>
+            <p>
+               <div><bibref ref="errFILE0001"/> is raised if <code>$file</code> does not
+                  exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:read-text</code></head>
+            <eg>
+<ex:function>file:read-text</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type>
+<ex:function>file:read-text</ex:function>($file as <ex:type>xs:string</ex:type>,
+               $encoding as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
+            <p>Returns the content of a file in its string representation.</p>
+            <p>The optional parameter <code>$encoding</code>, if not provided, is considered to be
+                  <code>UTF-8</code>.</p>
+            <p>
+               <div><bibref ref="errFILE0001"/> is raised if <code>$file</code> does not
+                  exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+                  not supported by the implementation.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:read-text-lines</code></head>
+            <eg>
+<ex:function>file:read-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type>
+<ex:function>file:read-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>,
+                     $encoding as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg>
+            <p>Returns the contents of a file as a sequence of strings, separated at newline
+               boundaries.</p>
+            <p>The optional parameter <code>$encoding</code>, if not provided, is considered to be
+                  <code>UTF-8</code>.</p>
+            <p>The newline handling is the same as for the <code>fn:unparsed-text-lines</code>
+               function in <bibref ref="fo30"/>.</p>
+            <p>
+               <div><bibref ref="errFILE0001"/> is raised if <code>$file</code> does not
+                  exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+                  not supported by the implementation.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:write</code></head>
+            <eg>
+<ex:function>file:write</ex:function>($file as <ex:type>xs:string</ex:type>,
+           $items as <ex:type>item()*</ex:type>) as <ex:type>empty-sequence()</ex:type>
+<ex:function>file:write</ex:function>($file as <ex:type>xs:string</ex:type>,
+           $items as <ex:type>item()*</ex:type>,
+           $params as <ex:type>element(output:serialization-parameters)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Writes a sequence of items to a file.</p>
+            <p>If <code>$file</code> already exists, it will be overwritten.</p>
+            <p><code>$params</code> controls the way the <code>$items</code> items are serialized.
+               The semantics of <code>$params</code> is the same as for the
+                  <code>fn:serialize</code> function in <bibref ref="fo30"/>. This consists of an
+                  <code>output:serialization-parameters</code> element whose format is defined in
+                  <bibref ref="ser30"/>. In contrast to fn:serialize, the encoding stage will not be
+               skipped by this function.</p>
+            <p>The function returns the empty sequence if the operation is successful.</p>
+            <p>
+               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+                     <code>$file</code> does not exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:write-text</code></head>
+            <eg>
+<ex:function>file:write-text</ex:function>($file as <ex:type>xs:string</ex:type>,
+                $value as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type>
+<ex:function>file:write-text</ex:function>($file as <ex:type>xs:string</ex:type>,
+                $value as <ex:type>xs:string</ex:type>,
+                $encoding as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Writes a strings to a file. If <code>$file</code> already exists, it will be
+               overwritten.</p>
+            <p>The optional parameter <code>$encoding</code>, if not provided, is considered to be
+                  <code>UTF-8</code>.</p>
+            <p>The function returns the empty sequence if the operation is successful.</p>
+            <p>
+               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+                     <code>$file</code> does not exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+                  not supported by the implementation.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:write-text-lines</code></head>
+            <eg>
+<ex:function>file:write-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>,
+                      $values as <ex:type>xs:string*</ex:type>) as <ex:type>empty-sequence()</ex:type>
+<ex:function>file:write-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>,
+                      $values as <ex:type>xs:string*</ex:type>,
+                      $encoding as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Writes a sequence of strings to a file, each followed by the system-dependent newline
+               character. If <code>$file</code> already exists, it will be overwritten.</p>
+            <p>The optional parameter <code>$encoding</code>, if not provided, is considered to be
+                  <code>UTF-8</code>.</p>
+            <p>The function returns the empty sequence if the operation is successful.</p>
+            <p>
+               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+                     <code>$file</code> does not exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+                  not supported by the implementation.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:write-binary</code></head>
+            <eg>
+<ex:function>file:write-binary</ex:function>($file as <ex:type>xs:string</ex:type>,
+                  $value as <ex:type>base64Binary</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
+            <p>Writes a Base64 items as binary to a file. If <code>$file</code> already exists, it
+               will be overwritten.</p>
+            <p>The function returns the empty sequence if the operation is successful.</p>
+            <p>
+               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+                     <code>$file</code> does not exist.</div>
+               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+                  directory.</div>
+               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+            </p>
+         </div2>
+      </div1>
+
+      <!-- *************************************** Functions on paths ************************* -->
+      <div1>
+         <head>Paths</head>
+         <p>None of the functions in this section performs any check regarding the existence of the
+            received or returned paths.</p>
+         <div2>
+            <head><code>file:base-name</code></head>
+            <eg>
+<ex:function>file:base-name</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type>
+<ex:function>file:base-name</ex:function>($path as <ex:type>xs:string</ex:type>,
+               $suffix as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
+            <p>Returns the last component from <code>$path</code>, deleting any trailing directory
+               separators. If <code>$path</code> consists entirely of directory separator, the empty
+               string is returned. If <code>$path</code> is the empty string, the string
+                  <code>"."</code> is returned, signifying the current working directory.</p>
+            <p>If <code>$suffix</code> is present, it will be trimmed from the end of the result.
+               This can be used to eliminate file extensions.</p>
+            <p>No path existence check is made.</p>
+         </div2>
+         <div2>
+            <head><code>file:dir-name</code></head>
+            <eg>
+<ex:function>file:dir-name</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
+            <p>This function returns a string denoting the parent directory of <code>$path</code>.
+               Any trailing directory separators are not counted as part of the directory name. If
+               the specified string is empty or contains no directory separators, <code>"."</code>
+               is returned, signifying the current directory.</p>
+            <p>No path existence check is made.</p>
+         </div2>
+         <div2>
+            <head><code>file:path-to-native</code></head>
+            <eg>
+<ex:function>file:path-to-native</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
+            <p>Transforms a URI, an absolute path, or relative path to a canonical, system-dependent
+               path representation. A canonical path is both absolute and unique and thus contains
+               no redirections such as references to parent directories or symbolic links.</p>
+            <p>No path existence check is made.</p>
+            <p>
+               <div><bibref ref="errFILE9999"/> is raised if an error occurs while trying to obtain
+                  the native path.</div>
+            </p>
+         </div2>
+         <div2>
+            <head><code>file:path-to-uri</code></head>
+            <eg>
 <ex:function>file:path-to-uri</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:anyURI</ex:type></eg>
-        <p>Transforms a file system path into a URI with the file:// scheme. No checks are performed regardless of the existence of a fil or directory referred to by the provided file system path.</p>
-      </div2>
-      <div2>
-        <head><code>file:read</code></head>
-        <eg>
-nondeterministic <ex:function>file:read</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:base64Binary</ex:type></eg>
-        <p>Reads the content of a file pointed to by the <code>$file</code> parameter and returns a Base64 representation of the content.</p>
-      </div2>
-      <div2>
-        <head><code>file:read-html</code></head>
-        <eg>
-nondeterministic <ex:function>file:read-html</ex:function>($file as <ex:type>xs:string</ex:type>,
-                                $tidyOptions as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
-        <p>Read the content of the HTML file pointed to by the <code>$file</code> parameters and returns it as a string. 
-         </p>
-      </div2>
-      <div2>
-        <head><code>file:read-text</code></head>
-        <eg>
-nondeterministic <ex:function>file:read-text</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
-        <p>Reads the content of a file and returns the string representation of the content.</p>
-      </div2>
-      <div2>
-        <head><code>file:read-xml</code></head>
-        <eg>
-nondeterministic <ex:function>file:read-xml</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>node()</ex:type>
-nondeterministic <ex:function>file:read-xml</ex:function>($file as <ex:type>xs:string</ex:type>,
-                               $tidy as <ex:type>xs:boolean</ex:type>) as <ex:type>node()</ex:type></eg>
-        <p>Reads a file and returns the parsed an XML document.
-          If the <code>$tidy</code> parameter is present and evaluates to <code>true</code>, the implementation might perform a cleaning step (e.g. as performed by the tidy library) in order to make sure that a valid XML document is obtained.
-          If the <code>$tidy</code> parameter is not present or evaluates to <code>false</code> and the file does not contain a well-formed XML document, an error is raised (TODO error code).
-          Cleaning documents before parsing in order to make them well-formed might be useful for HTML documents.
-        </p>
-        
-      </div2>
-      <div2>
-        <head><code>file:remove</code></head>
-        <eg>
-sequential <ex:function>file:remove</ex:function>($fileOrDir as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
-        <p>Delete a file or a directory from the file system. This operation is not recursive.
-          The function returns <code>false</code> if the operation failed (e.g. if a non-empty directory should be deleted or the file or directory does not exist).
-        Otherwise, the function returns <code>true</code>.</p>
-      </div2>
-      <div2>
-        <head><code>file:write</code></head>
-        <eg>
-sequential <ex:function>file:write</ex:function>($file as <ex:type>xs:string</ex:type>,
-                      $content as <ex:type>item()*</ex:type>,
-                      $serializer-params as <ex:type>node()*</ex:type>) as <ex:type>xs:boolean</ex:type>
-sequential <ex:function>file:write</ex:function>($file as <ex:type>xs:string</ex:type>,
-                      $content as <ex:type>item()*</ex:type>,
-                      $serializer-params as <ex:type>node()*</ex:type>,
-                      $append as <ex:type>xs:boolean</ex:type>) as <ex:type>xs:boolean</ex:type> 
-        </eg>
-        <p>Write a sequence of items to a file. This operation creates a new file or appends the
-          serialized content to the file pointed by the given path/URI. If the <code>$append</code> flag
-          is true and the file does not exist, a new one is created.</p>
-        <p>The <code>$serializer-params</code> parameter is used to set the corresponding serialization parameter defined in <bibref ref="xserial"/>, as defined for the XPath 2.1 function fn:serialize().</p>
-        <p>The function returns <code>true</code> if the file was written successfully, or <code>false</code> otherwise.</p>
-      </div2>
-    </div1>
-  </body>
-  <back>
-    <div1>
-      <head>References</head>
-      <blist>
-        <bibl id="xserial" key="Serialization">
-          <loc href="http://www.w3.org/TR/xslt-xquery-serialization/"> XSLT 2.0 and XQuery 1.0
-            Serialization </loc>. Scott Boag, Michael Kay, Joanne Tong, Norman Walsh, and Henry
-          Zongaro, editors. W3C Recommendation. 23 January 2007. </bibl>
-        <bibl id="fo11" key="F&amp;O 1.1">
-          <loc href="http://www.w3.org/TR/xpath-functions-11/"> XPath and XQuery Functions and
-            Operators 1.1 </loc>. Michael Kay, editor. W3C Working Draft. 15 January 2009. </bibl>
-        <bibl id="xslt20" key="XSLT 2.0">
-          <loc href="http://www.w3.org/TR/xslt20/">XSL Transformations (XSLT) Version 2.0</loc>.
-          Michael Kay, editor. W3C Recommendation. 23 January 2007. </bibl>
-      </blist>
-    </div1>
-    <div1>
-      <head>Summary of Error Conditions</head>
-      <blist>
-        <bibl id="errFS001" key="err:FS001">A file system error occurred.</bibl>
-      </blist>
-    </div1>
-  </back>
+            <p>Transforms a file system path into a URI with the <code>file://</code> scheme. If the
+               path is relative, it is first resolved against the current working directory.</p>
+            <p>No path existence check is made.</p>
+         </div2>
+         <div2>
+            <head><code>file:resolve-path</code></head>
+            <eg>
+<ex:function>file:resolve-path</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
+            <p>Transforms a relative path into an absolute operating system path by resolving it
+               against the current working directory.</p>
+            <p>No path existence check is made.</p>
+         </div2>
+      </div1>
+
+      <!-- ************************************************************************************ -->
+      <div1>
+         <head>System Properties</head>
+         <div2>
+            <head><code>file:dir-separator</code></head>
+            <eg>
+<ex:function>file:dir-separator</ex:function>() as <ex:type>xs:string</ex:type></eg>
+            <p>Returns the value of the operating system specific directory separator, which usually
+               is <code>/</code> on UNIX-based systems and <code>\</code> on Windows systems.</p>
+         </div2>
+         <div2>
+            <head><code>file:path-separator</code></head>
+            <eg>
+<ex:function>file:path-separator</ex:function>() as <ex:type>xs:string</ex:type></eg>
+            <p>Returns the value of the operating system specific path separator, which usually is
+                  <code>:</code> on UNIX-based systems and <code>;</code> on Windows systems.</p>
+         </div2>
+         <div2>
+            <head><code>file:line-separator</code></head>
+            <eg>
+<ex:function>file:line-separator</ex:function>() as <ex:type>xs:string</ex:type></eg>
+            <p>Returns the value of the operating system specific line separator, which usually is
+                  <code>&amp;#10;</code> on UNIX-based systems, <code>&amp;#13;&amp;#10;</code> on
+               Windows systems and <code>&amp;#13;</code> on Mac systems.</p>
+         </div2>
+      </div1>
+   </body>
+   <back>
+      <div1>
+         <head>References</head>
+         <blist>
+            <bibl id="ser30" key="XSLT and XQuery Serialization 3.0">
+               <loc href="http://www.w3.org/TR/xslt-xquery-serialization-30/">XSLT and XQuery
+                  Serialization 3.0</loc>. Henry Zongaro. W3C Working Draft 14 December 2010.</bibl>
+            <bibl id="fo30" key="XQuery and XPath Functions and Operators 3.0">
+               <loc href="http://www.w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and
+                  Operators 3.0</loc>. Michael Kay. W3C Working Draft 14 December 2010.</bibl>
+         </blist>
+      </div1>
+      <div1>
+         <head>Summary of Error Conditions</head>
+         <blist>
+            <bibl id="errFILE0001" key="err:FILE0001">The specified path does not exist.</bibl>
+            <bibl id="errFILE0002" key="err:FILE0002">The specified path already exists.</bibl>
+            <bibl id="errFILE0003" key="err:FILE0003">The specified path does not point to a
+               directory.</bibl>
+            <bibl id="errFILE0004" key="err:FILE0004">The specified path points to a
+               directory.</bibl>
+            <bibl id="errFILE0005" key="err:FILE0005">The specified encoding is not
+               supported.</bibl>
+            <bibl id="errFILE9999" key="err:FILE9999">A generic file system error occurred.</bibl>
+         </blist>
+      </div1>
+   </back>
 </spec>
