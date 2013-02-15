@@ -7,6 +7,7 @@
       <xs:complexType>
          <xs:sequence>
             <xs:element name="title" type="pkg:title-type"/>
+            <xs:element name="home"  type="xs:anyURI" minOccurs="0"/>
             <xs:element ref="pkg:dependency" minOccurs="0" maxOccurs="unbounded"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                <xs:element name="xquery" type="pkg:query-type"/>
@@ -20,15 +21,14 @@
          <xs:attribute name="name"    type="xs:anyURI" use="required"/>
          <xs:attribute name="abbrev"  type="xs:NCName" use="required"/>
          <xs:attribute name="version" type="xs:string" use="required"/>
-         <!-- In the 1.0 version of the spec, fix it to '1.0'. -->
          <xs:attribute name="spec"    fixed="1.0"      use="required"/>
       </xs:complexType>
    </xs:element>
 
    <xs:element name="dependency">
       <xs:complexType>
-         <xs:attribute name="name"    type="xs:anyURI"/>
-         <xs:attribute name="version" type="xs:token"/>
+         <xs:attribute name="package"   type="xs:anyURI"/>
+         <xs:attribute name="processor" type="xs:anyURI"/>
          <xs:attribute name="versions">
             <xs:simpleType>
                <xs:list itemType="xs:token"/>
@@ -58,8 +58,11 @@
 
    <xs:complexType name="query-type">
       <xs:sequence>
-         <xs:element name="namespace" type="xs:anyURI"/>
-         <xs:element name="file"      type="xs:anyURI"/>
+         <xs:choice>
+            <xs:element name="namespace"  type="xs:anyURI"/>
+            <xs:element name="import-uri" type="xs:anyURI"/>
+         </xs:choice>
+         <xs:element name="file" type="xs:anyURI"/>
       </xs:sequence>
    </xs:complexType>
 
