@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<spec role="editors-copy" xmlns:ex="http://expath.org/ns/xmlspec" ex:w3c="true">
+   <header>
+      <title>Binary Module</title>
+      <w3c-designation>w3c-designation</w3c-designation>
+      <w3c-doctype>EXPath Candidate Module</w3c-doctype>
+      <pubdate>
+         <day>14</day>
+         <month>February</month>
+         <year>2013</year>
+      </pubdate>
+      <publoc>
+         <loc href="http://expath.org/spec/binary/editor"/>
+      </publoc>
+      <altlocs>
+         <loc href="http://expath.org/spec/binary/editor.xml">XML</loc>
+      </altlocs>
+      <latestloc>
+         <loc href="http://expath.org/spec/binary"/>
+      </latestloc>
+      <prevlocs>
+         <loc href="http://expath.org/spec/binary/20130214"/>
+      </prevlocs>
+      <authlist>
+         <author role="editor">
+            <name>Jirka Kosek</name>
+         </author>
+      </authlist>
+      <copyright>
+         <p>Copyright ©2013 Jirka Kosek, published by the <loc
+            href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
+            href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+            License Agreement (CLA)</loc>. A human-readable <loc
+            href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
+            available.</p>
+         <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
+            >EXPath Community Group</loc>. It is not a W3C Standard nor is it on the W3C Standards
+            Track. Please note that under the <loc
+            href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+            License Agreement (CLA)</loc> there is a limited opt-out and other conditions apply.
+            Learn more about <loc href="http://www.w3.org/community/">W3C Community and Business
+            Groups</loc>.</p>
+      </copyright>
+      <abstract>
+         <p>This proposal provides an API for XPath 2.0 to handle binary data. It defines extension
+            functions to read binary files, perform basic binary operations on the data in memory,
+            as well as a new serialization method. It has been designed to be compatible with XQuery
+            1.0 and XSLT 2.0, as well as any other XPath 2.0 usage.</p>
+      </abstract>
+      <status>
+         <p/>
+      </status>
+      <langusage>
+         <language>en-US</language>
+      </langusage>
+      <revisiondesc>
+         <p>revisiondesc</p>
+      </revisiondesc>
+   </header>
+   <body>
+      <div1>
+         <head>Introduction</head>
+         <div2>
+            <head>Namespace Conventions</head>
+            <p>The module defined by this document defines several functions and a serialization
+               method, all contained in the namespace <code>http://expath.org/ns/binary</code>. In
+               this document, the <code>bin</code> prefix, when used, is bound to this namespace
+               URI.</p>
+            <p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>. In
+               this document, the <code>err</code> prefix, when used, is bound to this namespace
+               URI.</p>
+         </div2>
+      </div1>
+      <div1>
+         <head>Loading binary data</head>
+         <eg>
+<ex:function>bin:unparsed-binary</ex:function>($href as <ex:type>xs:string</ex:type>?) as <ex:type>xs:hexBinary</ex:type></eg>
+         <p>Reads binary content and returns it as xs:hexBinary.</p>
+      </div1>
+      <div1>
+         <head>Basic operations</head>
+         <eg>
+<ex:function>binary-subsequence</ex:function>($in as <ex:type>xs:hexBinary</ex:type>,
+                   $offset as <ex:type>xs:integer</ex:type>,
+                   $size as <ex:type>xs:integer</ex:type>) as <ex:type>xs:hexBinary</ex:type></eg>
+         <p>Returns just part of original binary data starting at $offset (zero based). Size of
+            returned data is $size octets.</p>
+         <eg>
+<ex:function>binary-length</ex:function>($in as xs:hexBinary) as xs:integer</eg>
+         <p>Returns size of binary data in octets.</p>
+         <eg>
+<ex:function>binary-concat</ex:function>($in1 as xs:hexBinary, $in2 as xs:hexBinary, ...) as xs:hexBinary</eg>
+         <p>Concatenates all provided binary data blocks into one large one.</p>
+      </div1>
+      <div1>
+         <head>Text decoding/encoding</head>
+         <eg>
+<ex:function>decode-string</ex:function>($in as xs:hexBinary, $encoding as $xs:string) as xs:string</eg>
+         <p>Decodes octets according to a given encoding.</p>
+         <eg>
+<ex:function>encode-string</ex:function>($in as xs:string, $encoding as $xs:string) as xs:hexBinary</eg>
+         <p>Encodes string using given encoding into octets.</p>
+      </div1>
+      <div1>
+         <head>Packing/unpacking of encoded number values</head>
+         <eg>
+<ex:function>unpack-double</ex:function>($in as xs:hexBinary, $offset as xs:integer) as xs:double</eg>
+         <p>Returns xs:double value which is stored at $offset. Little endian representation is
+            assumed.</p>
+         <eg>
+<ex:function>unpack-double</ex:function>($in as xs:hexBinary,
+              $offset as xs:integer,
+              $bigendian as xs:boolean) as xs:double</eg>
+         <p>Returns xs:double value which is stored at $offset. If $bigendian is true, big endian
+            representation is assumed, otherwise little endian is assumed.</p>
+         <p>Analogic functions for other numeric types will be provided: unpack-float(),
+            unpack-long(), unpack-int(), unpack-short(), unpack-byte(), unpack-unsignedLong(),
+            unpack-unsignedInt(), unpack-unsignedShort(), unpack-unsignedByte().</p>
+         <eg>
+<ex:function>pack-double</ex:function>($in as xs:double) as xs:hexBinary</eg>
+         <p>Returns binary representation of xs:double using little endian representation.</p>
+         <eg>
+<ex:function>pack-double</ex:function>($in as xs:double, $bigendian as xs:boolean) as xs:hexBinary</eg>
+         <p>Returns binary representation of xs:double value. If $bigendian is true, big endian
+            representation is used, otherwise little endian is used.</p>
+         <p>Analogic functions for other numeric types will be provided: pack-float(), pack-long(),
+            pack-int(), pack-short(), pack-byte(), pack-unsignedLong(), pack-unsignedInt(),
+            pack-unsignedShort(), pack-unsignedByte().</p>
+      </div1>
+      <div1>
+         <head>Bitwise operations</head>
+         <p>For now functions will be provided only. Later on we can override some operators as
+            well.</p>
+         <eg>
+<ex:function>binary-or</ex:function>($a as xs:hexBinary, $b as xs:hexBinary) as xs:hexBinary</eg>
+         <p>Returns "bitwise or" applied on $a and $b. If $a and $b do not have same binary-length()
+            then shorter is padded with zero octets to match size of longer argument.</p>
+         <eg>
+<ex:function>binary-xor</ex:function>(...)
+<ex:function>binary-and</ex:function>(...)
+<ex:function>binary-not</ex:function>(...)</eg>
+         <eg>
+<ex:function>binary-shift-left</ex:function>($in as xs:hexBinary, $by as xs:integer) as xs:hexBinary</eg>
+         <p>Shift bits in $in value left by $by bits.</p>
+         <eg>
+<ex:function>binary-shift-right</ex:function>($in as xs:hexBinary, $by as xs:integer) as xs:hexBinary</eg>
+         <p>Shift bits in $in value right by $by bits.</p>
+         <p>We can also provide rotation. For shifts we have to decide whether they should be
+            logical (strictly operating on bits) or arithmetical (taking sign bit into account) or
+            provide parameter for this.</p>
+      </div1>
+      <div1>
+         <head>Another functions</head>
+         <p>We might provide functions for converting strings written in hex, octal and binary
+            notation to number types.</p>
+      </div1>
+      <div1>
+         <head>Serialization</head>
+         <p>I think that we shouldn't use function for serialization because of side-effects. I
+            think that more cleaner would be to provide new output method for
+            xsl:result-document:</p>
+         <eg>
+&lt;xsl:result-document href="..." method="binary">
+  union(xs:hexBinary, xs:base64Binary)*
+&lt;/xsl:result-document></eg>
+         <p>For binary output method we can require that sequence constructor inside
+            xsl:result-document returns only sequence mixing xs:base64Binary and xs:hexBinary
+            types.</p>
+      </div1>
+   </body>
+   <back>
+      <div1>
+         <head>References</head>
+         <blist>
+            <bibl id="xserial" key="Serialization">
+               <loc href="http://www.w3.org/TR/xslt-xquery-serialization/">XSLT 2.0 and XQuery 1.0
+               Serialization</loc>. Scott Boag, Michael Kay, Joanne Tong, Norman Walsh, and Henry
+               Zongaro, editors. W3C Recommendation. 23 January 2007. </bibl>
+            <bibl id="fo11" key="F&amp;O 1.1">
+               <loc href="http://www.w3.org/TR/xpath-functions-11/">XPath and XQuery Functions and
+                  Operators 1.1</loc>. Michael Kay, editor. W3C Working Draft. 15 January 2009.</bibl>
+            <bibl id="xslt20" key="XSLT 2.0">
+               <loc href="http://www.w3.org/TR/xslt20/">XSL Transformations (XSLT) Version 2.0</loc>.
+               Michael Kay, editor. W3C Recommendation. 23 January 2007. </bibl>
+         </blist>
+      </div1>
+      <div1>
+         <head>Summary of Error Conditions</head>
+         <blist>
+            <bibl id="errBIN001" key="err:BIN001">Some error occurred.</bibl>
+         </blist>
+      </div1>
+   </back>
+</spec>
