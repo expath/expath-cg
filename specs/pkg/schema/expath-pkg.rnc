@@ -9,10 +9,11 @@ start =
          attribute abbrev { xsd:NCName },
          attribute name { xsd:anyURI },
          element title { xsd:string },
+         element home { xsd:anyURI }?,
          dependency*,
          (element xquery {
-            element namespace { anyURI },
-            element file { anyURI }
+            element namespace { xsd:anyURI },
+            element file { xsd:anyURI }
           }
           | element xslt { component-type }
           | element xproc { component-type }
@@ -35,7 +36,7 @@ dependency =
 anyURI = xsd:anyURI
 component-type =
   ((notAllowed
-    | element import-uri { anyURI }),
+    | element import-uri { xsd:anyURI }),
    (notAllowed
-    | element file { anyURI })),
+    | element file { xsd:anyURI })),
   empty
