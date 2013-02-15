@@ -57,7 +57,8 @@
       <abstract>
          <p>This proposal provides a file system API for XPath. It defines extension functions to
             perform file system related operations such as listing, reading, or writing files or
-            directories. It has been designed to be compatible with XQuery 1.0 and XSLT 2.0.</p>
+            directories. It has been designed to be compatible with XQuery 1.0 and XSLT 2.0, as
+            well as any other XPath 2.0 usage.</p>
       </abstract>
       <status>
          <p/>
@@ -71,7 +72,7 @@
    </header>
    <body>
 
-      <!-- *************************************** Introduction *************************************** -->
+      <!-- *************************************** Introduction ******************************* -->
       <div1>
          <head>Introduction</head>
          <div2>
@@ -141,7 +142,7 @@
          </div2>
       </div1>
 
-      <!-- *************************************** File properties *************************************** -->
+      <!-- *************************************** File properties **************************** -->
       <div1>
          <head>File Properties</head>
          <div2>
@@ -191,7 +192,7 @@
          </div2>
       </div1>
 
-      <!-- *************************************** I/O Functions *************************************** -->
+      <!-- *************************************** I/O Functions ****************************** -->
       <div1>
          <head>Input/Output</head>
          <div2>
@@ -561,7 +562,7 @@
          </div2>
       </div1>
 
-      <!-- *************************************** Functions on paths *************************************** -->
+      <!-- *************************************** Functions on paths ************************* -->
       <div1>
          <head>Paths</head>
          <p>None of the functions in this section performs any check regarding the existence of the
@@ -621,7 +622,7 @@
          </div2>
       </div1>
 
-      <!-- ***************************************************************************************** -->
+      <!-- ************************************************************************************ -->
       <div1>
          <head>System Properties</head>
          <div2>
