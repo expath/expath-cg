@@ -81,47 +81,47 @@
       <div1>
          <head>Basic operations</head>
          <eg>
-<ex:function>binary-subsequence</ex:function>($in as <ex:type>xs:hexBinary</ex:type>,
-                   $offset as <ex:type>xs:integer</ex:type>,
-                   $size as <ex:type>xs:integer</ex:type>) as <ex:type>xs:hexBinary</ex:type></eg>
+<ex:function>bin:binary-subsequence</ex:function>($in as <ex:type>xs:hexBinary</ex:type>,
+                       $offset as <ex:type>xs:integer</ex:type>,
+                       $size as <ex:type>xs:integer</ex:type>) as <ex:type>xs:hexBinary</ex:type></eg>
          <p>Returns just part of original binary data starting at $offset (zero based). Size of
             returned data is $size octets.</p>
          <eg>
-<ex:function>binary-length</ex:function>($in as xs:hexBinary) as xs:integer</eg>
+<ex:function>bin:binary-length</ex:function>($in as xs:hexBinary) as xs:integer</eg>
          <p>Returns size of binary data in octets.</p>
          <eg>
-<ex:function>binary-concat</ex:function>($in1 as xs:hexBinary, $in2 as xs:hexBinary, ...) as xs:hexBinary</eg>
+<ex:function>bin:binary-concat</ex:function>($in1 as xs:hexBinary, $in2 as xs:hexBinary, ...) as xs:hexBinary</eg>
          <p>Concatenates all provided binary data blocks into one large one.</p>
       </div1>
       <div1>
          <head>Text decoding/encoding</head>
          <eg>
-<ex:function>decode-string</ex:function>($in as xs:hexBinary, $encoding as $xs:string) as xs:string</eg>
+<ex:function>bin:decode-string</ex:function>($in as xs:hexBinary, $encoding as $xs:string) as xs:string</eg>
          <p>Decodes octets according to a given encoding.</p>
          <eg>
-<ex:function>encode-string</ex:function>($in as xs:string, $encoding as $xs:string) as xs:hexBinary</eg>
+<ex:function>bin:encode-string</ex:function>($in as xs:string, $encoding as $xs:string) as xs:hexBinary</eg>
          <p>Encodes string using given encoding into octets.</p>
       </div1>
       <div1>
          <head>Packing/unpacking of encoded number values</head>
          <eg>
-<ex:function>unpack-double</ex:function>($in as xs:hexBinary, $offset as xs:integer) as xs:double</eg>
+<ex:function>bin:unpack-double</ex:function>($in as xs:hexBinary, $offset as xs:integer) as xs:double</eg>
          <p>Returns xs:double value which is stored at $offset. Little endian representation is
             assumed.</p>
          <eg>
-<ex:function>unpack-double</ex:function>($in as xs:hexBinary,
-              $offset as xs:integer,
-              $bigendian as xs:boolean) as xs:double</eg>
+<ex:function>bin:unpack-double</ex:function>($in as xs:hexBinary,
+                  $offset as xs:integer,
+                  $bigendian as xs:boolean) as xs:double</eg>
          <p>Returns xs:double value which is stored at $offset. If $bigendian is true, big endian
             representation is assumed, otherwise little endian is assumed.</p>
          <p>Analogic functions for other numeric types will be provided: unpack-float(),
             unpack-long(), unpack-int(), unpack-short(), unpack-byte(), unpack-unsignedLong(),
             unpack-unsignedInt(), unpack-unsignedShort(), unpack-unsignedByte().</p>
          <eg>
-<ex:function>pack-double</ex:function>($in as xs:double) as xs:hexBinary</eg>
+<ex:function>bin:pack-double</ex:function>($in as xs:double) as xs:hexBinary</eg>
          <p>Returns binary representation of xs:double using little endian representation.</p>
          <eg>
-<ex:function>pack-double</ex:function>($in as xs:double, $bigendian as xs:boolean) as xs:hexBinary</eg>
+<ex:function>bin:pack-double</ex:function>($in as xs:double, $bigendian as xs:boolean) as xs:hexBinary</eg>
          <p>Returns binary representation of xs:double value. If $bigendian is true, big endian
             representation is used, otherwise little endian is used.</p>
          <p>Analogic functions for other numeric types will be provided: pack-float(), pack-long(),
@@ -133,18 +133,18 @@
          <p>For now functions will be provided only. Later on we can override some operators as
             well.</p>
          <eg>
-<ex:function>binary-or</ex:function>($a as xs:hexBinary, $b as xs:hexBinary) as xs:hexBinary</eg>
+<ex:function>bin:binary-or</ex:function>($a as xs:hexBinary, $b as xs:hexBinary) as xs:hexBinary</eg>
          <p>Returns "bitwise or" applied on $a and $b. If $a and $b do not have same binary-length()
             then shorter is padded with zero octets to match size of longer argument.</p>
          <eg>
-<ex:function>binary-xor</ex:function>(...)
-<ex:function>binary-and</ex:function>(...)
-<ex:function>binary-not</ex:function>(...)</eg>
+<ex:function>bin:binary-xor</ex:function>(...)
+<ex:function>bin:binary-and</ex:function>(...)
+<ex:function>bin:binary-not</ex:function>(...)</eg>
          <eg>
-<ex:function>binary-shift-left</ex:function>($in as xs:hexBinary, $by as xs:integer) as xs:hexBinary</eg>
+<ex:function>bin:binary-shift-left</ex:function>($in as xs:hexBinary, $by as xs:integer) as xs:hexBinary</eg>
          <p>Shift bits in $in value left by $by bits.</p>
          <eg>
-<ex:function>binary-shift-right</ex:function>($in as xs:hexBinary, $by as xs:integer) as xs:hexBinary</eg>
+<ex:function>bin:binary-shift-right</ex:function>($in as xs:hexBinary, $by as xs:integer) as xs:hexBinary</eg>
          <p>Shift bits in $in value right by $by bits.</p>
          <p>We can also provide rotation. For shifts we have to decide whether they should be
             logical (strictly operating on bits) or arithmetical (taking sign bit into account) or
@@ -161,7 +161,7 @@
             think that more cleaner would be to provide new output method for
             xsl:result-document:</p>
          <eg>
-&lt;xsl:result-document href="..." method="binary">
+&lt;xsl:result-document href="..." method="bin:binary">
   union(xs:hexBinary, xs:base64Binary)*
 &lt;/xsl:result-document></eg>
          <p>For binary output method we can require that sequence constructor inside
