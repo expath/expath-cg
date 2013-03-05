@@ -105,6 +105,19 @@
             returns an empty sequence.</p>
          <p>The result of the function is a binary value of the resource retrieved
             using the URI.</p>
+      </def></gitem><gitem><label>Examples</label><def>
+         
+            <p>Converting external images in HTML document into internal data: resources:</p>
+            <eg xml:space="preserve">&lt;xsl:template match="img[ends-with(@src, '.jpg')]"&gt;
+   &lt;xsl:copy&gt;
+      &lt;xsl:copy-of select="@* except @src"/&gt;
+      &lt;xsl:attribute name="src"&gt;
+        &lt;xsl:text&gt;data:image/jpeg;base64,&lt;/xsl:text&gt;
+        &lt;xsl:value-of select="xs:base64Binary(bin:unparsed-binary(resolve-uri(@src)))"/&gt;
+      &lt;/xsl:attribute&gt;
+   &lt;/xsl:copy&gt;
+&lt;/xsl:template&gt;</eg>
+         
       </def></gitem></glist>
          </div2>
       </div1>
@@ -124,6 +137,12 @@
          <p>The <code>$offset</code> is zero based.</p>
          <p>The value of <code>$offset</code> argument <rfc2119>must</rfc2119> be non-negative integer.</p>
          <p>It is dynamic error if <code>$offset</code> + <code>$size</code> is larger then size of binary data passed in <code>$in</code> argument.</p>
+      </def></gitem><gitem><label>Examples</label><def>
+         
+            <p>Testing whether <code>$data</code> variable contains content of PDF file:</p>
+            <eg xml:space="preserve">bin:binary-subsequence($data, 0, 4) eq xs:hexBinary("25504446")</eg>
+            <p><code>25504446</code> is magic number for PDF files, it is US-ASCII encoded value for <code>%PDF</code>.</p>
+         
       </def></gitem></glist>
          </div2>
          <div2>
@@ -148,31 +167,209 @@
             zero-length binary data.</p>
       </def></gitem></glist>
          </div2>
+         <div2>
+            <head>bin:binary-to-octets</head><glist><gitem><label>Summary</label><def>
+         <p>Returns binary data as a sequence of octets.</p>
+      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="binary-to-octets" return-type="xs:integer*" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>If <code>$in</code> is zero length binary data then empty sequence is returned.</p>
+         <p>Octets are returned as integers from 0 to 255.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:octets-to-binary</head><glist><gitem><label>Summary</label><def>
+         <p>Converts sequence of octets into binary data.</p>
+      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="octets-to-binary" return-type="xs:hexBinary" isOp="no" prefix="bin">
+            <arg name="in" type="xs:integer*"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>Octets are integers from 0 to 255.</p>
+      </def></gitem></glist>
+         </div2>
       </div1>
       <div1>
-         <head>Text decoding/encoding</head>
-         <eg>
-<ex:function>bin:decode-string</ex:function>($in as xs:hexBinary, $encoding as $xs:string) as xs:string</eg>
-         <p>Decodes octets according to a given encoding.</p>
-         <eg>
-<ex:function>bin:encode-string</ex:function>($in as xs:string, $encoding as $xs:string) as xs:hexBinary</eg>
-         <p>Encodes string using given encoding into octets.</p>
+         <head>Text decoding and encoding</head>
+         <div2>
+            <head>bin:decode-string</head><glist><gitem><label>Summary</label><def><p>Decodes binary data as a string in a given encoding.</p></def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="decode-string" return-type="xs:string" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="encoding" type="xs:string"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>The <code>$encoding</code> argument is the name of an encoding. The values
+            for this attribute follow the same rules as for the <code>encoding</code> attribute in
+            an XML declaration. The only values which every implementation is <rfc2119>required</rfc2119> to recognize are
+            <code>utf-8</code> and <code>utf-16</code>.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:unpack-string</head><glist><gitem><label>Summary</label><def><p>Decodes chunk of binary data at a specified offset as a string in a given encoding.</p></def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="unpack-string" return-type="xs:string" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+            <arg name="size" type="xs:integer"/>
+            <arg name="encoding" type="xs:string"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>If <code>$size</code> is greater then 0 this function is identical to calling <code>bin:decode-string(bin:binary-subsequence($in, $offset, $size), $encoding)</code>.</p>
+         <p>If <code>$size</code> is zero then all non-zero octets starting at <code>$offset</code> until first zero octets are extracted and then decoding is applied. This way zero-terminated strings can be easily decoded.</p>
+         <p>The <code>$encoding</code> argument is the name of an encoding. The values
+            for this attribute follow the same rules as for the <code>encoding</code> attribute in
+            an XML declaration. The only values which every implementation is <rfc2119>required</rfc2119> to recognize are
+            <code>utf-8</code> and <code>utf-16</code>.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:encode-string</head><glist><gitem><label>Summary</label><def><p>Encodes string into binary data using a given encoding.</p></def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="encode-string" return-type="xs:hexBinary" isOp="no" prefix="bin">
+            <arg name="in" type="xs:string"/>
+            <arg name="encoding" type="xs:string"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>The <code>$encoding</code> argument is the name of an encoding. The values
+            for this attribute follow the same rules as for the <code>encoding</code> attribute in
+            an XML declaration. The only values which every implementation is <rfc2119>required</rfc2119> to recognize are
+            <code>utf-8</code> and <code>utf-16</code>.</p>
+      </def></gitem></glist>
+         </div2>
       </div1>
       <div1>
-         <head>Packing/unpacking of encoded number values</head>
-         <eg>
-<ex:function>bin:unpack-double</ex:function>($in as xs:hexBinary, $offset as xs:integer) as xs:double</eg>
-         <p>Returns xs:double value which is stored at $offset. Little endian representation is
-            assumed.</p>
-         <eg>
-<ex:function>bin:unpack-double</ex:function>($in as xs:hexBinary,
-                  $offset as xs:integer,
-                  $bigendian as xs:boolean) as xs:double</eg>
-         <p>Returns xs:double value which is stored at $offset. If $bigendian is true, big endian
-            representation is assumed, otherwise little endian is assumed.</p>
-         <p>Analogic functions for other numeric types will be provided: unpack-float(),
-            unpack-long(), unpack-int(), unpack-short(), unpack-byte(), unpack-unsignedLong(),
-            unpack-unsignedInt(), unpack-unsignedShort(), unpack-unsignedByte().</p>
+         <head>Packing and unpacking of encoded numeric values</head>
+         <div2>
+            <head>bin:unpack-double</head><glist><gitem><label>Summary</label><def>
+         <p>Extract double value stored at the particular offset in binary data.</p>
+      </def></gitem><gitem><label>Signatures</label><def><p><example role="signature"><proto name="unpack-double" return-type="xs:double" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+         </proto></example><example role="signature"><proto name="unpack-double" return-type="xs:double" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+            <arg name="bigendian" type="xs:boolean"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:unpack-float</head><glist><gitem><label>Summary</label><def>
+         <p>Extract float value stored at the particular offset in binary data.</p>
+      </def></gitem><gitem><label>Signatures</label><def><p><example role="signature"><proto name="unpack-float" return-type="xs:float" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+         </proto></example><example role="signature"><proto name="unpack-float" return-type="xs:float" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+            <arg name="bigendian" type="xs:boolean"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:unpack-long</head><glist><gitem><label>Summary</label><def>
+         <p>Extract long (64-bit signed integer) value stored at the particular offset in binary data.</p>
+      </def></gitem><gitem><label>Signatures</label><def><p><example role="signature"><proto name="unpack-long" return-type="xs:long" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+         </proto></example><example role="signature"><proto name="unpack-long" return-type="xs:long" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+            <arg name="bigendian" type="xs:boolean"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:unpack-unsignedLong</head><glist><gitem><label>Summary</label><def>
+         <p>Extract unsignedLong (64-bit unsigned integer) value stored at the particular offset in binary data.</p>
+      </def></gitem><gitem><label>Signatures</label><def><p><example role="signature"><proto name="unpack-unsignedLong" return-type="xs:unsignedLong" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+         </proto></example><example role="signature"><proto name="unpack-unsignedLong" return-type="xs:unsignedLong" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+            <arg name="bigendian" type="xs:boolean"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:unpack-int</head><glist><gitem><label>Summary</label><def>
+         <p>Extract int (32-bit signed integer) value stored at the particular offset in binary data.</p>
+      </def></gitem><gitem><label>Signatures</label><def><p><example role="signature"><proto name="unpack-int" return-type="xs:int" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+         </proto></example><example role="signature"><proto name="unpack-int" return-type="xs:int" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+            <arg name="bigendian" type="xs:boolean"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:unpack-unsignedInt</head><glist><gitem><label>Summary</label><def>
+         <p>Extract unsignedInt (32-bit unsigned integer) value stored at the particular offset in binary data.</p>
+      </def></gitem><gitem><label>Signatures</label><def><p><example role="signature"><proto name="unpack-unsignedInt" return-type="xs:unsignedInt" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+         </proto></example><example role="signature"><proto name="unpack-unsignedInt" return-type="xs:unsignedInt" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+            <arg name="bigendian" type="xs:boolean"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:unpack-short</head><glist><gitem><label>Summary</label><def>
+         <p>Extract short (16-bit signed integer) value stored at the particular offset in binary data.</p>
+      </def></gitem><gitem><label>Signatures</label><def><p><example role="signature"><proto name="unpack-short" return-type="xs:short" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+         </proto></example><example role="signature"><proto name="unpack-short" return-type="xs:short" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+            <arg name="bigendian" type="xs:boolean"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:unpack-unsignedShort</head><glist><gitem><label>Summary</label><def>
+         <p>Extract unsignedShort (16-bit unsigned integer) value stored at the particular offset in binary data.</p>
+      </def></gitem><gitem><label>Signatures</label><def><p><example role="signature"><proto name="unpack-unsignedShort" return-type="xs:unsignedShort" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+         </proto></example><example role="signature"><proto name="unpack-unsignedShort" return-type="xs:unsignedShort" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+            <arg name="bigendian" type="xs:boolean"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:unpack-byte</head><glist><gitem><label>Summary</label><def>
+         <p>Extract byte (8-bit signed integer) value stored at the particular offset in binary data.</p>
+      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="unpack-byte" return-type="xs:byte" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>The <code>$offset</code> is zero based.</p>
+      </def></gitem></glist>
+         </div2>
+         <div2>
+            <head>bin:unpack-unsignedByte</head><glist><gitem><label>Summary</label><def>
+         <p>Extract unsignedByte (8-bit unsigned integer) value stored at the particular offset in binary data.</p>
+      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="unpack-unsignedByte" return-type="xs:unsignedByte" isOp="no" prefix="bin">
+            <arg name="in" type="xs:hexBinary"/>
+            <arg name="offset" type="xs:integer"/>
+         </proto></example></p></def></gitem><gitem><label>Rules</label><def>
+         <p>The <code>$offset</code> is zero based.</p>
+      </def></gitem></glist>
+         </div2>
+         
          <eg>
 <ex:function>bin:pack-double</ex:function>($in as xs:double) as xs:hexBinary</eg>
          <p>Returns binary representation of xs:double using little endian representation.</p>

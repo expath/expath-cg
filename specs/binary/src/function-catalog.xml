@@ -29,6 +29,20 @@
          <p>The result of the function is a binary value of the resource retrieved
             using the URI.</p>
       </fos:rules>
+      <fos:examples>
+         <fos:example>
+            <p>Converting external images in HTML document into internal data: resources:</p>
+            <eg xml:space="preserve"><![CDATA[<xsl:template match="img[ends-with(@src, '.jpg')]">
+   <xsl:copy>
+      <xsl:copy-of select="@* except @src"/>
+      <xsl:attribute name="src">
+        <xsl:text>data:image/jpeg;base64,</xsl:text>
+        <xsl:value-of select="xs:base64Binary(bin:unparsed-binary(resolve-uri(@src)))"/>
+      </xsl:attribute>
+   </xsl:copy>
+</xsl:template>]]></eg>
+         </fos:example>
+      </fos:examples>
    </fos:function>
    <fos:function name="binary-subsequence" prefix="bin">
       <fos:signatures>
@@ -48,6 +62,13 @@
          <p>The value of <code>$offset</code> argument <rfc2119>must</rfc2119> be non-negative integer.</p>
          <p>It is dynamic error if <code>$offset</code> + <code>$size</code> is larger then size of binary data passed in <code>$in</code> argument.</p>
       </fos:rules>
+      <fos:examples>
+         <fos:example>
+            <p>Testing whether <code>$data</code> variable contains content of PDF file:</p>
+            <eg xml:space="preserve">bin:binary-subsequence($data, 0, 4) eq xs:hexBinary("25504446")</eg>
+            <p><code>25504446</code> is magic number for PDF files, it is US-ASCII encoded value for <code>%PDF</code>.</p>
+         </fos:example>
+      </fos:examples>
    </fos:function>
    <fos:function name="binary-length" prefix="bin">
       <fos:signatures>
@@ -79,6 +100,270 @@
          <p>If the value of <code>$in</code> is the empty sequence, the function returns the
             zero-length binary data.</p>
       </fos:notes>
+   </fos:function>
+   <fos:function name="binary-to-octets" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="binary-to-octets" return-type="xs:integer*">
+            <fos:arg name="in" type="xs:hexBinary"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns binary data as a sequence of octets.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>If <code>$in</code> is zero length binary data then empty sequence is returned.</p>
+         <p>Octets are returned as integers from 0 to 255.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="octets-to-binary" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="octets-to-binary" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:integer*"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Converts sequence of octets into binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Octets are integers from 0 to 255.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="decode-string" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="decode-string" return-type="xs:string">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="encoding" type="xs:string"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary><p>Decodes binary data as a string in a given encoding.</p></fos:summary>
+      <fos:rules>
+         <p>The <code>$encoding</code> argument is the name of an encoding. The values
+            for this attribute follow the same rules as for the <code>encoding</code> attribute in
+            an XML declaration. The only values which every implementation is <rfc2119>required</rfc2119> to recognize are
+            <code>utf-8</code> and <code>utf-16</code>.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="unpack-string" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="unpack-string" return-type="xs:string">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+            <fos:arg name="size" type="xs:integer"/>
+            <fos:arg name="encoding" type="xs:string"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary><p>Decodes chunk of binary data at a specified offset as a string in a given encoding.</p></fos:summary>
+      <fos:rules>
+         <p>If <code>$size</code> is greater then 0 this function is identical to calling <code>bin:decode-string(bin:binary-subsequence($in, $offset, $size), $encoding)</code>.</p>
+         <p>If <code>$size</code> is zero then all non-zero octets starting at <code>$offset</code> until first zero octets are extracted and then decoding is applied. This way zero-terminated strings can be easily decoded.</p>
+         <p>The <code>$encoding</code> argument is the name of an encoding. The values
+            for this attribute follow the same rules as for the <code>encoding</code> attribute in
+            an XML declaration. The only values which every implementation is <rfc2119>required</rfc2119> to recognize are
+            <code>utf-8</code> and <code>utf-16</code>.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="encode-string" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="encode-string" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:string"/>
+            <fos:arg name="encoding" type="xs:string"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary><p>Encodes string into binary data using a given encoding.</p></fos:summary>
+      <fos:rules>
+         <p>The <code>$encoding</code> argument is the name of an encoding. The values
+            for this attribute follow the same rules as for the <code>encoding</code> attribute in
+            an XML declaration. The only values which every implementation is <rfc2119>required</rfc2119> to recognize are
+            <code>utf-8</code> and <code>utf-16</code>.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="unpack-double" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="unpack-double" return-type="xs:double">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+         </fos:proto>
+         <fos:proto name="unpack-double" return-type="xs:double">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Extract double value stored at the particular offset in binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="unpack-float" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="unpack-float" return-type="xs:float">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+         </fos:proto>
+         <fos:proto name="unpack-float" return-type="xs:float">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Extract float value stored at the particular offset in binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="unpack-long" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="unpack-long" return-type="xs:long">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+         </fos:proto>
+         <fos:proto name="unpack-long" return-type="xs:long">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Extract long (64-bit signed integer) value stored at the particular offset in binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="unpack-unsignedLong" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="unpack-unsignedLong" return-type="xs:unsignedLong">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+         </fos:proto>
+         <fos:proto name="unpack-unsignedLong" return-type="xs:unsignedLong">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Extract unsignedLong (64-bit unsigned integer) value stored at the particular offset in binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="unpack-int" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="unpack-int" return-type="xs:int">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+         </fos:proto>
+         <fos:proto name="unpack-int" return-type="xs:int">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Extract int (32-bit signed integer) value stored at the particular offset in binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="unpack-unsignedInt" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="unpack-unsignedInt" return-type="xs:unsignedInt">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+         </fos:proto>
+         <fos:proto name="unpack-unsignedInt" return-type="xs:unsignedInt">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Extract unsignedInt (32-bit unsigned integer) value stored at the particular offset in binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="unpack-short" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="unpack-short" return-type="xs:short">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+         </fos:proto>
+         <fos:proto name="unpack-short" return-type="xs:short">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Extract short (16-bit signed integer) value stored at the particular offset in binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="unpack-unsignedShort" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="unpack-unsignedShort" return-type="xs:unsignedShort">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+         </fos:proto>
+         <fos:proto name="unpack-unsignedShort" return-type="xs:unsignedShort">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Extract unsignedShort (16-bit unsigned integer) value stored at the particular offset in binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="unpack-byte" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="unpack-byte" return-type="xs:byte">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Extract byte (8-bit signed integer) value stored at the particular offset in binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>The <code>$offset</code> is zero based.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="unpack-unsignedByte" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="unpack-unsignedByte" return-type="xs:unsignedByte">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Extract unsignedByte (8-bit unsigned integer) value stored at the particular offset in binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>The <code>$offset</code> is zero based.</p>
+      </fos:rules>
    </fos:function>
    
 </fos:functions>

@@ -91,31 +91,58 @@
          <div2>
             <head><?function bin:binary-join?></head>
          </div2>
+         <div2>
+            <head><?function bin:binary-to-octets?></head>
+         </div2>
+         <div2>
+            <head><?function bin:octets-to-binary?></head>
+         </div2>
       </div1>
       <div1>
-         <head>Text decoding/encoding</head>
-         <eg>
-<ex:function>bin:decode-string</ex:function>($in as xs:hexBinary, $encoding as $xs:string) as xs:string</eg>
-         <p>Decodes octets according to a given encoding.</p>
-         <eg>
-<ex:function>bin:encode-string</ex:function>($in as xs:string, $encoding as $xs:string) as xs:hexBinary</eg>
-         <p>Encodes string using given encoding into octets.</p>
+         <head>Text decoding and encoding</head>
+         <div2>
+            <head><?function bin:decode-string?></head>
+         </div2>
+         <div2>
+            <head><?function bin:unpack-string?></head>
+         </div2>
+         <div2>
+            <head><?function bin:encode-string?></head>
+         </div2>
       </div1>
       <div1>
-         <head>Packing/unpacking of encoded number values</head>
-         <eg>
-<ex:function>bin:unpack-double</ex:function>($in as xs:hexBinary, $offset as xs:integer) as xs:double</eg>
-         <p>Returns xs:double value which is stored at $offset. Little endian representation is
-            assumed.</p>
-         <eg>
-<ex:function>bin:unpack-double</ex:function>($in as xs:hexBinary,
-                  $offset as xs:integer,
-                  $bigendian as xs:boolean) as xs:double</eg>
-         <p>Returns xs:double value which is stored at $offset. If $bigendian is true, big endian
-            representation is assumed, otherwise little endian is assumed.</p>
-         <p>Analogic functions for other numeric types will be provided: unpack-float(),
-            unpack-long(), unpack-int(), unpack-short(), unpack-byte(), unpack-unsignedLong(),
-            unpack-unsignedInt(), unpack-unsignedShort(), unpack-unsignedByte().</p>
+         <head>Packing and unpacking of encoded numeric values</head>
+         <div2>
+            <head><?function bin:unpack-double?></head>
+         </div2>
+         <div2>
+            <head><?function bin:unpack-float?></head>
+         </div2>
+         <div2>
+            <head><?function bin:unpack-long?></head>
+         </div2>
+         <div2>
+            <head><?function bin:unpack-unsignedLong?></head>
+         </div2>
+         <div2>
+            <head><?function bin:unpack-int?></head>
+         </div2>
+         <div2>
+            <head><?function bin:unpack-unsignedInt?></head>
+         </div2>
+         <div2>
+            <head><?function bin:unpack-short?></head>
+         </div2>
+         <div2>
+            <head><?function bin:unpack-unsignedShort?></head>
+         </div2>
+         <div2>
+            <head><?function bin:unpack-byte?></head>
+         </div2>
+         <div2>
+            <head><?function bin:unpack-unsignedByte?></head>
+         </div2>
+         
          <eg>
 <ex:function>bin:pack-double</ex:function>($in as xs:double) as xs:hexBinary</eg>
          <p>Returns binary representation of xs:double using little endian representation.</p>
