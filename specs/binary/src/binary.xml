@@ -6,8 +6,8 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Candidate Module</w3c-doctype>
       <pubdate>
-         <day>14</day>
-         <month>February</month>
+         <day>5</day>
+         <month>March</month>
          <year>2013</year>
       </pubdate>
       <publoc>
@@ -25,6 +25,7 @@
       <authlist>
          <author role="editor">
             <name>Jirka Kosek</name>
+            <email href="mailto:jirka@kosek.cz">jirka@kosek.cz</email>
          </author>
       </authlist>
       <copyright>
@@ -74,24 +75,22 @@
       </div1>
       <div1>
          <head>Loading binary data</head>
-         <eg>
-<ex:function>bin:unparsed-binary</ex:function>($href as <ex:type>xs:string</ex:type>?) as <ex:type>xs:hexBinary</ex:type></eg>
-         <p>Reads binary content and returns it as xs:hexBinary.</p>
+         <div2>
+            <head><?function bin:unparsed-binary?></head>
+         </div2>
       </div1>
       <div1>
          <head>Basic operations</head>
-         <eg>
-<ex:function>bin:binary-subsequence</ex:function>($in as <ex:type>xs:hexBinary</ex:type>,
-                       $offset as <ex:type>xs:integer</ex:type>,
-                       $size as <ex:type>xs:integer</ex:type>) as <ex:type>xs:hexBinary</ex:type></eg>
-         <p>Returns just part of original binary data starting at $offset (zero based). Size of
-            returned data is $size octets.</p>
-         <eg>
-<ex:function>bin:binary-length</ex:function>($in as xs:hexBinary) as xs:integer</eg>
-         <p>Returns size of binary data in octets.</p>
-         <eg>
-<ex:function>bin:binary-concat</ex:function>($in1 as xs:hexBinary, $in2 as xs:hexBinary, ...) as xs:hexBinary</eg>
-         <p>Concatenates all provided binary data blocks into one large one.</p>
+         
+         <div2>
+            <head><?function bin:binary-subsequence?></head>
+         </div2>
+         <div2>
+            <head><?function bin:binary-length?></head>
+         </div2>
+         <div2>
+            <head><?function bin:binary-join?></head>
+         </div2>
       </div1>
       <div1>
          <head>Text decoding/encoding</head>

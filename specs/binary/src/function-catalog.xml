@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Map and JSON functions labelled at="MAP" and commented out -->
+<!-- Current changes labelled at="M": post Jan-2013 candidate rec -->
+<fos:functions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.w3.org/xpath-functions/spec/namespace fos.xsd"
+   xmlns:fos="http://www.w3.org/xpath-functions/spec/namespace">
+   <fos:global-variables>
+      <fos:variable name="x"></fos:variable>
+   </fos:global-variables>
+   <fos:function name="unparsed-binary" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="unparsed-binary" return-type="xs:hexBinary?">
+            <fos:arg name="href" type="xs:string?"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>The <code>bin:unparsed-binary</code> function reads an external resource (for example, an image
+            file) and returns a binary data of the resource.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>The <code>$href</code> argument <rfc2119>must</rfc2119> be a string in the form of a URI
+            reference, which <rfc2119>must</rfc2119> contain no fragment identifier, and
+            <rfc2119>must</rfc2119> identify a resource 
+            for which a string representation is available. If the URI is a
+            relative URI reference, then it is resolved relative to the 
+            Static Base URI property from the static context.</p>
+         <p>If the value of the <code>$href</code> argument is an empty sequence, the function
+            returns an empty sequence.</p>
+         <p>The result of the function is a binary value of the resource retrieved
+            using the URI.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="binary-subsequence" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="binary-subsequence" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="offset" type="xs:integer"/>
+            <fos:arg name="size" type="xs:integer"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>The <code>bin:binary-subsequence</code> functions returns specified part of binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Returns part of original binary data starting at <code>$offset</code>. Size of
+            returned data is <code>$size</code> octets.</p>
+         <p>The <code>$offset</code> is zero based.</p>
+         <p>The value of <code>$offset</code> argument <rfc2119>must</rfc2119> be non-negative integer.</p>
+         <p>It is dynamic error if <code>$offset</code> + <code>$size</code> is larger then size of binary data passed in <code>$in</code> argument.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="binary-length" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="binary-length" return-type="xs:integer">
+            <fos:arg name="in" type="xs:hexBinary"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>The <code>bin:binary-length</code> functions returns size of binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Returns size of binary data in octets.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="binary-join" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="binary-join" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:hexBinary*"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns a binary data created by concatenating the binary data items in a sequence.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>The function returns an <code>xs:hexBinary</code> created by concatenating the items in the
+            sequence <code>$in</code>, in order.</p>
+      </fos:rules>
+      <fos:notes>
+         <p>If the value of <code>$in</code> is the empty sequence, the function returns the
+            zero-length binary data.</p>
+      </fos:notes>
+   </fos:function>
+   
+</fos:functions>
