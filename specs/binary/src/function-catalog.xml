@@ -155,7 +155,7 @@
       <fos:summary><p>Decodes chunk of binary data at a specified offset as a string in a given encoding.</p></fos:summary>
       <fos:rules>
          <p>If <code>$size</code> is greater then 0 this function is identical to calling <code>bin:decode-string(bin:binary-subsequence($in, $offset, $size), $encoding)</code>.</p>
-         <p>If <code>$size</code> is zero then all non-zero octets starting at <code>$offset</code> until first zero octets are extracted and then decoding is applied. This way zero-terminated strings can be easily decoded.</p>
+         <p>If <code>$size</code> is zero then all non-zero octets starting at <code>$offset</code> until first zero octet are extracted and then decoding is applied. This way zero-terminated strings can be easily decoded.</p>
          <p>The <code>$encoding</code> argument is the name of an encoding. The values
             for this attribute follow the same rules as for the <code>encoding</code> attribute in
             an XML declaration. The only values which every implementation is <rfc2119>required</rfc2119> to recognize are
@@ -365,5 +365,245 @@
          <p>The <code>$offset</code> is zero based.</p>
       </fos:rules>
    </fos:function>
-   
+   <fos:function name="pack-double" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="pack-double" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:double"/>
+         </fos:proto>
+         <fos:proto name="pack-double" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:double"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns binary representation of a double value.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="pack-float" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="pack-float" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:float"/>
+         </fos:proto>
+         <fos:proto name="pack-float" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:float"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns binary representation of a float value.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="pack-long" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="pack-long" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:long"/>
+         </fos:proto>
+         <fos:proto name="pack-long" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:long"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns binary representation of a long value.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="pack-unsignedLong" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="pack-unsignedLong" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:unsignedLong"/>
+         </fos:proto>
+         <fos:proto name="pack-unsignedLong" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:unsignedLong"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns binary representation of an unsignedLong (64-bit unsigned integer) value.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="pack-int" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="pack-int" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:int"/>
+         </fos:proto>
+         <fos:proto name="pack-int" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:int"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns binary representation of an int (32-bit signed integer) value.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="pack-unsignedInt" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="pack-unsignedInt" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:unsignedInt"/>
+         </fos:proto>
+         <fos:proto name="pack-unsignedInt" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:unsignedInt"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns binary representation of an unsignedInt (32-bit unsigned integer) value.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="pack-short" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="pack-short" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:short"/>
+         </fos:proto>
+         <fos:proto name="pack-short" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:short"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns binary representation of a short (16-bit signed integer) value.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="pack-unsignedShort" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="pack-unsignedShort" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:unsignedShort"/>
+         </fos:proto>
+         <fos:proto name="pack-unsignedShort" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:unsignedShort"/>
+            <fos:arg name="bigendian" type="xs:boolean"/>
+         </fos:proto>         
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns binary representation of an unsignedShort (16-bit unsigned integer) value.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Little endian number representation is assumed unless <code>$bigendian</code> parameter is specified and has <code>true()</code> value.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="pack-byte" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="pack-byte" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:byte"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns binary representation of a byte (8-bit signed integer) value.</p>
+      </fos:summary>
+      <fos:rules>
+         <p></p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="pack-unsignedByte" prefix="bin">      
+      <fos:signatures>
+         <fos:proto name="pack-unsignedByte" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:unsignedByte"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns binary representation of an unsignedByte (8-bit unsigned integer) value.</p>
+      </fos:summary>
+      <fos:rules>
+         <p></p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="binary-or" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="binary-or" return-type="xs:hexBinary">
+            <fos:arg name="a" type="xs:hexBinary"/>
+            <fos:arg name="b" type="xs:hexBinary"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns "bitwise or" applied on arguments.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Returns "bitwise or" applied on <code>$a</code> and <code>$b</code>.</p>
+         <p>If <code>$a</code> and <code>$b</code> do not have same length
+            then shorter is padded with zero octets to match size of a longer argument.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="binary-xor" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="binary-xor" return-type="xs:hexBinary">
+            <fos:arg name="a" type="xs:hexBinary"/>
+            <fos:arg name="b" type="xs:hexBinary"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns "bitwise xor" applied on arguments.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Returns "bitwise exclusive or" applied on <code>$a</code> and <code>$b</code>.</p>
+         <p>If <code>$a</code> and <code>$b</code> do not have same length
+            then shorter is padded with zero octets to match size of a longer argument.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="binary-and" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="binary-and" return-type="xs:hexBinary">
+            <fos:arg name="a" type="xs:hexBinary"/>
+            <fos:arg name="b" type="xs:hexBinary"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns "bitwise and" applied on arguments.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Returns "bitwise and" applied on <code>$a</code> and <code>$b</code>.</p>
+         <p>If <code>$a</code> and <code>$b</code> do not have same length
+            then shorter is padded with zero octets to match size of a longer argument.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="binary-not" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="binary-and" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:hexBinary"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns "bitwise not" of an argument.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>Returns "bitwise not" applied on <code>$in</code> argument.</p>
+      </fos:rules>
+   </fos:function>
+   <fos:function name="binary-shift" prefix="bin">
+      <fos:signatures>
+         <fos:proto name="binary-shift" return-type="xs:hexBinary">
+            <fos:arg name="in" type="xs:hexBinary"/>
+            <fos:arg name="by" type="xs:integer"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Shift bits in binary data.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>If <code>$by</code> is positive then bits are shifted <code>$by</code> times to the left.</p>
+         <p>If <code>$by</code> is negative then bits are shifted <code>-$by</code> times to the right.</p>
+         <p>If <code>$by</code> is zero result is identical to <code>$in</code> argument.</p>
+         <p>Result has always the same size as <code>$in</code> argument.</p>
+         <p>Shift is logical, zeros are placed into discarded bits.</p>
+      </fos:rules>
+   </fos:function>   
 </fos:functions>
