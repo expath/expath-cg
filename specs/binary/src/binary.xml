@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<spec role="editors-copy" xmlns:ex="http://expath.org/ns/xmlspec" ex:w3c="true">
+   <header>
+      <title>Binary Module</title>
+      <w3c-designation>w3c-designation</w3c-designation>
+      <w3c-doctype>EXPath Candidate Module</w3c-doctype>
+      <pubdate>
+         <day>5</day>
+         <month>March</month>
+         <year>2013</year>
+      </pubdate>
+      <publoc>
+         <loc href="http://expath.org/spec/binary/editor"/>
+      </publoc>
+      <altlocs>
+         <loc href="http://expath.org/spec/binary/editor.xml">XML</loc>
+      </altlocs>
+      <latestloc>
+         <loc href="http://expath.org/spec/binary"/>
+      </latestloc>
+      <!--
+      <prevlocs>
+         <loc href="http://expath.org/spec/binary/20130214"/>
+      </prevlocs>
+      -->
+      <authlist>
+         <author role="editor">
+            <name>Jirka Kosek</name>
+            <email href="mailto:jirka@kosek.cz">jirka@kosek.cz</email>
+         </author>
+      </authlist>
+      <copyright>
+         <p>Copyright ©2013 Jirka Kosek, published by the <loc
+            href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
+            href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+            License Agreement (CLA)</loc>. A human-readable <loc
+            href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
+            available.</p>
+         <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
+            >EXPath Community Group</loc>. It is not a W3C Standard nor is it on the W3C Standards
+            Track. Please note that under the <loc
+            href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+            License Agreement (CLA)</loc> there is a limited opt-out and other conditions apply.
+            Learn more about <loc href="http://www.w3.org/community/">W3C Community and Business
+            Groups</loc>.</p>
+      </copyright>
+      <abstract>
+         <p>This proposal provides an API for XPath 2.0 to handle binary data. It defines extension
+            functions to read binary files, perform basic binary operations on the data in memory,
+            as well as a new serialization method. It has been designed to be compatible with XQuery
+            1.0 and XSLT 2.0, as well as any other XPath 2.0 usage.</p>
+      </abstract>
+      <status>
+         <p/>
+      </status>
+      <langusage>
+         <language>en-US</language>
+      </langusage>
+      <revisiondesc>
+         <p>revisiondesc</p>
+      </revisiondesc>
+   </header>
+   <body>
+      <div1 id="status">
+         <head>Status of this document</head>
+         <p>This document is in an early draft stage. Comments are welcomed 
+            at <loc href="mailto:public-expath@w3.org">public-expath@w3.org</loc> mailing list (<loc href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
+      </div1>
+      <div1 id="introduction">
+         <head>Introduction</head>
+         <div2>
+            <head>Namespace Conventions</head>
+            <p>The module defined by this document defines several functions and a serialization
+               method, all contained in the namespace <code>http://expath.org/ns/binary</code>. In
+               this document, the <code>bin</code> prefix, when used, is bound to this namespace
+               URI.</p>
+            <p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>. In
+               this document, the <code>err</code> prefix, when used, is bound to this namespace
+               URI.</p>
+         </div2>
+      </div1>
+      <div1 id="use-cases">
+         <head>Use cases</head>
+         <p>Development of this specification was driven strictly by requirements which XML developer regularly faces.</p>
+         <p>Some typical use cases:</p>
+         <ulist>
+            <item><p>Getting dimensions of an image file.</p></item>
+            <item><p>Extracting image metadata.</p></item>
+            <item><p>Processing images embeded and base64 encoded inside SOAP message.</p></item>
+            <item><p>Processing legacy text file which uses several different encodings in different places.</p></item>
+         </ulist>
+      </div1>
+      <div1 id="loading">
+         <head>Loading binary data</head>
+         <div2 id="unparsed-binary">
+            <head><?function bin:unparsed-binary?></head>
+         </div2>
+      </div1>
+      <div1>
+         <head>Basic operations</head>
+         
+         <div2 id="binary-subsequence">
+            <head><?function bin:binary-subsequence?></head>
+         </div2>
+         <div2 id="binary-length">
+            <head><?function bin:binary-length?></head>
+         </div2>
+         <div2 id="binary-join">
+            <head><?function bin:binary-join?></head>
+         </div2>
+         <div2 id="binary-to-octets">
+            <head><?function bin:binary-to-octets?></head>
+         </div2>
+         <div2 id="octets-to-binary">
+            <head><?function bin:octets-to-binary?></head>
+         </div2>
+      </div1>
+      <div1 id="text-decoding-encoding">
+         <head>Text decoding and encoding</head>
+         <div2 id="decode-string">
+            <head><?function bin:decode-string?></head>
+         </div2>
+         <div2 id="unpack-string">
+            <head><?function bin:unpack-string?></head>
+         </div2>
+         <div2 id="encode-string">
+            <head><?function bin:encode-string?></head>
+         </div2>
+      </div1>
+      <div1 id="packing-unpacking">
+         <head>Packing and unpacking of encoded numeric values</head>
+         <div2 id="unpack-double">
+            <head><?function bin:unpack-double?></head>
+         </div2>
+         <div2 id="unpack-float">
+            <head><?function bin:unpack-float?></head>
+         </div2>
+         <div2 id="unpack-long">
+            <head><?function bin:unpack-long?></head>
+         </div2>
+         <div2 id="unpack-unsignedLong">
+            <head><?function bin:unpack-unsignedLong?></head>
+         </div2>
+         <div2 id="unpack-int">
+            <head><?function bin:unpack-int?></head>
+         </div2>
+         <div2 id="unpack-unsignedInt">
+            <head><?function bin:unpack-unsignedInt?></head>
+         </div2>
+         <div2 id="unpack-short">
+            <head><?function bin:unpack-short?></head>
+         </div2>
+         <div2 id="unpack-unsignedShort">
+            <head><?function bin:unpack-unsignedShort?></head>
+         </div2>
+         <div2 id="unpack-byte">
+            <head><?function bin:unpack-byte?></head>
+         </div2>
+         <div2 id="unpack-unsignedByte">
+            <head><?function bin:unpack-unsignedByte?></head>
+         </div2>
+         <div2 id="pack-double">
+            <head><?function bin:pack-double?></head>
+         </div2>
+         <div2 id="pack-float">
+            <head><?function bin:pack-float?></head>
+         </div2>
+         <div2 id="pack-long">
+            <head><?function bin:pack-long?></head>
+         </div2>
+         <div2 id="pack-unsignedLong">
+            <head><?function bin:pack-unsignedLong?></head>
+         </div2>
+         <div2 id="pack-int">
+            <head><?function bin:pack-int?></head>
+         </div2>
+         <div2 id="pack-unsignedInt">
+            <head><?function bin:pack-unsignedInt?></head>
+         </div2>
+         <div2 id="pack-short">
+            <head><?function bin:pack-short?></head>
+         </div2>
+         <div2 id="pack-unsignedShort">
+            <head><?function bin:pack-unsignedShort?></head>
+         </div2>
+         <div2 id="pack-byte">
+            <head><?function bin:pack-byte?></head>
+         </div2>
+         <div2 id="pack-unsignedByte">
+            <head><?function bin:pack-unsignedByte?></head>
+         </div2>         
+      </div1>
+      <div1 id="bitwise">
+         <head>Bitwise operations</head>
+         <div2 id="binary-or">
+            <head><?function bin:binary-or?></head>
+         </div2>
+         <div2 id="binary-xor">
+            <head><?function bin:binary-xor?></head>
+         </div2>
+         <div2 id="binary-and">
+            <head><?function bin:binary-and?></head>
+         </div2>
+         <div2 id="binary-not">
+            <head><?function bin:binary-not?></head>
+         </div2>
+         <div2 id="binary-shift">
+            <head><?function bin:binary-shift?></head>
+         </div2>
+      </div1>
+      <div1 id="serialization">
+         <head>Serialization</head>
+         <p>New serialization method <code>bin:binary</code> is defined.
+            It can serialize sequence containing only items of type <code>xs:hexBinary</code> 
+            or <code>xs:base64Binary</code>. Such sequence is turned into one block of binary data
+            using <code>bin:binary-join</code> and written out to the specified location.</p>
+         <glist>
+            <gitem>
+               <label>Examples</label>
+               <def>
+                  <p>Joining several blobs of data into a single file:</p>
+                  <eg><![CDATA[<xsl:result-document href="image.png" method="bin:binary">
+  <xsl:sequence select="$image-header"/>
+  <xsl:sequence select="$image-data"/>
+</xsl:result-document>]]></eg>
+                  <p>Template for extracting HTML images represented as data: URI scheme into separate external image files:</p>
+                  <eg xml:space="preserve"><![CDATA[<xsl:template match="img[starts-with(@src, 'data:image/png;base64,')]">
+   <xsl:copy>
+      <xsl:copy-of select="@* except @src"/>
+      <xsl:attribute name="src" select="concat(generate-id(), '.png')"/>
+      <xsl:result-document href="{generate-id()}.png" method="bin:binary">
+        <xsl:sequence select="xs:base64Binary(substring-after(@src, 'data:image/png;base64,'))"/>
+      </xsl:result-document>
+   </xsl:copy>
+</xsl:template>]]></eg>                           
+               </def>
+            </gitem>
+         </glist>
+      </div1>
+   </body>
+   <back>
+      <div1 id="references">
+         <head>References</head>
+         <blist>
+            <bibl id="xserial" key="Serialization">
+               <loc href="http://www.w3.org/TR/xslt-xquery-serialization/">XSLT 2.0 and XQuery 1.0
+               Serialization</loc>. Scott Boag, Michael Kay, Joanne Tong, Norman Walsh, and Henry
+               Zongaro, editors. W3C Recommendation. 23 January 2007. </bibl>
+            <bibl id="fo11" key="F&amp;O 1.1">
+               <loc href="http://www.w3.org/TR/xpath-functions-11/">XPath and XQuery Functions and
+                  Operators 1.1</loc>. Michael Kay, editor. W3C Working Draft. 15 January 2009.</bibl>
+            <bibl id="xslt20" key="XSLT 2.0">
+               <loc href="http://www.w3.org/TR/xslt20/">XSL Transformations (XSLT) Version 2.0</loc>.
+               Michael Kay, editor. W3C Recommendation. 23 January 2007. </bibl>
+         </blist>
+      </div1>
+      <div1 id="errors">
+         <head>Summary of Error Conditions</head>
+         <note><p>Proper error codes and conditions will be defined in the next version of this draft.</p></note>
+      </div1>
+   </back>
+</spec>
