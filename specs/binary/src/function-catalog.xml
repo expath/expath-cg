@@ -21,7 +21,7 @@
          <p>The <code>$href</code> argument <rfc2119>must</rfc2119> be a string in the form of a URI
             reference, which <rfc2119>must</rfc2119> contain no fragment identifier, and
             <rfc2119>must</rfc2119> identify a resource 
-            for which a string representation is available. If the URI is a
+            for which a binary representation is available. If the URI is a
             relative URI reference, then it is resolved relative to the 
             Static Base URI property from the static context.</p>
          <p>If the value of the <code>$href</code> argument is an empty sequence, the function
