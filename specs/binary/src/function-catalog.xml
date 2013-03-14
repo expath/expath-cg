@@ -577,7 +577,7 @@
    </fos:function>
    <fos:function name="binary-not" prefix="bin">
       <fos:signatures>
-         <fos:proto name="binary-and" return-type="xs:hexBinary">
+         <fos:proto name="binary-not" return-type="xs:hexBinary">
             <fos:arg name="in" type="xs:hexBinary"/>
          </fos:proto>
       </fos:signatures>
