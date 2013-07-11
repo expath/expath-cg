@@ -1,0 +1,2340 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-file">
+   <description>Tests for the extension functions in the EXPath "file" package.
+     Note the tests are written on the assumption that the "working directory"
+     for resolving relative filenames is the directory containing this test catalog file.</description>
+  <link type="spec" document="http://expath.org/spec/binary"/>
+         
+   <dependency type="spec" value="XQ30+"/>
+   
+   <environment name="file">
+        <namespace prefix="file" uri="http://expath.org/ns/file"/> 
+        <namespace prefix="file-err" uri="http://expath.org/ns/error"/> 
+   </environment>
+
+   <test-case name="file-exists-001">
+      <description>Use file:exists on an existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:exists("sandpit/test.bin")
+      </test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-exists-002">
+      <description>Use file:exists on an existing directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:exists("sandpit")
+      </test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-exists-003">
+      <description>Use file:exists on a non-existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:exists("sandpit/nonexisting-file.txt")
+      </test>
+      <result>
+         <assert-false/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-exists-004">
+      <description>Use file:exists on the current directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:exists(".")</test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-isDir-001">
+      <description>Use file:is-dir on an existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:is-dir("sandpit/test.bin")</test>
+      <result>
+         <assert-false/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-isDir-002">
+      <description>Use file:is-dir on an existing directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:is-dir("sandpit")</test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-isDir-003">
+      <description>Use file:is-dir on a non-existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:is-dir("sandpit/nonexisting-file.txt")</test>
+      <result>
+         <assert-false/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-isDir-004">
+      <description>Use file:is-dir on the current directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:is-dir(".")</test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-isDir-004">
+      <description>Use file:is-dir on the parent of the current directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:is-dir("..")</test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-isFile-001">
+      <description>Use file:is-file on an existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:is-file("sandpit/test.bin")</test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-isFile-002">
+      <description>Use file:is-file on an existing directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:is-file("sandpit")</test>
+      <result>
+         <assert-false/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-isFile-003">
+      <description>Use file:is-file on a non-existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:is-file("sandpit/nonexisting-file.txt")</test>
+      <result>
+         <assert-false/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-isFile-004">
+      <description>Use file:is-file on the current directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:is-file(".")</test>
+      <result>
+         <assert-false/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-last-modified-001">
+      <description>Use file:last-modified on a file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:append-text("sandpit/test.txt", "a"),
+        file:last-modified("sandpit/test.txt")</test>
+      <result>
+         <all-of>
+           <assert-type>xs:dateTime</assert-type>
+           <assert>exists(timezone-from-dateTime($result))</assert>
+           <assert>(current-dateTime() - $result) div xs:dayTimeDuration("PT1S") ge 0</assert>
+           <assert>(current-dateTime() - $result) div xs:dayTimeDuration("PT1S") lt 10</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-last-modified-002">
+      <description>Use file:last-modified on a directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/testdir")) 
+          then file:delete("sandpit/testdir")
+          else ()), 
+        file:create-dir("sandpit/testdir"),
+        file:last-modified("sandpit/testdir")</test>
+      <result>
+         <all-of>
+           <assert-type>xs:dateTime</assert-type>
+           <assert>exists(timezone-from-dateTime($result))</assert>
+           <assert>(current-dateTime() - $result) div xs:dayTimeDuration("PT1S") ge 0</assert>
+           <assert>(current-dateTime() - $result) div xs:dayTimeDuration("PT1S") lt 10</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-last-modified-003">
+      <description>Use file:last-modified on a non-existent path</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:last-modified("sandpit/nonexistent.txt")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-size-001">
+      <description>Use file:size on a text file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", ("abc")),
+        file:size("sandpit/test.txt")</test>
+      <result>
+         <assert-eq>3</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-size-002">
+      <description>Use file:size on an empty file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", ""),
+        file:size("sandpit/test.txt")</test>
+      <result>
+         <assert-eq>0</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-size-003">
+      <description>Use file:size on a binary file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.bin")) 
+          then file:delete("sandpit/test.bin")
+          else ()), 
+        file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304"))),
+        file:size("sandpit/test.bin")</test>
+      <result>
+         <assert-eq>5</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-size-004">
+      <description>Use file:size on a nonexistent file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:size("sandpit/nonexistent.bin")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-size-005">
+      <description>Use file:size on a directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:size("sandpit")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-append2-001">
+      <description>Use file:append with two arguments</description>
+      <created by="Michael Kay" on="2012-06-15"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:append("sandpit/test.txt", ("a", "b", "c", 10))</test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>ends-with(Q{http://expath.org/ns/file}read-text("sandpit/test.txt"), "?>a b c 10")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-append2-002">
+      <description>Use file:append with two arguments</description>
+      <created by="Michael Kay" on="2012-06-15"/>
+      <environment ref="file"/>
+      <dependency type="spec" value="XQ10+"/>
+      <test><![CDATA[
+         (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()),
+        file:append("sandpit/test.txt", <b/>)
+      ]]></test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert><![CDATA[ends-with(Q{http://expath.org/ns/file}read-text("sandpit/test.txt"), "?><b/>")]]></assert>
+         </all-of>
+      </result>
+   </test-case>   
+
+   <test-case name="file-appendText2-001">
+      <description>Use file:append-text with two arguments</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:append-text("sandpit/test.txt", "a"),
+        file:append-text("sandpit/test.txt", "b"),
+        file:append-text("sandpit/test.txt", "c")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/test.txt") eq "abc"</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendText2-002">
+      <description>Use file:append-text writing to an existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:append-text("sandpit/test.txt", "d"),
+        file:append-text("sandpit/test.txt", "e"),
+        file:append-text("sandpit/test.txt", "f")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/test.txt") eq "abcdef"</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendText2-003">
+      <description>Use file:append-text writing empty string</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>file:append-text("sandpit/test.txt", "")</test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/test.txt") eq "abcdef"</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendText2-004">
+      <description>Use file:append-text : default encoding is UTF-8</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>file:append-text("sandpit/test.txt", "&#xa3;")</test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/test.txt", "UTF-8") eq "abcdef&#xa3;"</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendText2-005">
+      <description>Use file:append-text with two arguments: file is a directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:append-text("sandpit", "abc")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendText2-006">
+      <description>Use file:append-text with two arguments: attempt to create file in non-existent directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:append-text("nonexistent/file.xml", "abc")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendText3-001">
+      <description>Use file:append-text with three arguments, UTF-8</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test2.txt")) 
+          then file:delete("sandpit/test2.txt")
+          else ()), 
+        file:append-text("sandpit/test2.txt", ("a"), "UTF-8"),
+        file:append-text("sandpit/test2.txt", ("b"), "UTF-8"),
+        file:append-text("sandpit/test2.txt", ("c"), "UTF-8"),
+        file:append-text("sandpit/test2.txt", ("&#xa3;"), "UTF-8")
+        
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/test2.txt") eq "abc&#xa3;"</assert>
+            <assert>xs:hexBinary(Q{http://expath.org/ns/file}read-binary("sandpit/test2.txt")) eq xs:hexBinary("616263C2A3")</assert>
+            <!-- TODO: allow leading BOM? -->
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendText3-002">
+      <description>Use file:append-text with three arguments: UTF-16 encoding</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test3.txt")) 
+          then file:delete("sandpit/test3.txt")
+          else ()), 
+        file:append-text("sandpit/test3.txt", ("a"), "UTF-16"),
+        file:append-text("sandpit/test3.txt", ("b"), "UTF-16"),
+        file:append-text("sandpit/test3.txt", ("c"), "UTF-16")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>xs:hexBinary(Q{http://expath.org/ns/file}read-binary("sandpit/test3.txt")) eq xs:hexBinary("FEFF0061FEFF0062FEFF0063")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendText3-003">
+      <description>Use file:append-text with three arguments: unsupported encoding</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test4.txt")) 
+          then file:delete("sandpit/test4.txt")
+          else ()), 
+        file:append-text("sandpit/test4.txt", "abc", "encoding-1234")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0005"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendText3-004">
+      <description>Use file:append-text with three arguments: file is a directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:append-text("sandpit", "abc", "UTF-8")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendText3-005">
+      <description>Use file:append-text with two arguments: attempt to create file in non-existent directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:append-text("nonexistent/file.xml", "abc", "UTF-8")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendBinary2-001">
+      <description>Use file:append-binary with two arguments</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.bin")) 
+          then file:delete("sandpit/test.bin")
+          else ()), 
+        file:append-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304")))</test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>xs:hexBinary(Q{http://expath.org/ns/file}read-binary("sandpit/test.bin")) eq xs:hexBinary("0001020304")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendBinary2-002">
+      <description>Use file:append-binary with two arguments, append to existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:append-binary("sandpit/test.bin", 
+            xs:base64Binary(xs:hexBinary("05"))),
+        file:append-binary("sandpit/test.bin",
+            xs:base64Binary(xs:hexBinary("06")))    
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>xs:hexBinary(Q{http://expath.org/ns/file}read-binary("sandpit/test.bin")) eq xs:hexBinary("00010203040506")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendBinary2-003">
+      <description>Use file:append-binary: file is a directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:append-binary("sandpit", xs:base64Binary(""))</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-appendBinary2-004">
+      <description>Use file:append-binary: attempt to create file in non-existent directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:append-binary("nonexistent/file.bin", xs:base64Binary(""))
+      </test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-copy-001">
+      <description>file:copy existing file, overwriting existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-text("sandpit/source.txt", "defenestration"),
+        file:write-text("sandpit/target.txt", "prague"),
+        file:copy("sandpit/source.txt", "sandpit/target.txt")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/target.txt") eq "defenestration"</assert>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/source.txt")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-copy-002">
+      <description>file:copy existing file, creating target file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-text("sandpit/source.txt", "treaty"),
+        file:delete("sandpit/target.txt"),
+        file:copy("sandpit/source.txt", "sandpit/target.txt")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/target.txt") eq "treaty"</assert>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/source.txt")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-copy-003">
+      <description>file:copy existing file, creating target file in specified directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-text("sandpit/source.txt", "persecution"),
+        if (file:exists("sandpit/dir2")) then file:delete("sandpit/dir2", true()) else (),
+        file:create-dir("sandpit/dir2"),
+        file:copy("sandpit/source.txt", "sandpit/dir2")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir2/source.txt")</assert>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/dir2/source.txt") eq "persecution"</assert>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/source.txt")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-copy-004">
+      <description>file:copy used to copy a directory, target directory does not exist</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dirsource")) then file:delete("sandpit/dirsource", true()) else (),
+        if (file:exists("sandpit/dirtarget")) then file:delete("sandpit/dirtarget", true()) else (),
+        file:create-dir("sandpit/dirsource"),
+        file:append-text("sandpit/dirsource/london.txt", "london"),
+        file:append-text("sandpit/dirsource/paris.txt", "paris"),
+        file:append-text("sandpit/dirsource/rome.txt", "rome"),
+        file:append-text("sandpit/dirsource/madrid.txt", "madrid"),
+        file:copy("sandpit/dirsource", "sandpit/dirtarget")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dirtarget/paris.txt")</assert>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/dirtarget/paris.txt") eq "paris"</assert>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dirsource/london.txt")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-copy-005">
+      <description>file:copy used to copy a directory, target directory exists</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dirsource")) then file:delete("sandpit/dirsource", true()) else (),
+        if (file:exists("sandpit/dirtarget")) then file:delete("sandpit/dirtarget", true()) else (),
+        file:create-dir("sandpit/dirsource"),
+        file:create-dir("sandpit/dirtarget"),
+        file:append-text("sandpit/dirsource/london.txt", "london"),
+        file:append-text("sandpit/dirsource/paris.txt", "paris"),
+        file:append-text("sandpit/dirsource/rome.txt", "rome"),
+        file:append-text("sandpit/dirsource/madrid.txt", "madrid"),
+        file:copy("sandpit/dirsource", "sandpit/dirtarget")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dirtarget/paris.txt")</assert>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/dirtarget/paris.txt") eq "paris"</assert>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dirsource/london.txt")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-createDir-001">
+      <description>Create directory: parent exists but target doesn't</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir3")) then file:delete("sandpit/dir3", true()) else (),
+        file:create-dir("sandpit/dir3"),
+        file:list("sandpit/dir3")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir3")</assert>
+            <assert>Q{http://expath.org/ns/file}is-dir("sandpit/dir3")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-createDir-002">
+      <description>Create directory: parent exists and target already exists (spec unclear)</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:create-dir("sandpit/dir3"),
+        file:create-dir("sandpit/dir3"),
+        file:list("sandpit/dir3")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir3")</assert>
+            <assert>Q{http://expath.org/ns/file}is-dir("sandpit/dir3")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-createDir-003">
+      <description>Create directory: parent exists and target already exists as a file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir3")) then file:delete("sandpit/dir3", true()) else (),
+        file:create-dir("sandpit/dir3"),
+        file:write-text("sandpit/dir3/test", "text"),
+        file:create-dir("sandpit/dir3/test"),
+        file:list("sandpit/dir3/test")
+      </test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0002"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-createDir-004">
+      <description>Create directory: parent already exists as a file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir3")) then file:delete("sandpit/dir3", true()) else (),
+        file:create-dir("sandpit/dir3"),
+        file:write-text("sandpit/dir3/test", "text"),
+        file:create-dir("sandpit/dir3/test/dir4"),
+        file:list("sandpit/dir3/test")
+      </test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0002"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-createDir-005">
+      <description>Create directory: create several levels of directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir3")) then file:delete("sandpit/dir3", true()) else (),
+        file:create-dir("sandpit/dir3/dir4/dir5/dir6")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir3")</assert>
+            <assert>Q{http://expath.org/ns/file}is-dir("sandpit/dir3")</assert>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir3/dir4")</assert>
+            <assert>Q{http://expath.org/ns/file}is-dir("sandpit/dir3/dir4")</assert>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir3/dir4/dir5")</assert>
+            <assert>Q{http://expath.org/ns/file}is-dir("sandpit/dir3/dir4/dir5")</assert>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir3/dir4/dir5/dir6")</assert>
+            <assert>Q{http://expath.org/ns/file}is-dir("sandpit/dir3/dir4/dir5/dir6")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-delete-001">
+      <description>Delete simple file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir4")) then () else file:create-dir("sandpit/dir4"),
+        file:write-text("sandpit/dir4/test.txt", "test"),
+        file:delete("sandpit/dir4/test.txt")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>not(Q{http://expath.org/ns/file}exists("sandpit/dir4/test.txt"))</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-delete-002">
+      <description>Delete empty directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir4")) then file:delete("sandpit/dir4", true()) else (),
+        file:create-dir("sandpit/dir4"),
+        file:delete("sandpit/dir4")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>not(Q{http://expath.org/ns/file}exists("sandpit/dir4"))</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-delete-003">
+      <description>Delete directory and contents</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir4")) then () else file:create-dir("sandpit/dir4/dir5/dir6"),
+        file:delete("sandpit/dir4", true())
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>not(Q{http://expath.org/ns/file}exists("sandpit/dir4"))</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-delete-004">
+      <description>Fail to delete non-empty directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir4")) then () else file:create-dir("sandpit/dir4/dir5/dir6"),
+        file:delete("sandpit/dir4", false())
+      </test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-delete-005">
+      <description>Fail to delete non-empty directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir4")) then () 
+            else (file:delete("sandpit/dir4", true()), 
+                  file:create-dir("sandpit/dir4"),
+                  file:write-text("sandpit/dir4/test.txt", "grandmother")),
+        file:delete("sandpit/dir4")
+      </test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-delete-006">
+      <description>Delete non-existent file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:delete("sandpit/does-not-exist.txt")
+      </test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-001">
+      <description>List empty directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:list("sandpit/dir5")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir5")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-002">
+      <description>List empty directory, recursive = true</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:list("sandpit/dir5", true())
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir5")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-003">
+      <description>List empty directory, recursive = false</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:list("sandpit/dir5", false())
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir5")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-004">
+      <description>List empty directory, recursive = true, with glob</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:list("sandpit/dir5", true(), "*.*")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir5")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-005">
+      <description>List non-empty directory, recursive = true</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:write-text("sandpit/dir5/geneva.txt", "geneva"),
+        file:write-text("sandpit/dir5/oslo.txt", "oslo"),
+        file:list("sandpit/dir5", true())
+      </test>
+      <result>
+         <all-of>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt"</assert-permutation>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-006">
+      <description>List non-empty directory, recursive = false</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:write-text("sandpit/dir5/geneva.txt", "geneva"),
+        file:write-text("sandpit/dir5/oslo.txt", "oslo"),
+        file:list("sandpit/dir5", false())
+      </test>
+      <result>
+         <all-of>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt"</assert-permutation>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-007">
+      <description>List non-empty directory, recursive = unspecified</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:write-text("sandpit/dir5/geneva.txt", "geneva"),
+        file:write-text("sandpit/dir5/oslo.txt", "oslo"),
+        file:list("sandpit/dir5", false())
+      </test>
+      <result>
+         <all-of>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt"</assert-permutation>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-008">
+      <description>List non-empty directory with subdirectories, recursive = true</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:write-text("sandpit/dir5/geneva.txt", "geneva"),
+        file:write-text("sandpit/dir5/oslo.txt", "oslo"),
+        file:create-dir("sandpit/dir5/dir6"),
+        file:write-text("sandpit/dir5/dir6/helsinki.txt", "helsinki"),
+        file:list("sandpit/dir5", true())
+      </test>
+      <result>
+         <all-of>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6", "dir6/helsinki.txt"</assert-permutation>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-009">
+      <description>List non-empty directory with subdirectories, recursive = false</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:write-text("sandpit/dir5/geneva.txt", "geneva"),
+        file:write-text("sandpit/dir5/oslo.txt", "oslo"),
+        file:create-dir("sandpit/dir5/dir6"),
+        file:write-text("sandpit/dir5/dir6/helsinki.txt", "helsinki"),
+        file:list("sandpit/dir5", false())
+      </test>
+      <result>
+         <all-of>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6"</assert-permutation>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-010">
+      <description>List non-empty directory with subdirectories, recursive = unspecified</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:write-text("sandpit/dir5/geneva.txt", "geneva"),
+        file:write-text("sandpit/dir5/oslo.txt", "oslo"),
+        file:create-dir("sandpit/dir5/dir6"),
+        file:write-text("sandpit/dir5/dir6/helsinki.txt", "helsinki"),
+        file:list("sandpit/dir5", false())
+      </test>
+      <result>
+         <all-of>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6"</assert-permutation>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-011">
+      <description>List applied to non- directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:list("sandpit/dir5/berlin.txt", false())
+      </test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-012">
+      <description>List applied to non-existent path</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:list("sandpit/non/existent/path", false())
+      </test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-013">
+      <description>List non-empty directory with subdirectories, recursive = true, with glob</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:write-text("sandpit/dir5/berlin.csv", "geneva"),
+        file:write-text("sandpit/dir5/oslo.dat", "oslo"),
+        file:create-dir("sandpit/dir5/dir6"),
+        file:write-text("sandpit/dir5/dir6/berlin.jpg", "helsinki"),
+        file:list("sandpit/dir5", true(), "berlin.*")
+      </test>
+      <result>
+         <all-of>
+            <assert-permutation>"berlin.txt", "berlin.csv", "dir6/berlin.jpg"</assert-permutation>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-014">
+      <description>List non-empty directory with subdirectories, recursive = true, with glob</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:write-text("sandpit/dir5/berlin.csv", "geneva"),
+        file:write-text("sandpit/dir5/oslo.dat", "oslo"),
+        file:create-dir("sandpit/dir5/dir6"),
+        file:write-text("sandpit/dir5/dir6/berlin.jpg", "helsinki"),
+        file:list("sandpit/dir5", false(), "berlin.*")
+      </test>
+      <result>
+         <all-of>
+            <assert-permutation>"berlin.txt", "berlin.csv"</assert-permutation>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-015">
+      <description>List non-empty directory with subdirectories, recursive = true, with glob</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:write-text("sandpit/dir5/geneva.txt", "geneva"),
+        file:write-text("sandpit/dir5/oslo.dat", "oslo"),
+        file:create-dir("sandpit/dir5/dir6"),
+        file:write-text("sandpit/dir5/dir6/helsinki.txt", "helsinki"),
+        file:list("sandpit/dir5", true(), "*.txt")
+      </test>
+      <result>
+         <all-of>
+            <assert-permutation>"berlin.txt", "geneva.txt", "dir6/helsinki.txt"</assert-permutation>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-016">
+      <description>List non-empty directory with subdirectories, recursive = true, with glob</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin.txt", "berlin"),
+        file:write-text("sandpit/dir5/geneva.tat", "geneva"),
+        file:write-text("sandpit/dir5/oslo.dat", "oslo"),
+        file:create-dir("sandpit/dir5/dir6"),
+        file:write-text("sandpit/dir5/dir6/helsinki.tit", "helsinki"),
+        file:list("sandpit/dir5", true(), "*.t?t")
+      </test>
+      <result>
+         <all-of>
+            <assert-permutation>"berlin.txt", "geneva.tat", "dir6/helsinki.tit"</assert-permutation>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-017">
+      <description>List non-empty directory with subdirectories, recursive = true, with glob</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:write-text("sandpit/dir5/berlin1.txt", "berlin"),
+        file:write-text("sandpit/dir5/berlin2.tat", "geneva"),
+        file:write-text("sandpit/dir5/berlin3.dat", "oslo"),
+        file:create-dir("sandpit/dir5/dir6"),
+        file:write-text("sandpit/dir5/dir6/berlin4.tit", "helsinki"),
+        file:list("sandpit/dir5", true(), "berlin*.*")
+      </test>
+      <result>
+         <all-of>
+            <assert-permutation>"berlin1.txt", "berlin2.tat", "berlin3.dat", "dir6/berlin4.tit"</assert-permutation>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-018">
+      <description>List contents of current directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        exists(file:list("."))
+      </test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-list-019">
+      <description>List contents of parent of current directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        exists(file:list(".."))
+      </test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-move-001">
+      <description>file:move existing file, overwriting existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-text("sandpit/source.txt", "defenestration"),
+        file:write-text("sandpit/target.txt", "prague"),
+        file:move("sandpit/source.txt", "sandpit/target.txt")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/target.txt") eq "defenestration"</assert>
+            <assert>not(Q{http://expath.org/ns/file}exists("sandpit/source.txt"))</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-move-002">
+      <description>file:move existing file, creating target file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-text("sandpit/source.txt", "treaty"),
+        file:delete("sandpit/target.txt"),
+        file:move("sandpit/source.txt", "sandpit/target.txt")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/target.txt") eq "treaty"</assert>
+            <assert>not(Q{http://expath.org/ns/file}exists("sandpit/source.txt"))</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-move-003">
+      <description>file:move existing file, creating target file in specified directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-text("sandpit/source.txt", "persecution"),
+        if (file:exists("sandpit/dir2")) then file:delete("sandpit/dir2", true()) else (),
+        file:create-dir("sandpit/dir2"),
+        file:move("sandpit/source.txt", "sandpit/dir2")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dir2/source.txt")</assert>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/dir2/source.txt") eq "persecution"</assert>
+            <assert>not(Q{http://expath.org/ns/file}exists("sandpit/source.txt"))</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-move-004">
+      <description>file:move used to move a directory, target directory does not exist</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dirsource")) then file:delete("sandpit/dirsource", true()) else (),
+        if (file:exists("sandpit/dirtarget")) then file:delete("sandpit/dirtarget", true()) else (),
+        file:create-dir("sandpit/dirsource"),
+        file:append-text("sandpit/dirsource/london.txt", "london"),
+        file:append-text("sandpit/dirsource/paris.txt", "paris"),
+        file:append-text("sandpit/dirsource/rome.txt", "rome"),
+        file:append-text("sandpit/dirsource/madrid.txt", "madrid"),
+        file:move("sandpit/dirsource", "sandpit/dirtarget")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dirtarget/paris.txt")</assert>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/dirtarget/paris.txt") eq "paris"</assert>
+            <assert>not(Q{http://expath.org/ns/file}exists("sandpit/dirsource/london.txt"))</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-move-005">
+      <description>file:move used to move a directory, target directory exists</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        if (file:exists("sandpit/dirsource")) then file:delete("sandpit/dirsource", true()) else (),
+        if (file:exists("sandpit/dirtarget")) then file:delete("sandpit/dirtarget", true()) else (),
+        file:create-dir("sandpit/dirsource"),
+        file:create-dir("sandpit/dirtarget"),
+        file:append-text("sandpit/dirsource/london.txt", "london"),
+        file:append-text("sandpit/dirsource/paris.txt", "paris"),
+        file:append-text("sandpit/dirsource/rome.txt", "rome"),
+        file:append-text("sandpit/dirsource/madrid.txt", "madrid"),
+        file:move("sandpit/dirsource", "sandpit/dirtarget")
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dirtarget/paris.txt")</assert>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/dirtarget/paris.txt") eq "paris"</assert>
+            <assert>not(Q{http://expath.org/ns/file}exists("sandpit/dirsource/london.txt"))</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readBinary-001">
+      <description>Use file:read-binary on binary data</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.bin")) 
+          then file:delete("sandpit/test.bin")
+          else ()), 
+        file:append-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304"))),
+        file:read-binary("sandpit/test.bin")</test>
+      <result>
+         <all-of>
+            <assert>xs:hexBinary($result) eq xs:hexBinary("0001020304")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readBinary-002">
+      <description>Use file:read-binary on text data</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.bin")) 
+          then file:delete("sandpit/test.bin")
+          else ()), 
+        file:append-text("sandpit/test.bin", "abc", "UTF-8"),
+        file:read-binary("sandpit/test.bin")</test>
+      <result>
+         <all-of>
+            <assert>xs:hexBinary($result) eq xs:hexBinary("616263")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readBinary-003">
+      <description>Use file:read-binary, file does not exist</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.bin")) 
+          then file:delete("sandpit/test.bin")
+          else ()), 
+        file:append-text("sandpit/test.bin", "abc", "UTF-8"),
+        file:read-binary("sandpit/nonexistent.bin")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readBinary-004">
+      <description>Use file:read-binary, file is directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.bin")) 
+          then file:delete("sandpit/test.bin")
+          else ()), 
+        file:append-text("sandpit/test.bin", "abc", "UTF-8"),
+        file:read-binary("sandpit")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readText1-001">
+      <description>Use file:read-text with 1 arg</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:append-text("sandpit/test.txt", "abcd"),
+        file:read-text("sandpit/test.txt")</test>
+      <result>
+         <all-of>
+            <assert-eq>"abcd"</assert-eq>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readText1-002">
+      <description>Use file:read-text with 1 arg, file does not exist</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:append-text("sandpit/test.txt", "abcd"),
+        file:read-text("sandpit/nonexistent.txt")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readText1-003">
+      <description>Use file:read-text with 1 arg, file is directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:append-text("sandpit/test.txt", "abcd"),
+        file:read-text("sandpit")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readText2-001">
+      <description>Use file:read-text with 2 args</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:append-text("sandpit/test.txt", "abcd&#xa3;"),
+        file:read-text("sandpit/test.txt", "UTF-8")</test>
+      <result>
+         <all-of>
+            <assert-eq>"abcd&#xa3;"</assert-eq>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readText2-002">
+      <description>Use file:read-text with 2 args - nonexistent file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:append-text("sandpit/test.txt", "abcd&#xa3;"),
+        file:read-text("sandpit/test.text", "UTF-8")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readText2-003">
+      <description>Use file:read-text with 2 args - file is directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:append-text("sandpit/test.txt", "abcd&#xa3;"),
+        file:read-text("sandpit", "UTF-8")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readText2-004">
+      <description>Use file:read-text with 2 args - invalid encoding</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:append-text("sandpit/test.txt", "abcd&#xa3;"),
+        file:read-text("sandpit/test.txt", "UTF-8.5")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0005"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readText2-005">
+      <description>Use file:read-text with 2 args - incorrect encoding</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-binary("sandpit/test.txt", 
+                        xs:base64Binary(xs:hexBinary("A3"))),
+        file:read-text("sandpit/test.txt", "UTF-8")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE9999"/>
+      </result>
+   </test-case>
+   
+   
+   
+        file:read-text-lines("sandpit/test.txt", "UTF-8")
+   
+   <test-case name="file-readTextLines1-001">
+      <description>Use file:read-textlines with 1 arg: xA as newline</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", string-join(("abcd", "defg", "hijk"), "&#xa;")),
+        file:read-text-lines("sandpit/test.txt")</test>
+      <result>
+         <all-of>
+            <assert-deep-eq>"abcd", "defg", "hijk"</assert-deep-eq>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-002">
+      <description>Use file:read-textlines with 1 arg: xD as newline</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", string-join(("abcd", "defg", "", "hijk"), "&#xd;")),
+        file:read-text-lines("sandpit/test.txt")</test>
+      <result>
+         <all-of>
+            <assert-deep-eq>"abcd", "defg", "", "hijk"</assert-deep-eq>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-003">
+      <description>Use file:read-textlines with 1 arg: xDxA as newline</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", string-join(("abcd", "defg", "", "hijk"), "&#xd;&#xa;")),
+        file:read-text-lines("sandpit/test.txt")</test>
+      <result>
+         <all-of>
+            <assert-deep-eq>"abcd", "defg", "", "hijk"</assert-deep-eq>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-004">
+      <description>Use file:read-textlines with 1 arg: xA as newline</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", string-join(("abcd", "defg", "hijk"), "&#xa;") || "&#xa;"),
+        file:read-text-lines("sandpit/test.txt")</test>
+      <result>
+         <all-of>
+            <assert-deep-eq>"abcd", "defg", "hijk"</assert-deep-eq>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-005">
+      <description>Use file:read-textlines with 1 arg: xD as newline</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", string-join(("abcd", "defg", "", "hijk"), "&#xd;") || "&#xd;"),
+        file:read-text-lines("sandpit/test.txt")</test>
+      <result>
+         <all-of>
+            <assert-deep-eq>"abcd", "defg", "", "hijk"</assert-deep-eq>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-006">
+      <description>Use file:read-textlines with 1 arg: xDxA as newline</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", string-join(("abcd", "defg", "", "hijk"), "&#xd;&#xa;") || "&#xd;&#xa;"),
+        file:read-text-lines("sandpit/test.txt")</test>
+      <result>
+         <all-of>
+            <assert-deep-eq>"abcd", "defg", "", "hijk"</assert-deep-eq>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-007">
+      <description>Use file:read-textlines with 1 arg: xAxD as newline</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", string-join(("abcd", "defg", "", "hijk"), "&#xa;&#xd;")),
+        file:read-text-lines("sandpit/test.txt")</test>
+      <result>
+         <all-of>
+            <assert-deep-eq>"abcd", "", "defg", "", "", "", "hijk"</assert-deep-eq>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-008">
+      <description>Use file:read-textlines with 1 arg: empty file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", ""),
+        file:read-text-lines("sandpit/test.txt")</test>
+      <result>
+         <all-of>
+            <assert-empty/>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-009">
+      <description>Use file:read-textlines with 1 arg: non-existent file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:read-text-lines("sandpit/test.txt")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-010">
+      <description>Use file:read-textlines with 1 arg: input is directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:read-text-lines("sandpit")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-011">
+      <description>Use file:read-textlines with 2 args: non-existent file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:read-text-lines("sandpit/test.txt", "UTF-8")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-012">
+      <description>Use file:read-textlines with 2 args: input is directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:read-text-lines("sandpit", "UTF-8")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-013">
+      <description>Use file:read-textlines with 2 args: unknown encoding</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", ""),
+        file:read-text-lines("sandpit", "UTF-82.3")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0005"/>
+      </result>
+   </test-case>
+
+   <test-case name="file-readTextLines1-014">
+      <description>Use file:read-textlines with 1 arg: xA as newline</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", 
+                        string-join(("abcd", "defg", "hijk"), "&#xa;") || "&#xa;", 
+                        "UTF-8"),
+        file:read-text-lines("sandpit/test.txt", "UTF-8")</test>
+      <result>
+         <all-of>
+            <assert-deep-eq>"abcd", "defg", "hijk"</assert-deep-eq>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-readTextLines1-015">
+      <description>Use file:read-textlines with 1 arg: file contents invalid for chosen encoding</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-binary("sandpit/test.txt", 
+                        xs:base64Binary(xs:hexBinary("A3"))),
+        file:read-text-lines("sandpit/test.txt", "UTF-8")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE9999"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeText2-001">
+      <description>Use file:write-text with two arguments</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", "abc")</test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/test.txt") eq "abc"</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeText2-002">
+      <description>Use file:write-text writing to an existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>file:write-text("sandpit/test.txt", "def")</test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/test.txt") eq "def"</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeText2-003">
+      <description>Use file:write-text writing empty string</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>file:write-text("sandpit/test.txt", "")</test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/test.txt") eq ""</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeText2-004">
+      <description>Use file:write-text : default encoding is UTF-8</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>file:write-text("sandpit/test.txt", "&#xa3;")</test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/test.txt", "UTF-8") eq "&#xa3;"</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeText2-005">
+      <description>Use file:write-text with two arguments: file is a directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-text("sandpit", "abc")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeText2-006">
+      <description>Use file:write-text with two arguments: attempt to create file in non-existent directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-text("nonexistent/file.xml", "abc")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeText3-001">
+      <description>Use file:write-text with three arguments, UTF-8</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test2.txt")) 
+          then file:delete("sandpit/test2.txt")
+          else ()), 
+        file:write-text("sandpit/test2.txt", "abc&#xa3;", "UTF-8")</test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/test2.txt") eq "abc&#xa3;"</assert>
+            <assert>xs:hexBinary(Q{http://expath.org/ns/file}read-binary("sandpit/test2.txt")) eq xs:hexBinary("616263C2A3")</assert>
+            <!-- TODO: allow leading BOM? -->
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeText3-002">
+      <description>Use file:write-text with three arguments: UTF-16 encoding</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test3.txt")) 
+          then file:delete("sandpit/test3.txt")
+          else ()), 
+        file:write-text("sandpit/test3.txt", "abc", "UTF-16")</test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>xs:hexBinary(Q{http://expath.org/ns/file}read-binary("sandpit/test3.txt")) eq xs:hexBinary("FEFF006100620063")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeText3-003">
+      <description>Use file:write-text with three arguments: unsupported encoding</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test4.txt")) 
+          then file:delete("sandpit/test4.txt")
+          else ()), 
+        file:write-text("sandpit/test4.txt", "abc", "encoding-1234")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0005"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeText3-004">
+      <description>Use file:write-text with three arguments: file is a directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-text("sandpit", "abc", "UTF-8")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeText3-005">
+      <description>Use file:write-text with three arguments: attempt to create file in non-existent directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-text("nonexistent/file.xml", "abc", "UTF-8")</test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      </result>
+   </test-case>
+
+   <test-case name="file-writeBinary2-001">
+      <description>Use file:write-binary with two arguments</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.bin")) 
+          then file:delete("sandpit/test.bin")
+          else ()), 
+        file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304")))
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>xs:hexBinary(Q{http://expath.org/ns/file}read-binary("sandpit/test.bin")) eq xs:hexBinary("0001020304")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeBinary2-002">
+      <description>Use file:write-binary with two arguments, overwrite existing file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-binary("sandpit/test.bin", 
+           xs:base64Binary(xs:hexBinary("0506")))
+      </test>
+      <result>
+         <all-of>
+            <assert-empty/>
+            <assert>xs:hexBinary(Q{http://expath.org/ns/file}read-binary("sandpit/test.bin")) eq xs:hexBinary("0506")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeBinary2-003">
+      <description>Use file:write-binary: file is a directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-binary("sandpit", xs:base64Binary(""))
+      </test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-writeBinary2-004">
+      <description>Use file:write-binary: attempt to create file in non-existent directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:write-binary("nonexistent/file.bin", xs:base64Binary(""))
+      </test>
+      <result>
+         <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName1-001">
+      <description>Use file:base-name on a text file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", "abc"),
+        file:base-name("sandpit/test.txt")
+      </test>
+      <result>
+         <assert-eq>"test.txt"</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName1-002">
+      <description>Use file:base-name on a directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:base-name("sandpit")
+      </test>
+      <result>
+         <assert-eq>"sandpit"</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName1-003">
+      <description>Use file:base-name on a nonexistent file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:base-name("sandpit/nonexistent.txt")
+      </test>
+      <result>
+         <assert-eq>"nonexistent.txt"</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName1-004">
+      <description>Use file:base-name on current directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:base-name(".")
+      </test>
+      <result>
+         <assert-type>xs:string</assert-type>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName1-005">
+      <description>Use file:base-name on path with trailing separator</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:base-name("sandpit/dir1/")
+      </test>
+      <result>
+         <assert-eq>"dir1"</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName1-006">
+      <description>Use file:base-name on root path</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:base-name("/")
+      </test>
+      <result>
+         <assert-eq>""</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName1-007">
+      <description>Use file:base-name on path containing multiple directory separators</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:base-name("////")
+      </test>
+      <result>
+         <assert-eq>""</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName1-008">
+      <description>Use file:base-name on empty path</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:base-name("")
+      </test>
+      <result>
+         <assert-eq>"."</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName2-001">
+      <description>Use file:base-name on a text file with matching suffix</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", "abc"),
+        file:base-name("sandpit/test.txt", ".txt")
+      </test>
+      <result>
+         <assert-eq>"test"</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName2-002">
+      <description>Use file:base-name on a text file with non-matching suffix</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", "abc"),
+        file:base-name("sandpit/test.txt", ".xml")
+      </test>
+      <result>
+         <assert-eq>"test.txt"</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName2-003">
+      <description>Use file:base-name on a directory with no suffix</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:base-name("sandpit", ".html")
+      </test>
+      <result>
+         <assert-eq>"sandpit"</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-baseName2-004">
+      <description>Use file:base-name on a directory with matching suffix</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:base-name("sandpit", "pit")
+      </test>
+      <result>
+         <assert-eq>"sand"</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-dirName-001">
+      <description>Use file:dir-name on a text file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        (if (file:exists("sandpit/test.txt")) 
+          then file:delete("sandpit/test.txt")
+          else ()), 
+        file:write-text("sandpit/test.txt", "abc"),
+        file:dir-name("sandpit/test.txt")
+      </test>
+      <result>
+         <assert-eq>"sandpit"</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-dirName-002">
+      <description>Use file:dir-name on a directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:dir-name("sandpit/dir1")
+      </test>
+      <result>
+         <assert-eq>"sandpit"</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-dirName-003">
+      <description>Use file:dir-name on a directory ignoring trailing slash</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:dir-name("sandpit/dir1/")
+      </test>
+      <result>
+         <assert-eq>"sandpit"</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-dirName-004">
+      <description>Use file:dir-name on current directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:dir-name(".")
+      </test>
+      <result>
+         <assert-eq>"."</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-dirName-005">
+      <description>Use file:dir-name on parent of current directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:dir-name("..")
+      </test>
+      <result>
+         <assert-eq>"."</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-dirName-006">
+      <description>Use file:dir-name on root directory</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:dir-name("/")
+      </test>
+      <result>
+         <assert-eq>""</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-dirName-007">
+      <description>Use file:dir-name on root directory URI</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:dir-name("file:///")
+      </test>
+      <result>
+         <assert-eq>""</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-dirName-008">
+      <description>Use file:dir-name on root directory URI</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:dir-name("file:/")
+      </test>
+      <result>
+         <assert-eq>""</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-dirName-009">
+      <description>Use file:dir-name on root directory URI</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:dir-name("file://localhost/")
+      </test>
+      <result>
+         <assert-eq>""</assert-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="file-pathToNative-001">
+      <description>Use file:path-to-native on a text file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:path-to-native("sandpit/test.txt")
+      </test>
+      <result>
+         <any-of>
+           <assert>ends-with($result, "sandpit/test.txt")</assert>
+           <assert>ends-with($result, "sandpit\test.txt")</assert>
+         </any-of>  
+      </result>
+   </test-case>
+   
+   <test-case name="file-pathToNative-002">
+      <description>Use file:path-to-native on a text file, multiple slashes</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+         file:path-to-native("sandpit///test.txt")
+      </test>
+      <result>
+         <any-of>
+           <assert>ends-with($result, "sandpit/test.txt")</assert>
+           <assert>ends-with($result, "sandpit\test.txt")</assert>
+         </any-of>  
+      </result>
+   </test-case>
+   
+   <test-case name="file-pathToNative-003">
+      <description>Use file:path-to-native on a text file, redundant component</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+         file:path-to-native("sandpit/./test.txt")
+      </test>
+      <result>
+         <any-of>
+           <assert>ends-with($result, "sandpit/test.txt")</assert>
+           <assert>ends-with($result, "sandpit\test.txt")</assert>
+         </any-of>  
+      </result>
+   </test-case>
+   
+   <test-case name="file-pathToNative-004">
+      <description>Use file:path-to-native on a text file, removal of file:/// part</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+         file:path-to-native("file:///test.dir")
+      </test>
+      <result>
+           <assert>not(starts-with($result, "file:"))</assert>
+      </result>
+   </test-case>
+   
+   <test-case name="file-pathToNative-005">
+      <description>Use file:path-to-native on a text file, removal of file:/// part</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+         file:path-to-native(".")
+      </test>
+      <result>
+           <assert>$result ne "."</assert>
+      </result>
+   </test-case>
+   
+   <test-case name="file-pathToUri-001">
+      <description>Use file:path-to-uri on a text file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:path-to-uri("sandpit/test.txt")
+      </test>
+      <result>
+        <all-of>
+           <assert>ends-with($result, "sandpit/test.txt")</assert> 
+           <assert>starts-with($result, "file:/")</assert> 
+        </all-of>   
+      </result>
+   </test-case>
+   
+   <test-case name="file-resolvePath-001">
+      <description>Use file:resolve-path on a text file</description>
+      <created by="Michael Kay" on="2012-06-11"/>
+      <environment ref="file"/>
+      <test>
+        file:resolve-path("sandpit/test.txt")
+      </test>
+      <result>
+        <any-of> 
+          <assert>matches($result, "/.*sandpit/test\.txt")</assert>
+          <assert>matches($result, "[A-Za-z]:\\.*sandpit\\test\.txt")</assert>        
+        </any-of>   
+      </result>
+   </test-case>
+   
+   <test-case name="file-dirSeparator-001">
+      <description>Use file:dir-separator</description>
+      <created by="Michael Kay" on="2012-06-15"/>
+      <environment ref="file"/>
+      <test>
+        file:dir-separator()
+      </test>
+      <result>
+        <any-of> 
+          <assert-string-value>/</assert-string-value>
+          <assert-string-value>\</assert-string-value>       
+        </any-of>   
+      </result>
+   </test-case>
+   
+   <test-case name="file-pathSeparator-001">
+      <description>Use file:path-separator</description>
+      <created by="Michael Kay" on="2012-06-15"/>
+      <environment ref="file"/>
+      <test>
+        file:path-separator()
+      </test>
+      <result>
+        <any-of> 
+          <assert-string-value>:</assert-string-value>
+          <assert-string-value>;</assert-string-value>       
+        </any-of>   
+      </result>
+   </test-case>
+   
+   <test-case name="file-lineSeparator-001">
+      <description>Use file:line-separator</description>
+      <created by="Michael Kay" on="2012-06-15"/>
+      <environment ref="file"/>
+      <test>
+        string-to-codepoints(file:line-separator())
+      </test>
+      <result>
+        <any-of> 
+          <assert-deep-eq>10</assert-deep-eq>
+          <assert-deep-eq>13, 10</assert-deep-eq>
+          <assert-deep-eq>13</assert-deep-eq>       
+        </any-of>   
+      </result>
+   </test-case>
+   
+   <test-case name="file-lineSeparator-002">
+      <description>Consistency of file:line-separator, file:path-separator, and file:dir-separator</description>
+      <created by="Michael Kay" on="2012-06-15"/>
+      <environment ref="file"/>
+      <test>
+        string-to-codepoints(file:path-separator() || file:dir-separator() || file:line-separator())
+      </test>
+      <result>
+        <any-of> 
+          <assert-deep-eq>59, 92, 13, 10</assert-deep-eq><!--windows-->
+          <assert-deep-eq>58, 47, 10</assert-deep-eq><!--unix-->
+          <assert-deep-eq>58, 47, 13</assert-deep-eq><!--mac (perhaps?)-->      
+        </any-of>   
+      </result>
+   </test-case>
+   
+</test-set>   

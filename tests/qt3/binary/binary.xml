@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-file">
+   <description>Tests for the extension functions in the EXPath "binary" package.
+     Note the tests are written on the assumption that the "working directory"
+     for resolving relative filenames is the directory containing this test catalog file.</description>
+   <link type="spec" document="http://expath.org/spec/binary"/>
+         
+   
+   <environment name="binary">
+        <namespace prefix="bin" uri="http://expath.org/ns/binary"/> 
+        <namespace prefix="err" uri="http://expath.org/ns/error"/> 
+   </environment>
+
+   <test-case name="binary-length-001">
+      <description>Use binary-length on an empty value</description>
+      <created by="Michael Kay" on="2013-07-11"/>
+      <environment ref="binary"/>
+      <test>
+        bin:binary-length(xs:hexBinary(""))
+      </test>
+      <result>
+         <assert-eq>0</assert-eq>
+      </result>
+   </test-case>
+   
+ 
+   
+</test-set>   
