@@ -24,7 +24,7 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Candidate Module</w3c-doctype>
       <pubdate>
-         <day>23</day>
+         <day>31</day>
          <month>July</month>
          <year>2013</year>
       </pubdate>
@@ -112,10 +112,9 @@
                   <ex:function>xs:hexBinary()</ex:function> and
                   <ex:function>xs:base64Binary()</ex:function>.</p>
             <note>
-               <p>As these types are normally
-                  implemented as wrappers around byte array structures containing the data, and differ
-                  only when being serialized to or parsed from text, such casting in-process should not
-                  involve data copying.</p>
+               <p>As these types are normally implemented as wrappers around byte array structures
+                  containing the data, and differ only when being serialized to or parsed from text,
+                  such casting in-process should not involve data copying.</p>
             </note>
          </div2>
       </div1>
@@ -142,7 +141,7 @@
                <p>Generating PDF files from SVG graphical data.</p>
             </item>
          </ulist>
-         <div2>
+         <div2 id="example-JPEG">
             <head>Example – finding JPEG size</head>
             <p>As an example, the following code reads the binary form of a JPEG image file,
                searches for the 'Start of Frame/DCT' segment, and unpacks the relevant binary
@@ -157,7 +156,7 @@
             <p>(The <code>'most-significant-first'()</code> argument ensures the numeric conversion
                is 'big-endian', which is the format in JPEG.)</p>
          </div2>
-         <div2>
+         <div2 id="example-ASN1">
             <head>Example – reading and writing variable length ASN.1 integers</head>
             <p><bibref ref="asn1"/> defines several formats for identifying and encoding
                arbitrary-sized telecommunications data as streams of octets. Many of these forms
@@ -440,7 +439,8 @@
          <div2 id="pad-left">
             <head>bin:pad-left</head><glist><gitem><label>Summary</label><def>
          <p>Returns the binary data created by padding <code>$in</code> with <code>$size</code>
-            blank octets from the left.</p>
+            octets from the left. The padding octet values are <code>$octet</code> or zero if
+            omitted.</p>
       </def></gitem><gitem><label>Signatures</label><def><p><example role="signature"><proto name="pad-left" return-type="xs:base64Binary?" isOp="no" prefix="bin">
             <arg name="in" type="xs:base64Binary?"/>
             <arg name="size" type="xs:integer"/>
@@ -450,36 +450,48 @@
             <arg name="octet" type="xs:integer"/>
          </proto></example></p></def></gitem><gitem><label>Rules</label><def>
          <p>The function returns an <code>xs:base64Binary</code> created by padding the input with
-               <code>$size</code> blank octets <em>in front of</em> the input.</p>
+               <code>$size</code> octets <em>in front of</em> the input. If <code>$octet</code> is
+            specified, the padding octets each have that value, otherwise they are blank.</p>
          <p><code>$size</code>
             <rfc2119>must</rfc2119> be a non-negative integer.</p>
          <p>If the value of <code>$in</code> is the empty sequence, the function returns an empty
             sequence.</p>
       </def></gitem><gitem><label>Error Conditions</label><def>
          <p><bibref ref="error.sizeNegative"/> is raised if <code>$size</code> is negative.</p>
+         <p><bibref ref="error.largeOctet"/> is raised if <code>$octet</code> lies outside the range 0
+            - 255. </p>
       </def></gitem><gitem><label>Notes</label><def>
-         <p>Padding with a non-zero octet value can be accomplished by the XPath expression:</p>
-         <eg xml:space="preserve">bin:join(($in, bin:from-octets((1 to $pad-length) ! $pad-octet)))</eg>
+         <p>Padding with a non-zero octet value can also be accomplished by the XPath expressions:</p>
+         <eg xml:space="preserve">bin:join(($in, bin:from-octets((1 to $pad-length) ! $pad-octet))) [XPath 3.0]</eg>
+         <eg xml:space="preserve">bin:join(($in, bin:from-octets(for $ i in (1 to $pad-length) return $pad-octet))) [XPath 2.0]</eg>
       </def></gitem></glist>
          </div2>
          <div2 id="pad-right">
             <head>bin:pad-right</head><glist><gitem><label>Summary</label><def>
          <p>Returns the binary data created by padding <code>$in</code> with <code>$size</code>
-            blank octets from the right.</p>
-      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="pad-right" return-type="xs:base64Binary?" isOp="no" prefix="bin">
+            blank octets from the right. The padding octet values are <code>$octet</code> or zero if
+            omitted.</p>
+      </def></gitem><gitem><label>Signatures</label><def><p><example role="signature"><proto name="pad-right" return-type="xs:base64Binary?" isOp="no" prefix="bin">
             <arg name="in" type="xs:base64Binary?"/>
             <arg name="size" type="xs:integer"/>
+         </proto></example><example role="signature"><proto name="pad-right" return-type="xs:base64Binary?" isOp="no" prefix="bin">
+            <arg name="in" type="xs:base64Binary?"/>
+            <arg name="size" type="xs:integer"/>
+            <arg name="octet" type="xs:integer"/>
          </proto></example></p></def></gitem><gitem><label>Rules</label><def>
          <p>The function returns an <code>xs:base64Binary</code> created by padding the input with
-               <code>$size</code> blank octets <em>after</em> the input.</p>
+            <code>$size</code> blank octets <em>after</em> the input. If <code>$octet</code> is
+            specified, the padding octets each have that value, otherwise they are blank.</p>
          <p><code>$size</code>
             <rfc2119>must</rfc2119> be a non-negative integer.</p>
          <p>If the value of <code>$in</code> is the empty sequence, the function returns an empty
             sequence.</p>
       </def></gitem><gitem><label>Error Conditions</label><def>
          <p><bibref ref="error.sizeNegative"/> is raised if <code>$size</code> is negative.</p>
+         <p><bibref ref="error.largeOctet"/> is raised if <code>$octet</code> lies outside the range 0
+            - 255. </p>
       </def></gitem><gitem><label>Notes</label><def>
-         <p>Padding with a non-zero octet value can be accomplished by the XPath expression:</p>
+         <p>Padding with a non-zero octet value can also be accomplished by the XPath expression:</p>
          <eg xml:space="preserve">bin:join((bin:from-octets((1 to $pad-length) ! $pad-octet),$in))</eg>
       </def></gitem></glist>
          </div2>
@@ -616,7 +628,7 @@
                integral number of octets. Integers where <code>$length</code> is greater than 8
                octets (and thus not representable as a <code>long</code>) might be expected in some
                situations, e.g. encryption. Whether the range of integers is limited to
-               <code>±2^63</code> may be implementation-dependant.</p>
+                  <code>±2^63</code> may be implementation-dependant.</p>
          </div2>
          <div2 id="floating">
             <head>Representation of floating point numbers</head>
@@ -809,8 +821,8 @@
          </div2>
          <div2 id="unpack-unsigned-integer">
             <head>bin:unpack-unsigned-integer</head><glist><gitem><label>Summary</label><def>
-         <p>Returns an unsigned integer value represented by the <code>$size</code> octets
-            starting from <code>$offset</code> in the input binary representation.</p>
+         <p>Returns an unsigned integer value represented by the <code>$size</code> octets starting
+            from <code>$offset</code> in the input binary representation.</p>
       </def></gitem><gitem><label>Signatures</label><def><p><example role="signature"><proto name="unpack-unsigned-integer" return-type="xs:integer" isOp="no" prefix="bin">
             <arg name="in" type="xs:base64Binary"/>
             <arg name="offset" type="xs:integer"/>
