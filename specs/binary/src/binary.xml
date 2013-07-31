@@ -35,7 +35,7 @@
          </author>
       </authlist>
       <copyright>
-         <p>Copyright ©2013 Jirka Kosek, published by the <loc
+         <p>Copyright ©2013 Jirka Kosek and John Lumley, published by the <loc
                href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
                href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
                License Agreement (CLA)</loc>. A human-readable <loc
@@ -100,10 +100,13 @@
             <p>The principal binary type within this module is <code>xs:base64Binary</code>.</p>
             <p>Conversion to and from <code>xs:hexBinary</code> can be performed by casting with
                   <ex:function>xs:hexBinary()</ex:function> and
-                  <ex:function>xs:base64Binary()</ex:function>. As these types are normally
-               implemented as wrappers around byte array structures containing the data, and differ
-               only when being serialized to or parsed from text, such casting in-process should not
-               involve data copying.</p>
+                  <ex:function>xs:base64Binary()</ex:function>.</p>
+            <note>
+               <p>As these types are normally
+                  implemented as wrappers around byte array structures containing the data, and differ
+                  only when being serialized to or parsed from text, such casting in-process should not
+                  involve data copying.</p>
+            </note>
          </div2>
       </div1>
       <div1 id="use-cases">
@@ -130,7 +133,7 @@
             </item>
          </ulist>
          <div2>
-            <head>Example - finding JPEG size</head>
+            <head>Example – finding JPEG size</head>
             <p>As an example, the following code reads the binary form of a JPEG image file,
                searches for the 'Start of Frame/DCT' segment, and unpacks the relevant binary
                sections to integers of height and width:</p>
@@ -145,22 +148,22 @@
                is 'big-endian', which is the format in JPEG.)</p>
          </div2>
          <div2>
-            <head>Example - reading and writing variable length ASN.1 integers</head>
+            <head>Example – reading and writing variable length ASN.1 integers</head>
             <p><bibref ref="asn1"/> defines several formats for identifying and encoding
                arbitrary-sized telecommunications data as streams of octets. Many of these forms
                specify the length of data as part of their encoding. For example, in the Basic
                Encoding Rules, an integer is represented as the following series of octets:</p>
             <ulist>
                <item>
-                  <p>Type - 1 octet - in this case the value <code>0x02</code></p>
+                  <p>Type – 1 octet – in this case the value <code>0x02</code></p>
                </item>
                <item>
-                  <p>Length - &gt;=1 octet - the number of octets in the integer value. The length
-                     field itself can be variable in length - to accomodate VERY large integers
+                  <p>Length – &gt;=1 octet – the number of octets in the integer value. The length
+                     field itself can be variable in length – to accomodate VERY large integers
                      (requiring more than 127 octets to represent, e.g. 2048-bit crypto keys.)</p>
                </item>
                <item>
-                  <p>Payload - &gt;=0 octets - the octets of the integer value in
+                  <p>Payload – &gt;=0 octets – the octets of the integer value in
                      most-significant-first order.</p>
                </item>
             </ulist>

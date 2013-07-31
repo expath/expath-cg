@@ -47,7 +47,7 @@ div.exampleHeader { font-weight: bold;
          <a href="http://expath.org/spec/binary">http://expath.org/spec/binary</a>
       </dd><dt>Previous version:</dt><dd>
          <a href="http://expath.org/spec/binary/20130312">http://expath.org/spec/binary/20130312</a><br />
-      </dd><dt>Editors:</dt><dd>Jirka Kosek &lt;<a href="mailto:jirka@kosek.cz">jirka@kosek.cz</a>&gt;</dd><dd>John Lumley &lt;<a href="mailto:john@saxonica.com">john@saxonica.com</a>&gt;</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/binary/editor.xml">XML</a>.</p><p class="copyright">Copyright ©2013 Jirka Kosek, published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+      </dd><dt>Editors:</dt><dd>Jirka Kosek &lt;<a href="mailto:jirka@kosek.cz">jirka@kosek.cz</a>&gt;</dd><dd>John Lumley &lt;<a href="mailto:john@saxonica.com">john@saxonica.com</a>&gt;</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/binary/editor.xml">XML</a>.</p><p class="copyright">Copyright ©2013 Jirka Kosek and John Lumley, published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
                License Agreement (CLA)</a>. A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is
             available.</p><p class="copyright">This specification was published by the <a href="http://www.w3.org/community/expath/">EXPath Community Group</a>. It is not a W3C Standard nor is it on the W3C
             Standards Track. Please note that under the <a href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
@@ -65,8 +65,8 @@ div.exampleHeader { font-weight: bold;
     2.2 <a href="#d5e145">Error management</a><br />
     2.3 <a href="#type">Binary type</a><br />
 3 <a href="#use-cases">Use cases</a><br />
-    3.1 <a href="#d5e196">Example - finding JPEG size</a><br />
-    3.2 <a href="#d5e208">Example - reading and writing variable length ASN.1 integers</a><br />
+    3.1 <a href="#d5e199">Example – finding JPEG size</a><br />
+    3.2 <a href="#d5e211">Example – reading and writing variable length ASN.1 integers</a><br />
 4 <a href="#loading">Loading and saving binary data</a><br />
 5 <a href="#constants">Defining 'constants' and conversions</a><br />
     5.1 <a href="#hex">bin:hex</a><br />
@@ -120,15 +120,15 @@ B <a href="#errors">Summary of Error Conditions</a><br />
                   <code>error()</code> had been called.)</p></div><div class="div2">
 <h3><a name="type" id="type"></a>2.3 Binary type</h3><p>The principal binary type within this module is <code>xs:base64Binary</code>.</p><p>Conversion to and from <code>xs:hexBinary</code> can be performed by casting with
                   <code class="function">xs:hexBinary()</code> and
-                  <code class="function">xs:base64Binary()</code>. As these types are normally
-               implemented as wrappers around byte array structures containing the data, and differ
-               only when being serialized to or parsed from text, such casting in-process should not
-               involve data copying.</p></div></div><div class="div1">
+                  <code class="function">xs:base64Binary()</code>.</p><div class="note"><p class="prefix"><b>Note:</b></p><p>As these types are normally
+                  implemented as wrappers around byte array structures containing the data, and differ
+                  only when being serialized to or parsed from text, such casting in-process should not
+                  involve data copying.</p></div></div></div><div class="div1">
 <h2><a name="use-cases" id="use-cases"></a>3 Use cases</h2><p>Development of this specification was driven by requirements which some XML developers
             regularly encounter in examining or generating data which is presented in binary, or
             other non-textual forms. Some typical use cases include:</p><ul><li><p>Getting the dimensions of an image file.</p></li><li><p>Extracting image metadata.</p></li><li><p>Processing images embedded as base64 encodings within a SOAP message.</p></li><li><p>Processing legacy text files which use different encodings in separate
                   sections.</p></li><li><p>Generating PDF files from SVG graphical data.</p></li></ul><div class="div2">
-<h3><a name="d5e196" id="d5e196"></a>3.1 Example - finding JPEG size</h3><p>As an example, the following code reads the binary form of a JPEG image file,
+<h3><a name="d5e199" id="d5e199"></a>3.1 Example – finding JPEG size</h3><p>As an example, the following code reads the binary form of a JPEG image file,
                searches for the 'Start of Frame/DCT' segment, and unpacks the relevant binary
                sections to integers of height and width:</p><div class="exampleInner"><pre>
 &lt;xsl:variable name="binary" select="file:read-binary(@href)" as="xs:base64Binary"/&gt;
@@ -138,12 +138,12 @@ B <a href="#errors">Summary of Error Conditions</a><br />
                
       =&gt; &lt;size width="377" height="327"/&gt;</pre></div><p>(The <code>'most-significant-first'()</code> argument ensures the numeric conversion
                is 'big-endian', which is the format in JPEG.)</p></div><div class="div2">
-<h3><a name="d5e208" id="d5e208"></a>3.2 Example - reading and writing variable length ASN.1 integers</h3><p><a href="#asn1">[ASN.1]</a> defines several formats for identifying and encoding
+<h3><a name="d5e211" id="d5e211"></a>3.2 Example – reading and writing variable length ASN.1 integers</h3><p><a href="#asn1">[ASN.1]</a> defines several formats for identifying and encoding
                arbitrary-sized telecommunications data as streams of octets. Many of these forms
                specify the length of data as part of their encoding. For example, in the Basic
-               Encoding Rules, an integer is represented as the following series of octets:</p><ul><li><p>Type - 1 octet - in this case the value <code>0x02</code></p></li><li><p>Length - &gt;=1 octet - the number of octets in the integer value. The length
-                     field itself can be variable in length - to accomodate VERY large integers
-                     (requiring more than 127 octets to represent, e.g. 2048-bit crypto keys.)</p></li><li><p>Payload - &gt;=0 octets - the octets of the integer value in
+               Encoding Rules, an integer is represented as the following series of octets:</p><ul><li><p>Type – 1 octet – in this case the value <code>0x02</code></p></li><li><p>Length – &gt;=1 octet – the number of octets in the integer value. The length
+                     field itself can be variable in length – to accomodate VERY large integers
+                     (requiring more than 127 octets to represent, e.g. 2048-bit crypto keys.)</p></li><li><p>Payload – &gt;=0 octets – the octets of the integer value in
                      most-significant-first order.</p></li></ul><p>To generate such a representation for an integer from XSLT/XPath, the following code
                might be used:</p><div class="exampleInner"><pre>
  &lt;xsl:function name="bin:int-octets" as="xs:integer*"&gt;
@@ -242,7 +242,7 @@ B <a href="#errors">Summary of Error Conditions</a><br />
             of the binary data in <code>$in</code>.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns an empty
             sequence.</p></dd><dt class="label">Error Conditions</dt><dd><p><a href="#error.offsetNegative">[err:BINA0002]</a> is raised if <code>$offset</code> is negative.</p><p><a href="#error.sizeNegative">[err:BINA0004]</a> is raised if <code>$size</code> is negative.</p><p><a href="#error.offsetBeyondEnd">[err:BINA0003]</a> is raised if <code>$offset + $size</code> extends
             beyond the binary data of <code>$in</code>.</p></dd><dt class="label">Notes</dt><dd><p>Note that <code>fn:subsequence()</code> and <code>fn:substring()</code>
-            <a href="#fo11">[F&amp;O 1.1]</a> both use <code>xs:double</code> for offset and size - this is a
+            <a href="#fo11">[F&amp;O 1.1]</a> both use <code>xs:double</code> for offset and size – this is a
             legacy from XPath 1.0.</p></dd><dt class="label">Examples</dt><dd><p>Testing whether <code>$data</code> variable starts with binary content consistent
                with a PDF file:</p><div class="exampleInner"><pre>bin:subsequence($data, 0, 4) eq bin:hex("25504446")</pre></div><p><code>25504446</code> is the magic number for PDF files: it is the US-ASCII encoded
                hexadecimal value for <code>%PDF</code>.</p></dd></dl></div><div class="div2">
