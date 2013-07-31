@@ -6,7 +6,7 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Candidate Module</w3c-doctype>
       <pubdate>
-         <day>23</day>
+         <day>31</day>
          <month>July</month>
          <year>2013</year>
       </pubdate>
@@ -102,10 +102,9 @@
                   <ex:function>xs:hexBinary()</ex:function> and
                   <ex:function>xs:base64Binary()</ex:function>.</p>
             <note>
-               <p>As these types are normally
-                  implemented as wrappers around byte array structures containing the data, and differ
-                  only when being serialized to or parsed from text, such casting in-process should not
-                  involve data copying.</p>
+               <p>As these types are normally implemented as wrappers around byte array structures
+                  containing the data, and differ only when being serialized to or parsed from text,
+                  such casting in-process should not involve data copying.</p>
             </note>
          </div2>
       </div1>
@@ -132,7 +131,7 @@
                <p>Generating PDF files from SVG graphical data.</p>
             </item>
          </ulist>
-         <div2>
+         <div2 id="example-JPEG">
             <head>Example – finding JPEG size</head>
             <p>As an example, the following code reads the binary form of a JPEG image file,
                searches for the 'Start of Frame/DCT' segment, and unpacks the relevant binary
@@ -147,7 +146,7 @@
             <p>(The <code>'most-significant-first'()</code> argument ensures the numeric conversion
                is 'big-endian', which is the format in JPEG.)</p>
          </div2>
-         <div2>
+         <div2 id="example-ASN1">
             <head>Example – reading and writing variable length ASN.1 integers</head>
             <p><bibref ref="asn1"/> defines several formats for identifying and encoding
                arbitrary-sized telecommunications data as streams of octets. Many of these forms
@@ -155,11 +154,11 @@
                Encoding Rules, an integer is represented as the following series of octets:</p>
             <ulist>
                <item>
-                  <p>Type – 1 octet – in this case the value <code>0x02</code></p>
+                  <p>Type - 1 octet - in this case the value <code>0x02</code></p>
                </item>
                <item>
                   <p>Length – &gt;=1 octet – the number of octets in the integer value. The length
-                     field itself can be variable in length – to accomodate VERY large integers
+                     field itself can be variable in length - to accomodate VERY large integers
                      (requiring more than 127 octets to represent, e.g. 2048-bit crypto keys.)</p>
                </item>
                <item>
@@ -330,7 +329,7 @@
                integral number of octets. Integers where <code>$length</code> is greater than 8
                octets (and thus not representable as a <code>long</code>) might be expected in some
                situations, e.g. encryption. Whether the range of integers is limited to
-               <code>±2^63</code> may be implementation-dependant.</p>
+                  <code>±2^63</code> may be implementation-dependant.</p>
          </div2>
          <div2 id="floating">
             <head>Representation of floating point numbers</head>
