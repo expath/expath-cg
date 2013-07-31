@@ -154,11 +154,11 @@
                Encoding Rules, an integer is represented as the following series of octets:</p>
             <ulist>
                <item>
-                  <p>Type - 1 octet - in this case the value <code>0x02</code></p>
+                  <p>Type – 1 octet – in this case the value <code>0x02</code></p>
                </item>
                <item>
                   <p>Length – &gt;=1 octet – the number of octets in the integer value. The length
-                     field itself can be variable in length - to accomodate VERY large integers
+                     field itself can be variable in length – to accomodate VERY large integers
                      (requiring more than 127 octets to represent, e.g. 2048-bit crypto keys.)</p>
                </item>
                <item>
