@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Binary Module -- Review Version</title><link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/TR/base.css" /><style type="text/css">
+code           { font-family: monospace; }
+
+div.constraint,
+div.issue,
+div.note,
+div.notice     { margin-left: 2em; }
+
+ol.enumar      { list-style-type: decimal; }
+ol.enumla      { list-style-type: lower-alpha; }
+ol.enumlr      { list-style-type: lower-roman; }
+ol.enumua      { list-style-type: upper-alpha; }
+ol.enumur      { list-style-type: upper-roman; }
+
+
+div.exampleInner pre { margin-left: 1em;
+                       margin-top: 0em; margin-bottom: 0em}
+div.exampleOuter {border: 4px double gray;
+                  margin: 0em; padding: 0em}
+div.exampleInner { background-color: #d5dee3;
+                   border-top-width: 4px;
+                   border-top-style: double;
+                   border-top-color: #d3d3d3;
+                   border-bottom-width: 4px;
+                   border-bottom-style: double;
+                   border-bottom-color: #d3d3d3;
+                   padding: 4px; margin: 0em }
+div.exampleWrapper { margin: 4px }
+div.exampleHeader { font-weight: bold;
+                    margin: 4px}
+
+            div.diff-add  { background-color: #FFFF99; }
+            div.diff-del  { text-decoration: line-through; }
+            div.diff-chg  { background-color: #99FF99; }
+            div.diff-off  {  }
+
+            span.diff-add { background-color: #FFFF99; }
+            span.diff-del { text-decoration: line-through; }
+            span.diff-chg { background-color: #99FF99; }
+            span.diff-off {  }
+
+            td.diff-add   { background-color: #FFFF99; }
+            td.diff-del   { text-decoration: line-through }
+            td.diff-chg   { background-color: #99FF99; }
+            td.diff-off   {  }
+            
+            pre.diff-add { background-color: #FFFF99; }
+            pre.diff-del { text-decoration: line-through; }
+            pre.diff-chg { background-color: #99FF99; }
+            pre.diff-off {  }
+            
+         
+      
+      code.function { font-weight: bold; }
+      code.type { font-style: italic; }
+      body {
+        background-image: url(http://expath.org/images/logo-candidate.png);
+      }
+   </style></head><body><div><p>The presentation of this document has been augmented to
+            identify changes from a previous version. Three kinds of changes
+            are highlighted: <span class="diff-add">new, added text</span>,
+            <span class="diff-chg">changed text</span>, and
+            <span class="diff-del">deleted text</span>.</p><hr /></div><p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p><div class="head">
+<h1><a name="title" id="title"></a>Binary Module</h1>
+<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 27 August 2013</h2><dl><dt>This version:</dt><dd>
+         <a href="http://expath.org/spec/binary/editor">http://expath.org/spec/binary/editor</a>
+      </dd><dt>Latest version:</dt><dd>
+         <a href="http://expath.org/spec/binary">http://expath.org/spec/binary</a>
+      </dd><dt>Previous versions:</dt><dd>
+         <span class="diff-add"><a href="http://expath.org/spec/binary/20130731">http://expath.org/spec/binary/20130731</a></span><br />
+         <a href="http://expath.org/spec/binary/20130312">http://expath.org/spec/binary/20130312</a><br />
+      </dd><dt>Editors:</dt><dd>Jirka Kosek &lt;<a href="mailto:jirka@kosek.cz">jirka@kosek.cz</a>&gt;</dd><dd>John Lumley &lt;<a href="mailto:john@saxonica.com">john@saxonica.com</a>&gt;</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/binary/editor.xml">XML</a>.</p><div class="diff-chg"><p class="copyright">Copyright © 2013 Jirka Kosek and John Lumley, published by
+            the <a href="http://w3.org/community/expath/">EXPath Community Group</a> under the
+               <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community
+               Contributor License Agreement (CLA)</a>. A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is
+            available.</p></div><p class="copyright">This specification was published by the <a href="http://www.w3.org/community/expath/">EXPath Community Group</a>. It is not a W3C Standard nor is it on the W3C
+            Standards Track. Please note that under the <a href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+               License Agreement (CLA)</a> there is a limited opt-out and other conditions apply.
+            Learn more about <a href="http://www.w3.org/community/">W3C Community and Business
+               Groups</a>.</p></div><hr /><div>
+<h2><a name="abstract" id="abstract"></a>Abstract</h2><div class="diff-chg"><p>This proposal provides an API for XPath 2.0 to handle binary data. It defines
+            extension functions to process data from binary files, including extracting subparts,
+            searching, basic binary operations and conversion between binary and structured forms.
+            It has been designed to be compatible with XQuery 1.0 and XSLT 2.0, as well as any other
+            XPath 2.0 usage.</p></div></div><div class="toc">
+<h2><a name="contents" id="contents"></a>Table of Contents</h2><p class="toc">1 <a href="#status">Status of this document</a><br />
+2 <a href="#introduction">Introduction</a><br />
+    2.1 <a href="#namespaces">Namespace Conventions</a><br />
+    2.2 <a href="#error.management">Error management</a><br />
+    2.3 <a href="#type">Binary type</a><br />
+3 <a href="#use-cases">Use cases</a><br />
+    3.1 <a href="#example-JPEG">Example – finding JPEG size</a><br />
+    3.2 <a href="#example-ASN1">Example – reading and writing variable length ASN.1 integers</a><br />
+4 <a href="#loading">Loading and saving binary data</a><br />
+5 <a href="#constants">Defining 'constants' and conversions</a><br />
+    5.1 <a href="#hex">bin:hex</a><br />
+    5.2 <a href="#binary">bin:bin</a><br />
+    5.3 <a href="#octal">bin:octal</a><br />
+    5.4 <a href="#to-octets">bin:to-octets</a><br />
+    5.5 <a href="#from-octets">bin:from-octets</a><br />
+6 <a href="#basic-operations">Basic operations</a><br />
+    6.1 <a href="#length">bin:length</a><br />
+    6.2 <a href="#part">bin:part</a><br />
+    6.3 <a href="#join">bin:join</a><br />
+    6.4 <a href="#insert-before">bin:insert-before</a><br />
+    6.5 <a href="#pad-left">bin:pad-left</a><br />
+    6.6 <a href="#pad-right">bin:pad-right</a><br />
+    6.7 <a href="#find">bin:find</a><br />
+7 <a href="#text-encoding">Text decoding and encoding</a><br />
+    7.1 <a href="#decode-string">bin:decode-string</a><br />
+    7.2 <a href="#encode-string">bin:encode-string</a><br />
+8 <a href="#numeric-packing">Packing and unpacking of encoded numeric values</a><br />
+    8.1 <a href="#endianness">Number 'endianness'</a><br />
+    8.2 <a href="#integer">Integer representation</a><br />
+    8.3 <a href="#floating">Representation of floating point numbers</a><br />
+    8.4 <a href="#pack-double">bin:pack-double</a><br />
+    8.5 <a href="#pack-float">bin:pack-float</a><br />
+    8.6 <a href="#pack-integer">bin:pack-integer</a><br />
+    8.7 <a href="#unpack-double">bin:unpack-double</a><br />
+    8.8 <a href="#unpack-float">bin:unpack-float</a><br />
+    8.9 <a href="#unpack-signed-integer">bin:unpack-signed-integer</a><br />
+    8.10 <a href="#unpack-unsigned-integer">bin:unpack-unsigned-integer</a><br />
+9 <a href="#bitwise">Bitwise operations</a><br />
+    9.1 <a href="#or">bin:or</a><br />
+    9.2 <a href="#xor">bin:xor</a><br />
+    9.3 <a href="#and">bin:and</a><br />
+    9.4 <a href="#not">bin:not</a><br />
+    9.5 <a href="#shift">bin:shift</a><br />
+</p>
+<h3><a name="appendices" id="appendices"></a>Appendices</h3><p class="toc">A <a href="#references">References</a><br />
+B <a href="#errors">Summary of Error Conditions</a><br />
+</p></div><hr /><div class="body"><div class="div1">
+<h2><a name="status" id="status"></a>1 Status of this document</h2><p>This document is in an interim draft stage. Comments are welcomed at <a href="mailto:public-expath@w3.org">public-expath@w3.org</a> mailing list (<a href="http://lists.w3.org/Archives/Public/public-expath/">archive</a>).</p></div><div class="div1">
+<h2><a name="introduction" id="introduction"></a>2 Introduction</h2><div class="div2">
+<h3><a name="namespaces" id="namespaces"></a>2.1 Namespace Conventions</h3><p>The module defined by this document defines several functions, all contained in the
+               namespace <code>http://expath.org/ns/binary</code>. In this document, the
+                  <code>bin</code> prefix, when used, is bound to this namespace URI.</p><div class="diff-chg"><p>Error codes are defined in the same namespace
+                  (<code>http://expath.org/ns/binary</code>), and in this document are displayed
+               with the same prefix, <code>bin</code>.</p></div><p>Binary file I/O uses facilities defined in the <a href="http://expath.org/spec/file">EXPath File Module</a>, which defines
+               functions in the namespace <code>http://expath.org/ns/file</code>. In this document,
+               the <code>file</code> prefix, when used, is bound to this namespace URI.</p></div><div class="div2">
+<h3><a name="error.management" id="error.management"></a>2.2 Error management</h3><p>Error conditions are identified by a code (a <code>QName</code>.) When such an error
+               condition is reached in the evaluation of an expression, a dynamic error is thrown,
+               with the corresponding error code (as if the standard XPath function
+                  <code>error()</code> had been called.)</p></div><div class="div2">
+<h3><a name="type" id="type"></a>2.3 Binary type</h3><p>The principal binary type within this module is <code>xs:base64Binary</code>.</p><p>Conversion to and from <code>xs:hexBinary</code> can be performed by casting with
+                  <code class="function">xs:hexBinary()</code> and
+                  <code class="function">xs:base64Binary()</code>.</p><div class="note"><p class="prefix"><b>Note:</b></p><p>As these types are normally implemented as wrappers around byte array structures
+                  containing the data, and differ only when being serialized to or parsed from text,
+                  such casting in-process should not involve data copying.</p></div></div></div><div class="div1">
+<h2><a name="use-cases" id="use-cases"></a>3 Use cases</h2><p>Development of this specification was driven by requirements which some XML developers
+            regularly encounter in examining or generating data which is presented in binary, or
+            other non-textual forms. Some typical use cases include:</p><ul><li><p>Getting the dimensions of an image file.</p></li><li><p>Extracting image metadata.</p></li><li><p>Processing images embedded as base64 encodings within a SOAP message.</p></li><li><p>Processing legacy text files which use different encodings in separate
+                  sections.</p></li><li><p>Generating PDF files from SVG graphical data.</p></li></ul><div class="div2">
+<h3><a name="example-JPEG" id="example-JPEG"></a>3.1 Example – finding JPEG size</h3><p>As an example, the following code reads the binary form of a JPEG image file,
+               searches for the 'Start of Frame/DCT' segment, and unpacks the relevant binary
+               sections to integers of height and width:</p><div class="exampleInner"><pre>
+&lt;xsl:variable name="binary" select="file:read-binary(@href)" as="xs:base64Binary"/&gt;
+&lt;xsl:variable name="location" select="bin:find($binary,0,bin:hex('FFC0'))"/&gt;
+&lt;size width="{bin:unpack-unsigned-integer($binary,$location+5,2,'most-significant-first')}"
+      height="{bin:unpack-unsigned-integer($binary,$location+7,2,'most-significant-first')}"/&gt;
+               
+      =&gt; &lt;size width="377" height="327"/&gt;</pre></div><p>(The <code>'most-significant-first'()</code> argument ensures the numeric conversion
+               is 'big-endian', which is the format in JPEG.)</p></div><div class="div2">
+<h3><a name="example-ASN1" id="example-ASN1"></a>3.2 Example – reading and writing variable length ASN.1 integers</h3><p><a href="#asn1">[ASN.1]</a> defines several formats for identifying and encoding
+               arbitrary-sized telecommunications data as streams of octets. Many of these forms
+               specify the length of data as part of their encoding. For example, in the Basic
+               Encoding Rules, an integer is represented as the following series of octets:</p><ul><li><p>Type - 1 octet - in this case the value <code>0x02</code></p></li><li><p>Length – &gt;=1 octet – the number of octets in the integer value. The length
+                     field itself can be variable in length - to accomodate VERY large integers
+                     (requiring more than 127 octets to represent, e.g. 2048-bit crypto keys.)</p></li><li><p>Payload – &gt;=0 octets – the octets of the integer value in
+                     most-significant-first order.</p></li></ul><p>To generate such a representation for an integer from XSLT/XPath, the following code
+               might be used:</p><div class="exampleInner"><pre>
+ &lt;xsl:function name="bin:int-octets" as="xs:integer*"&gt;
+    &lt;xsl:param name="value" as="xs:integer"/&gt;
+    &lt;xsl:sequence
+            select="if($value ne 0) then (bin:int-octets($value idiv 256),$value mod 256) else ()"/&gt;
+ &lt;/xsl:function&gt;
+ &lt;xsl:function name="bin:encode-ASN-integer" as="xs:base64Binary"&gt;
+     &lt;xsl:param name="int" as="xs:integer"/&gt;
+     &lt;xsl:variable name="octets" select="bin:int-octets($int)"/&gt;
+     &lt;xsl:variable name="length-octets"
+         select="let $l := count($octets) return
+         (if($l le 127) then $l 
+         else (let $lo := bin:int-octets($l) return (128+count($lo),$lo)))"/&gt;
+     &lt;xsl:sequence select="bin:from-octets((2,$length-octets,$octets))"/&gt;
+ &lt;/xsl:function&gt;</pre></div><p>The function <span class="diff-chg"><code>bin:int-octets()</code></span> returns a sequence of all the
+               'significant' octets of the integer (i.e. eliminating leading 'zeroes') in
+               most-significant order. Examples of the encoding are: </p><div class="exampleInner"><pre>
+ bin:encode-ASN-integer(0) =&gt; "AgA="
+ bin:encode-ASN-integer(1234) =&gt; "AgIE0g=="
+ bin:encode-ASN-integer(123456789123456789123456789123456789) =&gt; "Ag8XxuPAMviQRa10ZoQEXxU="
+               
+ bin:encode-ASN-integer(123456789.. 900 digits... 123456789) =&gt; "AoIBdgaTo....EBF8V"</pre></div><p>The first example requires no octets to encode zero, hence its octets are
+                  <code>2,0</code>. Both the second and third examples can be represented in less
+               than 128 octets (2 and 15 respectively), so length is encoded as a single octet. The
+               first three octets of the result for the last example, which encodes a 900-digit
+               integer, are: <code>2,130,1</code> indicating that the data is represented by
+               (130-128) * 256 + 1 = 513 octets and the length required two octets to encode.</p><p>Decoding is a matter of compound use of the integer decoding function:</p><div class="exampleInner"><pre>
+ &lt;xsl:function name="bin:decode-ASN-integer" as="xs:integer"&gt;
+     &lt;xsl:param name="in" as="xs:base64Binary"/&gt;
+     &lt;xsl:sequence
+         select="let $lo := bin:unpack-unsigned-integer($in,1,1,'BE') return (
+         if($lo le 127) then bin:unpack-unsigned-integer($in,2,$lo,'BE') 
+            else (let $lo2 := $lo - 128, $lo3 := bin:unpack-unsigned-integer($in,2,$lo2,'BE') return
+            bin:unpack-unsigned-integer($in,2+$lo2,$lo3,'BE')))"
+      /&gt;
+ &lt;/xsl:function&gt;               </pre></div><p>(all numbers in ASN are 'big-endian') and the examples from above reverse:</p><div class="exampleInner"><pre>
+ bin:decode-ASN-integer(xs:base64Binary("AgA=")) =&gt; 0
+ bin:decode-ASN-integer(xs:base64Binary("AgIE0g==")) =&gt; 1234
+ bin:encode-ASN-integer(xs:base64Binary("Ag8XxuPAMviQRa10ZoQEXxU=")) 
+     =&gt; 123456789123456789123456789123456789              
+ bin:encode-ASN-integer(xs:base64Binary("AoIBdgaTo....EBF8V")) 
+     =&gt; 123456789.. 900 digits... 123456789                </pre></div></div></div><div class="div1">
+<h2><a name="loading" id="loading"></a>4 Loading and saving binary data</h2><p>This module defines no specific functions for reading and writing binary data from
+            files. The EXPath File Module <a href="#expathfile">[EXPathFile]</a> provides three suitable
+            functions:</p><ul><li><p>
+                  <code class="function"><a href="http://expath.org/spec/file#d3e541">file:append-binary</a></code>($file as <code class="type">xs:string</code>,
+                  $value as <code class="type">xs:base64Binary</code>) as
+                     <code class="type">empty-sequence()</code>. Appends a Base64 item as binary to a
+                  file.</p></li><li><p>
+                  <code class="function"><a href="http://expath.org/spec/file#d3e954">file:read-binary</a></code>($file as <code class="type">xs:string</code>) as
+                     <code class="type">xs:base64Binary</code>. Returns the content of a file in its Base64
+                  representation.</p></li><li><p>
+                  <code class="function"><a href="http://expath.org/spec/file#d3e1359">file:write-binary</a></code>($file as <code class="type">xs:string</code>,
+                  $value as <code class="type">xs:base64Binary</code>) as
+                     <code class="type">empty-sequence()</code>. Writes a Base64 item as binary to a file.
+               </p></li></ul><p>There may be an argument for a positioned file:read-binary($file as
+               <code class="type">xs:string</code>,$offset as <code class="type">xs:integer</code>), for access
+            into large files without total read.</p></div><div class="div1">
+<h2><a name="constants" id="constants"></a>5 Defining 'constants' and conversions</h2><p>Users of the package may need to define binary 'constants' within their code or examine
+            the basic octets. The following functions support these:</p><div class="div2">
+<h3><a name="hex" id="hex"></a>5.1 bin:hex</h3><dl><dt class="label">Summary</dt><dd><div class="diff-chg"><p>Returns the binary form of the set of octets written as a sequence of
+                        (ASCII) hex digits ([0-9A-Fa-f]).</p></div></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:hex</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:string?</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></div></div></p></dd><dt class="label">Rules</dt><dd><div class="diff-chg"><p>
+                        <code>$in</code> will be effectively zero-padded from the left to generate
+                        an integral number of octets, i.e. an even number of hexadecimal digits. If
+                           <code>$in</code> is an empty string, then the result will be a
+                           <code>xs:base64Binary</code> with no embedded data.</p></div><p>Byte order in the result follows (per-octet) character order in the
+                        string.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        an empty sequence.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.nonNumberChar">[bin:non-numeric-character]</a> is raised if <code>$in</code> cannot be
+                        parsed as a hexadecimal number.</p></div></dd><dt class="label">Notes</dt><dd><div class="diff-chg"><p>When the input string has an even number of characters, this function
+                        behaves similarly to the double cast
+                              <code>xs:base64Binary(xs:hexBinary(<em>$string</em>))</code>.</p></div></dd><dt class="label">Examples</dt><dd><div class="exampleInner"><pre>bin:hex('11223F4E') =&gt; "ESI/Tg=="</pre></div><div class="exampleInner"><pre>bin:hex('1223F4E') =&gt; "ASI/Tg=="</pre></div></dd></dl></div><div class="div2">
+<h3><a name="binary" id="binary"></a>5.2 bin:bin</h3><dl><dt class="label">Summary</dt><dd><p>Returns the binary form of the set of octets written as a sequence of
+                        (8-wise) (ASCII) binary digits ([01]).</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:bin</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:string?</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>
+                        <code>$in</code> will be effectively zero-padded from the left to generate
+                        an integral number of octets. If <code>$in</code> is an empty string, then
+                        the result will be a <code>xs:base64Binary</code> with no embedded data.</p><p>Byte order in the result follows (per-octet) character order in the
+                        string.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        an empty sequence.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.nonNumberChar">[bin:non-numeric-character]</a> is raised if <code>$in</code> cannot be
+                        parsed as a binary number.</p></div></dd><dt class="label">Examples</dt><dd><div class="exampleInner"><pre>bin:bin('1101000111010101') =&gt; "0dU="</pre></div><div class="exampleInner"><pre>bin:bin('1000111010101') =&gt; "EdU="</pre></div></dd></dl></div><div class="div2">
+<h3><a name="octal" id="octal"></a>5.3 bin:octal</h3><dl><dt class="label">Summary</dt><dd><p>Returns the binary form of the set of octets written as a sequence of
+                        (ASCII) octal digits ([0-7]).</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:octal</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:string?</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>
+                        <code>$in</code> will be effectively zero-padded from the left to generate
+                        an integral number of octets. If <code>$in</code> is an empty string, then
+                        the result will be a <code>xs:base64Binary</code> with no embedded data.</p><p>Byte order in the result follows (per-octet) character order in the
+                        string.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        an empty sequence.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.nonNumberChar">[bin:non-numeric-character]</a> is raised if <code>$in</code> cannot be
+                        parsed as an octal number.</p></div></dd><dt class="label">Examples</dt><dd><div class="exampleInner"><pre>bin:octal('11223047') =&gt; "JSYn"</pre></div></dd></dl></div><div class="div2">
+<h3><a name="to-octets" id="to-octets"></a>5.4 bin:to-octets</h3><dl><dt class="label">Summary</dt><dd><p>Returns binary data as a sequence of octets.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:to-octets</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary</code>)<code class="as"> as </code><code class="return-type">xs:integer*</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>If <code>$in</code> is a zero length binary data then the empty sequence is
+                        returned.</p><p>Octets are returned as integers from 0 to 255.</p></dd></dl></div><div class="div2">
+<h3><a name="from-octets" id="from-octets"></a>5.5 bin:from-octets</h3><dl><dt class="label">Summary</dt><dd><p>Converts a sequence of octets into binary data.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:from-octets</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:integer*</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>Octets are integers from 0 to 255.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        zero-sized binary data.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.largeOctet">[bin:octet-out-of-range]</a> is raised if one of the octets lies outside
+                        the range 0 - 255. </p></div></dd></dl></div></div><div class="div1">
+<h2><a name="basic-operations" id="basic-operations"></a>6 Basic operations</h2><div class="div2">
+<h3><a name="length" id="length"></a>6.1 bin:length</h3><dl><dt class="label">Summary</dt><dd><p>The <code>bin:length</code> function returns the size of binary data in
+                        octets.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:length</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary</code>)<code class="as"> as </code><code class="return-type">xs:integer</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>Returns the size of binary data in octets.</p></dd></dl></div><div class="div2"><div class="diff-chg">
+<h3><a name="part" id="part"></a>6.2 bin:part</h3></div><dl><dt class="label">Summary</dt><dd><div class="diff-chg"><p>The <code>bin:part</code> function returns a specified part of binary
+                        data.</p></div></dd><dt class="label"><span class="diff-chg">Signatures</span></dt><dd><div class="diff-chg"><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:part</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary?</code>, <code class="arg">$offset</code><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:part</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary?</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></td></tr></table></div></div></p></div></dd><dt class="label">Rules</dt><dd><p>Returns a section of binary data starting at the <code>$offset</code> octet.
+                        If <code>$size</code> is defined, the size of the returned binary data is
+                           <code>$size</code> octets. If <code>$size</code> is absent, all remaining
+                        data from <code>$offset</code> is returned.</p><p>The <code>$offset</code> is zero based.</p><p>The values of <code>$offset</code> and <code>$size</code>
+                        <strong>must</strong> be non-negative integers.</p><div class="diff-chg"><p>It is a dynamic error if <code>$offset</code> + <code>$size</code> is larger
+                        than the size of the binary data in <code>$in</code>.</p></div><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        an empty sequence.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.offsetNegative">[bin:negative-offset]</a> is raised if <code>$offset</code> is
+                        negative.</p><p><a href="#error.sizeNegative">[bin:negative-size]</a> is raised if <code>$size</code> is
+                        negative.</p><p><a href="#error.offsetBeyondEnd">[bin:offset-beyond-end]</a> is raised if <code>$offset +
+                           $size</code> extends beyond the binary data of <code>$in</code>.</p></div></dd><dt class="label">Notes</dt><dd><p>Note that <code>fn:subsequence()</code> and <code>fn:substring()</code>
+                        <a href="#">[fo11]</a> both use <code>xs:double</code> for offset and size –
+                        this is a legacy from XPath 1.0.</p></dd><dt class="label">Examples</dt><dd><p>Testing whether <code>$data</code> variable starts with binary content
+                        consistent with a PDF file:</p><div class="diff-chg"><div class="exampleInner"><pre class="diff-chg">bin:part($data, 0, 4) eq bin:hex("25504446")</pre></div></div><p><code>25504446</code> is the magic number for PDF files: it is the US-ASCII
+                        encoded hexadecimal value for <code>%PDF</code>.</p></dd></dl></div><div class="div2">
+<h3><a name="join" id="join"></a>6.3 bin:join</h3><dl><dt class="label">Summary</dt><dd><p>Returns the binary data created by concatenating the binary data items in a
+                        sequence.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:join</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary*</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>The function returns an <code>xs:base64Binary</code> created by
+                        concatenating the items in the sequence <code>$in</code>, in order.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        a binary item containing no data bytes.</p></dd></dl></div><div class="diff-add"><div class="div2">
+<h3><a name="insert-before" id="insert-before"></a>6.4 bin:insert-before</h3><dl><dt class="label"><span class="diff-add">Summary</span></dt><dd><div class="diff-add"><p>The <code>bin:insert-before</code> function inserts additional binary data
+                        at a given point in other binary data.</p></div></dd><dt class="label"><span class="diff-add">Signature</span></dt><dd><div class="diff-add"><p><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:insert-before</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary?</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$extra</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary?</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></td></tr></table></div></div></p></div></dd><dt class="label"><span class="diff-add">Rules</span></dt><dd><div class="diff-add"><p>Returns binary data consisting sequentially of the data from
+                           <code>$in</code> upto and including the <code>$offset - 1</code> octet,
+                        followed by all the data from <code>$extra</code>, and then the remaining
+                        data from <code>$in</code>.</p><p>The <code>$offset</code> is zero based.</p><p>The value of <code>$offset</code>
+                        <strong>must</strong> be a non-negative integer.</p><p>It is a dynamic error if <code>$offset</code> is larger than the size of the
+                        binary data in <code>$in</code>.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        an empty sequence.</p><p>If the value of <code>$extra</code> is the empty sequence, the function
+                        returns <code>$in</code>.</p></div></dd><dt class="label"><span class="diff-add">Error Conditions</span></dt><dd><div class="diff-add"><p><a href="#error.offsetNegative">[bin:negative-offset]</a> is raised if <code>$offset</code> is
+                        negative.</p><p><a href="#error.offsetBeyondEnd">[bin:offset-beyond-end]</a> is raised if <code>$offset</code>
+                        extends beyond the binary data of <code>$in</code>.</p></div></dd><dt class="label"><span class="diff-add">Notes</span></dt><dd><div class="diff-add"><p>Note that under non-error conditions the function is equivalent to:</p><div class="exampleInner"><pre>bin:join((bin:part($in,0,$offset - 1),$extra,bin:part($in,$offset)))</pre></div></div></dd></dl></div></div><div class="div2">
+<h3><a name="pad-left" id="pad-left"></a>6.5 bin:pad-left</h3><dl><dt class="label">Summary</dt><dd><p>Returns the binary data created by padding <code>$in</code> with
+                           <code>$size</code> octets from the left. The padding octet values are
+                           <code>$octet</code> or zero if omitted.</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:pad-left</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary?</code>, <code class="arg">$size</code><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:pad-left</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary?</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$octet</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><p>The function returns an <code>xs:base64Binary</code> created by padding the
+                        input with <code>$size</code> octets <em>in front of</em> the input. If
+                           <code>$octet</code> is specified, the padding octets each have that
+                        value, otherwise they are blank.</p><p><code>$size</code>
+                        <strong>must</strong> be a non-negative integer.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        an empty sequence.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.sizeNegative">[bin:negative-size]</a> is raised if <code>$size</code> is
+                        negative.</p><p><a href="#error.largeOctet">[bin:octet-out-of-range]</a> is raised if <code>$octet</code> lies
+                        outside the range 0 - 255. </p></div></dd><dt class="label">Notes</dt><dd><p>Padding with a non-zero octet value can also be accomplished by the XPath
+                        expressions:</p><div class="exampleInner"><pre>bin:join(($in, bin:from-octets((1 to $pad-length) ! $pad-octet))) [XPath 3.0]</pre></div><div class="diff-add"><div class="exampleInner"><pre class="diff-add">bin:join(($in, bin:from-octets(for $ i in (1 to $pad-length) return $pad-octet))) [XPath 2.0]</pre></div></div></dd></dl></div><div class="div2">
+<h3><a name="pad-right" id="pad-right"></a>6.6 bin:pad-right</h3><dl><dt class="label">Summary</dt><dd><p>Returns the binary data created by padding <code>$in</code> with
+                           <code>$size</code> blank octets from the right. The padding octet values
+                        are <code>$octet</code> or zero if omitted.</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:pad-right</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary?</code>, <code class="arg">$size</code><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:pad-right</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary?</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$octet</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><p>The function returns an <code>xs:base64Binary</code> created by padding the
+                        input with <code>$size</code> blank octets <em>after</em> the input. If
+                           <code>$octet</code> is specified, the padding octets each have that
+                        value, otherwise they are blank.</p><p><code>$size</code>
+                        <strong>must</strong> be a non-negative integer.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        an empty sequence.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.sizeNegative">[bin:negative-size]</a> is raised if <code>$size</code> is
+                        negative.</p><p><a href="#error.largeOctet">[bin:octet-out-of-range]</a> is raised if <code>$octet</code> lies
+                        outside the range 0 - 255. </p></div></dd><dt class="label">Notes</dt><dd><p>Padding with a non-zero octet value can also be accomplished by the XPath
+                        expressions:</p><div class="exampleInner"><pre>bin:join((bin:from-octets((1 to $pad-length) ! $pad-octet),$in))  [XPath 3.0]</pre></div><div class="diff-add"><div class="exampleInner"><pre class="diff-add">bin:join((bin:from-octets(for $ i in (1 to $pad-length) return $pad-octet),$in))  [XPath 2.0]</pre></div></div></dd></dl></div><div class="div2">
+<h3><a name="find" id="find"></a>6.7 bin:find</h3><dl><dt class="label">Summary</dt><dd><p>Returns the first location in <code>$in</code> of <code>$search</code>,
+                        starting at the <code>$offset</code> octet.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:find</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary?</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$search</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary</code>)<code class="as"> as </code><code class="return-type">xs:integer?</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><p>The function returns the first location of the binary search sequence in the
+                        input, or if not found, the empty sequence.</p><p>The search sequence cannot be 'empty'.</p><p>The value of <code>$offset</code>
+                        <strong>must</strong> be a non-negative integer.</p><p>The <code>$offset</code> is zero based.</p><p>The returned location is zero based.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        an empty sequence.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.offsetNegative">[bin:negative-offset]</a> is raised if <code>$offset</code> is
+                        negative.</p><p><a href="#error.offsetBeyondEnd">[bin:offset-beyond-end]</a> is raised if <code>$offset</code>
+                        extends beyond the binary data of <code>$input</code>.</p><p><a href="#error.emptySearch">[bin:empty-search-item]</a> is raised if <code>$search</code> is empty
+                        binary data.</p></div></dd><dt class="label">Notes</dt><dd><p>Finding all the matches can be accomplished with simple recursive
+                        application:</p><div class="exampleInner"><pre>
+&lt;xsl:function name="bin:find-all" as="xs:integer*"&gt;
+     &lt;xsl:param name="data" as="xs:base64Binary?"/&gt;
+     &lt;xsl:param name="offset" as="xs:integer"/&gt;
+     &lt;xsl:param name="pattern" as="xs:base64Binary"/&gt;
+     &lt;xsl:sequence
+         select="let $found := bin:find($data,$offset,$pattern) return
+         if($found) then ($found,
+             if($found + 1 lt bin:length($data)) then bin:find-all($data,$found + 1,$pattern) else ())
+             else ()"/&gt;
+&lt;/xsl:function&gt;</pre></div></dd></dl></div></div><div class="div1">
+<h2><a name="text-encoding" id="text-encoding"></a>7 Text decoding and encoding</h2><div class="div2">
+<h3><a name="decode-string" id="decode-string"></a>7.1 bin:decode-string</h3><dl><dt class="label">Summary</dt><dd><p>Decodes binary data as a string in a given encoding.</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:decode-string</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary?</code>, <code class="arg">$encoding</code><code class="as"> as </code><code class="type">xs:string</code>)<code class="as"> as </code><code class="return-type">xs:string?</code></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:decode-string</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary?</code>,</td></tr><tr><td valign="baseline"><code class="arg">$encoding</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:string</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:string?</code></td></tr></table></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="4"><code class="function">bin:decode-string</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary?</code>,</td></tr><tr><td valign="baseline"><code class="arg">$encoding</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:string</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:string?</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><p>If <code>$offset</code> and <code>$size</code> are provided, the
+                           <code>$size</code> octets from <code>$offset</code> are decoded. If
+                           <code>$offset</code> alone is provided, octets from <code>$offset</code>
+                        to the end are decoded, otherwise the entire octet sequence is used.</p><p>The <code>$encoding</code> argument is the name of an encoding. The values
+                        for this attribute follow the same rules as for the <code>encoding</code>
+                        attribute in an XML declaration. The only values which every implementation
+                        is <strong>required</strong> to recognize are <code>utf-8</code> and
+                           <code>utf-16</code>.</p><p>The values of <code>$offset</code> and <code>$size</code>
+                        <strong>must</strong> be non-negative integers.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        an empty sequence.</p><p><code>$offset</code> is zero based.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.offsetNegative">[bin:negative-offset]</a> is raised if <code>$offset</code> is
+                        negative.</p><p><a href="#error.sizeNegative">[bin:negative-size]</a> is raised if <code>$size</code> is
+                        negative.</p><p><a href="#error.offsetBeyondEnd">[bin:offset-beyond-end]</a> is raised if <code>$offset</code> +
+                           <code>$size</code> - 1 extends beyond the binary data of
+                        <code>$in</code>.</p><p><a href="#error.unknownEncoding">[bin:unknown-encoding]</a> is raised if <code>$encoding</code> is
+                        invalid or not supported by the implementation.</p><p><a href="#error.encoding">[bin:decoding-error]</a> is raised if there is an error or malformed
+                        input during decoding the string. Additional information about the error may
+                        be passed though suitable error reporting mechanisms - this is
+                        implementation-dependant.</p></div></dd><dt class="label">Examples</dt><dd><p>Testing whether <code>$data</code> variable starts with binary content
+                        consistent with a PDF file:</p><div class="exampleInner"><pre>bin:decode-string($data, 'UTF-8', 0, 4) eq '%PDF'</pre></div><p>The first four characters of a PDF file are <code>'%PDF'</code>.</p></dd></dl></div><div class="div2">
+<h3><a name="encode-string" id="encode-string"></a>7.2 bin:encode-string</h3><dl><dt class="label">Summary</dt><dd><p>Encodes a string into binary data using a given encoding.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:encode-string</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:string?</code>, <code class="arg">$encoding</code><code class="as"> as </code><code class="type">xs:string</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>The <code>$encoding</code> argument is the name of an encoding. The values
+                        for this attribute follow the same rules as for the <code>encoding</code>
+                        attribute in an XML declaration. The only values which every implementation
+                        is <strong>required</strong> to recognize are <code>utf-8</code> and
+                           <code>utf-16</code>.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        an empty sequence.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.encoding">[bin:decoding-error]</a> is raised if <code>$encoding</code> is
+                        invalid or not supported by the implementation.</p></div></dd></dl></div></div><div class="div1">
+<h2><a name="numeric-packing" id="numeric-packing"></a>8 Packing and unpacking of encoded numeric values</h2><div class="div2">
+<h3><a name="endianness" id="endianness"></a>8.1 Number 'endianness'</h3><div class="diff-chg"><p>Packing and unpacking numeric values can be performed in 'most-significant-first'
+               ('big-endian') or 'least-significant-first' ('little-endian') octet order. The
+               default is <em>'most-significant-first'</em>. The functions have an optional parameter
+                  <code>$octet-order</code> whose string value controls the order.
+               Least-significant-first order is indicated by any of the values
+                  <code>least-significant-first</code>, <code>little-endian</code> or
+                  <code>LE</code>. Most-significant-first order is indicated by any of the values
+                  <code>most-significant-first</code>, <code>big-endian</code> or
+               <code>BE</code>.</p></div></div><div class="div2">
+<h3><a name="integer" id="integer"></a>8.2 Integer representation</h3><p></p><p>Integers within binary data are represented, or assumed to be represented, as an
+               integral number of octets. Integers where <code>$length</code> is greater than 8
+               octets (and thus not representable as a <code>long</code>) might be expected in some
+               situations, e.g. encryption. Whether the range of integers is limited to
+                  <code>±2^63</code> may be implementation-dependant.</p></div><div class="div2">
+<h3><a name="floating" id="floating"></a>8.3 Representation of floating point numbers</h3><p>Care should be taken with the packing and unpacking of floating point numbers
+                  (<code>xs:float</code> and <code>xs:double</code>). The binary representations are
+               expected to correspond with those of the IEEE single/double-precision 32/64-bit
+               floating point types <a href="#ieee754">[IEEE 754-1985]</a>. Consequently they will occupy 4 or 8
+               octets when packed.</p><p>Positive and negative infinities are supported. <code>INF</code> maps to <code>0x7f80
+                  0000</code> (float), <code>0x7ff0 0000 0000 0000</code> (double).
+                  <code>-INF</code> maps to <code>0xff80 0000</code> (float), <code>0xfff0 0000 0000
+                  0000</code> (double).</p><div class="diff-chg"><p>Negative zero (<code>0x8000 0000 0000 0000</code> double, <code>0x8000 0000</code>
+               float) encountered during unpacking will yield negative zero forms (e.g.
+                  <code>-xs:double(0.0)</code>) and negative zeros will be written as a result of
+               packing.</p></div><div class="diff-chg"><p><a href="#xmlschema1.1">[XML Schema 1.1 Part 2]</a> provides only one form of NaN which corresponds to a
+               'quiet' NaN with zero payload of <a href="#ieee754">[IEEE 754-1985]</a> with forms <code>0x7fc0
+                  0000</code> (float), <code>0x7ff8 0000 0000 0000</code> (double). These are the
+               bit forms that will be packed. 'Signalling' NaN values (<code>0x7f80 0001</code>
+               -&gt; <code>0x7fbf ffff</code> or <code>0xff80 0001</code> -&gt; <code>0xffbf
+                  ffff</code>, <code>0x7ff0 0000 0000 0001</code> -&gt; <code>0x7ff7 ffff ffff
+                  ffff</code> or <code>0xfff0 0000 0000 0001</code> -&gt; <code>0xfff7 ffff ffff
+                  ffff</code>) encountered during unpacking will be replaced by 'quiet' NaN. Any
+               low-order payload in a unpacked quiet NaN is also zeroed. </p></div></div><div class="div2">
+<h3><a name="pack-double" id="pack-double"></a>8.4 bin:pack-double</h3><dl><dt class="label">Summary</dt><dd><p>Returns the 8-octet binary representation of a <a href="http://www.w3.org/TR/xmlschema-2/#double">double</a> value.</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:pack-double</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:double</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:pack-double</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:double</code>, <code class="arg">$octet-order</code><code class="as"> as </code><code class="type">xs:string</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div></p></dd><dt class="label">Rules</dt><dd><div class="diff-chg"><p>Most-significant-octet-first number representation is assumed unless the
+                           <code>$octet-order</code> parameter is specified. Acceptable values for
+                           <code>$octet-order</code> are described in <a href="#endianness"><b>8.1 Number 'endianness'</b></a>.</p></div><p>The binary representation will correspond with that of the IEEE
+                        double-precision 64-bit floating point type <a href="#ieee754">[IEEE 754-1985]</a>. For
+                        more details see <a href="#floating"><b>8.3 Representation of floating point numbers</b></a>.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.endianness">[bin:unknown-significance-order]</a> is raised if the value
+                           <code>$octet-order</code> is unrecognized.</p></div></dd></dl></div><div class="div2">
+<h3><a name="pack-float" id="pack-float"></a>8.5 bin:pack-float</h3><dl><dt class="label">Summary</dt><dd><p>Returns the 4-octet binary representation of a <a href="http://www.w3.org/TR/xmlschema-2/#float">float</a> value.</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:pack-float</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:float</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:pack-float</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:float</code>, <code class="arg">$octet-order</code><code class="as"> as </code><code class="type">xs:string</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div></p></dd><dt class="label">Rules</dt><dd><div class="diff-chg"><p>Most-significant-octet-first number representation is assumed unless the
+                           <code>$octet-order</code> parameter is specified. Acceptable values for
+                           <code>$octet-order</code> are described in <a href="#endianness"><b>8.1 Number 'endianness'</b></a>.</p></div><p>The binary representation will correspond with that of the IEEE
+                        single-precision 32-bit floating point type <a href="#ieee754">[IEEE 754-1985]</a>. For
+                        more details see <a href="#floating"><b>8.3 Representation of floating point numbers</b></a>.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.endianness">[bin:unknown-significance-order]</a> is raised if the value
+                           <code>$octet-order</code> is unrecognized.</p></div></dd></dl></div><div class="div2">
+<h3><a name="pack-integer" id="pack-integer"></a>8.6 bin:pack-integer</h3><dl><dt class="label">Summary</dt><dd><p>Returns the <em>twos-complement</em> binary representation of an integer
+                        value treated as <code>$size</code> octets long. Any 'excess' high-order
+                        bits are discarded.</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:pack-integer</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:integer</code>, <code class="arg">$size</code><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:pack-integer</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$octet-order</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:string</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><div class="diff-chg"><p>Most-significant-octet-first number representation is assumed unless the
+                           <code>$octet-order</code> parameter is specified. Acceptable values for
+                           <code>$octet-order</code> are described in <a href="#endianness"><b>8.1 Number 'endianness'</b></a>.</p></div><p>Specifying a <code>$size</code> of zero yields an empty binary data.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.endianness">[bin:unknown-significance-order]</a> is raised if the value
+                           <code>$octet-order</code> is unrecognized.</p><p><a href="#error.sizeNegative">[bin:negative-size]</a> is raised if <code>$size</code> is
+                        negative.</p></div></dd><dt class="label">Notes</dt><dd><p>If the integer being packed has a maximum precision of <code>$size</code>
+                        octets, then signed/unsigned versions are not necessary. If the data is
+                        considered unsigned, then the most significant bit of the bottom
+                           <code>$size</code> octets has a normal positive (<code>2^(8 *$size -
+                           1)</code>) meaning. If it is considered to be a signed value, then the
+                        MSB and all the higher order, discarded bits will be '1' for a negative
+                        value and '0' for a positive or zero. If this function were to check the
+                        'sizing' of the supplied integer against the packing size, then any values
+                        of MSB and the discarded higher order bits other than 'all 1' or 'all 0'
+                        would constitute an error. <em>This function does not perfom such
+                           checking.</em></p></dd></dl></div><div class="div2">
+<h3><a name="unpack-double" id="unpack-double"></a>8.7 bin:unpack-double</h3><dl><dt class="label">Summary</dt><dd><p>Extract <a href="http://www.w3.org/TR/xmlschema-2/#double">double</a>
+                        value stored at the particular offset in binary data.</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:unpack-double</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary</code>, <code class="arg">$offset</code><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:double</code></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:unpack-double</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$octet-order</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:string</code>)<code class="as"> as </code><code class="return-type">xs:double</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><div class="diff-chg"><p>Most-significant-octet-first number representation is assumed unless the
+                           <code>$octet-order</code> parameter is specified. Acceptable values for
+                           <code>$octet-order</code> are described in <a href="#endianness"><b>8.1 Number 'endianness'</b></a>.</p></div><p>The value of <code>$offset</code>
+                        <strong>must</strong> be a non-negative integer.</p><p>The <code>$offset</code> is zero based.</p><p>The binary representation is expected to correspond with that of the IEEE
+                        double-precision 64-bit floating point type <a href="#ieee754">[IEEE 754-1985]</a>. For
+                        more details see <a href="#floating"><b>8.3 Representation of floating point numbers</b></a>.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.offsetNegative">[bin:negative-offset]</a> is raised if <code>$offset</code> is
+                        negative.</p><p><a href="#error.offsetBeyondEnd">[bin:offset-beyond-end]</a> is raised if <code>$offset</code> +
+                           <code>7</code> (octet-length of <code class="type">xs:double</code> - 1) extends
+                        beyond the binary data of <code>$in</code>.</p><p><a href="#error.endianness">[bin:unknown-significance-order]</a> is raised if the value
+                           <code>$octet-order</code> is unrecognized.</p></div></dd></dl></div><div class="div2">
+<h3><a name="unpack-float" id="unpack-float"></a>8.8 bin:unpack-float</h3><dl><dt class="label">Summary</dt><dd><p>Extract <a href="http://www.w3.org/TR/xmlschema-2/#float">float</a>
+                        value stored at the particular offset in binary data.</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:unpack-float</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary</code>, <code class="arg">$offset</code><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:float</code></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:unpack-float</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$octet-order</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:string</code>)<code class="as"> as </code><code class="return-type">xs:float</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><div class="diff-chg"><p>Most-significant-octet-first number representation is assumed unless the the
+                           <code>$octet-order</code> parameter is specified. Acceptable values for
+                           <code>$octet-order</code> are described in <a href="#endianness"><b>8.1 Number 'endianness'</b></a>.</p></div><p>The value of <code>$offset</code>
+                        <strong>must</strong> be a non-negative integer.</p><p>The <code>$offset</code> is zero based.</p><p>The binary representation is expected to correspond with that of the IEEE
+                        single-precision 32-bit floating point type <a href="#ieee754">[IEEE 754-1985]</a>. For
+                        more details see <a href="#floating"><b>8.3 Representation of floating point numbers</b></a>.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.offsetNegative">[bin:negative-offset]</a> is raised if <code>$offset</code> is
+                        negative.</p><p><a href="#error.offsetBeyondEnd">[bin:offset-beyond-end]</a> is raised if <code>$offset</code> +
+                           <code>3</code> (octet-length of <code class="type">xs:float</code> - 1) extends
+                        beyond the binary data of <code>$in</code>.</p><p><a href="#error.endianness">[bin:unknown-significance-order]</a> is raised if the value
+                           <code>$octet-order</code> is unrecognized.</p></div></dd></dl></div><div class="div2">
+<h3><a name="unpack-signed-integer" id="unpack-signed-integer"></a>8.9 bin:unpack-signed-integer</h3><dl><dt class="label">Summary</dt><dd><p>Returns a signed integer value represented by the <code>$size</code> octets
+                        starting from <code>$offset</code> in the input binary representation.
+                        Necessary sign extension is performed (i.e. the result is negative if the
+                        high order bit is '1').</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:unpack-signed-integer</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:integer</code></td></tr></table></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="4"><code class="function">bin:unpack-signed-integer</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$octet-order</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:string</code>)<code class="as"> as </code><code class="return-type">xs:integer</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><div class="diff-chg"><p>Most-significant-octet-first number representation is assumed unless the
+                           <code>$octet-order</code> parameter is specified. Acceptable values for
+                           <code>$octet-order</code> are described in <a href="#endianness"><b>8.1 Number 'endianness'</b></a>.</p></div><p>The values of <code>$offset</code> and <code>$size</code>
+                        <strong>must</strong> be non-negative integers.</p><p><code>$offset</code> is zero based.</p><p>Specifying a <code>$size</code> of zero yields the integer
+                        <code>0</code>.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.offsetNegative">[bin:negative-offset]</a> is raised if <code>$offset</code> is
+                        negative.</p><p><a href="#error.sizeNegative">[bin:negative-size]</a> is raised if <code>$size</code> is
+                        negative.</p><p><a href="#error.offsetBeyondEnd">[bin:offset-beyond-end]</a> is raised if <code>$offset</code> +
+                           <code>$size</code> - 1 extends beyond the binary data of
+                        <code>$in</code>.</p><p><a href="#error.endianness">[bin:unknown-significance-order]</a> is raised if the value
+                           <code>$octet-order</code> is unrecognized.</p></div></dd><dt class="label">Notes</dt><dd><p>For discussion on integer range see <a href="#integer"><b>8.2 Integer representation</b></a>.</p></dd></dl></div><div class="div2">
+<h3><a name="unpack-unsigned-integer" id="unpack-unsigned-integer"></a>8.10 bin:unpack-unsigned-integer</h3><dl><dt class="label">Summary</dt><dd><p>Returns an unsigned integer value represented by the <code>$size</code>
+                        octets starting from <code>$offset</code> in the input binary
+                        representation.</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:unpack-unsigned-integer</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:integer</code></td></tr></table></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="4"><code class="function">bin:unpack-unsigned-integer</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$octet-order</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:string</code>)<code class="as"> as </code><code class="return-type">xs:integer</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><div class="diff-chg"><p>Most-significant-octet-first number representation is assumed unless the
+                           <code>$octet-order</code> parameter is specified. Acceptable values for
+                           <code>$octet-order</code> are described in <a href="#endianness"><b>8.1 Number 'endianness'</b></a>.</p></div><p>The values of <code>$offset</code> and <code>$size</code>
+                        <strong>must</strong> be non-negative integers.</p><p>The <code>$offset</code> is zero based.</p><p>Specifying a <code>$size</code> of zero yields the integer
+                        <code>0</code>.</p></dd><dt class="label"><span class="diff-chg">Error Conditions</span></dt><dd><div class="diff-chg"><p><a href="#error.offsetNegative">[bin:negative-offset]</a> is raised if <code>$offset</code> is
+                        negative.</p><p><a href="#error.sizeNegative">[bin:negative-size]</a> is raised if <code>$size</code> is
+                        negative.</p><p><a href="#error.offsetBeyondEnd">[bin:offset-beyond-end]</a> is raised if <code>$offset</code> +
+                           <code>$size</code> - 1 extends beyond the binary data of
+                        <code>$in</code>.</p><p><a href="#error.endianness">[bin:unknown-significance-order]</a> is raised if the value
+                           <code>$octet-order</code> is unrecognized.</p></div></dd><dt class="label">Notes</dt><dd><p>For discussion on integer range see <a href="#integer"><b>8.2 Integer representation</b></a>.</p></dd></dl></div></div><div class="div1">
+<h2><a name="bitwise" id="bitwise"></a>9 Bitwise operations</h2><div class="div2">
+<h3><a name="or" id="or"></a>9.1 bin:or</h3><dl><dt class="label">Summary</dt><dd><p>Returns the "bitwise or" of two binary arguments.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:or</code>(<code class="arg">$a</code><code class="as"> as </code><code class="type">xs:base64Binary</code>, <code class="arg">$b</code><code class="as"> as </code><code class="type">xs:base64Binary</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>Returns "bitwise or" applied between <code>$a</code> and
+                        <code>$b</code>.</p></dd><dt class="label">Error Conditions</dt><dd><p><a href="#error.differentLengthArguments">[bin:differing-length-arguments]</a> is raised if the input
+                        arguments are of differing length.</p></dd></dl></div><div class="div2">
+<h3><a name="xor" id="xor"></a>9.2 bin:xor</h3><dl><dt class="label">Summary</dt><dd><p>Returns the "bitwise xor" of two binary arguments.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:xor</code>(<code class="arg">$a</code><code class="as"> as </code><code class="type">xs:base64Binary</code>, <code class="arg">$b</code><code class="as"> as </code><code class="type">xs:base64Binary</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>Returns "bitwise exclusive or" applied between <code>$a</code> and
+                           <code>$b</code>.</p></dd><dt class="label">Error Conditions</dt><dd><p><a href="#error.differentLengthArguments">[bin:differing-length-arguments]</a> is raised if the input
+                        arguments are of differing length.</p></dd></dl></div><div class="div2">
+<h3><a name="and" id="and"></a>9.3 bin:and</h3><dl><dt class="label">Summary</dt><dd><p>Returns the "bitwise and" of two binary arguments.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:and</code>(<code class="arg">$a</code><code class="as"> as </code><code class="type">xs:base64Binary</code>, <code class="arg">$b</code><code class="as"> as </code><code class="type">xs:base64Binary</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>Returns "bitwise and" applied between <code>$a</code> and
+                        <code>$b</code>.</p></dd><dt class="label">Error Conditions</dt><dd><p><a href="#error.differentLengthArguments">[bin:differing-length-arguments]</a> is raised if the input
+                        arguments are of differing length.</p></dd></dl></div><div class="div2">
+<h3><a name="not" id="not"></a>9.4 bin:not</h3><dl><dt class="label">Summary</dt><dd><p>Returns the "bitwise not" of a binary argument.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:not</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>Returns "bitwise not" applied to <code>$in</code>.</p></dd></dl></div><div class="div2">
+<h3><a name="shift" id="shift"></a>9.5 bin:shift</h3><dl><dt class="label">Summary</dt><dd><p>Shift bits in binary data.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:shift</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary?</code>, <code class="arg">$by</code><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>If <code>$by</code> is positive then bits are shifted <code>$by</code> times
+                        to the left.</p><p>If <code>$by</code> is negative then bits are shifted <code>-$by</code>
+                        times to the right.</p><p>If <code>$by</code> is zero, the result is identical to
+                        <code>$in</code>.</p><p>If <code>|$by|</code> is greater than the bit-length of <code>$in</code>
+                        then an all-zeros result, of the same length as <code>$in</code>, is
+                        returned.</p><p>The result always has the same size as <code>$in</code>.</p><p>The shifting is logical: zeros are placed into discarded bits.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
+                        an empty sequence.</p></dd><dt class="label">Notes</dt><dd><p>Bit shifting across byte boundaries implies 'big-endian' treatment, i.e. the
+                        leftmost (high-order) bit when shifted left becomes the low-order bit of the
+                        preceding byte.</p></dd></dl></div></div></div><div class="back"><div class="div1">
+<h2><a name="references" id="references"></a>A References</h2><dl><dt class="label"><a name="expathfile" id="expathfile"></a>EXPathFile</dt><dd>
+               <a href="http://expath.org/spec/file">File Module</a>. Christian Grün and
+               Matthias Brantner, editors. EXPath Candidate Module. 14 June 2012.</dd><dt class="label"><span class="diff-chg"><a name="fo30"></a>F&amp;O 3.0</span></dt><dd><div class="diff-chg">
+               <a href="http://www.w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and
+                  Operators 3.0</a>. Michael Kay, editor. W3C Candidate Recommendation 21 May
+               2013.</div></dd><dt class="label"><span class="diff-chg"><a name="xmlschema1.1"></a>XML Schema 1.1 Part 2</span></dt><dd><div class="diff-chg">
+               <a href="http://www.w3.org/TR/xmlschema11-2/">W3C XML Schema Definition Language
+                  (XSD) 1.1 Part 2: Datatypes</a>. David Peterson et al, editors.W3C
+               Recommendation 5 April 2012.</div></dd><dt class="label"><a name="ieee754" id="ieee754"></a>IEEE 754-1985</dt><dd>IEEE Standard for Binary Floating-Point
+               Arithmetic. See <a href="http://standards.ieee.org/reading/ieee/std_public/description/busarch/754-1985_desc.html">http://standards.ieee.org/reading/ieee/std_public/description/busarch/754-1985_desc.html</a></dd><dt class="label"><a name="asn1" id="asn1"></a>ASN.1</dt><dd> OSI networking and system aspects – Abstract Syntax
+               Notation One (ASN.1) – see <a href="http://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf">ASN.1
+                  encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding
+                  Rules (CER) and Distinguished Encoding Rules (DER) </a>. ITU-T X.690 (07/2002) </dd></dl></div><div class="div1">
+<h2><a name="errors" id="errors"></a>B Summary of Error Conditions</h2><div class="diff-chg"><dl><dt class="label"><a name="error.differentLengthArguments" id="error.differentLengthArguments"></a>bin:differing-length-arguments</dt><dd>The
+               arguments to a bitwise operation are differing lengths.</dd><dt class="label"><a name="error.offsetNegative" id="error.offsetNegative"></a>bin:negative-offset</dt><dd>Attempting to retrieve data
+               before the start of a binary data type.</dd><dt class="label"><a name="error.offsetBeyondEnd" id="error.offsetBeyondEnd"></a>bin:offset-beyond-end</dt><dd>Attempting to retrieve data
+               beyond the end of a binary data type.</dd><dt class="label"><a name="error.sizeNegative" id="error.sizeNegative"></a>bin:negative-size</dt><dd>Size of binary portion, required
+               numeric size or padding is negative.</dd><dt class="label"><a name="error.emptySearch" id="error.emptySearch"></a>bin:empty-search-item</dt><dd>Binary search item is
+               empty.</dd><dt class="label"><a name="error.largeOctet" id="error.largeOctet"></a>bin:octet-out-of-range</dt><dd>Attempting to pack binary value
+               with octet outside range.</dd><dt class="label"><a name="error.nonNumberChar" id="error.nonNumberChar"></a>bin:non-numeric-character</dt><dd>Wrong character in binary
+               'numeric constructor' string.</dd><dt class="label"><a name="error.unknownEncoding" id="error.unknownEncoding"></a>bin:unknown-encoding</dt><dd>The specified encoding is
+               not supported.</dd><dt class="label"><a name="error.encoding" id="error.encoding"></a>bin:decoding-error</dt><dd>Error in decoding string.</dd><dt class="label"><a name="error.endianness" id="error.endianness"></a>bin:unknown-significance-order</dt><dd>Unknown octet-order
+               value.</dd></dl></div></div></div><script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+         </script><script type="text/javascript">
+            try {
+               var pageTracker = _gat._getTracker("UA-5463082-2");
+               pageTracker._trackPageview();
+            } catch(err) {}
+         </script></body></html>
