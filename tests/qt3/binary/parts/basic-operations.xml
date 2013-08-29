@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-file-basic-operations">
+    <description>Tests for the basic binary operation extension functions in the EXPath "binary"
+        package. Note the tests are written on the assumption that the "working directory" for
+        resolving relative filenames is the directory containing this test catalog
+        file.</description>
+
+    <expand name="binary-part">
+        <created by="John Lumley" on="2013-07-18"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>Part of an empty sequence</description>
+            <test> bin:part((),0) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Part with negative offset</description>
+            <test> bin:part($man.base,-1) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Part with negative size</description>
+            <test> bin:part($man.base,0,-1) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}negative-size"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Part: offset beyond end of input</description>
+            <test> bin:part($man.base,3) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Part: end beyond end of input</description>
+            <test> bin:part($man.base,2,2) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+            </result>
+        </test-case>
+    </expand>
+
+    <expand name="binary-join">
+        <created by="John Lumley" on="2013-07-18"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>Join of an empty sequence</description>
+            <test> bin:join(()) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Join of two sequences</description>
+            <test> bin:join(($man.base,$man.base)) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("TWFuTWFu")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Join with type mismatch sequences</description>
+            <test> bin:join(($man.base,123)) </test>
+            <result>
+                <error code="Q{http://www.w3.org/2005/xqt-errors.}XPTY0004"/>
+            </result>
+        </test-case>
+    </expand>
+
+    <expand name="binary-insert-before">
+        <created by="John Lumley" on="2013-08-06"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>Insert-before with an empty sequence</description>
+            <test> bin:insert-before((),0,$man.base) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Insert-before with negative offset</description>
+            <test> bin:insert-before($man.base,-1,$man.base) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
+            </result>
+        </test-case>
+
+        <test-case>
+            <description>Insert-before: offset beyond end of input</description>
+            <test> bin:insert-before($man.base,4,$man.base) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Insert-before with an empty extra</description>
+            <test> bin:insert-before($man.base,0,()) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("TWFu")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Insert-before of two sequences</description>
+            <test> bin:insert-before($man.base,0,$man.base) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("TWFuTWFu")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Insert-before of two sequences</description>
+            <test> bin:to-octets(bin:insert-before($man.base,2,$man.base)) </test>
+            <result>
+                <all-of>
+                    <assert-deep-eq>(77,97,77,97,110,110)</assert-deep-eq>
+                </all-of>
+            </result>
+        </test-case>
+
+    </expand>
+
+    <expand name="binary-pad-left">
+        <created by="John Lumley" on="2013-07-18"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>Pad left on an empty sequence</description>
+            <test> bin:pad-left((),2) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-left with negative size</description>
+            <test> bin:pad-left($man.base,-1) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}negative-size"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-left with negative octet</description>
+            <test> bin:pad-left($man.base,1,-3) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}octet-out-of-range"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-left with large octet</description>
+            <test> bin:pad-left($man.base,1,333) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}octet-out-of-range"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-left with zero size</description>
+            <test> bin:pad-left($man.base,0) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-string-value>TWFu</assert-string-value>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-left by 3 octets</description>
+            <test> bin:pad-left($man.base,3) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("AAAATWFu")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-left by 1 octet</description>
+            <test> bin:pad-left($man.base,1) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("AE1hbg==")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-left by 1 octet with non-zero padding</description>
+            <test> bin:to-octets(bin:pad-left($man.base,1,12)) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:integer*</assert-type>
+                    <assert-deep-eq>(12,77,97,110)</assert-deep-eq>
+                </all-of>
+            </result>
+        </test-case>
+    </expand>
+
+    <expand name="binary-pad-right">
+        <created by="John Lumley" on="2013-07-18"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>Pad right on an empty sequence</description>
+            <test> bin:pad-right((),2) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-right with negative size</description>
+            <test> bin:pad-right($man.base,-1) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}negative-size"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-right with negative octet</description>
+            <test> bin:pad-right($man.base,1,-3) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}octet-out-of-range"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-right with large octet</description>
+            <test> bin:pad-right($man.base,1,333) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}octet-out-of-range"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-right with zero size</description>
+            <test> bin:pad-right($man.base,0) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("TWFu")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-right by 3 octets</description>
+            <test> bin:pad-right($man.base,3) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("TWFuAAAA")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-right by 1 octet</description>
+            <test> bin:pad-right($man.base,1) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("TWFuAA==")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Pad-right by 1 octet with non-zero padding</description>
+            <test> bin:to-octets(bin:pad-right($man.base,1,12)) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:integer*</assert-type>
+                    <assert-deep-eq>(77,97,110,12)</assert-deep-eq>
+                </all-of>
+            </result>
+        </test-case>
+    </expand>
+
+    <expand name="binary-find">
+        <created by="John Lumley" on="2013-07-18"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>find on an empty sequence</description>
+            <test> bin:find((),0,xs:base64Binary("TWFuAAAA")) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>find with an empty search sequence</description>
+            <test> bin:find(xs:base64Binary("TWFuAAAA"),0,xs:base64Binary("")) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}empty-search-item"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>find with negative offset</description>
+            <test> bin:find(xs:base64Binary("AE1hbg=="),-1,xs:base64Binary("TWFu")) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>find with offset beyond input</description>
+            <test> bin:find(xs:base64Binary("AE1hbg=="),5,xs:base64Binary("TWFu")) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>find with search sequence absent from target</description>
+            <test> bin:find(xs:base64Binary("AE1hbg=="),2,xs:base64Binary("TWFu")) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>find under normal operation</description>
+            <test> bin:find(xs:base64Binary("AE1hbg=="),0,xs:base64Binary("TWFu")) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:integer</assert-type>
+                    <assert-eq>1</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>find under normal operation</description>
+            <test> bin:find(xs:base64Binary("TWFuAA=="),0,xs:base64Binary("TWFu")) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:integer</assert-type>
+                    <assert-eq>0</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+    </expand>
+</test-set>

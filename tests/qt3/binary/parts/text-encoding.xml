@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-file-text-encoding">
+    <description>Tests for the text encoding extension functions in the EXPath "binary" package.
+        Note the tests are written on the assumption that the "working directory" for resolving
+        relative filenames is the directory containing this test catalog file.</description>
+
+    <expand name="binary-encode-string">
+        <created by="John Lumley" on="2013-07-18"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>encode-string on an empty string</description>
+            <test> bin:encode-string("","utf-8") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>encode-string with unknown encoding</description>
+            <test> bin:encode-string("","NOTutf-8") </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}unknown-encoding"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>encode-string on a non-empty string</description>
+            <test> bin:encode-string("AêñüC","utf-8") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("QcOqw7HDvEM=")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>encode-string on a non-empty string, converted to octets</description>
+            <test> bin:to-octets(bin:encode-string("AêñüC","utf-8")) </test>
+            <result>
+                <assert-deep-eq>(65,195,170,195,177,195,188,67)</assert-deep-eq>
+            </result>
+        </test-case>
+        <test-case>
+            <description>encode-string on a non-empty string - UTF-16 - no control over
+                BOM</description>
+            <test> xs:hexBinary(bin:encode-string("This is UTF-16","utf-16")) </test>
+            <result>
+                <assert-eq>xs:hexBinary("feff00540068006900730020006900730020005500540046002d00310036")</assert-eq>
+            </result>
+        </test-case>
+        <test-case>
+            <description>encode-string on a non-empty string - UTF-16 - no control over
+                BOM</description>
+            <test> xs:hexBinary(bin:encode-string("Ğ","utf-16")) </test>
+            <result>
+                <assert-eq>xs:hexBinary("feff011e")</assert-eq>
+            </result>
+        </test-case>
+    </expand>
+
+    <expand name="binary-decode-string">
+        <created by="John Lumley" on="2013-07-19"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>decode-string on an empty sequence</description>
+            <test> bin:decode-string((),"utf-8") </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string on empty binary data</description>
+            <test> bin:decode-string($empty.bin,"utf-8") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string</assert-type>
+                    <assert-eq>""</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string with unknown encoding</description>
+            <test> bin:decode-string($empty.bin,"NOTutf-8") </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}unknown-encoding"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string on non-empty binary data</description>
+            <test> bin:decode-string(bin:encode-string("Simple £ text","utf-8"),"utf-8") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string</assert-type>
+                    <assert-eq>"Simple £ text"</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string on non-empty binary data</description>
+            <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string</assert-type>
+                    <assert-eq>"AêñüC"</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string on non-empty binary data, converted from octets</description>
+            <test> bin:decode-string(bin:from-octets((65,195,170,195,177,195,188,67)),"utf-8") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string</assert-type>
+                    <assert-eq>"AêñüC"</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string with offset</description>
+            <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8",3) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string</assert-type>
+                    <assert-eq>"ñüC"</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string with offset and size</description>
+            <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8",3,4) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string</assert-type>
+                    <assert-eq>"ñü"</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string with negative offset</description>
+            <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8",-3,4) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string with negative size</description>
+            <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8",3,-4) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}negative-size"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string with offset+size beyond data</description>
+            <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8",3,6) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string with code phasing mismatch in UTF-8</description>
+            <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8",2) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}decoding-error"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string on non-empty binary data in UTF-16</description>
+            <test>
+                bin:decode-string(xs:base64Binary(xs:hexBinary("feff00540068006900730020006900730020005500540046002d00310036")),"utf-16") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string</assert-type>
+                    <assert-eq>"This is UTF-16"</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string on non-empty binary data in UTF-16 with big-endian BOM</description>
+            <test> bin:decode-string(xs:base64Binary(xs:hexBinary("feff011e")),"utf-16") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string</assert-type>
+                    <assert-eq>"Ğ"</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>decode-string on non-empty binary data in UTF-16 with little endian
+                BOM</description>
+            <test> bin:decode-string(xs:base64Binary(xs:hexBinary("fffe1e01")),"utf-16") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string</assert-type>
+                    <assert-eq>"Ğ"</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+    </expand>
+</test-set>

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-binary">
+    <description>Tests for the extension functions in the EXPath "binary" package. Note the tests
+        are written on the assumption that the "working directory" for resolving relative filenames
+        is the directory containing this test catalog file.</description>
+    <link type="spec" document="http://expath.org/spec/binary"/>
+
+
+    <environment name="binary">
+        <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
+        <namespace prefix="binJAVA" uri="java:org.expath.ns.binary.EXPathBinary"/>
+        <namespace prefix="err" uri="http://expath.org/ns/binary"/>
+        <param name="empty.bin" select="xs:base64Binary('')"/>
+        <!-- 'Man' in base64 - 3 octets, 4 characters -->
+        <param name="man.base" select="xs:base64Binary('TWFu')"/>
+        <param name="man.octets" select="77,97,110"/>
+    </environment>
+
+    <test-case name="binary-length-001">
+        <description>Use length on an empty value</description>
+        <created by="Michael Kay" on="2013-07-11"/>
+        <environment ref="binary"/>
+        <test> bin:length(xs:base64Binary("")) </test>
+        <result>
+            <assert-eq>0</assert-eq>
+        </result>
+    </test-case>
+    <test-case name="binary-length-002">
+        <description>Use length on an quadruple octet value</description>
+        <created by="John Lumley" on="2013-07-16"/>
+        <environment ref="binary"/>
+        <test> bin:length(xs:base64Binary(xs:hexBinary("face1234"))) </test>
+        <result>
+            <all-of>
+                <assert-type>xs:integer</assert-type>
+                <assert-eq>4</assert-eq>
+            </all-of>
+        </result>
+    </test-case>
+
+
+    <expand name="binary-from-octets">
+        <created by="John Lumley" on="2013-07-18"/>
+        <environment ref="binary"/>
+        <test-case name="binary-from-octets-001">
+            <description>Generate a zero-length binary from an empty set of octets</description>
+            <test> bin:from-octets(()) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Generate a 4-length binary from a triple of octets</description>
+            <test> bin:from-octets($man.octets) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("TWFu")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Negative integer outside octet range in binary construction</description>
+            <test> bin:from-octets((-77,97,110)) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}octet-out-of-range"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Positive integer outside octet range in binary construction</description>
+            <test> bin:from-octets((277,97,110)) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}octet-out-of-range"/>
+            </result>
+        </test-case>
+    </expand>
+
+    <expand name="binary-to-octets">
+        <created by="John Lumley" on="2013-07-18"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>Octets from a zero-length binary</description>
+            <test> bin:to-octets(xs:base64Binary("")) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Generate octets from a 4-length</description>
+            <test> bin:to-octets($man.base) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:integer*</assert-type>
+                    <assert-deep-eq>(77,97,110)</assert-deep-eq>
+                </all-of>
+            </result>
+        </test-case>
+    </expand>
+
+    <expand name="binary-hex">
+        <created by="John Lumley" on="2013-07-18"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>Generate a zero-length binary from an empty hex string</description>
+            <test> bin:hex("") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>hex - Generate an empty sequence from an empty sequence</description>
+            <test> bin:hex(()) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Generate a binary from a two-multiple hex string</description>
+            <test> bin:hex("4D616E") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("TWFu")</assert-eq>
+                    <assert-eq>xs:base64Binary(xs:hexBinary("4D616E"))</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Generate a binary from a non-two-multiple hex string</description>
+            <test> bin:hex("D616E") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("DWFu")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Parsing error in hex string</description>
+            <test> bin:hex("4X616E") </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}non-numeric-character"/>
+            </result>
+        </test-case>
+    </expand>
+    <expand name="binary-bin">
+        <created by="John Lumley" on="2013-07-18"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>Generate a zero-length binary from an empty binary string</description>
+            <test> bin:bin("") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bin - Generate an empty sequence from an empty sequence</description>
+            <test> bin:bin(()) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Generate a binary from an eight-multiple binary string</description>
+            <test> bin:bin("010011010110000101101110") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("TWFu")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Generate a binary from a non-eight-multiple binary string</description>
+            <test> bin:bin("011010110000101101110") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("DWFu")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Parsing error in binary string</description>
+            <test> bin:bin("0100a1010110000101101110") </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}non-numeric-character"/>
+            </result>
+        </test-case>
+    </expand>
+    <expand name="binary-octal">
+        <created by="John Lumley" on="2013-07-18"/>
+        <environment ref="binary"/>
+        <test-case>
+            <description>Generate a zero-length binary from an empty octal string</description>
+            <test> bin:octal("") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>octal - Generate an empty sequence from an empty sequence</description>
+            <test> bin:octal(()) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Generate a binary from byte-aligned octal string</description>
+            <test> bin:octal("23260556") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("TWFu")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Generate a binary from a non-byte-aligned string</description>
+            <test> bin:octal("3260556") </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary("DWFu")</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Parsing error in octal string</description>
+            <test> bin:octal("8260556") </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}non-numeric-character"/>
+            </result>
+        </test-case>
+    </expand>
+
+
+
+    <?include parts/basic-operations.xml?>
+    <?include parts/text-encoding.xml?>
+    <?include parts/numeric-packing.xml?>
+    <?include parts/bitwise.xml?>
+
+
+
+</test-set>
