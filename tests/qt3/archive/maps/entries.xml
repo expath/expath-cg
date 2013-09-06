@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-archive"
+    xmlns:file="http://expath.org/ns/file">
+    <description>Tests for the extension functions in the EXPath "archive" package. Note the tests
+        are written on the assumption that the "working directory" for resolving relative filenames
+        is the directory containing this test catalog file.</description>
+    <link type="spec" document="http://expath.org/spec/archive"/>
+
+
+    <expand name="entries-map">
+        <created by="John Lumley" on="2013-08-28"/>
+        <environment ref="archive-map"/>
+        <test-case>
+            <description>Count entries in a one-entry zip</description>
+            <test>
+                arch:entries-map($test1.ZIP)
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>map(xs:string,map(xs:string,item()*))</assert-type>
+                    <assert-count>1</assert-count>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Count entries in a multi-entry zip</description>
+            <test> 
+                map:keys(arch:entries-map($test3.ZIP))
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string*</assert-type>
+                    <assert-count>3</assert-count>
+                    <assert-permutation>'textA.txt','textB.txt','textC.txt'</assert-permutation>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Size from a map</description>
+            <test> 
+                arch:entries-map($test3.ZIP)('textA.txt')('size')
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:integer</assert-type>
+                    <assert-eq>14</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Required properties set</description>
+            <test> 
+                map:keys(arch:entries-map($test3.ZIP)('textA.txt'))
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string*</assert-type>
+                    <assert-permutation>'size','compressed-size','last-modified','compression'</assert-permutation>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Required properties set - with content</description>
+            <test> 
+                map:keys(arch:entries-map($test3.ZIP,true())('textA.txt'))
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string*</assert-type>
+                    <assert-permutation>'content','size','compressed-size','last-modified','compression'</assert-permutation>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Type of content</description>
+            <test> 
+                arch:entries-map($test3.ZIP,true())('textA.txt')('content')
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-count>1</assert-count>
+                </all-of>
+            </result>
+        </test-case>
+
+        <!--<test-case>
+            <description>Read error for a ZIP file</description>
+            <test> arch:entries($test1.ZIP.BROKEN) </test>
+            <result>
+                <error code="arch:read-error"/>
+            </result>
+        </test-case>-->
+    </expand>
+
+</test-set>

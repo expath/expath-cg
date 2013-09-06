@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-archive"
+    xmlns:file="http://expath.org/ns/file">
+    <description>Tests for the extension functions in the EXPath "archive" package. Note the tests
+        are written on the assumption that the "working directory" for resolving relative filenames
+        is the directory containing this test catalog file.</description>
+    <link type="spec" document="http://expath.org/spec/archive"/>
+
+
+    <expand name="extract-binary-map">
+        <created by="John Lumley" on="2013-08-28"/>
+        <environment ref="archive-map"/>
+        <test-case>
+            <description>Unknown entry</description>
+            <test>
+                arch:extract-binary-map($test1.ZIP,$unknown.test1)
+            </test>
+            <result>
+                <error code="arch:unknown-entry"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Known entry</description>
+            <test>
+                arch:extract-binary-map($test1.ZIP,$known.test1)
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-count>1</assert-count>
+                </all-of>
+            </result>
+        </test-case>
+
+    </expand>
+
+    <expand name="extract-text-map">
+        <created by="John Lumley" on="2013-08-28"/>
+        <environment ref="archive-map"/>
+        <test-case>
+            <description>Unknown entry</description>
+            <test>
+                arch:extract-text-map($test1.ZIP,$unknown.test1)
+            </test>
+            <result>
+                <error code="arch:unknown-entry"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Checking default coding, and lower/upper case</description>
+            <test>
+                arch:extract-text-map($test1.ZIP,$known.test1)
+                = arch:extract-text-map($test1.ZIP,$known.test1,'UTF-8') and
+                arch:extract-text-map($test1.ZIP,$known.test1)
+                = arch:extract-text-map($test1.ZIP,$known.test1,'utf-8')
+            </test>
+            <result>
+                <assert-true/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Checking unknown coding</description>
+            <test>
+               arch:extract-text-map($test1.ZIP,$known.test1,'NOT-UTF-8')
+            </test>
+            <result>
+                <error code="arch:unknown-encoding"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Checking with known coding</description>
+            <test>
+               arch:extract-text-map($test1.ZIP,$known.test1)
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string</assert-type>
+                    <assert-eq>'Some text here'</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+    </expand>
+
+</test-set>

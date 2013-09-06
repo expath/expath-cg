@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-archive"
+    xmlns:file="http://expath.org/ns/file" xmlns:arch="http://expath.org/ns/archive">
+    <description>Tests for the extension functions in the EXPath "archive" package. Note the tests
+        are written on the assumption that the "working directory" for resolving relative filenames
+        is the directory containing this test catalog file.</description>
+    <link type="spec" document="http://expath.org/spec/archive"/>
+
+
+    <expand name="options-map">
+        <created by="John Lumley" on="2013-08-28"/>
+        <environment ref="archive-map"/>
+        <test-case>
+            <description>Options for a ZIP file</description>
+            <test>
+                arch:options-map($test1.ZIP)
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>map(xs:string,item()*)</assert-type>
+                    <assert-count>1</assert-count>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Required properties set</description>
+            <test> 
+                map:keys(arch:options-map($test3.ZIP))
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string*</assert-type>
+                    <assert-permutation>'format','compression'</assert-permutation>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Format for a ZIP file</description>
+            <test> 
+                arch:options-map($test1.ZIP)('format')
+            </test>
+            <result>
+                <assert-eq>'zip'</assert-eq>
+            </result>
+        </test-case>
+        <test-case>
+            <description>compression for a ZIP file</description>
+            <test> 
+                arch:options-map($test1.ZIP)('compression')
+            </test>
+            <result>
+                <assert-eq>'stored'</assert-eq>
+            </result>
+        </test-case>
+        <!--<test-case>
+            <description>Read error for a ZIP file</description>
+            <test> 
+                arch:options-map($test1.ZIP.BROKEN)
+            </test>
+            <result>
+                <error code="arch:read-error"/>
+            </result>
+        </test-case>-->
+    </expand>
+
+</test-set>

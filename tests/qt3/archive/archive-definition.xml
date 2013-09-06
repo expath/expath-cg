@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-archive"
+    xmlns:file="http://expath.org/ns/file" xmlns:map="http://www.w3.org/2005/xpath-functions/map">
+    <description>Tests for the extension functions in the EXPath "archive" package. Note the tests
+        are written on the assumption that the "working directory" for resolving relative filenames
+        is the directory containing this test catalog file.</description>
+    <link type="spec" document="http://expath.org/spec/archive"/>
+
+
+    <environment name="archive">
+        <namespace prefix="arch" uri="http://expath.org/ns/archive"/>
+        <!--<namespace prefix="arch" uri="java:org.expath.ns.archive.EXPathA.Archive"/>-->
+        <namespace prefix="file" uri="http://expath.org/ns/file"/>
+        <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
+        <!--<namespace prefix="bin" uri="java:org.expath.ns.binary.EXPathBinary"/>-->
+
+
+        <param name="test1.ZIP" select="file:read-binary('sandpit/test1.zip')"/>
+        <param name="test1.ZIP.BROKEN" select="bin:part(file:read-binary('sandpit/test1.zip'),4,50)"/>
+        <param name="test3.ZIP" select="file:read-binary('sandpit/test3.zip')"/>
+
+        <param name="textA" select="'textA.txt'"/>
+
+        <param name="simple.Text" select="bin:encode-string('A simple string','UTF-8')"/>
+        <param name="empty.bin" select="xs:base64Binary('')"/>
+    </environment>
+
+    <environment name="archive-map">
+        <namespace prefix="arch" uri="http://expath.org/ns/archive"/>
+        <!--<namespace prefix="arch" uri="java:org.expath.ns.archive.EXPathA.Archive"/>-->
+        <namespace prefix="file" uri="http://expath.org/ns/file"/>
+        <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
+        <!--<namespace prefix="bin" uri="java:org.expath.ns.binary.EXPathBinary"/>-->
+        <namespace prefix="map" uri="http://www.w3.org/2005/xpath-functions/map"/>
+
+
+        <param name="test1.ZIP" select="file:read-binary('sandpit/test1.zip')"/>
+        <param name="test1.ZIP.BROKEN" select="bin:part(file:read-binary('sandpit/test1.zip'),4,50)"/>
+        <param name="test3.ZIP" select="file:read-binary('sandpit/test3.zip')"/>
+
+        <param name="textA" select="'textA.txt'"/>
+        <param name="known.test1" select="map:new(map:entry('textA.txt',()))"/>
+        <param name="unknown.test1" select="map:new(map:entry('foo',()))"/>
+        <!--<param name="map" select="map{'foo' : 1}"/>-->
+        <param name="simple.Text.string" select="'A simple string'"/>
+        <!-- <param name="simple.Text.map"
+            select="map { 
+            'simple.Text' : map{'content' :bin:encode-string('A simple string','UTF-8')}
+            }"/>-->
+        <param name="simple.Text.map"
+            select="map:new(map:entry('simple.Text',map:new(map:entry('content',bin:encode-string('A simple string','UTF-8'))
+            )))"/>
+        <param name="empty.bin" select="xs:base64Binary('')"/>
+    </environment>
+
+    <?include parts/options.xml?>
+    <?include parts/entries.xml?>
+    <?include parts/extraction.xml?>
+    <?include parts/updating.xml?>
+
+    <?include maps/options.xml?>
+    <?include maps/entries.xml?>
+    <?include maps/extraction.xml?>
+    <?include maps/updating.xml?>
+
+
+</test-set>

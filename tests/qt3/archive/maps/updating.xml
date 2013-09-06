@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-archive"
+    xmlns:file="http://expath.org/ns/file">
+    <description>Tests for the extension functions in the EXPath "archive" package. Note the tests
+        are written on the assumption that the "working directory" for resolving relative filenames
+        is the directory containing this test catalog file.</description>
+    <link type="spec" document="http://expath.org/spec/archive"/>
+
+
+    <expand name="delete-map">
+        <created by="John Lumley" on="2013-08-28"/>
+        <environment ref="archive-map"/>
+        <test-case>
+            <description>Delete entry from a one-entry zip</description>
+            <test>
+                arch:delete-map(arch:create-map($simple.Text.map),'simple.Text')
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-count>1</assert-count>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Deletion with empty deletion request</description>
+            <test>
+                let $a := arch:create-map($simple.Text.map)
+                 return arch:delete-map($a,()) = $a
+            </test>
+            <result>
+                <assert-true/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Delete the only entry from a one-entry zip</description>
+            <test>
+                map:keys(arch:entries-map(
+                arch:delete-map(arch:create-map($simple.Text.map),$simple.Text.map)
+                ))
+            </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <!--<test-case>
+            <description>Delete entry from a one-entry zip</description>
+            <test>
+                arch:entries(arch:delete($test1.ZIP,($textA)))
+            </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Delete unknown entry from a one-entry zip</description>
+            <test>
+                arch:delete($test1.ZIP,('textNOTTHERE.txt'))
+            </test>
+            <result>
+                <error code="arch:read-error"/>
+            </result>
+        </test-case>-->
+    </expand>
+
+    <expand name="update-map">
+        <created by="John Lumley" on="2013-08-28"/>
+        <environment ref="archive-map"/>
+        <test-case>
+            <description>Update entry in a one-entry zip</description>
+            <test>
+                arch:update-map($test1.ZIP,$simple.Text.map)
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-count>1</assert-count>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Update entry in a one-entry zip - new entry</description>
+            <test> 
+                map:keys(arch:entries-map(arch:update-map($test1.ZIP,$simple.Text.map)))
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:string*</assert-type>
+                    <assert-count>2</assert-count>
+                    <assert-permutation>('textA.txt','simple.Text')</assert-permutation>
+                </all-of>
+            </result>
+        </test-case>
+        <!--<test-case>
+            <description>Update entry in a one-entry zip - already there </description>
+            <test>
+                for $ e in arch:entries(arch:update($test1.ZIP,$textA,$simple.Text))
+                return string($e) 
+            </test>
+            <result>
+                <assert-permutation>('textA.txt')</assert-permutation>
+            </result>
+        </test-case>
+        
+        <test-case>
+            <description>Update entry in a one-entry zip - new entry </description>
+            <test>
+                for $ e in arch:entries(arch:update($test1.ZIP,'new.txt',$simple.Text))
+                return string($e)
+            </test>
+            <result>
+                <assert-permutation>('new.txt','textA.txt')</assert-permutation>
+            </result>
+        </test-case>
+        <test-case>
+            <description>Update entry in a one-entry zip - new entry </description>
+            <test>
+                arch:extract-binary(arch:update($test1.ZIP,'new.txt',$simple.Text),'new.txt')
+                =  $simple.Text
+            </test>
+            <result>
+                <assert-true/>
+            </result>
+        </test-case>-->
+    </expand>
+
+    <expand name="create-map">
+        <created by="John Lumley" on="2013-08-28"/>
+        <environment ref="archive-map"/>
+        <test-case>
+            <description>Create a one-entry ZIP</description>
+            <test> 
+                arch:create-map($simple.Text.map)
+            </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-count>1</assert-count>
+                </all-of>
+            </result>
+        </test-case>
+        <!--<test-case>
+            <description>Create a one-entry ZIP</description>
+            <test> 
+                arch:extract-binary(arch:create('new.txt',$simple.Text),'new.txt')
+                = $simple.Text
+            </test>
+            <result>
+                <assert-true/>
+            </result>
+        </test-case>-->
+    </expand>
+
+</test-set>
