@@ -167,7 +167,9 @@
         <test-case>
             <description>decode-string on non-empty binary data in UTF-16</description>
             <test>
-                bin:decode-string(xs:base64Binary(xs:hexBinary("feff00540068006900730020006900730020005500540046002d00310036")),"utf-16") </test>
+                bin:decode-string(xs:base64Binary(
+                xs:hexBinary("feff00540068006900730020006900730020005500540046002d00310036")),
+                "utf-16") </test>
             <result>
                 <all-of>
                     <assert-type>xs:string</assert-type>

@@ -113,7 +113,7 @@
             </result>
         </test-case>
         <test-case>
-            <description>Insert-before of two sequences</description>
+            <description>Insert-before of two sequences with zero offset</description>
             <test> bin:insert-before($man.base,0,$man.base) </test>
             <result>
                 <all-of>

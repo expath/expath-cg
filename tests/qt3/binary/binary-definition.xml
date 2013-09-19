@@ -163,7 +163,7 @@
             </result>
         </test-case>
         <test-case>
-            <description>bin - Generate an empty sequence from an empty sequence</description>
+            <description>Generate an empty sequence from an empty sequence</description>
             <test> bin:bin(()) </test>
             <result>
                 <assert-empty/>
