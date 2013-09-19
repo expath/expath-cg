@@ -46,26 +46,15 @@ div.exampleHeader { font-weight: bold;
             td.diff-del   { text-decoration: line-through }
             td.diff-chg   { background-color: #99FF99; }
             td.diff-off   {  }
-            
-            pre.diff-add { background-color: #FFFF99; }
-            pre.diff-del { text-decoration: line-through; }
-            pre.diff-chg { background-color: #99FF99; }
-            pre.diff-off {  }
-            
          
-      
-      code.function { font-weight: bold; }
-      code.type { font-style: italic; }
-      body {
-        background-image: url(http://expath.org/images/logo-candidate.png);
-      }
-   </style></head><body><div><p>The presentation of this document has been augmented to
+       code.function { font-weight: bold; }
+      code.type { font-style: italic; } body { background-image: url(http://expath.org/images/logo-candidate.png); } </style></head><body><div><p>The presentation of this document has been augmented to
             identify changes from a previous version. Three kinds of changes
             are highlighted: <span class="diff-add">new, added text</span>,
             <span class="diff-chg">changed text</span>, and
             <span class="diff-del">deleted text</span>.</p><hr /></div><p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p><div class="head">
 <h1><a name="title" id="title"></a>Binary Module</h1>
-<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 27 August 2013</h2><dl><dt>This version:</dt><dd>
+<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 6 September 2013</h2><dl><dt>This version:</dt><dd>
          <a href="http://expath.org/spec/binary/editor">http://expath.org/spec/binary/editor</a>
       </dd><dt>Latest version:</dt><dd>
          <a href="http://expath.org/spec/binary">http://expath.org/spec/binary</a>
@@ -294,9 +283,10 @@ B <a href="#errors">Summary of Error Conditions</a><br />
                         <strong>must</strong> be a non-negative integer.</p><p>It is a dynamic error if <code>$offset</code> is larger than the size of the
                         binary data in <code>$in</code>.</p><p>If the value of <code>$in</code> is the empty sequence, the function returns
                         an empty sequence.</p><p>If the value of <code>$extra</code> is the empty sequence, the function
-                        returns <code>$in</code>.</p></div></dd><dt class="label"><span class="diff-add">Error Conditions</span></dt><dd><div class="diff-add"><p><a href="#error.offsetNegative">[bin:negative-offset]</a> is raised if <code>$offset</code> is
+                        returns <code>$in</code>.</p><div class="diff-add"><p>If <code>$offset eq 0</code> the result is the binary concatenation of <code>$in</code>
+                        and <code>$extra</code>.</p></div></div></dd><dt class="label"><span class="diff-add">Error Conditions</span></dt><dd><div class="diff-add"><p><a href="#error.offsetNegative">[bin:negative-offset]</a> is raised if <code>$offset</code> is
                         negative.</p><p><a href="#error.offsetBeyondEnd">[bin:offset-beyond-end]</a> is raised if <code>$offset</code>
-                        extends beyond the binary data of <code>$in</code>.</p></div></dd><dt class="label"><span class="diff-add">Notes</span></dt><dd><div class="diff-add"><p>Note that under non-error conditions the function is equivalent to:</p><div class="exampleInner"><pre>bin:join((bin:part($in,0,$offset - 1),$extra,bin:part($in,$offset)))</pre></div></div></dd></dl></div></div><div class="div2">
+                        extends beyond the binary data of <code>$in</code>.</p></div></dd><dt class="label"><span class="diff-add">Notes</span></dt><dd><div class="diff-add"><div class="diff-chg"><p>Note that under non-error conditions and when <code>$offset gt 0</code> the function is equivalent to:</p></div><div class="exampleInner"><pre>bin:join((bin:part($in,0,$offset - 1),$extra,bin:part($in,$offset)))</pre></div></div></dd></dl></div></div><div class="div2">
 <h3><a name="pad-left" id="pad-left"></a>6.5 bin:pad-left</h3><dl><dt class="label">Summary</dt><dd><p>Returns the binary data created by padding <code>$in</code> with
                            <code>$size</code> octets from the left. The padding octet values are
                            <code>$octet</code> or zero if omitted.</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">bin:pad-left</code>(<code class="arg">$in</code><code class="as"> as </code><code class="type">xs:base64Binary?</code>, <code class="arg">$size</code><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:pad-left</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary?</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$octet</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary?</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><p>The function returns an <code>xs:base64Binary</code> created by padding the

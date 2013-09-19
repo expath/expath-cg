@@ -1,0 +1,12 @@
+#! bash
+sSrc="C:/Users/jwl/Desktop/SaxonicaWS/Saxon95"
+java="java -classpath $sSrc/lib/*;$sSrc/*" 
+echo $java
+saxon="$java  -Xms64m -Xmx512m net.sf.saxon.Transform"
+$saxon -xsl:style/merge-function-specs.xsl -s:src/binary.xml -o:src/binary-expanded.xml
+$saxon -xsl:style/merge-function-specs.xsl -s:src/20130731/binary.xml -o:src/20130731/binary-expanded.xml
+$saxon -xsl:style/xmlspec2html.xsl -s:src/binary-expanded.xml -o:html/binary.html
+
+$saxon -xsl:tools/doc/genSaxonDoc.xsl -s:doc/functions-binary.xml -o:doc/functions-binary-expanded.xml
+echo FINISHED
+read PAUSE

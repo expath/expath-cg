@@ -8,7 +8,8 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
 
-   <xsl:import href="http://w3.org/2002/xmlspec/xmlspec.xsl"/>
+  <xsl:import href="../../xmlspec/src/xmlspec.xsl"/>
+  <!-- <xsl:import href="http://w3.org/2002/xmlspec/xmlspec.xsl"/>-->
    <xsl:import href="shared.xsl"/>
 
    <pkg:import-uri>http://expath.org/ns/xmlspec/xmlspec.xsl</pkg:import-uri>

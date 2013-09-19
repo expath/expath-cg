@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://www.w3.org/1999/xhtml"
-                xmlns:spec="http://expath.org/ns/xmlspec"
-                xmlns:pkg="http://expath.org/ns/pkg"
-                exclude-result-prefixes="#all"
-                version="2.0">
+   xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://www.w3.org/1999/xhtml"
+   xmlns:spec="http://expath.org/ns/xmlspec" xmlns:pkg="http://expath.org/ns/pkg"
+   exclude-result-prefixes="#all" version="2.0">
 
-   <xsl:import href="http://w3.org/2002/xmlspec/diffspec.xsl"/>
+   <xsl:import href="../../xmlspec/src/diffspec.xsl"/>
+   <!-- <xsl:import href="http://w3.org/2002/xmlspec/diffspec.xsl"/>-->
    <xsl:import href="shared.xsl"/>
 
    <pkg:import-uri>http://expath.org/ns/xmlspec/diffspec.xsl</pkg:import-uri>
@@ -35,22 +33,19 @@
             td.diff-off   {  }
          </xsl:text>
       </xsl:if>
-      <!-- ...then the EXPath spec specific stuff. -->
-      code.function { font-weight: bold; }
-      code.type { font-style: italic; }
-      body {
-        <xsl:text>background-image: url(</xsl:text>
-        <xsl:value-of select="( $logo-offline[$offline], $logo )[1]"/>
-        <xsl:text>);</xsl:text>
-      }
-   </xsl:param>
+      <!-- ...then the EXPath spec specific stuff. --> code.function { font-weight: bold; }
+      code.type { font-style: italic; } body { <xsl:text>background-image: url(</xsl:text>
+      <xsl:value-of select="( $logo-offline[$offline], $logo )[1]"/>
+      <xsl:text>);</xsl:text> } </xsl:param>
 
    <!--
       Mode: postproc (extend it, defined in shared.xsl)
    -->
 
    <!-- replace div by span for locations in the header block -->
-   <xsl:template match="h:div[@class eq 'head']/h:dl/h:dd/h:div[@class = ('diff-add', 'diff-del', 'diff-chg')][h:a]" mode="postproc">
+   <xsl:template
+      match="h:div[@class eq 'head']/h:dl/h:dd/h:div[@class = ('diff-add', 'diff-del', 'diff-chg')][h:a]"
+      mode="postproc">
       <span>
          <xsl:copy-of select="@*"/>
          <xsl:apply-templates select="node()" mode="postproc"/>
@@ -59,7 +54,9 @@
 
    <!-- replace div by span for both links in: "This document is also available
         in these non-normative formats: |XML| and |Revision markup|." -->
-   <xsl:template match="h:div[@class eq 'head']/h:p/h:div[@class = ('diff-add', 'diff-del', 'diff-chg')][h:a]" mode="postproc">
+   <xsl:template
+      match="h:div[@class eq 'head']/h:p/h:div[@class = ('diff-add', 'diff-del', 'diff-chg')][h:a]"
+      mode="postproc">
       <span>
          <xsl:copy-of select="@*"/>
          <xsl:apply-templates select="node()" mode="postproc"/>

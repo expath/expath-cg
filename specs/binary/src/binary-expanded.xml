@@ -459,12 +459,15 @@
             sequence.</p>
          <p>If the value of <code>$extra</code> is the empty sequence, the function returns
                <code>$in</code>.</p>
+         <p>If <code>$offset eq 0</code> the result is the binary concatenation of <code>$in</code>
+            and <code>$extra</code>.</p>
       </def></gitem><gitem><label>Error Conditions</label><def>
          <p><bibref ref="error.offsetNegative"/> is raised if <code>$offset</code> is negative.</p>
          <p><bibref ref="error.offsetBeyondEnd"/> is raised if <code>$offset</code> extends beyond
             the binary data of <code>$in</code>.</p>
       </def></gitem><gitem><label>Notes</label><def>
-         <p>Note that under non-error conditions the function is equivalent to:</p>
+         <p>Note that under non-error conditions and when <code>$offset gt 0</code> the function is
+            equivalent to:</p>
          <eg>bin:join((bin:part($in,0,$offset - 1),$extra,bin:part($in,$offset)))</eg>
       </def></gitem></glist>
          </div2>
