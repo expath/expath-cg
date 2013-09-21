@@ -22,13 +22,42 @@
                     <element name="title">
                         <data type="string"/>
                     </element>
+                    <element name="home">
+                        <data type="anyURI"/>
+                    </element>
                     <zeroOrMore>
                         <ref name="dependency"/>
                     </zeroOrMore>
                     <zeroOrMore>
                         <choice>
                             <element name="xquery">
-                                <element name="namespace">
+                                <choice>
+                                    <element name="namespace">
+                                        <ref name="anyURI"/>
+                                    </element>
+                                    <element name="import-uri">
+                                        <ref name="anyURI"/>
+                                    </element>
+                                </choice>
+                                <element name="file">
+                                    <ref name="anyURI"/>
+                                </element>
+                            </element>
+                            <element name="dtd">
+                                <optional>
+                                    <element name="public-id">
+                                        <ref name="anyURI"/>
+                                    </element>
+                                </optional>
+                                <element name="system-id">
+                                    <ref name="anyURI"/>
+                                </element>
+                                <element name="file">
+                                    <ref name="anyURI"/>
+                                </element>
+                            </element>
+                            <element name="resource">
+                                <element name="public-uri">
                                     <ref name="anyURI"/>
                                 </element>
                                 <element name="file">
@@ -48,6 +77,12 @@
                                 <ref name="component-type"/>
                             </element>
                             <element name="rnc">
+                                <ref name="component-type"/>
+                            </element>
+                            <element name="schematron">
+                                <ref name="component-type"/>
+                            </element>
+                            <element name="nvdl">
                                 <ref name="component-type"/>
                             </element>
                         </choice>
@@ -85,12 +120,12 @@
                     </attribute>
                 </optional>
                 <optional>
-                    <attribute name="version">
+                    <attribute name="package">
                         <data type="token"/>
                     </attribute>
                 </optional>
                 <optional>
-                    <attribute name="name">
+                    <attribute name="processor">
                         <data type="anyURI"/>
                     </attribute>
                 </optional>

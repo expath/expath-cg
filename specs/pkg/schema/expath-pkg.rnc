@@ -12,14 +12,26 @@ start =
          element home { xsd:anyURI }?,
          dependency*,
          (element xquery {
-            element namespace { xsd:anyURI },
+            (element namespace { xsd:anyURI }
+             | element import-uri { xsd:anyURI }),
             element file { xsd:anyURI }
+          }
+          | element dtd {
+             element public-id { xsd:anyURI }?,
+             element system-id { xsd:anyURI },
+             element file { xsd:anyURI }
+          }
+          | element resource {
+             element public-uri { xsd:anyURI },
+             element file { xsd:anyURI }
           }
           | element xslt { component-type }
           | element xproc { component-type }
           | element xsd { component-type }
           | element rng { component-type }
-          | element rnc { component-type })*
+          | element rnc { component-type }
+          | element schematron { component-type }
+          | element nvdl { component-type })*
        })
 dependency =
   notAllowed
@@ -30,10 +42,9 @@ dependency =
       attribute versions {
         list { xsd:token* }
       }?,
-      attribute version { xsd:token }?,
-      attribute name { xsd:anyURI }?
+      attribute package { xsd:anyURI }?,
+      attribute processor { xsd:anyURI }?
     }
-anyURI = xsd:anyURI
 component-type =
   ((notAllowed
     | element import-uri { xsd:anyURI }),

@@ -10,12 +10,16 @@
             <xs:element name="home"  type="xs:anyURI" minOccurs="0"/>
             <xs:element ref="pkg:dependency" minOccurs="0" maxOccurs="unbounded"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
-               <xs:element name="xquery" type="pkg:query-type"/>
-               <xs:element name="xslt"   type="pkg:component-type"/>
-               <xs:element name="xproc"  type="pkg:component-type"/>
-               <xs:element name="xsd"    type="pkg:component-type"/>
-               <xs:element name="rng"    type="pkg:component-type"/>
-               <xs:element name="rnc"    type="pkg:component-type"/>
+               <xs:element name="xquery"     type="pkg:query-type"/>
+               <xs:element name="xslt"       type="pkg:component-type"/>
+               <xs:element name="xproc"      type="pkg:component-type"/>
+               <xs:element name="xsd"        type="pkg:component-type"/>
+               <xs:element name="rng"        type="pkg:component-type"/>
+               <xs:element name="rnc"        type="pkg:component-type"/>
+               <xs:element name="schematron" type="pkg:component-type"/>
+               <xs:element name="nvdl"       type="pkg:component-type"/>
+               <xs:element name="dtd"        type="pkg:dtd-type"/>
+               <xs:element name="resource"   type="pkg:resource-type"/>
             </xs:choice>
          </xs:sequence>
          <xs:attribute name="name"    type="xs:anyURI" use="required"/>
@@ -63,6 +67,21 @@
             <xs:element name="import-uri" type="xs:anyURI"/>
          </xs:choice>
          <xs:element name="file" type="xs:anyURI"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name="dtd-type">
+      <xs:sequence>
+         <xs:element name="public-id" type="xs:anyURI" minOccurs="0"/>
+         <xs:element name="system-id" type="xs:anyURI"/>
+         <xs:element name="file"      type="xs:anyURI"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name="resource-type">
+      <xs:sequence>
+         <xs:element name="public-uri" type="xs:anyURI"/>
+         <xs:element name="file"       type="xs:anyURI"/>
       </xs:sequence>
    </xs:complexType>
 
