@@ -290,7 +290,11 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
 <xsl:variable name="arch" select="file:read-binary($uri)"/>
 <xsl:variable name="entries" select="arch:entries($arch)"/>
 <xsl:variable name="dirs" select="$entries[ends-with(.,'/')]"/>
-<xsl:sequence select="for $d in $dirs return file:create-dir(replace($d,'/$',''))"/>
+<xsl:variable name="required.dirs"
+            select="for $r in distinct-values(($entries except $dirs) return
+            replace($r,'/[^/]+$','/'))[ends-with(.,'/')]"/>
+<xsl:sequence select="for $d in distinct-values(($required.dirs,$dirs))
+         return file:create-dir(replace($d,'/$',''))"/>
 <xsl:sequence select="for $f in ($entries except $dirs) 
         return file:write-binary($f,arch:extract-binary($arch,$f))"/>
 ]]></eg>
