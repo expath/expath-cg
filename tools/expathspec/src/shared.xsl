@@ -93,6 +93,42 @@
       </xsl:if>
    </xsl:template>
 
+   <!-- Add an empty anchor if KW has an @id... -->
+   <xsl:template match="kw[@id]">
+      <a id="{ @id }" name="{ @id }"/>
+      <xsl:next-match/>
+   </xsl:template>
+
+   <!-- ...and allows it to be used in a specref (to simulate a linkable formalpara). -->
+   <xsl:template match="specref">
+      <xsl:param name="target" select="key('ids', @ref)[1]"/>
+      <xsl:choose>
+         <xsl:when test="$target instance of element(kw)">
+            <xsl:apply-templates select="$target" mode="specref"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:next-match/>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+
+   <xsl:template match="kw" mode="specref">
+      <a>
+         <xsl:attribute name="href">
+            <xsl:call-template name="href.target"/>
+         </xsl:attribute>
+         <b>
+            <xsl:variable name="div" select="
+                ancestor::*[local-name(.) = ('div1', 'div2', 'div3', 'div4', 'div5')][1]"/>
+            <xsl:apply-templates select="$div" mode="divnum"/>
+            <xsl:apply-templates select="$div/head" mode="text"/>
+            <xsl:text> (</xsl:text>
+            <xsl:apply-templates select="." mode="text"/>
+            <xsl:text>)</xsl:text>
+         </b>
+      </a>
+   </xsl:template>
+
    <!-- EXPath specifics... -->
    <xsl:template match="spec:function">
       <code class="function">
