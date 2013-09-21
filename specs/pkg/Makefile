@@ -10,7 +10,7 @@
 XMLSPEC=http://expath.org/ns/xmlspec/xmlspec.xsl
 DIFFSPEC=http://expath.org/ns/xmlspec/diffspec.xsl
 
-latest: pkg-20120509.html pkg-20120509-diff.html
+editorial: pkg.html pkg-diff.html
 
 pkg.html: pkg.xml
 	saxon -xi -s:$< -xsl:$(XMLSPEC) > $@
