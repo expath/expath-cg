@@ -45,7 +45,7 @@
       </fos:errors>
       <fos:notes>
          <p>Note that <code>fn:subsequence()</code> and <code>fn:substring()</code>
-            <bibref ref="fo11"/> both use <code>xs:double</code> for offset and size – this is a
+            <bibref ref="fo30"/> both use <code>xs:double</code> for offset and size – this is a
             legacy from XPath 1.0.</p>
       </fos:notes>
       <fos:examples>

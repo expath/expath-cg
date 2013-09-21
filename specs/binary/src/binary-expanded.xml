@@ -29,10 +29,11 @@
          <year>2013</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/binary/editor"/>
+         <loc href="http://expath.org/spec/binary/20130920"/>
       </publoc>
       <altlocs>
-         <loc href="http://expath.org/spec/binary/editor.xml">XML</loc>
+         <loc href="http://expath.org/spec/binary/20130920.xml">XML</loc>
+         <loc href="http://expath.org/spec/binary/20130920/diff">Revision markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/binary"/>
@@ -413,7 +414,7 @@
             beyond the binary data of <code>$in</code>.</p>
       </def></gitem><gitem><label>Notes</label><def>
          <p>Note that <code>fn:subsequence()</code> and <code>fn:substring()</code>
-            <bibref ref="fo11"/> both use <code>xs:double</code> for offset and size – this is a
+            <bibref ref="fo30"/> both use <code>xs:double</code> for offset and size – this is a
             legacy from XPath 1.0.</p>
       </def></gitem><gitem><label>Examples</label><def>
          
