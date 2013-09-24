@@ -65,16 +65,16 @@ div.exampleHeader { font-weight: bold;
             also defined.</p></div><div class="toc">
 <h2><a name="contents" id="contents"></a>Table of Contents</h2><p class="toc">1 <a href="#status">Status of this document</a><br />
 2 <a href="#introduction">Introduction</a><br />
-    2.1 <a href="#d5e131">Namespace Conventions</a><br />
+    2.1 <a href="#d5e131">Namespace conventions</a><br />
     2.2 <a href="#d5e188">Error management</a><br />
     2.3 <a href="#type">Archive representation</a><br />
-    2.4 <a href="#archive.types">Archive Types</a><br />
+    2.4 <a href="#archive.types">Archive types</a><br />
 3 <a href="#use-cases">Use cases</a><br />
     3.1 <a href="#example.epub">Creating a simple EPUB document</a><br />
     3.2 <a href="#example.jar">Examining a JAR file</a><br />
     3.3 <a href="#example.zip">Extracting a ZIP archive to a file system</a><br />
 4 <a href="#descriptions">Describing archives and entries</a><br />
-    4.1 <a href="#archive.properties">Archive Properties and Options</a><br />
+    4.1 <a href="#archive.properties">Archive properties and options</a><br />
     4.2 <a href="#entry.structures">Entry descriptions</a><br />
     4.3 <a href="#using.maps">Using map types to describe entries and options</a><br />
 5 <a href="#loading">Loading and saving archives</a><br />
@@ -103,11 +103,11 @@ div.exampleHeader { font-weight: bold;
     10.11 <a href="#delete.map">archM:delete</a><br />
 </p>
 <h3><a name="appendices" id="appendices"></a>Appendices</h3><p class="toc">A <a href="#references">References</a><br />
-B <a href="#errors">Summary of Error Conditions</a><br />
+B <a href="#errors">Summary of error conditions</a><br />
 </p></div><hr /><div class="body"><div class="div1">
 <h2><a name="status" id="status"></a>1 Status of this document</h2><p>This document is in an interim draft stage. Comments are welcomed at <a href="mailto:public-expath@w3.org">public-expath@w3.org</a> mailing list (<a href="http://lists.w3.org/Archives/Public/public-expath/">archive</a>).</p></div><div class="div1">
 <h2><a name="introduction" id="introduction"></a>2 Introduction</h2><div class="div2">
-<h3><a name="d5e131" id="d5e131"></a>2.1 Namespace Conventions</h3><p>The module defined by this document defines several functions, all contained in the
+<h3><a name="d5e131" id="d5e131"></a>2.1 Namespace conventions</h3><p>The module defined by this document defines several functions, all contained in the
                namespace <code>http://expath.org/ns/archive</code>. In this document, the
                   <code>arch</code> prefix, when used, is bound to this namespace URI.</p><p>Alternative versions of these functions using the proposed XPath3.0
                   <code>map()</code> type (see <a href="#using.maps"><b>4.3 Using map types to describe entries and options</b></a>) are defined in the
@@ -149,7 +149,7 @@ B <a href="#errors">Summary of Error Conditions</a><br />
                   implementation dependent. Nevertheless, if an error is not thrown, only
                      <em>one</em> entry should be returned when reading. Implementations
                      <strong>must not</strong> write duplicate entries in result archives.</p></div></div><div class="div2">
-<h3><a name="archive.types" id="archive.types"></a>2.4 Archive Types</h3><p>The module is designed to be able to support a number of different types of archive,
+<h3><a name="archive.types" id="archive.types"></a>2.4 Archive types</h3><p>The module is designed to be able to support a number of different types of archive,
                providing a coherent access mechanism.</p><p>The following archive types are required to be supported:</p><ul><li><p><a href="#zip">[ZIP]</a>: (which also covers derivative archive formats, such as JAR
                      or OpenDocument.)</p></li><li><p><a href="#gzip">[GZIP]</a> : A compressed archive of a sequence of files</p><div class="note"><p class="prefix"><b>Note:</b></p><p>Within GZIP names of entries (original file names) are optional, on a
                         per-file basis, so special measures may need to be taken to handle 'unnamed'
@@ -251,7 +251,7 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
                string value. The major point in favour of using elements rather than attributes
                would be where we need to read or set complex structured parameters, such as
                character maps. This needs discussion.</p></div><div class="div2">
-<h3><a name="archive.properties" id="archive.properties"></a>4.1 Archive Properties and Options</h3><p>Archive options and properties are described as a structured element
+<h3><a name="archive.properties" id="archive.properties"></a>4.1 Archive properties and options</h3><p>Archive options and properties are described as a structured element
                   (<code>element(arch:options)</code>) with the following attributes:</p><ul><li><p><code>format</code>: the type of the archive, e.g. "zip". This is
                      mandatory.</p></li><li><p><code>algorithm</code>: the default compression used in the archive, e.g.
                      "deflate".</p></li></ul><p>Other attributes may be dependent upon the type of the archive and the
@@ -577,7 +577,7 @@ return
                Recommendation 5 April 2012.</dd><dt class="label"><a name="zip" id="zip"></a>ZIP</dt><dd>
                <a href="http://www.pkware.com/documents/casestudies/APPNOTE.TXT">ZIP File Format
                   Specification</a>.PKWare, Version 6.3.3, 1 September 2012.</dd></dl></div><div class="div1">
-<h2><a name="errors" id="errors"></a>B Summary of Error Conditions</h2><dl><dt class="label"><a name="error.archiveReadError" id="error.archiveReadError"></a>arch:read-error</dt><dd>There was an general error in
+<h2><a name="errors" id="errors"></a>B Summary of error conditions</h2><dl><dt class="label"><a name="error.archiveReadError" id="error.archiveReadError"></a>arch:read-error</dt><dd>There was an general error in
                reading the archive</dd><dt class="label"><a name="error.unknownEntry" id="error.unknownEntry"></a>arch:unknown-entry</dt><dd>The specified entry does not
                exist in this archive.</dd><dt class="label"><a name="error.entryDataMismatch" id="error.entryDataMismatch"></a>arch:entry-data-mismatch</dt><dd>The sequence of entry
                names is not the same length as the sequence of updated values.</dd><dt class="label"><a name="error.unknownEncoding" id="error.unknownEncoding"></a>arch:unknown-encoding</dt><dd>The specified encoding is

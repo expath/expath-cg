@@ -89,7 +89,7 @@
       <div1 id="introduction">
          <head>Introduction</head>
          <div2>
-            <head>Namespace Conventions</head>
+            <head>Namespace conventions</head>
             <p>The module defined by this document defines several functions, all contained in the
                namespace <code>http://expath.org/ns/archive</code>. In this document, the
                   <code>arch</code> prefix, when used, is bound to this namespace URI.</p>
@@ -164,7 +164,7 @@
             </note>
          </div2>
          <div2 id="archive.types">
-            <head>Archive Types</head>
+            <head>Archive types</head>
             <p>The module is designed to be able to support a number of different types of archive,
                providing a coherent access mechanism.</p>
             <p>The following archive types are required to be supported:</p>
@@ -319,7 +319,7 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
                character maps. This needs discussion.</p>
          </note>
          <div2 id="archive.properties">
-            <head>Archive Properties and Options</head>
+            <head>Archive properties and options</head>
             <p>Archive options and properties are described as a structured element
                   (<code>element(arch:options)</code>) with the following attributes:</p>
             <ulist>
@@ -627,7 +627,7 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
          </blist>
       </div1>
       <div1 id="errors">
-         <head>Summary of Error Conditions</head>
+         <head>Summary of error conditions</head>
          <blist>
             <bibl id="error.archiveReadError" key="arch:read-error">There was an general error in
                reading the archive</bibl>
@@ -638,8 +638,6 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
             <bibl id="error.unknownEncoding" key="arch:unknown-encoding">The specified encoding is
                not supported.</bibl>
             <bibl id="error.decoding" key="arch:decoding-error">Error in decoding a string.</bibl>
-
-
          </blist>
       </div1>
    </back>
