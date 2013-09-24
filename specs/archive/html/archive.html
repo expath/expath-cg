@@ -66,7 +66,7 @@ div.exampleHeader { font-weight: bold;
 <h2><a name="contents" id="contents"></a>Table of Contents</h2><p class="toc">1 <a href="#status">Status of this document</a><br />
 2 <a href="#introduction">Introduction</a><br />
     2.1 <a href="#d5e131">Namespace conventions</a><br />
-    2.2 <a href="#d5e188">Error management</a><br />
+    2.2 <a href="#d5e186">Error management</a><br />
     2.3 <a href="#type">Archive representation</a><br />
     2.4 <a href="#archive.types">Archive types</a><br />
 3 <a href="#use-cases">Use cases</a><br />
@@ -116,13 +116,12 @@ B <a href="#errors">Summary of error conditions</a><br />
                   (<code>http://expath.org/ns/archive</code>), and in this document are displayed
                with the same prefix, <code>arch</code>.</p><div class="note"><p class="prefix"><b>Note:</b></p><p>This follows the suggestion (in late August 2013) for a coherent naming standard
                   in EXPath modules.</p></div><p>Binary file I/O, to read and write complete archives to files, uses facilities
-               defined in the <a href="http://expath.org/spec/file">EXPath File Module</a>,
-               which defines functions in the namespace <code>http://expath.org/ns/file</code>. In
-               this document, the <code>file</code> prefix, when used, is bound to this namespace
-               URI.</p><p>Manipulation of binary data itself can employ functions from <a href="http://expath.org/spec/binary">EXPath Binary Module</a>, which defines
-               functions in the namespace <code>http://expath.org/ns/binary</code>. In this
-               document, the <code>bin</code> prefix, when used, is bound to this namespace URI.</p></div><div class="div2">
-<h3><a name="d5e188" id="d5e188"></a>2.2 Error management</h3><p>Error conditions are identified by a code (a <code>QName</code>.) When such an error
+               defined in <a href="#expathfile">[EXPath File]</a>, which defines functions in the namespace
+               <code>http://expath.org/ns/file</code>. In this document, the <code>file</code> prefix,
+               when used, is bound to this namespace URI.</p><p>Manipulation of binary data itself can employ functions from <a href="#expathbinary">[EXPath Binary]</a>, which defines functions in the namespace
+               <code>http://expath.org/ns/binary</code>. In this document, the <code>bin</code> prefix,
+               when used, is bound to this namespace URI.</p></div><div class="div2">
+<h3><a name="d5e186" id="d5e186"></a>2.2 Error management</h3><p>Error conditions are identified by a code (a <code>QName</code>.) When such an error
                condition is reached in the evaluation of an expression, a dynamic error is thrown,
                with the corresponding error code (as if the standard XPath function
                   <code>error()</code> had been called.)</p></div><div class="div2">
@@ -228,7 +227,7 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
 </pre></div></div><div class="div2">
 <h3><a name="example.zip" id="example.zip"></a>3.3 Extracting a ZIP archive to a file system</h3><p>Assuming the ZIP file in question has (empty) entries denoting any directories
                required, the following XSLT will unzip an archive to the current directory, using
-               the file writing functions of <a href="#expathfile">[EXPathFile]</a>: </p><div class="exampleInner"><pre>
+               the file writing functions of <a href="#expathfile">[EXPath File]</a>: </p><div class="exampleInner"><pre>
 &lt;xsl:variable name="arch" select="file:read-binary($uri)"/&gt;
 &lt;xsl:variable name="entries" select="arch:entries($arch)"/&gt;
 &lt;xsl:variable name="dirs" select="$entries[ends-with(.,'/')]"/&gt;
@@ -283,7 +282,7 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
                   namespace (<code>archM:entries()</code>) - in this current draft the second is
                   used. Details are discussed in <a href="#maps"><b>10 Functions using XPath3.0 map() type</b></a></p></div><p>Support for similar approaches using other map representations, such as <a href="#jsoniq">[JSONiq]</a> objects may be implementation dependent.</p></div></div><div class="div1">
 <h2><a name="loading" id="loading"></a>5 Loading and saving archives</h2><p>This module defines no specific functions for reading and writing archives from files,
-            as distinct from their binary data. The EXPath File Module <a href="#expathfile">[EXPathFile]</a>
+            as distinct from their binary data. The EXPath File Module <a href="#expathfile">[EXPath File]</a>
             provides two suitable functions to do this:</p><ul><li><p>
                   <code class="function"><a href="http://expath.org/spec/file#d3e954">file:read-binary</a></code>($file as <code class="type">xs:string</code>) as
                      <code class="type">xs:base64Binary</code>. Returns the content of a file in its Base64
@@ -351,7 +350,7 @@ arch:extract-binary(file:read-binary($uri),'build.xml')
             unsupported.</p><p><a href="#error.decoding">[arch:decoding-error]</a> is raised if there was an error in decoding the
             entry.</p><p><a href="#error.archiveReadError">[arch:read-error]</a> is raised if there was an unspecified problem in
             reading the archive.</p></dd><dt class="label">Notes</dt><dd><p>This function should be equivalent to the use of <code>arch:extract-binary()</code> and
-            the function <code>bin:decode-string()</code> from <a href="#expathbinary">[EXPathBinary]</a>:</p><div class="exampleInner"><pre>arch:extract-binary($in,$entries) ! bin:decode-string(.,$encoding) [XPath 3.0]</pre></div><div class="exampleInner"><pre>for $b in arch:extract-binary($in,$entries) return bin:decode-string($b,$encoding)
+            the function <code>bin:decode-string()</code> from <a href="#expathbinary">[EXPath Binary]</a>:</p><div class="exampleInner"><pre>arch:extract-binary($in,$entries) ! bin:decode-string(.,$encoding) [XPath 3.0]</pre></div><div class="exampleInner"><pre>for $b in arch:extract-binary($in,$entries) return bin:decode-string($b,$encoding)
             [XPath 2.0]</pre></div><p>Further conversion into XML can be achieved using the XPath3.0 function
                <code>fn:parse-XML()</code> on each of the returned strings.</p><p>There have been suggestions for a signature <code>arch:extract-text($archive as
                xs:base64Binary)</code> returning all the entries. In the absence of maps in the
@@ -560,9 +559,9 @@ return
 <h2><a name="references" id="references"></a>A References</h2><dl><dt class="label"><a name="epub" id="epub"></a>EPUB</dt><dd>
                <a href="http://www.idpf.org/epub/30/spec/epub30-overview.html">EPUB 3
                   Overview</a>. International Digital Publishing Forum. Recommended Specification
-               11 October 2011.</dd><dt class="label"><a name="expathfile" id="expathfile"></a>EXPathFile</dt><dd>
+               11 October 2011.</dd><dt class="label"><a name="expathfile" id="expathfile"></a>EXPath File</dt><dd>
                <a href="http://expath.org/spec/file">File Module</a>. Christian Grün and
-               Matthias Brantner, editors. EXPath Candidate Module. 14 June 2012.</dd><dt class="label"><a name="expathbinary" id="expathbinary"></a>EXPathBinary</dt><dd>
+               Matthias Brantner, editors. EXPath Candidate Module. 14 June 2012.</dd><dt class="label"><a name="expathbinary" id="expathbinary"></a>EXPath Binary</dt><dd>
                <a href="http://expath.org/spec/binary">Binary Module</a>. Jirka Kosek and John
                Lumley, editors. EXPath Candidate Module. 6 August 2013.</dd><dt class="label"><a name="fo30" id="fo30"></a>F&amp;O 3.0</dt><dd>
                <a href="http://www.w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and

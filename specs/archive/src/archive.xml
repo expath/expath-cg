@@ -105,14 +105,13 @@
                   in EXPath modules.</p>
             </note>
             <p>Binary file I/O, to read and write complete archives to files, uses facilities
-               defined in the <loc href="http://expath.org/spec/file">EXPath File Module</loc>,
-               which defines functions in the namespace <code>http://expath.org/ns/file</code>. In
-               this document, the <code>file</code> prefix, when used, is bound to this namespace
-               URI.</p>
-            <p>Manipulation of binary data itself can employ functions from <loc
-                  href="http://expath.org/spec/binary">EXPath Binary Module</loc>, which defines
-               functions in the namespace <code>http://expath.org/ns/binary</code>. In this
-               document, the <code>bin</code> prefix, when used, is bound to this namespace URI.</p>
+               defined in <bibref ref="expathfile"/>, which defines functions in the namespace
+               <code>http://expath.org/ns/file</code>. In this document, the <code>file</code> prefix,
+               when used, is bound to this namespace URI.</p>
+            <p>Manipulation of binary data itself can employ functions from <bibref
+                  ref="expathbinary"/>, which defines functions in the namespace
+               <code>http://expath.org/ns/binary</code>. In this document, the <code>bin</code> prefix,
+               when used, is bound to this namespace URI.</p>
          </div2>
          <div2>
             <head>Error management</head>
@@ -601,10 +600,10 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
                <loc href="http://www.idpf.org/epub/30/spec/epub30-overview.html">EPUB 3
                   Overview</loc>. International Digital Publishing Forum. Recommended Specification
                11 October 2011.</bibl>
-            <bibl id="expathfile" key="EXPathFile">
+            <bibl id="expathfile" key="EXPath File">
                <loc href="http://expath.org/spec/file">File Module</loc>. Christian Grün and
                Matthias Brantner, editors. EXPath Candidate Module. 14 June 2012.</bibl>
-            <bibl id="expathbinary" key="EXPathBinary">
+            <bibl id="expathbinary" key="EXPath Binary">
                <loc href="http://expath.org/spec/binary">Binary Module</loc>. Jirka Kosek and John
                Lumley, editors. EXPath Candidate Module. 6 August 2013.</bibl>
             <bibl id="fo30" key="F&amp;O 3.0">
