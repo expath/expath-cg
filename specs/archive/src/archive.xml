@@ -95,7 +95,7 @@
                   <code>arch</code> prefix, when used, is bound to this namespace URI.</p>
             <p>Alternative versions of these functions using the proposed XPath3.0
                   <code>map()</code> type (see <specref ref="using.maps"/>) are defined in the
-               namespace <code>http://expath.org/ns/archiveMap</code>. In this document, the
+               namespace <code>http://expath.org/ns/archive-map</code>. In this document, the
                   <code>archM</code> prefix, when used, is bound to this namespace URI. </p>
             <p>Error codes are defined in the same namespace
                   (<code>http://expath.org/ns/archive</code>), and in this document are displayed
