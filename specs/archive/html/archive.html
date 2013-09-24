@@ -41,14 +41,16 @@ div.exampleHeader { font-weight: bold;
       }
    </style></head><body><p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p><div class="head">
 <h1><a name="title" id="title"></a>Archive Module</h1>
-<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 6 September 2013</h2><dl><dt>This version:</dt><dd>
-         <a href="http://expath.org/spec/archive/editor">http://expath.org/spec/archive/editor</a>
+<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 26 September 2013</h2><dl><dt>This version:</dt><dd>
+         <a href="http://expath.org/spec/archive/20130926">http://expath.org/spec/archive/20130926</a>
       </dd><dt>Latest version:</dt><dd>
          <a href="http://expath.org/spec/archive">http://expath.org/spec/archive</a>
       </dd><dt>Previous version:</dt><dd>
          <a href="http://expath.org/spec/zip/20101012">http://expath.org/spec/zip/20101012</a><br />
-      </dd><dt>Editor:</dt><dd>John Lumley, Saxonica Ltd &lt;<a href="mailto:john@saxonica.com">john@saxonica.com</a>&gt;</dd><dt>Contributors:</dt><dd>Christian Grün &lt;<a href="mailto:christian.gruen@gmail.com">christian.gruen@gmail.com</a>&gt;</dd><dd>Matthias Brantner &lt;<a href="mailto:matthias.brantner@28msec.com">matthias.brantner@28msec.com</a>&gt;</dd><dd>Florent Georges, H2O Consulting &lt;<a href="mailto:fgeorges@fgeorges.org">fgeorges@fgeorges.org</a>&gt;</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/archive/editor.xml">XML</a>.</p><p class="copyright">Copyright © 2013 John Lumley, published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
-               License Agreement (CLA)</a>. A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is
+      </dd><dt>Editor:</dt><dd>John Lumley, Saxonica Ltd &lt;<a href="mailto:john@saxonica.com">john@saxonica.com</a>&gt;</dd><dt>Contributors:</dt><dd>Christian Grün, BaseX GmbH &lt;<a href="mailto:christian.gruen@gmail.com">christian.gruen@gmail.com</a>&gt;</dd><dd>Matthias Brantner, 28msec GmbH &lt;<a href="mailto:matthias.brantner@28msec.com">matthias.brantner@28msec.com</a>&gt;</dd><dd>Florent Georges, H2O Consulting</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/archive/20130926.xml">XML</a>.</p><p class="copyright">Copyright © 2013 John Lumley, Christian Grün, Matthias Brantner and Florent Georges,
+            published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a>
+            under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community
+               Contributor License Agreement (CLA)</a>. A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is
             available.</p><p class="copyright">This specification was published by the <a href="http://www.w3.org/community/expath/">EXPath Community Group</a>. It is not a W3C Standard nor is it on the W3C
             Standards Track. Please note that under the <a href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
                License Agreement (CLA)</a> there is a limited opt-out and other conditions apply.
@@ -63,8 +65,8 @@ div.exampleHeader { font-weight: bold;
             also defined.</p></div><div class="toc">
 <h2><a name="contents" id="contents"></a>Table of Contents</h2><p class="toc">1 <a href="#status">Status of this document</a><br />
 2 <a href="#introduction">Introduction</a><br />
-    2.1 <a href="#d5e129">Namespace Conventions</a><br />
-    2.2 <a href="#d5e186">Error management</a><br />
+    2.1 <a href="#d5e131">Namespace Conventions</a><br />
+    2.2 <a href="#d5e188">Error management</a><br />
     2.3 <a href="#type">Archive representation</a><br />
     2.4 <a href="#archive.types">Archive Types</a><br />
 3 <a href="#use-cases">Use cases</a><br />
@@ -105,7 +107,7 @@ B <a href="#errors">Summary of Error Conditions</a><br />
 </p></div><hr /><div class="body"><div class="div1">
 <h2><a name="status" id="status"></a>1 Status of this document</h2><p>This document is in an interim draft stage. Comments are welcomed at <a href="mailto:public-expath@w3.org">public-expath@w3.org</a> mailing list (<a href="http://lists.w3.org/Archives/Public/public-expath/">archive</a>).</p></div><div class="div1">
 <h2><a name="introduction" id="introduction"></a>2 Introduction</h2><div class="div2">
-<h3><a name="d5e129" id="d5e129"></a>2.1 Namespace Conventions</h3><p>The module defined by this document defines several functions, all contained in the
+<h3><a name="d5e131" id="d5e131"></a>2.1 Namespace Conventions</h3><p>The module defined by this document defines several functions, all contained in the
                namespace <code>http://expath.org/ns/archive</code>. In this document, the
                   <code>arch</code> prefix, when used, is bound to this namespace URI.</p><p>Alternative versions of these functions using the proposed XPath3.0
                   <code>map()</code> type (see <a href="#using.maps"><b>4.3 Using map types to describe entries and options</b></a>) are defined in the
@@ -120,7 +122,7 @@ B <a href="#errors">Summary of Error Conditions</a><br />
                URI.</p><p>Manipulation of binary data itself can employ functions from <a href="http://expath.org/spec/binary">EXPath Binary Module</a>, which defines
                functions in the namespace <code>http://expath.org/ns/binary</code>. In this
                document, the <code>bin</code> prefix, when used, is bound to this namespace URI.</p></div><div class="div2">
-<h3><a name="d5e186" id="d5e186"></a>2.2 Error management</h3><p>Error conditions are identified by a code (a <code>QName</code>.) When such an error
+<h3><a name="d5e188" id="d5e188"></a>2.2 Error management</h3><p>Error conditions are identified by a code (a <code>QName</code>.) When such an error
                condition is reached in the evaluation of an expression, a dynamic error is thrown,
                with the corresponding error code (as if the standard XPath function
                   <code>error()</code> had been called.)</p></div><div class="div2">
@@ -230,7 +232,11 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
 &lt;xsl:variable name="arch" select="file:read-binary($uri)"/&gt;
 &lt;xsl:variable name="entries" select="arch:entries($arch)"/&gt;
 &lt;xsl:variable name="dirs" select="$entries[ends-with(.,'/')]"/&gt;
-&lt;xsl:sequence select="for $d in $dirs return file:create-dir(replace($d,'/$',''))"/&gt;
+&lt;xsl:variable name="required.dirs"
+            select="for $r in distinct-values(($entries except $dirs) return
+            replace($r,'/[^/]+$','/'))[ends-with(.,'/')]"/&gt;
+&lt;xsl:sequence select="for $d in distinct-values(($required.dirs,$dirs))
+         return file:create-dir(replace($d,'/$',''))"/&gt;
 &lt;xsl:sequence select="for $f in ($entries except $dirs) 
         return file:write-binary($f,arch:extract-binary($arch,$f))"/&gt;
 </pre></div><p>(<code>file:create-dir()</code> creates necessary intermediate directories, so

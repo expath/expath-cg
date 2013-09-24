@@ -6,15 +6,15 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Candidate Module</w3c-doctype>
       <pubdate>
-         <day>6</day>
+         <day>26</day>
          <month>September</month>
          <year>2013</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/archive/editor"/>
+         <loc href="http://expath.org/spec/archive/20130926"/>
       </publoc>
       <altlocs>
-         <loc href="http://expath.org/spec/archive/editor.xml">XML</loc>
+         <loc href="http://expath.org/spec/archive/20130926.xml">XML</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/archive"/>
@@ -32,23 +32,24 @@
          </author>
          <author role="contrib">
             <name>Christian Grün</name>
+            <affiliation>BaseX GmbH</affiliation>
             <email href="mailto:christian.gruen@gmail.com">christian.gruen@gmail.com</email>
          </author>
          <author role="contrib">
             <name>Matthias Brantner</name>
+            <affiliation>28msec GmbH</affiliation>
             <email href="mailto:matthias.brantner@28msec.com">matthias.brantner@28msec.com</email>
          </author>
          <author role="contrib">
             <name>Florent Georges</name>
             <affiliation>H2O Consulting</affiliation>
-            <email href="mailto:fgeorges@fgeorges.org">fgeorges@fgeorges.org</email>
          </author>
       </authlist>
       <copyright>
-         <p>Copyright © 2013 John Lumley, published by the <loc
-               href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
-               href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
-               License Agreement (CLA)</loc>. A human-readable <loc
+         <p>Copyright © 2013 John Lumley, Christian Grün, Matthias Brantner and Florent Georges,
+            published by the <loc href="http://w3.org/community/expath/">EXPath Community Group</loc>
+            under the <loc href="https://www.w3.org/community/about/agreements/cla/">W3C Community
+               Contributor License Agreement (CLA)</loc>. A human-readable <loc
                href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
             available.</p>
          <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
