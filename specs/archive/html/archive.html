@@ -128,14 +128,13 @@ B <a href="#errors">Summary of error conditions</a><br />
 <h3><a name="type" id="type"></a>2.3 Archive representation</h3><p>Archives in this module are represented principally as items of type
                   <code>xs:base64Binary</code>, i.e. in their basic binary (byte sequence)
                forms.</p><p>Archives are treated as being arranged structurally as a description of overall
-               options of the archive and a sequence of named entries. Each entry has:</p><ul><li><p>A <em>name</em> of the entry, which is treated as a sequence of Unicode
-                     characters. In many cases the solidus character (<code>/</code>) is used to
-                     imply the entries being logically arranged in positions within a directory
-                     tree, but this is not mandatory.</p></li><li><p>A set of <em>properties</em> of the entry, denoting at least the
-                     uncompressed size of the entry, archive internal properties for the entry, such
-                     as the compression method used on the stored data and other indications such as
-                     the date of last modification.</p></li><li><p>The <em>data</em> for the entry, treated as (possibly null) binary
-                     data.</p></li></ul><p>It is most common that archives are considered to be arranged logically as
+               options of the archive and a sequence of named entries. Each entry has:</p><ul><li><p>A <b>name</b>, which is treated as a sequence of Unicode characters. In many
+                     cases the solidus character (<code>/</code>) is used to imply the entries being
+                     logically arranged in positions within a directory tree, but this is not
+                     mandatory.</p></li><li><p>A set of <b>properties</b>, denoting at least the uncompressed size of the
+                     entry, archive internal properties for the entry, such as the compression method
+                     used on the stored data and other indications such as the date of last
+                     modification.</p></li><li><p><b>Data</b>, treated as (possibly null) binary data.</p></li></ul><p>It is most common that archives are considered to be arranged logically as
                directories, using the entry names to denote paths and file names (e.g.
                   <code>tests/qt3/archive/main.xml</code>) In such circumstances, archives may
                contain entries to represent the directories themselves (e.g.

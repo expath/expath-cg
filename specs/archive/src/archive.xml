@@ -129,20 +129,19 @@
                options of the archive and a sequence of named entries. Each entry has:</p>
             <ulist>
                <item>
-                  <p>A <emph>name</emph> of the entry, which is treated as a sequence of Unicode
-                     characters. In many cases the solidus character (<code>/</code>) is used to
-                     imply the entries being logically arranged in positions within a directory
-                     tree, but this is not mandatory.</p>
+                  <p>A <kw>name</kw>, which is treated as a sequence of Unicode characters. In many
+                     cases the solidus character (<code>/</code>) is used to imply the entries being
+                     logically arranged in positions within a directory tree, but this is not
+                     mandatory.</p>
                </item>
                <item>
-                  <p>A set of <emph>properties</emph> of the entry, denoting at least the
-                     uncompressed size of the entry, archive internal properties for the entry, such
-                     as the compression method used on the stored data and other indications such as
-                     the date of last modification.</p>
+                  <p>A set of <kw>properties</kw>, denoting at least the uncompressed size of the
+                     entry, archive internal properties for the entry, such as the compression method
+                     used on the stored data and other indications such as the date of last
+                     modification.</p>
                </item>
                <item>
-                  <p>The <emph>data</emph> for the entry, treated as (possibly null) binary
-                     data.</p>
+                  <p><kw>Data</kw>, treated as (possibly null) binary data.</p>
                </item>
             </ulist>
             <p>It is most common that archives are considered to be arranged logically as
