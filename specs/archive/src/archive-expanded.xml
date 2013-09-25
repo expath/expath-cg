@@ -24,15 +24,15 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Candidate Module</w3c-doctype>
       <pubdate>
-         <day>26</day>
+         <day>30</day>
          <month>September</month>
          <year>2013</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/archive/20130926"/>
+         <loc href="http://expath.org/spec/archive/20130930"/>
       </publoc>
       <altlocs>
-         <loc href="http://expath.org/spec/archive/20130926.xml">XML</loc>
+         <loc href="http://expath.org/spec/archive/20130930.xml">XML</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/archive"/>
