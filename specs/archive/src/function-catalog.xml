@@ -2,7 +2,7 @@
 <!-- Map and JSON functions labelled at="MAP" and commented out -->
 <!-- Current changes labelled at="M": post Jan-2013 candidate rec -->
 <fos:functions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.w3.org/xpath-functions/spec/namespace fos.xsd"
+   xsi:schemaLocation="http://www.w3.org/xpath-functions/spec/namespace ../../../tools/fos/src/fos.xsd"
    xmlns:ex="http://expath.org/ns/xmlspec"
    xmlns:fos="http://www.w3.org/xpath-functions/spec/namespace">
    <fos:global-variables>
