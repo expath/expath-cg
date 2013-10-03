@@ -830,7 +830,7 @@
             unrecognized.</p>
       </def></gitem></glist>
          </div2>
-         <div2 id="unpack-integer">
+         <div2 id="unpack-signed-integer">
             <head>bin:unpack-integer</head><glist><gitem><label>Summary</label><def>
          <p>Returns a signed integer value represented by the <code>$size</code> octets starting
             from <code>$offset</code> in the input binary representation. Necessary sign extension

@@ -97,7 +97,7 @@ div.exampleHeader { font-weight: bold;
     8.6 <a href="#pack-integer">bin:pack-integer</a><br />
     8.7 <a href="#unpack-double">bin:unpack-double</a><br />
     8.8 <a href="#unpack-float">bin:unpack-float</a><br />
-    8.9 <a href="#unpack-integer">bin:unpack-integer</a><br />
+    8.9 <a href="#unpack-signed-integer">bin:unpack-integer</a><br />
     8.10 <a href="#unpack-unsigned-integer">bin:unpack-unsigned-integer</a><br />
 9 <a href="#bitwise">Bitwise operations</a><br />
     9.1 <a href="#or">bin:or</a><br />
@@ -399,7 +399,7 @@ B <a href="#errors">Summary of error conditions</a><br />
             (octet-length of <code class="type">xs:float</code> - 1) extends beyond the binary data of
                <code>$in</code>.</p><p><a href="#error.endianness">[bin:unknown-significance-order]</a> is raised if the value <code>$octet-order</code> is
             unrecognized.</p></dd></dl></div><div class="div2">
-<h3><a name="unpack-integer" id="unpack-integer"></a>8.9 bin:unpack-integer</h3><dl><dt class="label">Summary</dt><dd><p>Returns a signed integer value represented by the <code>$size</code> octets starting
+<h3><a name="unpack-signed-integer" id="unpack-signed-integer"></a>8.9 bin:unpack-integer</h3><dl><dt class="label">Summary</dt><dd><p>Returns a signed integer value represented by the <code>$size</code> octets starting
             from <code>$offset</code> in the input binary representation. Necessary sign extension
             is performed (i.e. the result is negative if the high order bit is '1').</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">bin:unpack-integer</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>)<code class="as"> as </code><code class="return-type">xs:integer</code></td></tr></table></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="4"><code class="function">bin:unpack-integer</code>(</td><td valign="baseline"><code class="arg">$in</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary</code>,</td></tr><tr><td valign="baseline"><code class="arg">$offset</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$size</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:integer</code>,</td></tr><tr><td valign="baseline"><code class="arg">$octet-order</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:string</code>)<code class="as"> as </code><code class="return-type">xs:integer</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><p>Most-significant-octet-first number representation is assumed unless the
                <code>$octet-order</code> parameter is specified. Acceptable values for

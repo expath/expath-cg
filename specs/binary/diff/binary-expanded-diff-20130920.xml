@@ -22,26 +22,24 @@
    <header>
       <title>Binary Module</title>
       <w3c-designation>w3c-designation</w3c-designation>
-      <w3c-doctype>EXPath Proposed Module</w3c-doctype>
-      <pubdate>
-         <day>3</day>
-         <month>October</month>
+      <w3c-doctype>EXPath Candidate Module</w3c-doctype>
+      <pubdate diff="chg">
+         <day>20</day>
+         <month>September</month>
          <year>2013</year>
       </pubdate>
       <publoc>
-         <loc diff="chg" href="http://expath.org/spec/binary/20131003"/>
+         <loc href="http://expath.org/spec/binary/editor"/>
       </publoc>
       <altlocs>
          <loc href="http://expath.org/spec/binary/editor.xml">XML</loc>
-         <loc href="http://expath.org/spec/binary/20131003/diff">Revision Markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/binary"/>
       </latestloc>
 
       <prevlocs>
-         <loc diff="add" href="http://expath.org/spec/binary/20130920"/>
-         <loc href="http://expath.org/spec/binary/20130731"/>
+         <loc diff="add" href="http://expath.org/spec/binary/20130731"/>
          <loc href="http://expath.org/spec/binary/20130312"/>
       </prevlocs>
 
@@ -56,10 +54,10 @@
          </author>
       </authlist>
       <copyright>
-         <p>Copyright © 2013 Jirka Kosek and John Lumley, published by the <loc
-               href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
-               href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
-               License Agreement (CLA)</loc>. A human-readable <loc
+         <p diff="chg">Copyright © 2013 Jirka Kosek and John Lumley, published by
+            the <loc href="http://w3.org/community/expath/">EXPath Community Group</loc> under the
+               <loc href="https://www.w3.org/community/about/agreements/cla/">W3C Community
+               Contributor License Agreement (CLA)</loc>. A human-readable <loc
                href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
             available.</p>
          <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
@@ -71,13 +69,11 @@
                Groups</loc>.</p>
       </copyright>
       <abstract>
-         <p>This proposal provides an API for XPath 2.0 to handle binary data. It defines extension
-            functions to process data from binary files, including extracting subparts, searching,
-            basic binary operations and conversion between binary and structured forms. It has been
-            designed to be compatible with XQuery 1.0 and XSLT 2.0, as well as any other XPath 2.0
-            usage.</p>
-         <p diff="add">The module homepage, with more information, is on the EXPath website at <loc
-               href="http://expath.org/modules/binary/">http://expath.org/modules/binary/</loc>.</p>
+         <p diff="chg">This proposal provides an API for XPath 2.0 to handle binary data. It defines
+            extension functions to process data from binary files, including extracting subparts,
+            searching, basic binary operations and conversion between binary and structured forms.
+            It has been designed to be compatible with XQuery 1.0 and XSLT 2.0, as well as any other
+            XPath 2.0 usage.</p>
       </abstract>
       <status>
          <p/>
@@ -92,26 +88,24 @@
    <body>
       <div1 id="status">
          <head>Status of this document</head>
-         <p>This document is in a<phrase diff="del">n interim</phrase>
-            <phrase diff="add">final</phrase> draft stage. Comments are welcomed at <loc
+         <p>This document is in an interim draft stage. Comments are welcomed at <loc
                href="mailto:public-expath@w3.org">public-expath@w3.org</loc> mailing list (<loc
                href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
       </div1>
       <div1 id="introduction">
          <head>Introduction</head>
          <div2 id="namespaces">
-            <head>Namespace conventions</head>
+            <head>Namespace Conventions</head>
             <p>The module defined by this document defines several functions, all contained in the
                namespace <code>http://expath.org/ns/binary</code>. In this document, the
                   <code>bin</code> prefix, when used, is bound to this namespace URI.</p>
-            <p>Error codes are defined in the same namespace
+            <p diff="chg">Error codes are defined in the same namespace
                   (<code>http://expath.org/ns/binary</code>), and in this document are displayed
                with the same prefix, <code>bin</code>.</p>
-            <p>Binary file I/O uses facilities defined in <phrase diff="del"><loc
-                     href="http://expath.org/spec/file">EXPath File Module</loc></phrase>
-               <phrase diff="add"><bibref ref="expathfile"/></phrase>, which defines functions in
-               the namespace <code>http://expath.org/ns/file</code>. In this document, the
-                  <code>file</code> prefix, when used, is bound to this namespace URI.</p>
+            <p>Binary file I/O uses facilities defined in the <loc
+                  href="http://expath.org/spec/file">EXPath File Module</loc>, which defines
+               functions in the namespace <code>http://expath.org/ns/file</code>. In this document,
+               the <code>file</code> prefix, when used, is bound to this namespace URI.</p>
          </div2>
          <div2 id="error.management">
             <head>Error management</head>
@@ -131,11 +125,6 @@
                   containing the data, and differ only when being serialized to or parsed from text,
                   such casting in-process should not involve data copying.</p>
             </note>
-         </div2>
-         <div2 id="testing" diff="add">
-            <head diff="add">Test suite</head>
-            <p>A suite of test-cases for all the functions defined in this module, in <bibref
-                  ref="qt3"/> format, is defined at <bibref ref="tests.binary"/>.</p>
          </div2>
       </div1>
       <div1 id="use-cases">
@@ -213,7 +202,7 @@
          else (let $lo := bin:int-octets($l) return (128+count($lo),$lo)))"/&gt;
      &lt;xsl:sequence select="bin:from-octets((2,$length-octets,$octets))"/&gt;
  &lt;/xsl:function&gt;</eg>
-            <p>The function <code>bin:int-octets()</code> returns a sequence of all the
+            <p>The function <code diff="chg">bin:int-octets()</code> returns a sequence of all the
                'significant' octets of the integer (i.e. eliminating leading 'zeroes') in
                most-significant order. Examples of the encoding are: </p>
             <eg xml:space="preserve">
@@ -294,7 +283,7 @@
                <gitem>
                   <label>Summary</label>
                   <def>
-                     <p>Returns the binary form of the set of octets written as a sequence of
+                     <p diff="chg">Returns the binary form of the set of octets written as a sequence of
                         (ASCII) hex digits ([0-9A-Fa-f]).</p>
                   </def>
                </gitem>
@@ -311,7 +300,7 @@
                <gitem>
                   <label>Rules</label>
                   <def>
-                     <p>
+                     <p diff="chg">
                         <code>$in</code> will be effectively zero-padded from the left to generate
                         an integral number of octets, i.e. an even number of hexadecimal digits. If
                            <code>$in</code> is an empty string, then the result will be a
@@ -322,7 +311,7 @@
                         an empty sequence.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.nonNumberChar"/> is raised if <code>$in</code> cannot be
@@ -332,7 +321,7 @@
                <gitem>
                   <label>Notes</label>
                   <def>
-                     <p>When the input string has an even number of characters, this function
+                     <p diff="chg">When the input string has an even number of characters, this function
                         behaves similarly to the double cast
                               <code>xs:base64Binary(xs:hexBinary(<em>$string</em>))</code>.</p>
                   </def>
@@ -384,7 +373,7 @@
                         an empty sequence.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.nonNumberChar"/> is raised if <code>$in</code> cannot be
@@ -437,7 +426,7 @@
                         an empty sequence.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.nonNumberChar"/> is raised if <code>$in</code> cannot be
@@ -511,7 +500,7 @@
                         zero-sized binary data.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.largeOctet"/> is raised if one of the octets lies outside
@@ -553,16 +542,16 @@
             </glist>
          </div2>
          <div2 id="part">
-            <head>bin:part</head>
+            <head diff="chg">bin:part</head>
             <glist>
                <gitem>
                   <label>Summary</label>
                   <def>
-                     <p>The <code>bin:part</code> function returns a specified part of binary
+                     <p diff="chg">The <code>bin:part</code> function returns a specified part of binary
                         data.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Signatures</label>
                   <def>
                      <p><example role="signature">
@@ -589,13 +578,13 @@
                      <p>The <code>$offset</code> is zero based.</p>
                      <p>The values of <code>$offset</code> and <code>$size</code>
                         <rfc2119>must</rfc2119> be non-negative integers.</p>
-                     <p>It is a dynamic error if <code>$offset</code> + <code>$size</code> is larger
+                     <p diff="chg">It is a dynamic error if <code>$offset</code> + <code>$size</code> is larger
                         than the size of the binary data in <code>$in</code>.</p>
                      <p>If the value of <code>$in</code> is the empty sequence, the function returns
                         an empty sequence.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.offsetNegative"/> is raised if <code>$offset</code> is
@@ -620,7 +609,7 @@
 
                      <p>Testing whether <code>$data</code> variable starts with binary content
                         consistent with a PDF file:</p>
-                     <eg xml:space="preserve">bin:part($data, 0, 4) eq bin:hex("25504446")</eg>
+                     <eg diff="chg" xml:space="preserve">bin:part($data, 0, 4) eq bin:hex("25504446")</eg>
                      <p><code>25504446</code> is the magic number for PDF files: it is the US-ASCII
                         encoded hexadecimal value for <code>%PDF</code>.</p>
 
@@ -659,7 +648,7 @@
                </gitem>
             </glist>
          </div2>
-         <div2 id="insert-before">
+         <div2 diff="add" id="insert-before">
             <head>bin:insert-before</head>
             <glist>
                <gitem>
@@ -698,10 +687,8 @@
                         an empty sequence.</p>
                      <p>If the value of <code>$extra</code> is the empty sequence, the function
                         returns <code>$in</code>.</p>
-                     <p>If <code>$offset eq 0</code> the result is the binary concatenation of
-                           <phrase diff="del"><code>$in</code> and <code>$extra</code></phrase>
-                        <phrase diff="add"><code>$extra</code> and <code>$in</code>, i.e. equivalent
-                           to <code>bin:join(($extra,$in))</code></phrase>.</p>
+                     <p diff="add">If <code>$offset eq 0</code> the result is the binary concatenation of <code>$in</code>
+                        and <code>$extra</code>.</p>
                   </def>
                </gitem>
                <gitem>
@@ -716,8 +703,7 @@
                <gitem>
                   <label>Notes</label>
                   <def>
-                     <p>Note that under non-error conditions and when <code>$offset gt 0</code> the
-                        function is equivalent to:</p>
+                     <p diff="chg">Note that under non-error conditions and when <code>$offset gt 0</code> the function is equivalent to:</p>
                      <eg>bin:join((bin:part($in,0,$offset - 1),$extra,bin:part($in,$offset)))</eg>
                   </def>
                </gitem>
@@ -766,7 +752,7 @@
                         an empty sequence.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.sizeNegative"/> is raised if <code>$size</code> is
@@ -781,7 +767,7 @@
                      <p>Padding with a non-zero octet value can also be accomplished by the XPath
                         expressions:</p>
                      <eg xml:space="preserve">bin:join(($in, bin:from-octets((1 to $pad-length) ! $pad-octet))) [XPath 3.0]</eg>
-                     <eg xml:space="preserve">bin:join(($in, bin:from-octets(for $ i in (1 to $pad-length) return $pad-octet))) [XPath 2.0]</eg>
+                     <eg diff="add" xml:space="preserve">bin:join(($in, bin:from-octets(for $ i in (1 to $pad-length) return $pad-octet))) [XPath 2.0]</eg>
                   </def>
                </gitem>
             </glist>
@@ -829,7 +815,7 @@
                         an empty sequence.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.sizeNegative"/> is raised if <code>$size</code> is
@@ -844,12 +830,12 @@
                      <p>Padding with a non-zero octet value can also be accomplished by the XPath
                         expressions:</p>
                      <eg xml:space="preserve">bin:join((bin:from-octets((1 to $pad-length) ! $pad-octet),$in))  [XPath 3.0]</eg>
-                     <eg xml:space="preserve">bin:join((bin:from-octets(for $ i in (1 to $pad-length) return $pad-octet),$in))  [XPath 2.0]</eg>
+                     <eg diff="add" xml:space="preserve">bin:join((bin:from-octets(for $ i in (1 to $pad-length) return $pad-octet),$in))  [XPath 2.0]</eg>
                   </def>
                </gitem>
             </glist>
          </div2>
-         <div2 id="index-of">
+         <div2 id="find">
             <head>bin:find</head>
             <glist>
                <gitem>
@@ -885,7 +871,7 @@
                         an empty sequence.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.offsetNegative"/> is raised if <code>$offset</code> is
@@ -976,7 +962,7 @@
                      <p><code>$offset</code> is zero based.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.offsetNegative"/> is raised if <code>$offset</code> is
@@ -1040,7 +1026,7 @@
                         an empty sequence.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.encoding"/> is raised if <code>$encoding</code> is
@@ -1055,10 +1041,10 @@
          <head>Packing and unpacking of encoded numeric values</head>
          <div2 id="endianness">
             <head>Number 'endianness'</head>
-            <p>Packing and unpacking numeric values can be performed in 'most-significant-first'
+            <p diff="chg">Packing and unpacking numeric values can be performed in 'most-significant-first'
                ('big-endian') or 'least-significant-first' ('little-endian') octet order. The
-               default is <emph>'most-significant-first'</emph>. The functions have an optional
-               parameter <code>$octet-order</code> whose string value controls the order.
+               default is <emph>'most-significant-first'</emph>. The functions have an optional parameter
+                  <code>$octet-order</code> whose string value controls the order.
                Least-significant-first order is indicated by any of the values
                   <code>least-significant-first</code>, <code>little-endian</code> or
                   <code>LE</code>. Most-significant-first order is indicated by any of the values
@@ -1085,11 +1071,11 @@
                   0000</code> (float), <code>0x7ff0 0000 0000 0000</code> (double).
                   <code>-INF</code> maps to <code>0xff80 0000</code> (float), <code>0xfff0 0000 0000
                   0000</code> (double).</p>
-            <p>Negative zero (<code>0x8000 0000 0000 0000</code> double, <code>0x8000 0000</code>
+            <p diff="chg">Negative zero (<code>0x8000 0000 0000 0000</code> double, <code>0x8000 0000</code>
                float) encountered during unpacking will yield negative zero forms (e.g.
                   <code>-xs:double(0.0)</code>) and negative zeros will be written as a result of
                packing.</p>
-            <p><bibref ref="xmlschema1.1"/> provides only one form of NaN which corresponds to a
+            <p diff="chg"><bibref ref="xmlschema1.1"/> provides only one form of NaN which corresponds to a
                'quiet' NaN with zero payload of <bibref ref="ieee754"/> with forms <code>0x7fc0
                   0000</code> (float), <code>0x7ff8 0000 0000 0000</code> (double). These are the
                bit forms that will be packed. 'Signalling' NaN values (<code>0x7f80 0001</code>
@@ -1129,7 +1115,7 @@
                <gitem>
                   <label>Rules</label>
                   <def>
-                     <p>Most-significant-octet-first number representation is assumed unless the
+                     <p diff="chg">Most-significant-octet-first number representation is assumed unless the
                            <code>$octet-order</code> parameter is specified. Acceptable values for
                            <code>$octet-order</code> are described in <specref ref="endianness"
                         />.</p>
@@ -1138,7 +1124,7 @@
                         more details see <specref ref="floating"/>.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.endianness"/> is raised if the value
@@ -1177,7 +1163,7 @@
                <gitem>
                   <label>Rules</label>
                   <def>
-                     <p>Most-significant-octet-first number representation is assumed unless the
+                     <p diff="chg">Most-significant-octet-first number representation is assumed unless the
                            <code>$octet-order</code> parameter is specified. Acceptable values for
                            <code>$octet-order</code> are described in <specref ref="endianness"
                         />.</p>
@@ -1186,7 +1172,7 @@
                         more details see <specref ref="floating"/>.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.endianness"/> is raised if the value
@@ -1228,14 +1214,14 @@
                <gitem>
                   <label>Rules</label>
                   <def>
-                     <p>Most-significant-octet-first number representation is assumed unless the
+                     <p diff="chg">Most-significant-octet-first number representation is assumed unless the
                            <code>$octet-order</code> parameter is specified. Acceptable values for
                            <code>$octet-order</code> are described in <specref ref="endianness"
                         />.</p>
                      <p>Specifying a <code>$size</code> of zero yields an empty binary data.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.endianness"/> is raised if the value
@@ -1294,7 +1280,7 @@
                <gitem>
                   <label>Rules</label>
                   <def>
-                     <p>Most-significant-octet-first number representation is assumed unless the
+                     <p diff="chg">Most-significant-octet-first number representation is assumed unless the
                            <code>$octet-order</code> parameter is specified. Acceptable values for
                            <code>$octet-order</code> are described in <specref ref="endianness"
                         />.</p>
@@ -1306,7 +1292,7 @@
                         more details see <specref ref="floating"/>.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.offsetNegative"/> is raised if <code>$offset</code> is
@@ -1350,7 +1336,7 @@
                <gitem>
                   <label>Rules</label>
                   <def>
-                     <p>Most-significant-octet-first number representation is assumed unless the
+                     <p diff="chg">Most-significant-octet-first number representation is assumed unless the the
                            <code>$octet-order</code> parameter is specified. Acceptable values for
                            <code>$octet-order</code> are described in <specref ref="endianness"
                         />.</p>
@@ -1362,7 +1348,7 @@
                         more details see <specref ref="floating"/>.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.offsetNegative"/> is raised if <code>$offset</code> is
@@ -1376,9 +1362,8 @@
                </gitem>
             </glist>
          </div2>
-         <div2 id="unpack-integer">
-            <head><phrase diff="del">bin:unpack-signed-integer</phrase><phrase diff="add"
-                  >bin:unpack-integer</phrase></head>
+         <div2 id="unpack-signed-integer">
+            <head>bin:unpack-signed-integer</head>
             <glist>
                <gitem>
                   <label>Summary</label>
@@ -1392,15 +1377,15 @@
                <gitem>
                   <label>Signatures</label>
                   <def>
-                     <p diff="chg"><example role="signature">
-                           <proto name="unpack-integer" return-type="xs:integer" isOp="no"
+                     <p><example role="signature">
+                           <proto name="unpack-signed-integer" return-type="xs:integer" isOp="no"
                               prefix="bin">
                               <arg name="in" type="xs:base64Binary"/>
                               <arg name="offset" type="xs:integer"/>
                               <arg name="size" type="xs:integer"/>
                            </proto>
                         </example><example role="signature">
-                           <proto name="unpack-integer" return-type="xs:integer" isOp="no"
+                           <proto name="unpack-signed-integer" return-type="xs:integer" isOp="no"
                               prefix="bin">
                               <arg name="in" type="xs:base64Binary"/>
                               <arg name="offset" type="xs:integer"/>
@@ -1413,7 +1398,7 @@
                <gitem>
                   <label>Rules</label>
                   <def>
-                     <p>Most-significant-octet-first number representation is assumed unless the
+                     <p diff="chg">Most-significant-octet-first number representation is assumed unless the
                            <code>$octet-order</code> parameter is specified. Acceptable values for
                            <code>$octet-order</code> are described in <specref ref="endianness"
                         />.</p>
@@ -1424,7 +1409,7 @@
                         <code>0</code>.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.offsetNegative"/> is raised if <code>$offset</code> is
@@ -1481,7 +1466,7 @@
                <gitem>
                   <label>Rules</label>
                   <def>
-                     <p>Most-significant-octet-first number representation is assumed unless the
+                     <p diff="chg">Most-significant-octet-first number representation is assumed unless the
                            <code>$octet-order</code> parameter is specified. Acceptable values for
                            <code>$octet-order</code> are described in <specref ref="endianness"
                         />.</p>
@@ -1492,7 +1477,7 @@
                         <code>0</code>.</p>
                   </def>
                </gitem>
-               <gitem>
+               <gitem diff="chg">
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.offsetNegative"/> is raised if <code>$offset</code> is
@@ -1710,39 +1695,32 @@
          <head>References</head>
          <blist>
 
+            <bibl id="expathfile" key="EXPathFile">
+               <loc href="http://expath.org/spec/file">File Module</loc>. Christian Grün and
+               Matthias Brantner, editors. EXPath Candidate Module. 14 June 2012.</bibl>
+            <bibl  diff="chg" id="fo30" key="F&amp;O 3.0">
+               <loc href="http://www.w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and
+                  Operators 3.0</loc>. Michael Kay, editor. W3C Candidate Recommendation 21 May
+               2013.</bibl>
+            <bibl  diff="chg" id="xmlschema1.1" key="XML Schema 1.1 Part 2">
+               <loc href="http://www.w3.org/TR/xmlschema11-2/">W3C XML Schema Definition Language
+                  (XSD) 1.1 Part 2: Datatypes</loc>. David Peterson et al, editors.W3C
+               Recommendation 5 April 2012.</bibl>
+            <bibl id="ieee754" key="IEEE 754-1985">IEEE Standard for Binary Floating-Point
+               Arithmetic. See <loc
+                  href="http://standards.ieee.org/reading/ieee/std_public/description/busarch/754-1985_desc.html"
+                  >http://standards.ieee.org/reading/ieee/std_public/description/busarch/754-1985_desc.html</loc></bibl>
             <bibl id="asn1" key="ASN.1"> OSI networking and system aspects – Abstract Syntax
                Notation One (ASN.1) – see <loc
                   href="http://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf">ASN.1
                   encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding
                   Rules (CER) and Distinguished Encoding Rules (DER) </loc>. ITU-T X.690 (07/2002) </bibl>
-            <bibl id="expathfile" key="EXPath File">
-               <loc href="http://expath.org/spec/file">File Module</loc>. Christian Grün and
-               Matthias Brantner, editors. EXPath Candidate Module. 14 June 2012.</bibl>
-            <bibl id="fo30" key="F&amp;O 3.0">
-               <loc href="http://www.w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and
-                  Operators 3.0</loc>. Michael Kay, editor. W3C Candidate Recommendation 21 May
-               2013.</bibl>
-            <bibl id="ieee754" key="IEEE 754-1985">IEEE Standard for Binary Floating-Point
-               Arithmetic. See <loc
-                  href="http://standards.ieee.org/reading/ieee/std_public/description/busarch/754-1985_desc.html"
-                  >http://standards.ieee.org/reading/ieee/std_public/description/busarch/754-1985_desc.html</loc></bibl>
-            <bibl diff="add" id="qt3" key="QT3">
-               <loc href="http://dev.w3.org/2011/QT3-test-suite/">XML Query Test Suite</loc>. W3C 21
-               June 2013. </bibl>
-            <bibl diff="add" id="tests.binary" key="Test-suite"> The test suite for this module,
-               using QT3 format, is in the EXPath repository <loc
-                  href="http://github.com/expath/expath-cg/tree/master/tests/qt3/binary"
-                  >http://github.com/expath/expath-cg</loc> in the directory
-               tests/qt3/binary/</bibl>
-            <bibl id="xmlschema1.1" key="XML Schema 1.1 Part 2">
-               <loc href="http://www.w3.org/TR/xmlschema11-2/">W3C XML Schema Definition Language
-                  (XSD) 1.1 Part 2: Datatypes</loc>. David Peterson et al, editors. W3C
-               Recommendation 5 April 2012.</bibl>
+
          </blist>
       </div1>
       <div1 id="errors">
-         <head>Summary of error conditions</head>
-         <blist>
+         <head>Summary of Error Conditions</head>
+         <blist diff="chg">
             <bibl id="error.differentLengthArguments" key="bin:differing-length-arguments">The
                arguments to a bitwise operation are differing lengths.</bibl>
             <bibl id="error.offsetNegative" key="bin:negative-offset">Attempting to retrieve data
