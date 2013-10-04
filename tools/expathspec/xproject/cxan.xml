@@ -1,0 +1,14 @@
+<package xmlns="http://cxan.org/ns/package" id="expathspec">
+
+   <abstract>
+      The EXPath-specific layer on top of XMLSpec format.
+   </abstract>
+
+   <author id="fgeorges">Florent Georges</author>
+
+   <category id="doctypes">Document types</category>
+
+   <tag>expath</tag>
+   <tag>spec</tag>
+
+</package>

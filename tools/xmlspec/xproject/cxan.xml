@@ -1,0 +1,15 @@
+<package xmlns="http://cxan.org/ns/package" id="xmlspec">
+
+   <abstract>
+      The W3C XMLSpec format.
+   </abstract>
+
+   <author id="ndw">Norman Walsh</author>
+   <maintainer id="fgeorges">Florent Georges</maintainer>
+
+   <category id="doctypes">Document types</category>
+
+   <tag>spec</tag>
+   <tag>w3c</tag>
+
+</package>
