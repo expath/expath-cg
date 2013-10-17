@@ -25,6 +25,37 @@
             </result>
         </test-case>
         <test-case>
+            <description>bitwise-or on empty sequences</description>
+            <test> bin:or((),()) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bitwise-or with data and empty sequence</description>
+            <test> bin:or($a,()) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}differing-length-arguments"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bitwise-or with empty sequence and data</description>
+            <test> bin:or((),$a) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}differing-length-arguments"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bitwise-or on empty binaries</description>
+            <test> bin:or($empty.bin,$empty.bin) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary('')</assert-eq>
+                </all-of>
+            </result>
+        </test-case>
+        <test-case>
             <description>bitwise-or with similar lengths</description>
             <test> bin:or($a,$b) </test>
             <result>
@@ -35,6 +66,7 @@
             </result>
         </test-case>
     </expand>
+    
     <expand name="binary-bitwise-and">
         <created by="John Lumley" on="2013-07-22"/>
         <environment ref="binary-bitwise"/>
@@ -43,6 +75,37 @@
             <test> bin:and($a,$c) </test>
             <result>
                 <error code="Q{http://expath.org/ns/binary}differing-length-arguments"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bitwise-and on empty sequences</description>
+            <test> bin:and((),()) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bitwise-and with data and empty sequence</description>
+            <test> bin:and($a,()) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}differing-length-arguments"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bitwise-and with empty sequence and data</description>
+            <test> bin:and((),$a) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}differing-length-arguments"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bitwise-and on empty binaries</description>
+            <test> bin:and($empty.bin,$empty.bin) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary('')</assert-eq>
+                </all-of>
             </result>
         </test-case>
         <test-case>
@@ -64,6 +127,37 @@
             <test> bin:xor($a,$c) </test>
             <result>
                 <error code="Q{http://expath.org/ns/binary}differing-length-arguments"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bitwise-xor on empty sequences</description>
+            <test> bin:xor((),()) </test>
+            <result>
+                <assert-empty/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bitwise-xor with data and empty sequence</description>
+            <test> bin:xor($a,()) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}differing-length-arguments"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bitwise-xor with empty sequence and data</description>
+            <test> bin:xor((),$a) </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}differing-length-arguments"/>
+            </result>
+        </test-case>
+        <test-case>
+            <description>bitwise-xor on empty binaries</description>
+            <test> bin:xor($empty.bin,$empty.bin) </test>
+            <result>
+                <all-of>
+                    <assert-type>xs:base64Binary</assert-type>
+                    <assert-eq>xs:base64Binary('')</assert-eq>
+                </all-of>
             </result>
         </test-case>
         <test-case>
