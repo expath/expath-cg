@@ -62,5 +62,13 @@
          <xsl:apply-templates select="node()" mode="postproc"/>
       </span>
    </xsl:template>
+   
+   <!-- Differential in head for TOC entry - TOC entries are expanded in mode 'text' -->
+   <xsl:template mode="text" match="head[@diff] | phrase[@diff]">
+      <span class="diff-{@diff}">
+         <xsl:apply-templates mode="#current"/>
+      </span>
+   </xsl:template>
+   
 
 </xsl:stylesheet>

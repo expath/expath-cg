@@ -22,18 +22,19 @@
    <header>
       <title>Binary Module</title>
       <w3c-designation>w3c-designation</w3c-designation>
-      <w3c-doctype>EXPath Proposed Module</w3c-doctype>
+      <w3c-doctype>EXPath <phrase diff="del">Candidate</phrase><phrase diff="add">Proposed</phrase>
+         Module</w3c-doctype>
       <pubdate>
-         <day>18</day>
+         <day>3</day>
          <month>October</month>
          <year>2013</year>
       </pubdate>
       <publoc>
-         <loc diff="chg" href="http://expath.org/spec/binary/20131018"/>
+         <loc diff="chg" href="http://expath.org/spec/binary/20131003"/>
       </publoc>
       <altlocs>
          <loc href="http://expath.org/spec/binary/editor.xml">XML</loc>
-         <loc href="http://expath.org/spec/binary/20131018/diff">Revision Markup</loc>
+         <loc href="http://expath.org/spec/binary/20131003/diff">Revision Markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/binary"/>
@@ -1530,10 +1531,10 @@
                <gitem>
                   <label>Signature</label>
                   <def>
-                     <p diff="chg"><example role="signature">
-                           <proto name="or" return-type="xs:base64Binary?" isOp="no" prefix="bin">
-                              <arg name="a" type="xs:base64Binary?"/>
-                              <arg name="b" type="xs:base64Binary?"/>
+                     <p><example role="signature">
+                           <proto name="or" return-type="xs:base64Binary" isOp="no" prefix="bin">
+                              <arg name="a" type="xs:base64Binary"/>
+                              <arg name="b" type="xs:base64Binary"/>
                            </proto>
                         </example></p>
                   </def>
@@ -1543,16 +1544,13 @@
                   <def>
                      <p>Returns "bitwise or" applied between <code>$a</code> and
                         <code>$b</code>.</p>
-                     <p diff="add">If both arguments are the empty sequence, an empty sequence is
-                        returned.</p>
                   </def>
                </gitem>
                <gitem>
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.differentLengthArguments"/> is raised if the input
-                        arguments are of differing length<phrase diff="add"> or one is, but not both
-                           are, an empty sequence</phrase>.</p>
+                        arguments are of differing length.</p>
                   </def>
                </gitem>
             </glist>
@@ -1569,10 +1567,10 @@
                <gitem>
                   <label>Signature</label>
                   <def>
-                     <p diff="chg"><example role="signature">
-                           <proto name="xor" return-type="xs:base64Binary?" isOp="no" prefix="bin">
-                              <arg name="a" type="xs:base64Binary?"/>
-                              <arg name="b" type="xs:base64Binary?"/>
+                     <p><example role="signature">
+                           <proto name="xor" return-type="xs:base64Binary" isOp="no" prefix="bin">
+                              <arg name="a" type="xs:base64Binary"/>
+                              <arg name="b" type="xs:base64Binary"/>
                            </proto>
                         </example></p>
                   </def>
@@ -1582,16 +1580,13 @@
                   <def>
                      <p>Returns "bitwise exclusive or" applied between <code>$a</code> and
                            <code>$b</code>.</p>
-                     <p diff="add">If both arguments are the empty sequence, an empty sequence is
-                        returned.</p>
                   </def>
                </gitem>
                <gitem>
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.differentLengthArguments"/> is raised if the input
-                        arguments are of differing length<phrase diff="add"> or one is, but not both
-                           are, an empty sequence</phrase>.</p>
+                        arguments are of differing length.</p>
                   </def>
                </gitem>
             </glist>
@@ -1608,10 +1603,10 @@
                <gitem>
                   <label>Signature</label>
                   <def>
-                     <p diff="chg"><example role="signature">
-                           <proto name="and" return-type="xs:base64Binary?" isOp="no" prefix="bin">
-                              <arg name="a" type="xs:base64Binary?"/>
-                              <arg name="b" type="xs:base64Binary?"/>
+                     <p><example role="signature">
+                           <proto name="and" return-type="xs:base64Binary" isOp="no" prefix="bin">
+                              <arg name="a" type="xs:base64Binary"/>
+                              <arg name="b" type="xs:base64Binary"/>
                            </proto>
                         </example></p>
                   </def>
@@ -1621,16 +1616,13 @@
                   <def>
                      <p>Returns "bitwise and" applied between <code>$a</code> and
                         <code>$b</code>.</p>
-                     <p diff="add">If both arguments are the empty sequence, an empty sequence is
-                        returned.</p>
                   </def>
                </gitem>
                <gitem>
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.differentLengthArguments"/> is raised if the input
-                        arguments are of differing length<phrase diff="add"> or one is, but not both
-                           are, an empty sequence</phrase>.</p>
+                        arguments are of differing length.</p>
                   </def>
                </gitem>
             </glist>
@@ -1647,9 +1639,9 @@
                <gitem>
                   <label>Signature</label>
                   <def>
-                     <p diff="chg"><example role="signature">
-                           <proto name="not" return-type="xs:base64Binary?" isOp="no" prefix="bin">
-                              <arg name="in" type="xs:base64Binary?"/>
+                     <p><example role="signature">
+                           <proto name="not" return-type="xs:base64Binary" isOp="no" prefix="bin">
+                              <arg name="in" type="xs:base64Binary"/>
                            </proto>
                         </example></p>
                   </def>
@@ -1658,8 +1650,6 @@
                   <label>Rules</label>
                   <def>
                      <p>Returns "bitwise not" applied to <code>$in</code>.</p>
-                     <p diff="add">If the argument is the empty sequence, an empty sequence is
-                        returned.</p>
                   </def>
                </gitem>
             </glist>

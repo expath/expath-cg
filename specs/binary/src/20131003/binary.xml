@@ -6,16 +6,16 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Proposed Module</w3c-doctype>
       <pubdate>
-         <day>18</day>
+         <day>3</day>
          <month>October</month>
          <year>2013</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/binary/20131018"/>
+         <loc href="http://expath.org/spec/binary/20131003"/>
       </publoc>
       <altlocs>
          <loc href="http://expath.org/spec/binary/editor.xml">XML</loc>
-         <loc href="http://expath.org/spec/binary/20131018/diff">Revision Markup</loc>
+         <loc href="http://expath.org/spec/binary/20131003/diff">Revision Markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/binary"/>

@@ -83,9 +83,8 @@
             sequence.</p>
          <p>If the value of <code>$extra</code> is the empty sequence, the function returns
                <code>$in</code>.</p>
-         <p>If <code>$offset eq 0</code> the result is the binary concatenation of
-               <code>$extra</code> and <code>$in</code>, i.e. equivalent to
-               <code>bin:join(($extra,$in))</code>.</p>
+         <p>If <code>$offset eq 0</code> the result is the binary concatenation of <code>$extra</code>
+            and <code>$in</code>, i.e. equivalent to <code>bin:join(($extra,$in))</code>.</p>
       </fos:rules>
       <fos:errors>
          <p><bibref ref="error.offsetNegative"/> is raised if <code>$offset</code> is negative.</p>
@@ -728,9 +727,9 @@
 
    <fos:function name="or" prefix="bin">
       <fos:signatures>
-         <fos:proto name="or" return-type="xs:base64Binary?">
-            <fos:arg name="a" type="xs:base64Binary?"/>
-            <fos:arg name="b" type="xs:base64Binary?"/>
+         <fos:proto name="or" return-type="xs:base64Binary">
+            <fos:arg name="a" type="xs:base64Binary"/>
+            <fos:arg name="b" type="xs:base64Binary"/>
          </fos:proto>
       </fos:signatures>
       <fos:summary>
@@ -738,18 +737,17 @@
       </fos:summary>
       <fos:rules>
          <p>Returns "bitwise or" applied between <code>$a</code> and <code>$b</code>.</p>
-         <p>If both arguments are the empty sequence, an empty sequence is returned.</p>
       </fos:rules>
       <fos:errors>
          <p><bibref ref="error.differentLengthArguments"/> is raised if the input arguments are of
-            differing length or one is, but not both are, an empty sequence.</p>
+            differing length.</p>
       </fos:errors>
    </fos:function>
    <fos:function name="xor" prefix="bin">
       <fos:signatures>
-         <fos:proto name="xor" return-type="xs:base64Binary?">
-            <fos:arg name="a" type="xs:base64Binary?"/>
-            <fos:arg name="b" type="xs:base64Binary?"/>
+         <fos:proto name="xor" return-type="xs:base64Binary">
+            <fos:arg name="a" type="xs:base64Binary"/>
+            <fos:arg name="b" type="xs:base64Binary"/>
          </fos:proto>
       </fos:signatures>
       <fos:summary>
@@ -757,18 +755,17 @@
       </fos:summary>
       <fos:rules>
          <p>Returns "bitwise exclusive or" applied between <code>$a</code> and <code>$b</code>.</p>
-         <p>If both arguments are the empty sequence, an empty sequence is returned.</p>
       </fos:rules>
       <fos:errors>
          <p><bibref ref="error.differentLengthArguments"/> is raised if the input arguments are of
-            differing length or one is, but not both are, an empty sequence.</p>
+            differing length.</p>
       </fos:errors>
    </fos:function>
    <fos:function name="and" prefix="bin">
       <fos:signatures>
-         <fos:proto name="and" return-type="xs:base64Binary?">
-            <fos:arg name="a" type="xs:base64Binary?"/>
-            <fos:arg name="b" type="xs:base64Binary?"/>
+         <fos:proto name="and" return-type="xs:base64Binary">
+            <fos:arg name="a" type="xs:base64Binary"/>
+            <fos:arg name="b" type="xs:base64Binary"/>
          </fos:proto>
       </fos:signatures>
       <fos:summary>
@@ -776,17 +773,16 @@
       </fos:summary>
       <fos:rules>
          <p>Returns "bitwise and" applied between <code>$a</code> and <code>$b</code>.</p>
-         <p>If both arguments are the empty sequence, an empty sequence is returned.</p>
       </fos:rules>
       <fos:errors>
          <p><bibref ref="error.differentLengthArguments"/> is raised if the input arguments are of
-            differing length or one is, but not both are, an empty sequence.</p>
+            differing length.</p>
       </fos:errors>
    </fos:function>
    <fos:function name="not" prefix="bin">
       <fos:signatures>
-         <fos:proto name="not" return-type="xs:base64Binary?">
-            <fos:arg name="in" type="xs:base64Binary?"/>
+         <fos:proto name="not" return-type="xs:base64Binary">
+            <fos:arg name="in" type="xs:base64Binary"/>
          </fos:proto>
       </fos:signatures>
       <fos:summary>
@@ -794,7 +790,6 @@
       </fos:summary>
       <fos:rules>
          <p>Returns "bitwise not" applied to <code>$in</code>.</p>
-         <p>If the argument is the empty sequence, an empty sequence is returned.</p>
       </fos:rules>
    </fos:function>
 

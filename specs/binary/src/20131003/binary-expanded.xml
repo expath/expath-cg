@@ -24,16 +24,16 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Proposed Module</w3c-doctype>
       <pubdate>
-         <day>18</day>
+         <day>3</day>
          <month>October</month>
          <year>2013</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/binary/20131018"/>
+         <loc href="http://expath.org/spec/binary/20131003"/>
       </publoc>
       <altlocs>
          <loc href="http://expath.org/spec/binary/editor.xml">XML</loc>
-         <loc href="http://expath.org/spec/binary/20131018/diff">Revision Markup</loc>
+         <loc href="http://expath.org/spec/binary/20131003/diff">Revision Markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/binary"/>
@@ -466,9 +466,8 @@
             sequence.</p>
          <p>If the value of <code>$extra</code> is the empty sequence, the function returns
                <code>$in</code>.</p>
-         <p>If <code>$offset eq 0</code> the result is the binary concatenation of
-               <code>$extra</code> and <code>$in</code>, i.e. equivalent to
-               <code>bin:join(($extra,$in))</code>.</p>
+         <p>If <code>$offset eq 0</code> the result is the binary concatenation of <code>$extra</code>
+            and <code>$in</code>, i.e. equivalent to <code>bin:join(($extra,$in))</code>.</p>
       </def></gitem><gitem><label>Error Conditions</label><def>
          <p><bibref ref="error.offsetNegative"/> is raised if <code>$offset</code> is negative.</p>
          <p><bibref ref="error.offsetBeyondEnd"/> is raised if <code>$offset</code> extends beyond
@@ -831,7 +830,7 @@
             unrecognized.</p>
       </def></gitem></glist>
          </div2>
-         <div2 id="unpack-integer">
+         <div2 id="unpack-signed-integer">
             <head>bin:unpack-integer</head><glist><gitem><label>Summary</label><def>
          <p>Returns a signed integer value represented by the <code>$size</code> octets starting
             from <code>$offset</code> in the input binary representation. Necessary sign extension
@@ -903,53 +902,49 @@
          <div2 id="or">
             <head>bin:or</head><glist><gitem><label>Summary</label><def>
          <p>Returns the "bitwise or" of two binary arguments.</p>
-      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="or" return-type="xs:base64Binary?" isOp="no" prefix="bin">
-            <arg name="a" type="xs:base64Binary?"/>
-            <arg name="b" type="xs:base64Binary?"/>
+      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="or" return-type="xs:base64Binary" isOp="no" prefix="bin">
+            <arg name="a" type="xs:base64Binary"/>
+            <arg name="b" type="xs:base64Binary"/>
          </proto></example></p></def></gitem><gitem><label>Rules</label><def>
          <p>Returns "bitwise or" applied between <code>$a</code> and <code>$b</code>.</p>
-         <p>If both arguments are the empty sequence, an empty sequence is returned.</p>
       </def></gitem><gitem><label>Error Conditions</label><def>
          <p><bibref ref="error.differentLengthArguments"/> is raised if the input arguments are of
-            differing length or one is, but not both are, an empty sequence.</p>
+            differing length.</p>
       </def></gitem></glist>
          </div2>
          <div2 id="xor">
             <head>bin:xor</head><glist><gitem><label>Summary</label><def>
          <p>Returns the "bitwise xor" of two binary arguments.</p>
-      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="xor" return-type="xs:base64Binary?" isOp="no" prefix="bin">
-            <arg name="a" type="xs:base64Binary?"/>
-            <arg name="b" type="xs:base64Binary?"/>
+      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="xor" return-type="xs:base64Binary" isOp="no" prefix="bin">
+            <arg name="a" type="xs:base64Binary"/>
+            <arg name="b" type="xs:base64Binary"/>
          </proto></example></p></def></gitem><gitem><label>Rules</label><def>
          <p>Returns "bitwise exclusive or" applied between <code>$a</code> and <code>$b</code>.</p>
-         <p>If both arguments are the empty sequence, an empty sequence is returned.</p>
       </def></gitem><gitem><label>Error Conditions</label><def>
          <p><bibref ref="error.differentLengthArguments"/> is raised if the input arguments are of
-            differing length or one is, but not both are, an empty sequence.</p>
+            differing length.</p>
       </def></gitem></glist>
          </div2>
          <div2 id="and">
             <head>bin:and</head><glist><gitem><label>Summary</label><def>
          <p>Returns the "bitwise and" of two binary arguments.</p>
-      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="and" return-type="xs:base64Binary?" isOp="no" prefix="bin">
-            <arg name="a" type="xs:base64Binary?"/>
-            <arg name="b" type="xs:base64Binary?"/>
+      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="and" return-type="xs:base64Binary" isOp="no" prefix="bin">
+            <arg name="a" type="xs:base64Binary"/>
+            <arg name="b" type="xs:base64Binary"/>
          </proto></example></p></def></gitem><gitem><label>Rules</label><def>
          <p>Returns "bitwise and" applied between <code>$a</code> and <code>$b</code>.</p>
-         <p>If both arguments are the empty sequence, an empty sequence is returned.</p>
       </def></gitem><gitem><label>Error Conditions</label><def>
          <p><bibref ref="error.differentLengthArguments"/> is raised if the input arguments are of
-            differing length or one is, but not both are, an empty sequence.</p>
+            differing length.</p>
       </def></gitem></glist>
          </div2>
          <div2 id="not">
             <head>bin:not</head><glist><gitem><label>Summary</label><def>
          <p>Returns the "bitwise not" of a binary argument.</p>
-      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="not" return-type="xs:base64Binary?" isOp="no" prefix="bin">
-            <arg name="in" type="xs:base64Binary?"/>
+      </def></gitem><gitem><label>Signature</label><def><p><example role="signature"><proto name="not" return-type="xs:base64Binary" isOp="no" prefix="bin">
+            <arg name="in" type="xs:base64Binary"/>
          </proto></example></p></def></gitem><gitem><label>Rules</label><def>
          <p>Returns "bitwise not" applied to <code>$in</code>.</p>
-         <p>If the argument is the empty sequence, an empty sequence is returned.</p>
       </def></gitem></glist>
          </div2>
          <div2 id="shift">
