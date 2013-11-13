@@ -738,11 +738,11 @@
       </fos:summary>
       <fos:rules>
          <p>Returns "bitwise or" applied between <code>$a</code> and <code>$b</code>.</p>
-         <p>If both arguments are the empty sequence, an empty sequence is returned.</p>
+         <p>If either argument is the empty sequence, an empty sequence is returned.</p>
       </fos:rules>
       <fos:errors>
          <p><bibref ref="error.differentLengthArguments"/> is raised if the input arguments are of
-            differing length or one is, but not both are, an empty sequence.</p>
+            differing length.</p>
       </fos:errors>
    </fos:function>
    <fos:function name="xor" prefix="bin">
@@ -757,11 +757,11 @@
       </fos:summary>
       <fos:rules>
          <p>Returns "bitwise exclusive or" applied between <code>$a</code> and <code>$b</code>.</p>
-         <p>If both arguments are the empty sequence, an empty sequence is returned.</p>
+        <p>If either argument is the empty sequence, an empty sequence is returned.</p>
       </fos:rules>
       <fos:errors>
          <p><bibref ref="error.differentLengthArguments"/> is raised if the input arguments are of
-            differing length or one is, but not both are, an empty sequence.</p>
+            differing length.</p>
       </fos:errors>
    </fos:function>
    <fos:function name="and" prefix="bin">
@@ -776,11 +776,11 @@
       </fos:summary>
       <fos:rules>
          <p>Returns "bitwise and" applied between <code>$a</code> and <code>$b</code>.</p>
-         <p>If both arguments are the empty sequence, an empty sequence is returned.</p>
+        <p>If either argument is the empty sequence, an empty sequence is returned.</p>
       </fos:rules>
       <fos:errors>
          <p><bibref ref="error.differentLengthArguments"/> is raised if the input arguments are of
-            differing length or one is, but not both are, an empty sequence.</p>
+            differing length.</p>
       </fos:errors>
    </fos:function>
    <fos:function name="not" prefix="bin">
