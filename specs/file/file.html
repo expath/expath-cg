@@ -229,8 +229,8 @@ return file:read-text($path)</pre></div><div class="div2">
                   directory with the name of the source file. If a file already exists, it will be
                   overwritten.</li></ol><p>The following cases may occur if <code>$source</code> points to a directory:</p><ol type="a"><li> if <code>$target</code> does not exist, it will be created as directory, and all
                   files of the source directory are copied to this directory with their existing
-                  local names.</li><li> if <code>$target</code> is a directory, all files are copied from the source
-                  into the target directory. If a file already exists, it will be overwritten.</li></ol><p>Other cases will raise one of the errors listed below.</p><p>The function returns the empty sequence if the operation is successful. If an error
+                  local names.</li><li> if <code>$target</code> is a directory, the source directory with all its files
+                  will be copied into the target directory. If a file already exists, it will be overwritten.</li></ol><p>Other cases will raise one of the errors listed below.</p><p>The function returns the empty sequence if the operation is successful. If an error
                occurs during the operation, no rollback to the original state will be possible </p><p>This function is ·nondeterministic·.</p><p>
                <div><a href="#errFILE0001">[err:FILE0001]</a> is raised if the <code>$source</code> path does not
                   exist.</div>
@@ -308,8 +308,8 @@ return file:read-text($path)</pre></div><div class="div2">
                   directory with the name of the source file. If a file already exists, it will be
                   overwritten.</li></ol><p>The following cases may occur if <code>$source</code> points to a directory:</p><ol type="a"><li> if <code>$target</code> does not exist, it will be created as directory, and all
                   files of the source directory are moved to this directory with their existing
-                  local names.</li><li> if <code>$target</code> is a directory, all files are moved from the source into
-                  the target directory. If a file already exists, it will be overwritten.</li></ol><p>Other cases will raise one of the errors listed below.</p><p>The function returns the empty sequence if the operation is successful. If an error
+                  local names.</li><li> if <code>$target</code> is a directory, the source directory with all its files
+                  will be moved into the target directory. If a file already exists, it will be overwritten.</li></ol><p>Other cases will raise one of the errors listed below.</p><p>The function returns the empty sequence if the operation is successful. If an error
                occurs during the operation, no rollback to the original state will be possible </p><p>This function is ·nondeterministic·.</p><p>
                <div><a href="#errFILE0001">[err:FILE0001]</a> is raised if the <code>$source</code> path does not
                   exist.</div>
