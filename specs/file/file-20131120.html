@@ -41,7 +41,7 @@ div.exampleHeader { font-weight: bold;
       }
    </style></head><body><p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p><div class="head">
 <h1><a name="title" id="title"></a>File Module</h1>
-<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Proposed Module 14 November 2013</h2><dl><dt>This version:</dt><dd>
+<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Proposed Module 20 November 2013</h2><dl><dt>This version:</dt><dd>
          <a href="http://expath.org/spec/file/20131114">http://expath.org/spec/file/20131114</a>
       </dd><dt>Latest version:</dt><dd>
          <a href="http://expath.org/spec/file">http://expath.org/spec/file</a>
@@ -71,39 +71,39 @@ div.exampleHeader { font-weight: bold;
     3.3 <a href="#d3e248">file:is-file</a><br />
     3.4 <a href="#d3e269">file:last-modified</a><br />
     3.5 <a href="#d3e300">file:size</a><br />
-4 <a href="#d3e332">Input/Output</a><br />
-    4.1 <a href="#d3e335">file:append</a><br />
-    4.2 <a href="#d3e421">file:append-binary</a><br />
-    4.3 <a href="#d3e467">file:append-text</a><br />
-    4.4 <a href="#d3e544">file:append-text-lines</a><br />
-    4.5 <a href="#d3e621">file:copy</a><br />
-    4.6 <a href="#d3e721">file:create-dir</a><br />
-    4.7 <a href="#d3e751">file:create-temp-dir</a><br />
-    4.8 <a href="#d3e805">file:create-temp-file</a><br />
-    4.9 <a href="#d3e859">file:delete</a><br />
-    4.10 <a href="#d3e920">file:list</a><br />
-    4.11 <a href="#d3e1009">file:move</a><br />
-    4.12 <a href="#d3e1109">file:read-binary</a><br />
-    4.13 <a href="#d3e1194">file:read-text</a><br />
-    4.14 <a href="#d3e1260">file:read-text-lines</a><br />
-    4.15 <a href="#d3e1333">file:write</a><br />
-    4.16 <a href="#d3e1416">file:write-binary</a><br />
-    4.17 <a href="#d3e1490">file:write-text</a><br />
-    4.18 <a href="#d3e1567">file:write-text-lines</a><br />
-5 <a href="#d3e1645">Paths</a><br />
-    5.1 <a href="#d3e1650">file:base-name</a><br />
-    5.2 <a href="#d3e1698">file:dir-name</a><br />
-    5.3 <a href="#d3e1722">file:path-to-native</a><br />
-    5.4 <a href="#d3e1748">file:path-to-uri</a><br />
-    5.5 <a href="#d3e1769">file:resolve-path</a><br />
-6 <a href="#d3e1790">System Properties</a><br />
-    6.1 <a href="#d3e1793">file:dir-separator</a><br />
-    6.2 <a href="#d3e1814">file:line-separator</a><br />
-    6.3 <a href="#d3e1838">file:path-separator</a><br />
-    6.4 <a href="#d3e1859">file:temp-dir</a><br />
+4 <a href="#d3e335">Input/Output</a><br />
+    4.1 <a href="#d3e338">file:append</a><br />
+    4.2 <a href="#d3e424">file:append-binary</a><br />
+    4.3 <a href="#d3e470">file:append-text</a><br />
+    4.4 <a href="#d3e547">file:append-text-lines</a><br />
+    4.5 <a href="#d3e624">file:copy</a><br />
+    4.6 <a href="#d3e724">file:create-dir</a><br />
+    4.7 <a href="#d3e754">file:create-temp-dir</a><br />
+    4.8 <a href="#d3e808">file:create-temp-file</a><br />
+    4.9 <a href="#d3e862">file:delete</a><br />
+    4.10 <a href="#d3e923">file:list</a><br />
+    4.11 <a href="#d3e1012">file:move</a><br />
+    4.12 <a href="#d3e1112">file:read-binary</a><br />
+    4.13 <a href="#d3e1197">file:read-text</a><br />
+    4.14 <a href="#d3e1263">file:read-text-lines</a><br />
+    4.15 <a href="#d3e1336">file:write</a><br />
+    4.16 <a href="#d3e1419">file:write-binary</a><br />
+    4.17 <a href="#d3e1493">file:write-text</a><br />
+    4.18 <a href="#d3e1570">file:write-text-lines</a><br />
+5 <a href="#d3e1648">Paths</a><br />
+    5.1 <a href="#d3e1653">file:base-name</a><br />
+    5.2 <a href="#d3e1701">file:dir-name</a><br />
+    5.3 <a href="#d3e1725">file:path-to-native</a><br />
+    5.4 <a href="#d3e1751">file:path-to-uri</a><br />
+    5.5 <a href="#d3e1772">file:resolve-path</a><br />
+6 <a href="#d3e1793">System Properties</a><br />
+    6.1 <a href="#d3e1796">file:dir-separator</a><br />
+    6.2 <a href="#d3e1817">file:line-separator</a><br />
+    6.3 <a href="#d3e1841">file:path-separator</a><br />
+    6.4 <a href="#d3e1862">file:temp-dir</a><br />
 </p>
-<h3><a name="appendices" id="appendices"></a>Appendices</h3><p class="toc">A <a href="#d3e1875">References</a><br />
-B <a href="#d3e1889">Summary of Error Conditions</a><br />
+<h3><a name="appendices" id="appendices"></a>Appendices</h3><p class="toc">A <a href="#d3e1878">References</a><br />
+B <a href="#d3e1892">Summary of Error Conditions</a><br />
 </p></div><hr /><div class="body"><div class="div1">
 <h2><a name="status" id="status"></a>1 Status of this document</h2><p>This document is in a final draft stage. Comments are welcomed at <a href="mailto:public-expath@w3.org">public-expath@w3.org</a> mailing list (<a href="http://lists.w3.org/Archives/Public/public-expath/">archive</a>).</p></div><div class="div1">
 <h2><a name="d3e103" id="d3e103"></a>2 Introduction</h2><div class="div2">
@@ -149,19 +149,19 @@ return file:read-text($path)</pre></div><div class="div2">
 <h3><a name="d3e248" id="d3e248"></a>3.3 <code>file:is-file</code></h3><div class="exampleInner"><pre>
 <code class="function">file:is-file</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code></pre></div><p>Tests if <code>$path</code> points to a file.</p><p>This function is ·nondeterministic·.</p></div><div class="div2">
 <h3><a name="d3e269" id="d3e269"></a>3.4 <code>file:last-modified</code></h3><div class="exampleInner"><pre>
-<code class="function">file:last-modified</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:dateTime</code></pre></div><p>Returns the last modification time of a file.</p><p>This function is ·nondeterministic·.</p><p>
+<code class="function">file:last-modified</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:dateTime</code></pre></div><p>Returns the last modification time of a file or directory.</p><p>This function is ·nondeterministic·.</p><p>
                <div><a href="#errFILE0001">[err:FILE0001]</a> is raised if <code>$path</code> does not
                   exist.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
 <h3><a name="d3e300" id="d3e300"></a>3.5 <code>file:size</code></h3><div class="exampleInner"><pre>
-<code class="function">file:size</code>($file as <code class="type">xs:string</code>) as <code class="type">xs:integer</code></pre></div><p>Returns the byte size of a file.</p><p>This function is ·nondeterministic·.</p><p>
+<code class="function">file:size</code>($file as <code class="type">xs:string</code>) as <code class="type">xs:integer</code></pre></div><p>Returns the byte size of a file, or the value <code>0</code> for directories.</p><p>This function is ·nondeterministic·.</p><p>
                <div><a href="#errFILE0001">[err:FILE0001]</a> is raised if <code>$path</code> does not
                   exist.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div></div><div class="div1">
-<h2><a name="d3e332" id="d3e332"></a>4 Input/Output</h2><div class="div2">
-<h3><a name="d3e335" id="d3e335"></a>4.1 <code>file:append</code></h3><div class="exampleInner"><pre>
+<h2><a name="d3e335" id="d3e335"></a>4 Input/Output</h2><div class="div2">
+<h3><a name="d3e338" id="d3e338"></a>4.1 <code>file:append</code></h3><div class="exampleInner"><pre>
 <code class="function">file:append</code>($file as <code class="type">xs:string</code>,
             $items as <code class="type">item()*</code>) as <code class="type">empty-sequence()</code>
 <code class="function">file:append</code>($file as <code class="type">xs:string</code>,
@@ -179,7 +179,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   directory.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e421" id="d3e421"></a>4.2 <code>file:append-binary</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e424" id="d3e424"></a>4.2 <code>file:append-binary</code></h3><div class="exampleInner"><pre>
 <code class="function">file:append-binary</code>($file as <code class="type">xs:string</code>,
                    $value as <code class="type">xs:base64Binary</code>) as <code class="type">empty-sequence()</code></pre></div><p>Appends a Base64 item as binary to a file. If the file pointed by <code>$file</code>
                does not exist, a new file will be created.</p><p>The function returns the empty sequence if the operation is successful.</p><p>This function is ·nondeterministic·.</p><p>
@@ -189,7 +189,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   directory.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e467" id="d3e467"></a>4.3 <code>file:append-text</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e470" id="d3e470"></a>4.3 <code>file:append-text</code></h3><div class="exampleInner"><pre>
 <code class="function">file:append-text</code>($file as <code class="type">xs:string</code>,
                  $value as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code>
 <code class="function">file:append-text</code>($file as <code class="type">xs:string</code>,
@@ -205,7 +205,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   not supported by the implementation.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e544" id="d3e544"></a>4.4 <code>file:append-text-lines</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e547" id="d3e547"></a>4.4 <code>file:append-text-lines</code></h3><div class="exampleInner"><pre>
 <code class="function">file:append-text-lines</code>($file as <code class="type">xs:string</code>,
                        $values as <code class="type">xs:string*</code>) as <code class="type">empty-sequence()</code>
 <code class="function">file:append-text-lines</code>($file as <code class="type">xs:string</code>,
@@ -222,7 +222,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   not supported by the implementation.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e621" id="d3e621"></a>4.5 <code>file:copy</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e624" id="d3e624"></a>4.5 <code>file:copy</code></h3><div class="exampleInner"><pre>
 <code class="function">file:copy</code>($source as <code class="type">xs:string</code>,
           $target as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code></pre></div><p>Copies a file or a directory given a source and a target path/URI. The following
                cases may occur if <code>$source</code> points to a file:</p><ol type="a"><li> if <code>$target</code> does not exist, it will be created.</li><li> if <code>$target</code> is a file, it will be overwritten.</li><li> if <code>$target</code> is a directory, the file will be created in that
@@ -243,14 +243,14 @@ return file:read-text($path)</pre></div><div class="div2">
                   with the name of the source file.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e721" id="d3e721"></a>4.6 <code>file:create-dir</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e724" id="d3e724"></a>4.6 <code>file:create-dir</code></h3><div class="exampleInner"><pre>
 <code class="function">file:create-dir</code>($dir as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code></pre></div><p>Creates a directory, or does nothing if the directory already exists. The operation
                will create all non-existing parent directories.</p><p>The function returns the empty sequence if the operation is successful.</p><p>This function is ·nondeterministic·.</p><p>
                <div><a href="#errFILE0002">[err:FILE0002]</a> is raised if the specified path, or any of its
                   parent directories, points to an existing file.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e751" id="d3e751"></a>4.7 <code>file:create-temp-dir</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e754" id="d3e754"></a>4.7 <code>file:create-temp-dir</code></h3><div class="exampleInner"><pre>
 <code class="function">file:create-temp-dir</code>($prefix as <code class="type">xs:string</code>,
                      $suffix as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
 <code class="function">file:create-temp-dir</code>($prefix as <code class="type">xs:string</code>,
@@ -261,7 +261,7 @@ return file:read-text($path)</pre></div><div class="div2">
                <div><a href="#errFILE0002">[err:FILE0002]</a> is raised if the specified directory does not exist.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e805" id="d3e805"></a>4.8 <code>file:create-temp-file</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e808" id="d3e808"></a>4.8 <code>file:create-temp-file</code></h3><div class="exampleInner"><pre>
 <code class="function">file:create-temp-file</code>($prefix as <code class="type">xs:string</code>,
                       $suffix as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
 <code class="function">file:create-temp-file</code>($prefix as <code class="type">xs:string</code>,
@@ -272,7 +272,7 @@ return file:read-text($path)</pre></div><div class="div2">
                <div><a href="#errFILE0002">[err:FILE0002]</a> is raised if the specified directory does not exist.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e859" id="d3e859"></a>4.9 <code>file:delete</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e862" id="d3e862"></a>4.9 <code>file:delete</code></h3><div class="exampleInner"><pre>
 <code class="function">file:delete</code>($path as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code>
 <code class="function">file:delete</code>($path as <code class="type">xs:string</code>,
             $recursive as <code class="type">xs:boolean</code>) as <code class="type">empty-sequence()</code></pre></div><p>Deletes a file or a directory from the file system.</p><p>If the optional parameter <code>$recursive</code> is set to <code>true()</code>,
@@ -283,7 +283,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   non-empty directory.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e920" id="d3e920"></a>4.10 <code>file:list</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e923" id="d3e923"></a>4.10 <code>file:list</code></h3><div class="exampleInner"><pre>
 <code class="function">file:list</code>($dir as <code class="type">xs:string</code>) as <code class="type">xs:string*</code>
 <code class="function">file:list</code>($dir as <code class="type">xs:string</code>,
           $recursive as <code class="type">xs:boolean</code>) as <code class="type">xs:string*</code>
@@ -301,7 +301,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   existing directory.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e1009" id="d3e1009"></a>4.11 <code>file:move</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1012" id="d3e1012"></a>4.11 <code>file:move</code></h3><div class="exampleInner"><pre>
 <code class="function">file:move</code>($source as <code class="type">xs:string</code>,
           $target as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code></pre></div><p>Moves a file or a directory given a source and a target path/URI. The following cases
                may occur if <code>$source</code> points to a file:</p><ol type="a"><li> if <code>$target</code> does not exist, it will be created.</li><li> if <code>$target</code> is a file, it will be overwritten.</li><li> if <code>$target</code> is a directory, the file will be created in that
@@ -322,7 +322,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   with the name of the source file.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e1109" id="d3e1109"></a>4.12 <code>file:read-binary</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1112" id="d3e1112"></a>4.12 <code>file:read-binary</code></h3><div class="exampleInner"><pre>
 <code class="function">file:read-binary</code>($file as <code class="type">xs:string</code>) as <code class="type">xs:base64Binary</code>
 <code class="function">file:read-binary</code>($file as <code class="type">xs:string</code>,
                  $offset as <code class="type">xs:integer</code>) as <code class="type">xs:base64Binary</code>
@@ -338,7 +338,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   <code>$length</code> is negative, or if the chosen values would exceed the file bounds.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e1194" id="d3e1194"></a>4.13 <code>file:read-text</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1197" id="d3e1197"></a>4.13 <code>file:read-text</code></h3><div class="exampleInner"><pre>
 <code class="function">file:read-text</code>($file as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
 <code class="function">file:read-text</code>($file as <code class="type">xs:string</code>,
                $encoding as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><p>Returns the content of a file in its string representation.</p><p>The optional parameter <code>$encoding</code>, if not provided, is considered to be
@@ -351,7 +351,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   not supported by the implementation.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e1260" id="d3e1260"></a>4.14 <code>file:read-text-lines</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1263" id="d3e1263"></a>4.14 <code>file:read-text-lines</code></h3><div class="exampleInner"><pre>
 <code class="function">file:read-text-lines</code>($file as <code class="type">xs:string</code>) as <code class="type">xs:string*</code>
 <code class="function">file:read-text-lines</code>($file as <code class="type">xs:string</code>,
                      $encoding as <code class="type">xs:string</code>) as <code class="type">xs:string*</code></pre></div><p>Returns the contents of a file as a sequence of strings, separated at newline
@@ -366,7 +366,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   not supported by the implementation.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e1333" id="d3e1333"></a>4.15 <code>file:write</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1336" id="d3e1336"></a>4.15 <code>file:write</code></h3><div class="exampleInner"><pre>
 <code class="function">file:write</code>($file as <code class="type">xs:string</code>,
            $items as <code class="type">item()*</code>) as <code class="type">empty-sequence()</code>
 <code class="function">file:write</code>($file as <code class="type">xs:string</code>,
@@ -384,7 +384,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   directory.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e1416" id="d3e1416"></a>4.16 <code>file:write-binary</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1419" id="d3e1419"></a>4.16 <code>file:write-binary</code></h3><div class="exampleInner"><pre>
 <code class="function">file:write-binary</code>($file as <code class="type">xs:string</code>,
                   $value as <code class="type">xs:base64Binary</code>) as <code class="type">empty-sequence()</code>
 <code class="function">file:write-binary</code>($file as <code class="type">xs:string</code>,
@@ -400,7 +400,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   or if it exceeds the current file size.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e1490" id="d3e1490"></a>4.17 <code>file:write-text</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1493" id="d3e1493"></a>4.17 <code>file:write-text</code></h3><div class="exampleInner"><pre>
 <code class="function">file:write-text</code>($file as <code class="type">xs:string</code>,
                 $value as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code>
 <code class="function">file:write-text</code>($file as <code class="type">xs:string</code>,
@@ -416,7 +416,7 @@ return file:read-text($path)</pre></div><div class="div2">
                   not supported by the implementation.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div><div class="div2">
-<h3><a name="d3e1567" id="d3e1567"></a>4.18 <code>file:write-text-lines</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1570" id="d3e1570"></a>4.18 <code>file:write-text-lines</code></h3><div class="exampleInner"><pre>
 <code class="function">file:write-text-lines</code>($file as <code class="type">xs:string</code>,
                       $values as <code class="type">xs:string*</code>) as <code class="type">empty-sequence()</code>
 <code class="function">file:write-text-lines</code>($file as <code class="type">xs:string</code>,
@@ -432,9 +432,9 @@ return file:read-text($path)</pre></div><div class="div2">
                   not supported by the implementation.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
             </p></div></div><div class="div1">
-<h2><a name="d3e1645" id="d3e1645"></a>5 Paths</h2><p>None of the functions in this section performs any check regarding the existence of the
+<h2><a name="d3e1648" id="d3e1648"></a>5 Paths</h2><p>None of the functions in this section performs any check regarding the existence of the
             received or returned paths.</p><div class="div2">
-<h3><a name="d3e1650" id="d3e1650"></a>5.1 <code>file:base-name</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1653" id="d3e1653"></a>5.1 <code>file:base-name</code></h3><div class="exampleInner"><pre>
 <code class="function">file:base-name</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
 <code class="function">file:base-name</code>($path as <code class="type">xs:string</code>,
                $suffix as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><p>Returns the last component from <code>$path</code>, deleting any trailing directory
@@ -442,13 +442,13 @@ return file:read-text($path)</pre></div><div class="div2">
                string is returned. If <code>$path</code> is the empty string, the string
                   <code>"."</code> is returned, signifying the current working directory.</p><p>If <code>$suffix</code> is present, it will be trimmed from the end of the result.
                This can be used to eliminate file extensions.</p><p>This function is ·deterministic· (no path existence check is made).</p></div><div class="div2">
-<h3><a name="d3e1698" id="d3e1698"></a>5.2 <code>file:dir-name</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1701" id="d3e1701"></a>5.2 <code>file:dir-name</code></h3><div class="exampleInner"><pre>
 <code class="function">file:dir-name</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><p>This function returns a string denoting the parent directory of <code>$path</code>.
                If the specified string is empty or contains no directory separators, it is replaced
                with a single dot (<code>.</code>), signifying the current directory.
                If the resulting string does not end with a directory separator, it will be suffixed
                with the system-dependent directory separator.</p><p>This function is ·deterministic· (no path existence check is made).</p></div><div class="div2">
-<h3><a name="d3e1722" id="d3e1722"></a>5.3 <code>file:path-to-native</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1725" id="d3e1725"></a>5.3 <code>file:path-to-native</code></h3><div class="exampleInner"><pre>
 <code class="function">file:path-to-native</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><p>Transforms a URI, an absolute path, or relative path to a canonical, system-dependent
                path representation. A canonical path is both absolute and unique and thus contains
                no redirections such as references to parent directories or symbolic links.</p><p>If the resulting path points to a directory,
@@ -456,32 +456,32 @@ return file:read-text($path)</pre></div><div class="div2">
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if an error occurs while trying to obtain
                   the native path.</div>
             </p></div><div class="div2">
-<h3><a name="d3e1748" id="d3e1748"></a>5.4 <code>file:path-to-uri</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1751" id="d3e1751"></a>5.4 <code>file:path-to-uri</code></h3><div class="exampleInner"><pre>
 <code class="function">file:path-to-uri</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:anyURI</code></pre></div><p>Transforms a file system path into a URI with the <code>file://</code> scheme. If the
                path is relative, it is first resolved against the current working directory.</p><p>This function is ·deterministic· (no path existence check is made).</p></div><div class="div2">
-<h3><a name="d3e1769" id="d3e1769"></a>5.5 <code>file:resolve-path</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1772" id="d3e1772"></a>5.5 <code>file:resolve-path</code></h3><div class="exampleInner"><pre>
 <code class="function">file:resolve-path</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><p>Transforms a relative path into an absolute operating system path by resolving it
                against the current working directory.</p><p>If the resulting path points to a directory,
                it will be suffixed with the system-specific directory separator.</p><p>This function is ·nondeterministic·.</p></div></div><div class="div1">
-<h2><a name="d3e1790" id="d3e1790"></a>6 System Properties</h2><div class="div2">
-<h3><a name="d3e1793" id="d3e1793"></a>6.1 <code>file:dir-separator</code></h3><div class="exampleInner"><pre>
+<h2><a name="d3e1793" id="d3e1793"></a>6 System Properties</h2><div class="div2">
+<h3><a name="d3e1796" id="d3e1796"></a>6.1 <code>file:dir-separator</code></h3><div class="exampleInner"><pre>
 <code class="function">file:dir-separator</code>() as <code class="type">xs:string</code></pre></div><p>Returns the value of the operating system-specific directory separator, which usually
                is <code>/</code> on UNIX-based systems and <code>\</code> on Windows systems.</p><p>This function is ·nondeterministic·.</p></div><div class="div2">
-<h3><a name="d3e1814" id="d3e1814"></a>6.2 <code>file:line-separator</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1817" id="d3e1817"></a>6.2 <code>file:line-separator</code></h3><div class="exampleInner"><pre>
 <code class="function">file:line-separator</code>() as <code class="type">xs:string</code></pre></div><p>Returns the value of the operating system-specific line separator, which usually is
                   <code>&amp;#10;</code> on UNIX-based systems, <code>&amp;#13;&amp;#10;</code> on
                Windows systems and <code>&amp;#13;</code> on Mac systems.</p><p>This function is ·nondeterministic·.</p></div><div class="div2">
-<h3><a name="d3e1838" id="d3e1838"></a>6.3 <code>file:path-separator</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1841" id="d3e1841"></a>6.3 <code>file:path-separator</code></h3><div class="exampleInner"><pre>
 <code class="function">file:path-separator</code>() as <code class="type">xs:string</code></pre></div><p>Returns the value of the operating system-specific path separator, which usually is
                   <code>:</code> on UNIX-based systems and <code>;</code> on Windows systems.</p><p>This function is ·nondeterministic·.</p></div><div class="div2">
-<h3><a name="d3e1859" id="d3e1859"></a>6.4 <code>file:temp-dir</code></h3><div class="exampleInner"><pre>
+<h3><a name="d3e1862" id="d3e1862"></a>6.4 <code>file:temp-dir</code></h3><div class="exampleInner"><pre>
 <code class="function">file:temp-dir</code>() as <code class="type">xs:string</code></pre></div><p>Returns the path to the default temporary-file directory of an operating system.</p><p>This function is ·nondeterministic·.</p></div></div></div><div class="back"><div class="div1">
-<h2><a name="d3e1875" id="d3e1875"></a>A References</h2><dl><dt class="label"><a name="ser30" id="ser30"></a>XSLT and XQuery Serialization 3.0</dt><dd>
+<h2><a name="d3e1878" id="d3e1878"></a>A References</h2><dl><dt class="label"><a name="ser30" id="ser30"></a>XSLT and XQuery Serialization 3.0</dt><dd>
                <a href="http://www.w3.org/TR/xslt-xquery-serialization-30/">XSLT and XQuery
                   Serialization 3.0</a>. Henry Zongaro. W3C Working Draft 14 December 2010.</dd><dt class="label"><a name="fo30" id="fo30"></a>XQuery and XPath Functions and Operators 3.0</dt><dd>
                <a href="http://www.w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and
                   Operators 3.0</a>. Michael Kay. W3C Working Draft 14 December 2010.</dd></dl></div><div class="div1">
-<h2><a name="d3e1889" id="d3e1889"></a>B Summary of Error Conditions</h2><dl><dt class="label"><a name="errFILE0001" id="errFILE0001"></a>err:FILE0001</dt><dd>The specified path does not exist.</dd><dt class="label"><a name="errFILE0002" id="errFILE0002"></a>err:FILE0002</dt><dd>The specified path already exists.</dd><dt class="label"><a name="errFILE0003" id="errFILE0003"></a>err:FILE0003</dt><dd>The specified path does not point to a
+<h2><a name="d3e1892" id="d3e1892"></a>B Summary of Error Conditions</h2><dl><dt class="label"><a name="errFILE0001" id="errFILE0001"></a>err:FILE0001</dt><dd>The specified path does not exist.</dd><dt class="label"><a name="errFILE0002" id="errFILE0002"></a>err:FILE0002</dt><dd>The specified path already exists.</dd><dt class="label"><a name="errFILE0003" id="errFILE0003"></a>err:FILE0003</dt><dd>The specified path does not point to a
                directory.</dd><dt class="label"><a name="errFILE0004" id="errFILE0004"></a>err:FILE0004</dt><dd>The specified path points to a
                directory.</dd><dt class="label"><a name="errFILE0005" id="errFILE0005"></a>err:FILE0005</dt><dd>The specified encoding is not
                supported.</dd><dt class="label"><a name="errFILE0006" id="errFILE0006"></a>err:FILE0006</dt><dd>The specified offset or length is negative,

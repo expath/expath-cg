@@ -11,6 +11,7 @@
    
     <test-set name="file"           file="file/file.xml"/>  
     <test-set name="binary"         file="binary/binary.xml"/>
+    <test-set name="binary2"        file="binary/binary2.xml"/>
     <test-set name="archive"        file="archive/archive.xml"/>
  
     

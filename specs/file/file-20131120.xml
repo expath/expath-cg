@@ -8,7 +8,7 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Proposed Module</w3c-doctype>
       <pubdate>
-         <day>14</day>
+         <day>20</day>
          <month>November</month>
          <year>2013</year>
       </pubdate>
@@ -187,7 +187,7 @@ return file:read-text($path)</pre>
             <head><code>file:last-modified</code></head>
             <eg>
 <ex:function>file:last-modified</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:dateTime</ex:type></eg>
-            <p>Returns the last modification time of a file.</p>
+            <p>Returns the last modification time of a file or directory.</p>
             <p>This function is ·nondeterministic·.</p>
             <p>
                <div><bibref ref="errFILE0001"/> is raised if <code>$path</code> does not
@@ -199,7 +199,7 @@ return file:read-text($path)</pre>
             <head><code>file:size</code></head>
             <eg>
 <ex:function>file:size</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:integer</ex:type></eg>
-            <p>Returns the byte size of a file.</p>
+            <p>Returns the byte size of a file, or the value <code>0</code> for directories.</p>
             <p>This function is ·nondeterministic·.</p>
             <p>
                <div><bibref ref="errFILE0001"/> is raised if <code>$path</code> does not
