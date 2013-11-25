@@ -19,7 +19,7 @@
             <description>Part with negative offset</description>
             <test> bin:part($man.base,-1) </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
@@ -33,14 +33,14 @@
             <description>Part: offset beyond end of input</description>
             <test> bin:part($man.base,3) </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
             <description>Part: end beyond end of input</description>
             <test> bin:part($man.base,2,2) </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
     </expand>
@@ -91,7 +91,7 @@
             <description>Insert-before with negative offset</description>
             <test> bin:insert-before($man.base,-1,$man.base) </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
 
@@ -99,7 +99,7 @@
             <description>Insert-before: offset beyond end of input</description>
             <test> bin:insert-before($man.base,4,$man.base) </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
@@ -292,23 +292,28 @@
         </test-case>
         <test-case>
             <description>find with an empty search sequence</description>
-            <test> bin:find(xs:base64Binary("TWFuAAAA"),0,xs:base64Binary("")) </test>
+            <test> bin:find(xs:base64Binary("TWFuAAAA"),1,xs:base64Binary("")) </test>
+            <modified by="John Lumley" on="2013-11-25" change="Empty search supported"/>
             <result>
-                <error code="Q{http://expath.org/ns/binary}empty-search-item"/>
+                <!--<error code="Q{http://expath.org/ns/binary}empty-search-item"/>-->
+                <all-of>
+                    <assert-type>xs:integer</assert-type>
+                    <assert-eq>1</assert-eq>
+                </all-of>
             </result>
         </test-case>
         <test-case>
             <description>find with negative offset</description>
             <test> bin:find(xs:base64Binary("AE1hbg=="),-1,xs:base64Binary("TWFu")) </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
             <description>find with offset beyond input</description>
             <test> bin:find(xs:base64Binary("AE1hbg=="),5,xs:base64Binary("TWFu")) </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
