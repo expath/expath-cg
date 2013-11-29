@@ -385,8 +385,9 @@ return file:read-text($path)</pre>
                      $suffix as <ex:type>xs:string</ex:type>,
                      $dir as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
             <p>Creates a temporary directory and all non-existing parent directories.
-               The temporary directory is guaranteed to not already exist when the function is called.</p>
-            <p>If <code>$dir</code> is not given, then the directory will be created inside
+               The temporary directory is guaranteed to not already exist when the function is called.
+               It will not be automatically deleted after query execution.</p>
+            <p>If <code>$dir</code> is not given, the directory will be created inside
                the system-dependent default temporary-file directory.</p>
             <p>The function returns the full path to the created directory.</p>
             <p>This function is ·nondeterministic·.</p>
@@ -404,8 +405,9 @@ return file:read-text($path)</pre>
                       $suffix as <ex:type>xs:string</ex:type>,
                       $dir as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
             <p>Creates a temporary file and all non-existing parent directories.
-               The temporary file is guaranteed to not already exist when the function is called.</p>
-            <p>If <code>$dir</code> is not given, then the directory will be created inside
+               The temporary file is guaranteed to not already exist when the function is called.
+               It will not be automatically deleted after query execution.</p>
+            <p>If <code>$dir</code> is not given, the directory will be created inside
                the system-dependent default temporary-file directory.</p>
             <p>The function returns the full path to the created file.</p>
             <p>This function is ·nondeterministic·.</p>

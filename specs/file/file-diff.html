@@ -287,7 +287,8 @@ return file:read-text($path)</pre></div></div><div class="div2">
 <code class="function">file:create-temp-dir</code>($prefix as <code class="type">xs:string</code>,
                      $suffix as <code class="type">xs:string</code>,
                      $dir as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><p>Creates a temporary directory and all non-existing parent directories.
-               The temporary directory is guaranteed to not already exist when the function is called.</p><p>If <code>$dir</code> is not given, then the directory will be created inside
+               The temporary directory is guaranteed to not already exist when the function is called.
+               It will not be automatically deleted after query execution.</p><p>If <code>$dir</code> is not given, the directory will be created inside
                the system-dependent default temporary-file directory.</p><p>The function returns the full path to the created directory.</p><p>This function is ·nondeterministic·.</p><p>
                <div><a href="#errFILE0002">[err:FILE0002]</a> is raised if the specified directory does not exist.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
@@ -298,7 +299,8 @@ return file:read-text($path)</pre></div></div><div class="div2">
 <code class="function">file:create-temp-file</code>($prefix as <code class="type">xs:string</code>,
                       $suffix as <code class="type">xs:string</code>,
                       $dir as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><p>Creates a temporary file and all non-existing parent directories.
-               The temporary file is guaranteed to not already exist when the function is called.</p><p>If <code>$dir</code> is not given, then the directory will be created inside
+               The temporary file is guaranteed to not already exist when the function is called.
+               It will not be automatically deleted after query execution.</p><p>If <code>$dir</code> is not given, the directory will be created inside
                the system-dependent default temporary-file directory.</p><p>The function returns the full path to the created file.</p><p>This function is ·nondeterministic·.</p><p>
                <div><a href="#errFILE0002">[err:FILE0002]</a> is raised if the specified directory does not exist.</div>
                <div><a href="#errFILE9999">[err:FILE9999]</a> is raised if any other error occurs.</div>
