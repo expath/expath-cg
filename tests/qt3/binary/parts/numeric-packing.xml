@@ -384,14 +384,14 @@
             <description>unpack-double with negative offset</description>
             <test> bin:unpack-double(bin:from-octets($double.1.octets),-1,'most-significant-first') </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
             <description>unpack-double extending beyond data</description>
             <test> bin:unpack-double(bin:from-octets($double.1.octets),1,'most-significant-first') </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
@@ -467,14 +467,14 @@
             <description>unpack-float with negative offset</description>
             <test> bin:unpack-float(bin:from-octets($float.1.octets),-1,'most-significant-first') </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
             <description>unpack-float extending beyond data</description>
             <test> bin:unpack-float(bin:from-octets($float.1.octets),1,'most-significant-first') </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
@@ -578,7 +578,7 @@
             <description>unpack-unsigned-integer with negative offset</description>
             <test> bin:unpack-unsigned-integer($int.short.B,-1,2,'most-significant-first') </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
@@ -592,7 +592,7 @@
             <description>unpack-unsigned-integer extending beyond data</description>
             <test> bin:unpack-unsigned-integer($int.short.B,1,2,'most-significant-first') </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
@@ -714,7 +714,7 @@
             <description>unpack-integer with negative offset</description>
             <test> bin:unpack-integer($int.short.B,-1,2,'most-significant-first') </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
@@ -728,7 +728,7 @@
             <description>unpack-integer extending beyond data</description>
             <test> bin:unpack-integer($int.short.B,1,2,'most-significant-first') </test>
             <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
+                <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
             </result>
         </test-case>
         <test-case>
