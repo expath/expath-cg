@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="us-ascii"?>
 <test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-file">
    <description>Tests for the extension functions in the EXPath "file" package.
      Note the tests are written on the assumption that the "working directory"
@@ -265,17 +264,19 @@
    <test-case name="file-size-005">
       <description>Use file:size on a directory</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         file:size("sandpit")</test>
       <result>
-         <error code="Q{http://expath.org/ns/error}FILE0004"/>
+         <assert-eq>0</assert-eq>
       </result>
    </test-case>
    
    <test-case name="file-append2-001">
       <description>Use file:append with two arguments</description>
       <created by="Michael Kay" on="2012-06-15"/>
+      <modified by="Christian Grün" on="2013-11-20" change="omit-xml-declaration may be true"/>
       <environment ref="file"/>
       <test>
         (if (file:exists("sandpit/test.txt")) 
@@ -285,7 +286,7 @@
       <result>
          <all-of>
             <assert-empty/>
-            <assert>ends-with(Q{http://expath.org/ns/file}read-text("sandpit/test.txt"), "?>a b c 10")</assert>
+            <assert>ends-with(Q{http://expath.org/ns/file}read-text("sandpit/test.txt"), "a b c 10")</assert>
          </all-of>
       </result>
    </test-case>
@@ -293,6 +294,7 @@
    <test-case name="file-append2-002">
       <description>Use file:append with two arguments</description>
       <created by="Michael Kay" on="2012-06-15"/>
+      <modified by="Christian Grün" on="2013-11-20" change="omit-xml-declaration may be true"/>
       <environment ref="file"/>
       <dependency type="spec" value="XQ10+"/>
       <test><![CDATA[
@@ -304,7 +306,7 @@
       <result>
          <all-of>
             <assert-empty/>
-            <assert><![CDATA[ends-with(Q{http://expath.org/ns/file}read-text("sandpit/test.txt"), "?><b/>")]]></assert>
+            <assert><![CDATA[ends-with(Q{http://expath.org/ns/file}read-text("sandpit/test.txt"), "<b/>")]]></assert>
          </all-of>
       </result>
    </test-case>   
@@ -420,6 +422,7 @@
    
    <test-case name="file-appendText3-002">
       <description>Use file:append-text with three arguments: UTF-16 encoding</description>
+      <modified by="Christian Grün" on="2013-11-20" change="Alternative without BOM added" />
       <created by="Michael Kay" on="2012-06-11"/>
       <environment ref="file"/>
       <test>
@@ -615,7 +618,8 @@
    <test-case name="file-copy-005">
       <description>file:copy used to copy a directory, target directory exists</description>
       <created by="Michael Kay" on="2012-06-11"/>
-      <environment ref="file"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
+     <environment ref="file"/>
       <test>
         if (file:exists("sandpit/dirsource")) then file:delete("sandpit/dirsource", true()) else (),
         if (file:exists("sandpit/dirtarget")) then file:delete("sandpit/dirtarget", true()) else (),
@@ -630,8 +634,8 @@
       <result>
          <all-of>
             <assert-empty/>
-            <assert>Q{http://expath.org/ns/file}exists("sandpit/dirtarget/paris.txt")</assert>
-            <assert>Q{http://expath.org/ns/file}read-text("sandpit/dirtarget/paris.txt") eq "paris"</assert>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dirtarget/dirsource/paris.txt")</assert>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/dirtarget/dirsource/paris.txt") eq "paris"</assert>
             <assert>Q{http://expath.org/ns/file}exists("sandpit/dirsource/london.txt")</assert>
          </all-of>
       </result>
@@ -947,6 +951,7 @@
    <test-case name="file-list-008">
       <description>List non-empty directory with subdirectories, recursive = true</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
@@ -959,15 +964,17 @@
         file:list("sandpit/dir5", true())
       </test>
       <result>
-         <all-of>
-            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6", "dir6/helsinki.txt"</assert-permutation>
-         </all-of>
+         <any-of>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6\", "dir6\helsinki.txt"</assert-permutation>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6/", "dir6/helsinki.txt"</assert-permutation>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-list-009">
       <description>List non-empty directory with subdirectories, recursive = false</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Alternative added, aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
@@ -980,15 +987,17 @@
         file:list("sandpit/dir5", false())
       </test>
       <result>
-         <all-of>
-            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6"</assert-permutation>
-         </all-of>
+         <any-of>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6\"</assert-permutation>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6/"</assert-permutation>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-list-010">
       <description>List non-empty directory with subdirectories, recursive = unspecified</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Alternative added, aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
@@ -1001,9 +1010,10 @@
         file:list("sandpit/dir5", false())
       </test>
       <result>
-         <all-of>
-            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6"</assert-permutation>
-         </all-of>
+         <any-of>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6\"</assert-permutation>
+            <assert-permutation>"berlin.txt", "geneva.txt", "oslo.txt", "dir6/"</assert-permutation>
+         </any-of>
       </result>
    </test-case>
    
@@ -1040,6 +1050,7 @@
    <test-case name="file-list-013">
       <description>List non-empty directory with subdirectories, recursive = true, with glob</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Alternative added"/>
       <environment ref="file"/>
       <test>
         if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
@@ -1052,9 +1063,10 @@
         file:list("sandpit/dir5", true(), "berlin.*")
       </test>
       <result>
-         <all-of>
+         <any-of>
             <assert-permutation>"berlin.txt", "berlin.csv", "dir6/berlin.jpg"</assert-permutation>
-         </all-of>
+            <assert-permutation>"berlin.txt", "berlin.csv", "dir6\berlin.jpg"</assert-permutation>
+         </any-of>
       </result>
    </test-case>
    
@@ -1082,6 +1094,7 @@
    <test-case name="file-list-015">
       <description>List non-empty directory with subdirectories, recursive = true, with glob</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Alternative added"/>
       <environment ref="file"/>
       <test>
         if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
@@ -1094,15 +1107,17 @@
         file:list("sandpit/dir5", true(), "*.txt")
       </test>
       <result>
-         <all-of>
+         <any-of>
             <assert-permutation>"berlin.txt", "geneva.txt", "dir6/helsinki.txt"</assert-permutation>
-         </all-of>
+            <assert-permutation>"berlin.txt", "geneva.txt", "dir6\helsinki.txt"</assert-permutation>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-list-016">
       <description>List non-empty directory with subdirectories, recursive = true, with glob</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Alternative added"/>
       <environment ref="file"/>
       <test>
         if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
@@ -1115,15 +1130,17 @@
         file:list("sandpit/dir5", true(), "*.t?t")
       </test>
       <result>
-         <all-of>
+         <any-of>
             <assert-permutation>"berlin.txt", "geneva.tat", "dir6/helsinki.tit"</assert-permutation>
-         </all-of>
+            <assert-permutation>"berlin.txt", "geneva.tat", "dir6\helsinki.tit"</assert-permutation>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-list-017">
       <description>List non-empty directory with subdirectories, recursive = true, with glob</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Alternative added"/>
       <environment ref="file"/>
       <test>
         if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
@@ -1136,9 +1153,10 @@
         file:list("sandpit/dir5", true(), "berlin*.*")
       </test>
       <result>
-         <all-of>
+         <any-of>
             <assert-permutation>"berlin1.txt", "berlin2.tat", "berlin3.dat", "dir6/berlin4.tit"</assert-permutation>
-         </all-of>
+            <assert-permutation>"berlin1.txt", "berlin2.tat", "berlin3.dat", "dir6\berlin4.tit"</assert-permutation>
+         </any-of>
       </result>
    </test-case>
    
@@ -1249,7 +1267,8 @@
    <test-case name="file-move-005">
       <description>file:move used to move a directory, target directory exists</description>
       <created by="Michael Kay" on="2012-06-11"/>
-      <environment ref="file"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
+     <environment ref="file"/>
       <test>
         if (file:exists("sandpit/dirsource")) then file:delete("sandpit/dirsource", true()) else (),
         if (file:exists("sandpit/dirtarget")) then file:delete("sandpit/dirtarget", true()) else (),
@@ -1264,8 +1283,8 @@
       <result>
          <all-of>
             <assert-empty/>
-            <assert>Q{http://expath.org/ns/file}exists("sandpit/dirtarget/paris.txt")</assert>
-            <assert>Q{http://expath.org/ns/file}read-text("sandpit/dirtarget/paris.txt") eq "paris"</assert>
+            <assert>Q{http://expath.org/ns/file}exists("sandpit/dirtarget/dirsource/paris.txt")</assert>
+            <assert>Q{http://expath.org/ns/file}read-text("sandpit/dirtarget/dirsource/paris.txt") eq "paris"</assert>
             <assert>not(Q{http://expath.org/ns/file}exists("sandpit/dirsource/london.txt"))</assert>
          </all-of>
       </result>
@@ -2067,6 +2086,7 @@
    <test-case name="file-dirName-001">
       <description>Use file:dir-name on a text file</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         (if (file:exists("sandpit/test.txt")) 
@@ -2076,103 +2096,138 @@
         file:dir-name("sandpit/test.txt")
       </test>
       <result>
-         <assert-eq>"sandpit"</assert-eq>
+         <any-of>
+            <assert-eq>"sandpit\"</assert-eq>
+            <assert-eq>"sandpit/"</assert-eq>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-dirName-002">
       <description>Use file:dir-name on a directory</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         file:dir-name("sandpit/dir1")
       </test>
       <result>
-         <assert-eq>"sandpit"</assert-eq>
+         <any-of>
+            <assert-eq>"sandpit\"</assert-eq>
+            <assert-eq>"sandpit/"</assert-eq>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-dirName-003">
       <description>Use file:dir-name on a directory ignoring trailing slash</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         file:dir-name("sandpit/dir1/")
       </test>
       <result>
-         <assert-eq>"sandpit"</assert-eq>
+         <any-of>
+            <assert-eq>"sandpit\"</assert-eq>
+            <assert-eq>"sandpit/"</assert-eq>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-dirName-004">
       <description>Use file:dir-name on current directory</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         file:dir-name(".")
       </test>
       <result>
-         <assert-eq>"."</assert-eq>
+         <any-of>
+            <assert-eq>".\"</assert-eq>
+            <assert-eq>"./"</assert-eq>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-dirName-005">
       <description>Use file:dir-name on parent of current directory</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         file:dir-name("..")
       </test>
       <result>
-         <assert-eq>"."</assert-eq>
+         <any-of>
+            <assert-eq>".\"</assert-eq>
+            <assert-eq>"./"</assert-eq>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-dirName-006">
       <description>Use file:dir-name on root directory</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         file:dir-name("/")
       </test>
       <result>
-         <assert-eq>""</assert-eq>
+         <any-of>
+            <assert-eq>"\"</assert-eq>
+            <assert-eq>"/"</assert-eq>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-dirName-007">
       <description>Use file:dir-name on root directory URI</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         file:dir-name("file:///")
       </test>
       <result>
-         <assert-eq>""</assert-eq>
+         <any-of>
+            <assert-eq>"\"</assert-eq>
+            <assert-eq>"/"</assert-eq>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-dirName-008">
       <description>Use file:dir-name on root directory URI</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         file:dir-name("file:/")
       </test>
       <result>
-         <assert-eq>""</assert-eq>
+         <any-of>
+            <assert-eq>"\"</assert-eq>
+            <assert-eq>"/"</assert-eq>
+         </any-of>
       </result>
    </test-case>
    
    <test-case name="file-dirName-009">
       <description>Use file:dir-name on root directory URI</description>
       <created by="Michael Kay" on="2012-06-11"/>
+      <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
       <environment ref="file"/>
       <test>
         file:dir-name("file://localhost/")
       </test>
       <result>
-         <assert-eq>""</assert-eq>
+         <any-of>
+            <assert-eq>"\"</assert-eq>
+            <assert-eq>"/"</assert-eq>
+         </any-of>
       </result>
    </test-case>
    
