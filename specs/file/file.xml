@@ -13,11 +13,11 @@
          <year>2013</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/file/20131114"/>
+         <loc href="http://expath.org/spec/file/20131129"/>
       </publoc>
       <altlocs>
-         <loc href="http://expath.org/spec/file/20131114.xml">XML</loc>
-         <loc href="http://expath.org/spec/file/20131114/diff">Revision markup</loc>
+         <loc href="http://expath.org/spec/file/20131129.xml">XML</loc>
+         <loc href="http://expath.org/spec/file/20131129/diff">Revision markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/file"/>
