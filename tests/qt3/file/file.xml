@@ -8,7 +8,6 @@
 
   <environment name="file">
     <namespace prefix="file" uri="http://expath.org/ns/file"/>
-    <namespace prefix="file-err" uri="http://expath.org/ns/error"/>
   </environment>
 
   <test-case name="file-exists-001">
@@ -201,7 +200,7 @@
     <test>
         file:last-modified("sandpit/nonexistent.txt")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      <error code="Q{http://expath.org/ns/file}not-found"/>
     </result>
   </test-case>
 
@@ -257,7 +256,7 @@
     <test>
         file:size("sandpit/nonexistent.bin")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      <error code="Q{http://expath.org/ns/file}not-found"/>
     </result>
   </test-case>
 
@@ -382,7 +381,7 @@
     <test>
         file:append-text("sandpit", "abc")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -394,7 +393,7 @@
     <test>
         file:append-text("nonexistent/file.xml", "abc")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      <error code="Q{http://expath.org/ns/file}no-dir"/>
     </result>
   </test-case>
 
@@ -455,7 +454,7 @@
           else ()), 
         file:append-text("sandpit/test4.txt", "abc", "encoding-1234")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0005"/>
+      <error code="Q{http://expath.org/ns/file}unknown-encoding"/>
     </result>
   </test-case>
 
@@ -466,7 +465,7 @@
     <test>
         file:append-text("sandpit", "abc", "UTF-8")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -478,7 +477,7 @@
     <test>
         file:append-text("nonexistent/file.xml", "abc", "UTF-8")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      <error code="Q{http://expath.org/ns/file}no-dir"/>
     </result>
   </test-case>
 
@@ -526,7 +525,7 @@
     <test>
         file:append-binary("sandpit", xs:base64Binary(""))</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -539,7 +538,7 @@
         file:append-binary("nonexistent/file.bin", xs:base64Binary(""))
       </test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      <error code="Q{http://expath.org/ns/file}no-dir"/>
     </result>
   </test-case>
 
@@ -705,7 +704,7 @@
         file:list("sandpit/dir3/test")
       </test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0002"/>
+      <error code="Q{http://expath.org/ns/file}exists"/>
     </result>
   </test-case>
 
@@ -721,7 +720,7 @@
         file:list("sandpit/dir3/test")
       </test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0002"/>
+      <error code="Q{http://expath.org/ns/file}exists"/>
     </result>
   </test-case>
 
@@ -872,7 +871,7 @@
         file:delete("sandpit/dir4", false())
       </test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -888,7 +887,7 @@
         file:delete("sandpit/dir4")
       </test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -900,7 +899,7 @@
         file:delete("sandpit/does-not-exist.txt")
       </test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      <error code="Q{http://expath.org/ns/file}not-found"/>
     </result>
   </test-case>
 
@@ -1113,7 +1112,7 @@
         file:list("sandpit/dir5/berlin.txt", false())
       </test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      <error code="Q{http://expath.org/ns/file}no-dir"/>
     </result>
   </test-case>
 
@@ -1128,7 +1127,7 @@
         file:list("sandpit/non/existent/path", false())
       </test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      <error code="Q{http://expath.org/ns/file}no-dir"/>
     </result>
   </test-case>
 
@@ -1435,7 +1434,7 @@
         file:append-text("sandpit/test.bin", "abc", "UTF-8"),
         file:read-binary("sandpit/nonexistent.bin")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      <error code="Q{http://expath.org/ns/file}not-found"/>
     </result>
   </test-case>
 
@@ -1450,7 +1449,7 @@
         file:append-text("sandpit/test.bin", "abc", "UTF-8"),
         file:read-binary("sandpit")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -1498,7 +1497,7 @@
         file:read-binary("sandpit/test.bin",-1)</test>
     <result>
       <all-of>
-        <error code="Q{http://expath.org/ns/error}FILE0006"/>
+        <error code="Q{http://expath.org/ns/file}out-of-range"/>
       </all-of>
     </result>
   </test-case>
@@ -1514,7 +1513,7 @@
         file:read-binary("sandpit/test.bin",0,-1)</test>
     <result>
       <all-of>
-        <error code="Q{http://expath.org/ns/error}FILE0006"/>
+        <error code="Q{http://expath.org/ns/file}out-of-range"/>
       </all-of>
     </result>
   </test-case>
@@ -1546,7 +1545,7 @@
         file:read-binary("sandpit/test.bin",10,2)</test>
     <result>
       <all-of>
-        <error code="Q{http://expath.org/ns/error}FILE0006"/>
+        <error code="Q{http://expath.org/ns/file}out-of-range"/>
       </all-of>
     </result>
   </test-case>
@@ -1578,7 +1577,7 @@
         file:read-binary("sandpit/test.bin",1,5)</test>
     <result>
       <all-of>
-        <error code="Q{http://expath.org/ns/error}FILE0006"/>
+        <error code="Q{http://expath.org/ns/file}out-of-range"/>
       </all-of>
     </result>
   </test-case>
@@ -1612,7 +1611,7 @@
         file:append-text("sandpit/test.txt", "abcd"),
         file:read-text("sandpit/nonexistent.txt")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      <error code="Q{http://expath.org/ns/file}not-found"/>
     </result>
   </test-case>
 
@@ -1627,7 +1626,7 @@
         file:append-text("sandpit/test.txt", "abcd"),
         file:read-text("sandpit")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -1659,7 +1658,7 @@
         file:append-text("sandpit/test.txt", "abcd&#xa3;"),
         file:read-text("sandpit/test.text", "UTF-8")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      <error code="Q{http://expath.org/ns/file}not-found"/>
     </result>
   </test-case>
 
@@ -1674,7 +1673,7 @@
         file:append-text("sandpit/test.txt", "abcd&#xa3;"),
         file:read-text("sandpit", "UTF-8")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -1689,7 +1688,7 @@
         file:append-text("sandpit/test.txt", "abcd&#xa3;"),
         file:read-text("sandpit/test.txt", "UTF-8.5")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0005"/>
+      <error code="Q{http://expath.org/ns/file}unknown-encoding"/>
     </result>
   </test-case>
 
@@ -1705,7 +1704,7 @@
                         xs:base64Binary(xs:hexBinary("A3"))),
         file:read-text("sandpit/test.txt", "UTF-8")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE9999"/>
+      <error code="Q{http://expath.org/ns/file}io-error"/>
     </result>
   </test-case>
 
@@ -1856,7 +1855,7 @@
           else ()), 
         file:read-text-lines("sandpit/test.txt")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      <error code="Q{http://expath.org/ns/file}not-found"/>
     </result>
   </test-case>
 
@@ -1867,7 +1866,7 @@
     <test>
         file:read-text-lines("sandpit")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -1881,7 +1880,7 @@
           else ()), 
         file:read-text-lines("sandpit/test.txt", "UTF-8")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0001"/>
+      <error code="Q{http://expath.org/ns/file}not-found"/>
     </result>
   </test-case>
 
@@ -1892,7 +1891,7 @@
     <test>
         file:read-text-lines("sandpit", "UTF-8")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -1909,7 +1908,7 @@
         file:write-text("sandpit/test.txt", ""),
         file:read-text-lines("sandpit/test.txt", "UTF-82.3")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0005"/>
+      <error code="Q{http://expath.org/ns/file}unknown-encoding"/>
     </result>
   </test-case>
 
@@ -1945,7 +1944,7 @@
                         xs:base64Binary(xs:hexBinary("A3"))),
         file:read-text-lines("sandpit/test.txt", "UTF-8")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE9999"/>
+      <error code="Q{http://expath.org/ns/file}io-error"/>
     </result>
   </test-case>
 
@@ -2013,7 +2012,7 @@
     <test>
         file:write-text("sandpit", "abc")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -2025,7 +2024,7 @@
     <test>
         file:write-text("nonexistent/file.xml", "abc")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      <error code="Q{http://expath.org/ns/file}no-dir"/>
     </result>
   </test-case>
 
@@ -2077,7 +2076,7 @@
           else ()), 
         file:write-text("sandpit/test4.txt", "abc", "encoding-1234")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0005"/>
+      <error code="Q{http://expath.org/ns/file}unknown-encoding"/>
     </result>
   </test-case>
 
@@ -2088,7 +2087,7 @@
     <test>
         file:write-text("sandpit", "abc", "UTF-8")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -2100,7 +2099,7 @@
     <test>
         file:write-text("nonexistent/file.xml", "abc", "UTF-8")</test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      <error code="Q{http://expath.org/ns/file}no-dir"/>
     </result>
   </test-case>
 
@@ -2148,7 +2147,7 @@
         file:write-binary("sandpit", xs:base64Binary(""))
       </test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0004"/>
+      <error code="Q{http://expath.org/ns/file}is-dir"/>
     </result>
   </test-case>
 
@@ -2161,7 +2160,7 @@
         file:write-binary("nonexistent/file.bin", xs:base64Binary(""))
       </test>
     <result>
-      <error code="Q{http://expath.org/ns/error}FILE0003"/>
+      <error code="Q{http://expath.org/ns/file}no-dir"/>
     </result>
   </test-case>
 
@@ -2173,13 +2172,13 @@
         (if (file:exists("sandpit/test.bin")) 
           then file:delete("sandpit/test.bin")
           else ()), 
-        file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304")), 1)
+        file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304")), 0)
       </test>
     <result>
       <all-of>
         <assert-empty/>
         <assert>xs:hexBinary(Q{http://expath.org/ns/file}read-binary("sandpit/test.bin")) eq
-          xs:hexBinary("000001020304")</assert>
+          xs:hexBinary("0001020304")</assert>
       </all-of>
     </result>
   </test-case>
@@ -2214,7 +2213,7 @@
       </test>
     <result>
       <all-of>
-        <error code="Q{http://expath.org/ns/error}FILE0006"/>
+        <error code="Q{http://expath.org/ns/file}out-of-range"/>
       </all-of>
     </result>
   </test-case>
@@ -2228,11 +2227,11 @@
           then file:delete("sandpit/test.bin")
           else ()),
         file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304"))),
-        file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304")), 5)
+        file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304")), 6)
       </test>
     <result>
       <all-of>
-        <error code="Q{http://expath.org/ns/error}FILE0006"/>
+        <error code="Q{http://expath.org/ns/file}out-of-range"/>
       </all-of>
     </result>
   </test-case>
@@ -2305,7 +2304,7 @@
         file:name("/")
       </test>
     <result>
-      <assert-empty/>
+      <assert-eq/>
     </result>
   </test-case>
   <test-case name="file-name1-007">
@@ -2316,166 +2315,9 @@
         file:name("")
       </test>
     <result>
-      <assert-empty/>
+      <assert-eq/>
     </result>
   </test-case>
-
-  <!-- <test-case name="file-baseName1-001">
-    <description>Use file:base-name on a text file</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        (if (file:exists("sandpit/test.txt")) 
-          then file:delete("sandpit/test.txt")
-          else ()), 
-        file:write-text("sandpit/test.txt", "abc"),
-        file:base-name("sandpit/test.txt")
-      </test>
-    <result>
-      <assert-eq>"test.txt"</assert-eq>
-    </result>
-  </test-case>
-
-  <test-case name="file-baseName1-002">
-    <description>Use file:base-name on a directory</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        file:base-name("sandpit")
-      </test>
-    <result>
-      <assert-eq>"sandpit"</assert-eq>
-    </result>
-  </test-case>
-
-  <test-case name="file-baseName1-003">
-    <description>Use file:base-name on a nonexistent file</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        file:base-name("sandpit/nonexistent.txt")
-      </test>
-    <result>
-      <assert-eq>"nonexistent.txt"</assert-eq>
-    </result>
-  </test-case>
-
-  <test-case name="file-baseName1-004">
-    <description>Use file:base-name on current directory</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        file:base-name(".")
-      </test>
-    <result>
-      <assert-type>xs:string</assert-type>
-    </result>
-  </test-case>
-
-  <test-case name="file-baseName1-005">
-    <description>Use file:base-name on path with trailing separator</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        file:base-name("sandpit/dir1/")
-      </test>
-    <result>
-      <assert-eq>"dir1"</assert-eq>
-    </result>
-  </test-case>
-
-  <test-case name="file-baseName1-006">
-    <description>Use file:base-name on root path</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        file:base-name("/")
-      </test>
-    <result>
-      <assert-eq>""</assert-eq>
-    </result>
-  </test-case>
-
-  <test-case name="file-baseName1-007">
-    <description>Use file:base-name on path containing multiple directory separators</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        file:base-name("////")
-      </test>
-    <result>
-      <assert-eq>""</assert-eq>
-    </result>
-  </test-case>
-
-  <test-case name="file-baseName1-008">
-    <description>Use file:base-name on empty path</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        file:base-name("")
-      </test>
-    <result>
-      <assert-eq>"."</assert-eq>
-    </result>
-  </test-case>
-
-  <test-case name="file-baseName2-001">
-    <description>Use file:base-name on a text file with matching suffix</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        (if (file:exists("sandpit/test.txt")) 
-          then file:delete("sandpit/test.txt")
-          else ()), 
-        file:write-text("sandpit/test.txt", "abc"),
-        file:base-name("sandpit/test.txt", ".txt")
-      </test>
-    <result>
-      <assert-eq>"test"</assert-eq>
-    </result>
-  </test-case>
-
-  <test-case name="file-baseName2-002">
-    <description>Use file:base-name on a text file with non-matching suffix</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        (if (file:exists("sandpit/test.txt")) 
-          then file:delete("sandpit/test.txt")
-          else ()), 
-        file:write-text("sandpit/test.txt", "abc"),
-        file:base-name("sandpit/test.txt", ".xml")
-      </test>
-    <result>
-      <assert-eq>"test.txt"</assert-eq>
-    </result>
-  </test-case>
-
-  <test-case name="file-baseName2-003">
-    <description>Use file:base-name on a directory with no suffix</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        file:base-name("sandpit", ".html")
-      </test>
-    <result>
-      <assert-eq>"sandpit"</assert-eq>
-    </result>
-  </test-case>
-
-  <test-case name="file-baseName2-004">
-    <description>Use file:base-name on a directory with matching suffix</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <environment ref="file"/>
-    <test>
-        file:base-name("sandpit", "pit")
-      </test>
-    <result>
-      <assert-eq>"sand"</assert-eq>
-    </result>
-  </test-case>
--->
 
   <test-case name="file-parent-001">
     <description>Use file:parent on a text file</description>
@@ -2489,7 +2331,10 @@
         file:parent("sandpit/test.txt")
     </test>
     <result>
-      <assert-eq>Q{http://expath.org/ns/file}path-to-native("sandpit/")</assert-eq>
+      <any-of>
+        <assert-eq>"sandpit/"</assert-eq>
+        <assert-eq>"sandpit\"</assert-eq>
+      </any-of>
     </result>
   </test-case>
   <test-case name="file-parent-002">
@@ -2500,7 +2345,10 @@
         file:parent("sandpit/dir1")
     </test>
     <result>
-      <assert-eq>Q{http://expath.org/ns/file}path-to-native("sandpit/")</assert-eq>
+      <any-of>
+        <assert-eq>"sandpit/"</assert-eq>
+        <assert-eq>"sandpit\"</assert-eq>
+      </any-of>
     </result>
   </test-case>
   <test-case name="file-parent-003">
@@ -2511,7 +2359,10 @@
         file:parent("sandpit/dir1/")
     </test>
     <result>
-      <assert-eq>Q{http://expath.org/ns/file}path-to-native("sandpit/")</assert-eq>
+      <any-of>
+        <assert-eq>"sandpit/"</assert-eq>
+        <assert-eq>"sandpit\"</assert-eq>
+      </any-of>
     </result>
   </test-case>
   <test-case name="file-parent-004">
@@ -2525,156 +2376,6 @@
       <assert-empty/>
     </result>
   </test-case>
-
-
-
-  <!-- <test-case name="file-dirName-001">
-    <description>Use file:dir-name on a text file</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
-    <environment ref="file"/>
-    <test>
-        (if (file:exists("sandpit/test.txt")) 
-          then file:delete("sandpit/test.txt")
-          else ()), 
-        file:write-text("sandpit/test.txt", "abc"),
-        file:dir-name("sandpit/test.txt")
-      </test>
-    <result>
-      <any-of>
-        <assert-eq>"sandpit\"</assert-eq>
-        <assert-eq>"sandpit/"</assert-eq>
-      </any-of>
-    </result>
-  </test-case>
-
-  <test-case name="file-dirName-002">
-    <description>Use file:dir-name on a directory</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
-    <environment ref="file"/>
-    <test>
-        file:dir-name("sandpit/dir1")
-      </test>
-    <result>
-      <any-of>
-        <assert-eq>"sandpit\"</assert-eq>
-        <assert-eq>"sandpit/"</assert-eq>
-      </any-of>
-    </result>
-  </test-case>
-
-  <test-case name="file-dirName-003">
-    <description>Use file:dir-name on a directory ignoring trailing slash</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
-    <environment ref="file"/>
-    <test>
-        file:dir-name("sandpit/dir1/")
-      </test>
-    <result>
-      <any-of>
-        <assert-eq>"sandpit\"</assert-eq>
-        <assert-eq>"sandpit/"</assert-eq>
-      </any-of>
-    </result>
-  </test-case>
-
-  <test-case name="file-dirName-004">
-    <description>Use file:dir-name on current directory</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
-    <environment ref="file"/>
-    <test>
-        file:dir-name(".")
-      </test>
-    <result>
-      <any-of>
-        <assert-eq>".\"</assert-eq>
-        <assert-eq>"./"</assert-eq>
-      </any-of>
-    </result>
-  </test-case>
-
-  <test-case name="file-dirName-005">
-    <description>Use file:dir-name on parent of current directory</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
-    <environment ref="file"/>
-    <test>
-        file:dir-name("..")
-      </test>
-    <result>
-      <any-of>
-        <assert-eq>".\"</assert-eq>
-        <assert-eq>"./"</assert-eq>
-      </any-of>
-    </result>
-  </test-case>
-
-  <test-case name="file-dirName-006">
-    <description>Use file:dir-name on root directory</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
-    <environment ref="file"/>
-    <test>
-        file:dir-name("/")
-      </test>
-    <result>
-      <any-of>
-        <assert-eq>"\"</assert-eq>
-        <assert-eq>"/"</assert-eq>
-      </any-of>
-    </result>
-  </test-case>
-
- <test-case name="file-dirName-007">
-    <description>Use file:dir-name on root directory URI</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
-    <environment ref="file"/>
-    <test>
-        file:dir-name("file:///")
-      </test>
-    <result>
-      <any-of>
-        <assert-eq>"\"</assert-eq>
-        <assert-eq>"/"</assert-eq>
-      </any-of>
-    </result>
-  </test-case>
-
-  <test-case name="file-dirName-008">
-    <description>Use file:dir-name on root directory URI</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
-    <environment ref="file"/>
-    <test>
-        file:dir-name("file:/")
-      </test>
-    <result>
-      <any-of>
-        <assert-eq>"\"</assert-eq>
-        <assert-eq>"/"</assert-eq>
-      </any-of>
-    </result>
-  </test-case>
-
-  <test-case name="file-dirName-009">
-    <description>Use file:dir-name on root directory URI</description>
-    <created by="Michael Kay" on="2012-06-11"/>
-    <modified by="Christian Grün" on="2013-11-20" change="Aligned with latest spec (20131120)"/>
-    <environment ref="file"/>
-    <test>
-        file:dir-name("file://localhost/")
-      </test>
-    <result>
-      <any-of>
-        <assert-eq>"\"</assert-eq>
-        <assert-eq>"/"</assert-eq>
-      </any-of>
-    </result>
-  </test-case>-->
 
   <test-case name="file-pathToNative-001">
     <description>Use file:path-to-native on a text file</description>
