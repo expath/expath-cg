@@ -143,7 +143,7 @@
           <p>Generating PDF files from SVG graphical data.</p>
         </item>
       </ulist>
-      <div2 id="example-JPEG">
+      <div2 id="example–JPEG">
         <head>Example – finding JPEG size</head>
         <p>As an example, the following code reads the binary form of a JPEG image file, searches
           for the 'Start of Frame/DCT' segment, and unpacks the relevant binary sections to integers
@@ -166,11 +166,11 @@
           represented as the following series of octets:</p>
         <ulist>
           <item>
-            <p>Type - 1 octet - in this case the value <code>0x02</code></p>
+            <p>Type – 1 octet – in this case the value <code>0x02</code></p>
           </item>
           <item>
             <p>Length – &gt;=1 octet – the number of octets in the integer value. The length field
-              itself can be variable in length - to accomodate VERY large integers (requiring more
+              itself can be variable in length – to accomodate VERY large integers (requiring more
               than 127 octets to represent, e.g. 2048-bit crypto keys.)</p>
           </item>
           <item>
