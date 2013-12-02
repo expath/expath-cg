@@ -81,9 +81,9 @@
             href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
       </div1>
 
-      <div1>
+      <div1 id="intro">
          <head>Introduction</head>
-         <div2>
+         <div2 id="namespaces">
             <head>Namespace conventions</head>
             <p>The module defined by this document defines the functions and variables in the
                namespace <code>http://expath.org/ns/file</code>. In this document, the
@@ -94,7 +94,7 @@
             <p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>.
                The <code>err</code> prefix is bound to this namespace URI.</p>
          </div2>
-         <div2>
+         <div2 id="file-paths">
             <head>File Paths</head>
             <p>All file paths are specified as strings, and are resolved against the current working
                directory. An implementation must accept absolute and relative UNIX/Linux and Windows
@@ -136,7 +136,7 @@ let $dir := file:dir-name(static-base-uri())
 let $path := concat($dir, $filename)
 return file:read-text($path)</pre>
          </div2>
-         <div2>
+         <div2 id="exec">
             <head>Query Execution</head>
             <p>Some function are marked as ·nondeterministic·, which means they are not guaranteed to
                perform the same operations and produce identical results from repeated calls. A query
@@ -144,7 +144,7 @@ return file:read-text($path)</pre>
                its results are not cached when compiling and evaluating the query and serializing
                its results.</p>
          </div2>
-         <div2>
+         <div2 id="error">
             <head>Error Management</head>
             <p>Error conditions are identified by a code (a <code>QName</code>). When such an error
                condition is reached during the execution of the function, a dynamic error is thrown,
@@ -159,16 +159,16 @@ return file:read-text($path)</pre>
       </div1>
 
       <!-- *************************************** File properties **************************** -->
-      <div1>
+      <div1 id="props">
          <head>File Properties</head>
-         <div2>
+         <div2 id="pr.exists">
             <head><code>file:exists</code></head>
             <eg>
 <ex:function>file:exists</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
             <p>Tests if the file or directory pointed by <code>$path</code> exists.</p>
             <p>This function is ·nondeterministic·.</p>
          </div2>
-         <div2>
+         <div2 id="pr.is-dir">
             <head><code>file:is-dir</code></head>
             <eg>
 <ex:function>file:is-dir</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
@@ -176,14 +176,14 @@ return file:read-text($path)</pre>
                the volume roots are considered directories.</p>
             <p>This function is ·nondeterministic·.</p>
          </div2>
-         <div2>
+         <div2 id="pr.is-file">
             <head><code>file:is-file</code></head>
             <eg>
 <ex:function>file:is-file</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
             <p>Tests if <code>$path</code> points to a file.</p>
             <p>This function is ·nondeterministic·.</p>
          </div2>
-         <div2>
+         <div2 id="pr.last-modified">
             <head><code>file:last-modified</code></head>
             <eg>
 <ex:function>file:last-modified</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:dateTime</ex:type></eg>
@@ -195,7 +195,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="pr.size">
             <head><code>file:size</code></head>
             <eg>
 <ex:function>file:size</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:integer</ex:type></eg>
@@ -210,9 +210,9 @@ return file:read-text($path)</pre>
       </div1>
 
       <!-- *************************************** I/O Functions ****************************** -->
-      <div1>
+      <div1 id="in-out">
          <head>Input/Output</head>
-         <div2>
+         <div2 id="fn.append">
             <head><code>file:append</code></head>
             <eg>
 <ex:function>file:append</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -238,7 +238,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.append-binary">
             <head><code>file:append-binary</code></head>
             <eg>
 <ex:function>file:append-binary</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -255,7 +255,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.append-text">
             <head><code>file:append-text</code></head>
             <eg>
 <ex:function>file:append-text</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -279,7 +279,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.append-text-lines">
             <head><code>file:append-text-lines</code></head>
             <eg>
 <ex:function>file:append-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -304,7 +304,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.copy">
             <head><code>file:copy</code></head>
             <eg>
 <ex:function>file:copy</ex:function>($source as <ex:type>xs:string</ex:type>,
@@ -343,7 +343,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.create-dir">
             <head><code>file:create-dir</code></head>
             <eg>
 <ex:function>file:create-dir</ex:function>($dir as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
@@ -357,7 +357,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.create-temp-dir">
             <head><code>file:create-temp-dir</code></head>
             <eg>
 <ex:function>file:create-temp-dir</ex:function>($prefix as <ex:type>xs:string</ex:type>,
@@ -377,7 +377,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.create-temp-file">
             <head><code>file:create-temp-file</code></head>
             <eg>
 <ex:function>file:create-temp-file</ex:function>($prefix as <ex:type>xs:string</ex:type>,
@@ -397,7 +397,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.delete">
             <head><code>file:delete</code></head>
             <eg>
 <ex:function>file:delete</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type>
@@ -416,7 +416,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.list">
             <head><code>file:list</code></head>
             <eg>
 <ex:function>file:list</ex:function>($dir as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type>
@@ -446,7 +446,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.move">
             <head><code>file:move</code></head>
             <eg>
 <ex:function>file:move</ex:function>($source as <ex:type>xs:string</ex:type>,
@@ -485,7 +485,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.read-binary">
             <head><code>file:read-binary</code></head>
             <eg>
 <ex:function>file:read-binary</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:base64Binary</ex:type>
@@ -508,7 +508,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.read-text">
             <head><code>file:read-text</code></head>
             <eg>
 <ex:function>file:read-text</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type>
@@ -528,7 +528,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.read-text-lines">
             <head><code>file:read-text-lines</code></head>
             <eg>
 <ex:function>file:read-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type>
@@ -551,7 +551,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.write">
             <head><code>file:write</code></head>
             <eg>
 <ex:function>file:write</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -577,7 +577,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.write-binary">
             <head><code>file:write-binary</code></head>
             <eg>
 <ex:function>file:write-binary</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -601,7 +601,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.write-text">
             <head><code>file:write-text</code></head>
             <eg>
 <ex:function>file:write-text</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -625,7 +625,7 @@ return file:read-text($path)</pre>
                <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.write-text-lines">
             <head><code>file:write-text-lines</code></head>
             <eg>
 <ex:function>file:write-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -652,11 +652,11 @@ return file:read-text($path)</pre>
       </div1>
 
       <!-- *************************************** Functions on paths ************************* -->
-      <div1>
+      <div1 id="paths">
          <head>Paths</head>
          <p>None of the functions in this section performs any check regarding the existence of the
             received or returned paths.</p>
-         <div2>
+         <div2 id="fn.base-name">
             <head><code>file:base-name</code></head>
             <eg>
 <ex:function>file:base-name</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type>
@@ -670,7 +670,7 @@ return file:read-text($path)</pre>
                This can be used to eliminate file extensions.</p>
             <p>This function is ·deterministic· (no path existence check is made).</p>
          </div2>
-         <div2>
+         <div2 id="fn.dir-name">
             <head><code>file:dir-name</code></head>
             <eg>
 <ex:function>file:dir-name</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
@@ -681,7 +681,7 @@ return file:read-text($path)</pre>
                with the system-dependent directory separator.</p>
             <p>This function is ·deterministic· (no path existence check is made).</p>
          </div2>
-         <div2>
+         <div2 id="fn.path-to-native">
             <head><code>file:path-to-native</code></head>
             <eg>
 <ex:function>file:path-to-native</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
@@ -696,7 +696,7 @@ return file:read-text($path)</pre>
                   the native path.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.path-to-uri">
             <head><code>file:path-to-uri</code></head>
             <eg>
 <ex:function>file:path-to-uri</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:anyURI</ex:type></eg>
@@ -704,7 +704,7 @@ return file:read-text($path)</pre>
                path is relative, it is first resolved against the current working directory.</p>
             <p>This function is ·deterministic· (no path existence check is made).</p>
          </div2>
-         <div2>
+         <div2 id="fn.resolve-path">
             <head><code>file:resolve-path</code></head>
             <eg>
 <ex:function>file:resolve-path</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
@@ -717,9 +717,9 @@ return file:read-text($path)</pre>
       </div1>
 
       <!-- ************************************************************************************ -->
-      <div1>
+      <div1 id="sys-props">
          <head>System Properties</head>
-         <div2>
+         <div2 id="pr.dir-separator">
             <head><code>file:dir-separator</code></head>
             <eg>
 <ex:function>file:dir-separator</ex:function>() as <ex:type>xs:string</ex:type></eg>
@@ -727,7 +727,7 @@ return file:read-text($path)</pre>
                is <code>/</code> on UNIX-based systems and <code>\</code> on Windows systems.</p>
             <p>This function is ·nondeterministic·.</p>
          </div2>
-         <div2>
+         <div2 id="pr.line-separator">
             <head><code>file:line-separator</code></head>
             <eg>
 <ex:function>file:line-separator</ex:function>() as <ex:type>xs:string</ex:type></eg>
@@ -736,7 +736,7 @@ return file:read-text($path)</pre>
                Windows systems and <code>&amp;#13;</code> on Mac systems.</p>
             <p>This function is ·nondeterministic·.</p>
          </div2>
-         <div2>
+         <div2 id="pr.path-separator">
             <head><code>file:path-separator</code></head>
             <eg>
 <ex:function>file:path-separator</ex:function>() as <ex:type>xs:string</ex:type></eg>
@@ -744,7 +744,7 @@ return file:read-text($path)</pre>
                   <code>:</code> on UNIX-based systems and <code>;</code> on Windows systems.</p>
             <p>This function is ·nondeterministic·.</p>
          </div2>
-         <div2>
+         <div2 id="pr.temp-dir">
             <head><code>file:temp-dir</code></head>
             <eg>
 <ex:function>file:temp-dir</ex:function>() as <ex:type>xs:string</ex:type></eg>
@@ -754,7 +754,7 @@ return file:read-text($path)</pre>
       </div1>
    </body>
    <back>
-      <div1>
+      <div1 id="refs">
          <head>References</head>
          <blist>
             <bibl id="ser30" key="XSLT and XQuery Serialization 3.0">
