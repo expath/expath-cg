@@ -8,16 +8,16 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Proposed Module</w3c-doctype>
       <pubdate diff="chg">
-         <day>29</day>
-         <month>November</month>
+         <day>03</day>
+         <month>December</month>
          <year>2013</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/file/20131129" diff="chg"/>
+         <loc href="http://expath.org/spec/file/20131203" diff="chg"/>
       </publoc>
       <altlocs>
-         <loc href="http://expath.org/spec/file/20131129.xml" diff="chg">XML</loc>
-         <loc href="http://expath.org/spec/file/20131129/diff" diff="chg">Revision markup</loc>
+         <loc href="http://expath.org/spec/file/20131203.xml" diff="chg">XML</loc>
+         <loc href="http://expath.org/spec/file/20131203/diff" diff="chg">Revision markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/file"/>
@@ -81,22 +81,22 @@
             href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
       </div1>
 
-      <div1>
+      <div1 id="intro">
          <head>Introduction</head>
-         <div2>
+         <div2 id="namespaces">
             <head>Namespace conventions</head>
-            <p>The module defined by this document defines the functions and variables in the
+            <p>The module defined by this document defines <phrase diff="del">the</phrase> functions
+               and <phrase diff="del">variables</phrase> <phrase diff="add">errors</phrase> in the
                namespace <code>http://expath.org/ns/file</code>. In this document, the
                   <code>file</code> prefix<phrase diff="del">, when used,</phrase> is bound to this namespace URI.</p>
             <p>The <code>output</code> prefix is bound to the namespace
                <code>http://www.w3.org/2010/xslt-xquery-serialization</code>. It is used
                to specify serialization parameters.</p>
-            <p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>.
-               <phrase diff="del">In this document, the</phrase>
-               <phrase diff="add">The </phrase><code>err</code> prefix<phrase diff="del">, when used,</phrase>
+            <p diff="del">Error codes are defined in the namespace <code>http://expath.org/ns/error</code>.
+               In this document, the <code>err</code> prefix, when used,
                is bound to this namespace URI.</p>
          </div2>
-         <div2>
+         <div2 id="file-paths">
             <head>File Paths <phrase diff="del">vs. URIs</phrase></head>
             <p>All file paths are specified as strings, and are resolved against the current working
                directory. An implementation must accept absolute and relative UNIX/Linux and Windows
@@ -139,7 +139,7 @@ let $dir := file:dir-name(static-base-uri())
 let $path := concat($dir, $filename)
 return file:read-text($path)</pre>
          </div2>
-         <div2>
+         <div2 id="exec">
             <head>Query Execution</head>
             <p><phrase diff="del">Functions on File Properties (Section 2) and Input/Output (Section 3) are</phrase>
                <phrase diff="add">Some function are marked as</phrase>
@@ -149,7 +149,7 @@ return file:read-text($path)</pre>
                that these functions are not relocated or pre-evaluated and that its results are not
                cached when compiling and evaluating the query and serializing its results.</p>
          </div2>
-         <div2>
+         <div2 id="error">
             <head>Error Management</head>
             <p>Error conditions are identified by a code (a <code>QName</code>). When such an error
                condition is reached during the execution of the function, a dynamic error is thrown,
@@ -157,21 +157,22 @@ return file:read-text($path)</pre>
                   <code><phrase diff="add">fn:</phrase>error</code> had been called).</p>
             <p>Error codes are defined through the specification.
                <phrase diff="add">The generic error
-               <bibref ref="errFILE9999"/> with an appropriate message is raised for I/O faults,
+               <bibref diff="del" ref="errFILE9999"/>
+               <bibref diff="add" ref="errIE"/> with an appropriate message is raised for I/O faults,
                or for specific errors caused by the underlying platform or programming language.</phrase>
                <phrase diff="del">If file operations raise
                additional, errors, which may be specific to the underlying platform or programming
-               language, the generic error <bibref ref="errFILE9999"/> with an appropriate message
-               is raised.</phrase></p>
+               language, the generic error <bibref diff="del" ref="errFILE9999"/>
+               <bibref diff="add" ref="errIE"/> with an appropriate message is raised.</phrase></p>
             <p>For a list of specific errors see the "Summary of Error Conditions" section of this
                document.</p>
          </div2>
       </div1>
 
       <!-- *************************************** File properties **************************** -->
-      <div1>
+      <div1 id="props">
          <head>File Properties</head>
-         <div2>
+         <div2 id="pr.exists">
             <head><code>file:exists</code></head>
             <eg>
 <ex:function>file:exists</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
@@ -182,7 +183,7 @@ return file:read-text($path)</pre>
                location pointed by <code>$path</code>.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
          </div2>
-         <div2>
+         <div2 id="pr.is-dir">
             <head><code>file:is-dir</code></head>
             <eg>
 <ex:function>file:is-dir</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
@@ -190,14 +191,14 @@ return file:read-text($path)</pre>
                the volume roots are considered directories.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
          </div2>
-         <div2>
+         <div2 id="pr.is-file">
             <head><code>file:is-file</code></head>
             <eg>
 <ex:function>file:is-file</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
             <p>Tests if <code>$path</code> points to a file.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
          </div2>
-         <div2>
+         <div2 id="pr.last-modified">
             <head><code>file:last-modified</code></head>
             <eg>
 <ex:function>file:last-modified</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:dateTime</ex:type></eg>
@@ -205,12 +206,13 @@ return file:read-text($path)</pre>
             <phrase diff="add">of a file or directory</phrase>.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0001"/> is raised if <code>$path</code> does not
-                  exist.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE0001"/>
+                    <bibref diff="add" ref="errNF"/> is raised if <code>$path</code> does not exist.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="pr.size">
             <head><code>file:size</code></head>
             <eg>
 <ex:function>file:size</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:integer</ex:type></eg>
@@ -218,19 +220,22 @@ return file:read-text($path)</pre>
             or the value <code>0</code> for directories.</phrase></p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0001"/> is raised if <code>$path</code> does not
+               <div><bibref diff="del" ref="errFILE0001"/>
+                    <bibref diff="add" ref="errNF"/> is raised if <code>$path</code> does not
                   exist.</div>
-               <div diff="del"><bibref ref="errFILE0004"/> is raised if <code>$path</code> points to a
+               <div diff="del">
+                    <bibref ref="errID"/> is raised if <code>$path</code> points to a
                   directory.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
       </div1>
 
       <!-- *************************************** I/O Functions ****************************** -->
-      <div1>
+      <div1 id="in-out">
          <head>Input/Output</head>
-         <div2>
+         <div2 id="fn.append">
             <head><code>file:append</code></head>
             <eg>
 <ex:function>file:append</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -249,14 +254,17 @@ return file:read-text($path)</pre>
             <p>The function returns the empty sequence if the operation is successful.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+               <div><bibref diff="del" ref="errFILE0003"/>
+                    <bibref diff="add" ref="errND"/> is raised if the parent directory of
                      <code>$file</code> does not exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   directory.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.append-binary">
             <head><code>file:append-binary</code></head>
             <eg>
 <ex:function>file:append-binary</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -266,14 +274,17 @@ return file:read-text($path)</pre>
             <p>The function returns the empty sequence if the operation is successful.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+               <div><bibref diff="del" ref="errFILE0003"/>
+                    <bibref diff="add" ref="errND"/> is raised if the parent directory of
                      <code>$file</code> does not exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   directory.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.append-text">
             <head><code>file:append-text</code></head>
             <eg>
 <ex:function>file:append-text</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -288,16 +299,20 @@ return file:read-text($path)</pre>
             <p>The function returns the empty sequence if the operation is successful.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+               <div><bibref diff="del" ref="errFILE0003"/>
+                    <bibref diff="add" ref="errND"/> is raised if the parent directory of
                      <code>$file</code> does not exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   directory.</div>
-               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+               <div><bibref diff="del" ref="errFILE0005"/>
+                    <bibref diff="add" ref="errUE"/> is raised if <code>$encoding</code> is invalid or
                   not supported by the implementation.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.append-text-lines">
             <head><code>file:append-text-lines</code></head>
             <eg>
 <ex:function>file:append-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -313,16 +328,20 @@ return file:read-text($path)</pre>
             <p>The function returns the empty sequence if the operation is successful.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+               <div><bibref diff="del" ref="errFILE0003"/>
+                    <bibref diff="add" ref="errND"/> is raised if the parent directory of
                      <code>$file</code> does not exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   directory.</div>
-               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+               <div><bibref diff="del" ref="errFILE0005"/>
+                    <bibref diff="add" ref="errUE"/> is raised if <code>$encoding</code> is invalid or
                   not supported by the implementation.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.copy">
             <head><code>file:copy</code></head>
             <eg>
 <ex:function>file:copy</ex:function>($source as <ex:type>xs:string</ex:type>,
@@ -350,19 +369,24 @@ return file:read-text($path)</pre>
                occurs during the operation, no rollback to the original state will be possible </p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0001"/> is raised if the <code>$source</code> path does not
+               <div><bibref diff="del" ref="errFILE0001"/>
+                    <bibref diff="add" ref="errNF"/> is raised if the <code>$source</code> path does not
                   exist.</div>
-               <div><bibref ref="errFILE0002"/> is raised if <code>$source</code> points to a
+               <div><bibref diff="del" ref="errFILE0002"/>
+                    <bibref diff="add" ref="errE"/> is raised if <code>$source</code> points to a
                   directory and <code>$target</code> points to an existing file.</div>
-               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+               <div><bibref diff="del" ref="errFILE0003"/>
+                    <bibref diff="add" ref="errND"/> is raised if the parent directory of
                      <code>$source</code> does not exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$source</code> points to a file
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$source</code> points to a file
                   and <code>$target</code> points to a directory, in which a subdirectory exists
                   with the name of the source file.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.create-dir">
             <head><code>file:create-dir</code></head>
             <eg>
 <ex:function>file:create-dir</ex:function>($dir as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg>
@@ -371,12 +395,14 @@ return file:read-text($path)</pre>
             <p>The function returns the empty sequence if the operation is successful.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0002"/> is raised if the specified path, or any of its
+               <div><bibref diff="del" ref="errFILE0002"/>
+                    <bibref diff="add" ref="errE"/> is raised if the specified path, or any of its
                   parent directories, points to an existing file.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2 diff="add">
+         <div2 diff="add" id="fn.create-temp-dir">
             <head><code>file:create-temp-dir</code></head>
             <eg>
 <ex:function>file:create-temp-dir</ex:function>($prefix as <ex:type>xs:string</ex:type>,
@@ -384,19 +410,22 @@ return file:read-text($path)</pre>
 <ex:function>file:create-temp-dir</ex:function>($prefix as <ex:type>xs:string</ex:type>,
                      $suffix as <ex:type>xs:string</ex:type>,
                      $dir as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
-            <p>Creates a temporary directory and all non-existing parent directories.
-               The temporary directory is guaranteed to not already exist when the function is called.
-               It will not be automatically deleted after query execution.</p>
-            <p>If <code>$dir</code> is not given, the directory will be created inside
-               the system-dependent default temporary-file directory.</p>
-            <p>The function returns the full path to the created directory.</p>
+                <p>Creates a temporary directory and all non-existing parent directories
+                   and returns the full path to the created directory.</p>
+                <p>The temporary directory will not be automatically deleted after query execution.
+                   It is guaranteed to not already exist when the function is called.</p>
+                <p>If <code>$dir</code> is not given, the directory will be created inside
+                   the system-dependent default temporary-file directory.</p>
+
             <p>This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0002"/> is raised if the specified directory does not exist.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE0002"/>
+                    <bibref diff="add" ref="errE"/> is raised if the specified directory does not exist.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2 diff="add">
+         <div2 diff="add" id="fn.create-temp-file">
             <head><code>file:create-temp-file</code></head>
             <eg>
 <ex:function>file:create-temp-file</ex:function>($prefix as <ex:type>xs:string</ex:type>,
@@ -404,19 +433,22 @@ return file:read-text($path)</pre>
 <ex:function>file:create-temp-file</ex:function>($prefix as <ex:type>xs:string</ex:type>,
                       $suffix as <ex:type>xs:string</ex:type>,
                       $dir as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
-            <p>Creates a temporary file and all non-existing parent directories.
-               The temporary file is guaranteed to not already exist when the function is called.
-               It will not be automatically deleted after query execution.</p>
-            <p>If <code>$dir</code> is not given, the directory will be created inside
-               the system-dependent default temporary-file directory.</p>
-            <p>The function returns the full path to the created file.</p>
+                <p>Creates a temporary file and all non-existing parent directories and
+                   returns the full path to the created file.</p>
+                <p>The temporary file will not be automatically deleted after query execution.
+                   It is guaranteed to not already exist when the function is called.</p>
+                <p>If <code>$dir</code> is not given, the directory will be created inside
+                   the system-dependent default temporary-file directory.</p>
+
             <p>This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0002"/> is raised if the specified directory does not exist.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE0002"/>
+                    <bibref diff="add" ref="errE"/> is raised if the specified directory does not exist.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.delete">
             <head><code>file:delete</code></head>
             <eg>
 <ex:function>file:delete</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type>
@@ -428,14 +460,17 @@ return file:read-text($path)</pre>
             <p>The function returns the empty sequence if the operation is successful.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0001"/> is raised if <code>$path</code> does not
+               <div><bibref diff="del" ref="errFILE0001"/>
+                    <bibref diff="add" ref="errNF"/> is raised if <code>$path</code> does not
                   exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   non-empty directory.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.list">
             <head><code>file:list</code></head>
             <eg>
 <ex:function>file:list</ex:function>($dir as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type>
@@ -460,12 +495,14 @@ return file:read-text($path)</pre>
             </p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0003"/> is raised <code>$dir</code> does not point to an
+               <div><bibref diff="del" ref="errFILE0003"/>
+                    <bibref diff="add" ref="errND"/> is raised <code>$dir</code> does not point to an
                   existing directory.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.move">
             <head><code>file:move</code></head>
             <eg>
 <ex:function>file:move</ex:function>($source as <ex:type>xs:string</ex:type>,
@@ -493,19 +530,24 @@ return file:read-text($path)</pre>
                occurs during the operation, no rollback to the original state will be possible </p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0001"/> is raised if the <code>$source</code> path does not
+               <div><bibref diff="del" ref="errFILE0001"/>
+                    <bibref diff="add" ref="errNF"/> is raised if the <code>$source</code> path does not
                   exist.</div>
-               <div><bibref ref="errFILE0002"/> is raised if <code>$source</code> points to a
+               <div><bibref diff="del" ref="errFILE0002"/>
+                    <bibref diff="add" ref="errE"/> is raised if <code>$source</code> points to a
                   directory and <code>$target</code> points to an existing file.</div>
-               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+               <div><bibref diff="del" ref="errFILE0003"/>
+                    <bibref diff="add" ref="errND"/> is raised if the parent directory of
                      <code>$source</code> does not exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$source</code> points to a file
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$source</code> points to a file
                   and <code>$target</code> points to a directory, in which a subdirectory exists
                   with the name of the source file.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.read-binary">
             <head><code>file:read-binary</code></head>
             <eg>
 <ex:function>file:read-binary</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:base64Binary</ex:type>
@@ -519,16 +561,20 @@ return file:read-text($path)</pre>
                used to read chunks of a file.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0001"/> is raised if <code>$file</code> does not
+               <div><bibref diff="del" ref="errFILE0001"/>
+                    <bibref diff="add" ref="errNF"/> is raised if <code>$file</code> does not
                   exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   directory.</div>
-               <div diff="add"><bibref ref="errFILE0006"/> is raised if <code>$offset</code> or
+               <div diff="add"><bibref diff="del" ref="errFILE0006"/>
+                    <bibref diff="add" ref="errOOR"/> is raised if <code>$offset</code> or
                   <code>$length</code> is negative, or if the chosen values would exceed the file bounds.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.read-text">
             <head><code>file:read-text</code></head>
             <eg>
 <ex:function>file:read-text</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type>
@@ -539,16 +585,20 @@ return file:read-text($path)</pre>
                   <code>UTF-8</code>.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0001"/> is raised if <code>$file</code> does not
+               <div><bibref diff="del" ref="errFILE0001"/>
+                    <bibref diff="add" ref="errNF"/> is raised if <code>$file</code> does not
                   exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   directory.</div>
-               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+               <div><bibref diff="del" ref="errFILE0005"/>
+                    <bibref diff="add" ref="errUE"/> is raised if <code>$encoding</code> is invalid or
                   not supported by the implementation.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.read-text-lines">
             <head><code>file:read-text-lines</code></head>
             <eg>
 <ex:function>file:read-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type>
@@ -562,16 +612,20 @@ return file:read-text($path)</pre>
                function in <bibref ref="fo30"/>.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0001"/> is raised if <code>$file</code> does not
+               <div><bibref diff="del" ref="errFILE0001"/>
+                    <bibref diff="add" ref="errNF"/> is raised if <code>$file</code> does not
                   exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   directory.</div>
-               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+               <div><bibref diff="del" ref="errFILE0005"/>
+                    <bibref diff="add" ref="errUE"/> is raised if <code>$encoding</code> is invalid or
                   not supported by the implementation.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.write">
             <head><code>file:write</code></head>
             <eg>
 <ex:function>file:write</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -590,14 +644,17 @@ return file:read-text($path)</pre>
             <p>The function returns the empty sequence if the operation is successful.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+               <div><bibref diff="del" ref="errFILE0003"/>
+                    <bibref diff="add" ref="errND"/> is raised if the parent directory of
                      <code>$file</code> does not exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   directory.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.write-binary">
             <head><code>file:write-binary</code></head>
             <eg>
 <ex:function>file:write-binary</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -612,16 +669,20 @@ return file:read-text($path)</pre>
             <p>The function returns the empty sequence if the operation is successful.</p>
             <p>This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+               <div><bibref diff="del" ref="errFILE0003"/>
+                    <bibref diff="add" ref="errND"/> is raised if the parent directory of
                      <code>$file</code> does not exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   directory.</div>
-               <div diff="add"><bibref ref="errFILE0006"/> is raised if <code>$offset</code> is negative,
+               <div diff="add"><bibref diff="del" ref="errFILE0006"/>
+                    <bibref diff="add" ref="errOOR"/> is raised if <code>$offset</code> is negative,
                   or if it exceeds the current file size.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.write-text">
             <head><code>file:write-text</code></head>
             <eg>
 <ex:function>file:write-text</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -636,16 +697,20 @@ return file:read-text($path)</pre>
             <p>The function returns the empty sequence if the operation is successful.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+               <div><bibref diff="del" ref="errFILE0003"/>
+                    <bibref diff="add" ref="errND"/> is raised if the parent directory of
                      <code>$file</code> does not exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   directory.</div>
-               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+               <div><bibref diff="del" ref="errFILE0005"/>
+                    <bibref diff="add" ref="errUE"/> is raised if <code>$encoding</code> is invalid or
                   not supported by the implementation.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.write-text-lines">
             <head><code>file:write-text-lines</code></head>
             <eg>
 <ex:function>file:write-text-lines</ex:function>($file as <ex:type>xs:string</ex:type>,
@@ -660,23 +725,55 @@ return file:read-text($path)</pre>
             <p>The function returns the empty sequence if the operation is successful.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE0003"/> is raised if the parent directory of
+               <div><bibref diff="del" ref="errFILE0003"/>
+                    <bibref diff="add" ref="errND"/> is raised if the parent directory of
                      <code>$file</code> does not exist.</div>
-               <div><bibref ref="errFILE0004"/> is raised if <code>$file</code> points to a
+               <div><bibref diff="del" ref="errFILE0004"/>
+                    <bibref diff="add" ref="errID"/> is raised if <code>$file</code> points to a
                   directory.</div>
-               <div><bibref ref="errFILE0005"/> is raised if <code>$encoding</code> is invalid or
+               <div><bibref diff="del" ref="errFILE0005"/>
+                    <bibref diff="add" ref="errUE"/> is raised if <code>$encoding</code> is invalid or
                   not supported by the implementation.</div>
-               <div><bibref ref="errFILE9999"/> is raised if any other error occurs.</div>
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>
          </div2>
       </div1>
 
       <!-- *************************************** Functions on paths ************************* -->
-      <div1>
+      <div1 id="paths">
          <head>Paths</head>
          <p>None of the functions in this section performs any check regarding the existence of the
             received or returned paths.</p>
-         <div2>
+         <div2 id="fn.name" diff="add">
+            <head><code>file:name</code></head>
+            <eg>
+<ex:function>file:name</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
+            <p>Returns the name of a file or directory.</p>
+            <p>An empty string is returned if the path points to the root directory,
+               or if it contains no directory separators.</p>
+            <p>This function is ·deterministic· (no path existence check is made).</p>
+
+
+
+
+
+         </div2>
+         <div2 id="fn.parent" diff="add">
+            <head><code>file:parent</code></head>
+            <eg>
+<ex:function>file:parent</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string?</ex:type></eg>
+            <p>Returns the parent directory of a file or directory.</p>
+            <p>An empty sequence is returned if the path points to a root directory,
+               or if it contains no directory separators.</p>
+            <p>This function is ·deterministic· (no path existence check is made).</p>
+
+
+
+
+
+         </div2>
+         <div2 diff="del" id="fn.base-name">
             <head><code>file:base-name</code></head>
             <eg>
 <ex:function>file:base-name</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type>
@@ -688,10 +785,9 @@ return file:read-text($path)</pre>
                   <code>"."</code> is returned, signifying the current working directory.</p>
             <p>If <code>$suffix</code> is present, it will be trimmed from the end of the result.
                This can be used to eliminate file extensions.</p>
-            <p diff="del">No path existence check is made.</p>
-            <p diff="add">This function is ·deterministic· (no path existence check is made).</p>
+            <p>No path existence check is made.</p>
          </div2>
-         <div2>
+         <div2 diff="del" id="fn.dir-name">
             <head><code>file:dir-name</code></head>
             <eg>
 <ex:function>file:dir-name</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
@@ -703,10 +799,9 @@ return file:read-text($path)</pre>
                with a single dot (<code>.</code>), signifying the current directory.
                If the resulting string does not end with a directory separator, it will be suffixed
                with the system-dependent directory separator.</phrase></p>
-            <p diff="del">No path existence check is made.</p>
-            <p diff="add">This function is ·deterministic· (no path existence check is made).</p>
+            <p>No path existence check is made.</p>
          </div2>
-         <div2>
+         <div2 id="fn.path-to-native">
             <head><code>file:path-to-native</code></head>
             <eg>
 <ex:function>file:path-to-native</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
@@ -718,11 +813,12 @@ return file:read-text($path)</pre>
                it will be suffixed with the system-specific directory separator.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
             <p>
-               <div><bibref ref="errFILE9999"/> is raised if an error occurs while trying to obtain
+               <div><bibref diff="del" ref="errFILE9999"/>
+                    <bibref diff="add" ref="errIE"/> is raised if an error occurs while trying to obtain
                   the native path.</div>
             </p>
          </div2>
-         <div2>
+         <div2 id="fn.path-to-uri">
             <head><code>file:path-to-uri</code></head>
             <eg>
 <ex:function>file:path-to-uri</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:anyURI</ex:type></eg>
@@ -731,7 +827,7 @@ return file:read-text($path)</pre>
             <p diff="del">No path existence check is made.</p>
             <p diff="add">This function is ·deterministic· (no path existence check is made).</p>
          </div2>
-         <div2>
+         <div2 id="fn.resolve-path">
             <head><code>file:resolve-path</code></head>
             <eg>
 <ex:function>file:resolve-path</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg>
@@ -745,9 +841,9 @@ return file:read-text($path)</pre>
       </div1>
 
       <!-- ************************************************************************************ -->
-      <div1>
+      <div1 id="sys-props">
          <head>System Properties</head>
-         <div2>
+         <div2 id="pr.dir-separator">
             <head><code>file:dir-separator</code></head>
             <eg>
 <ex:function>file:dir-separator</ex:function>() as <ex:type>xs:string</ex:type></eg>
@@ -755,7 +851,7 @@ return file:read-text($path)</pre>
                is <code>/</code> on UNIX-based systems and <code>\</code> on Windows systems.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
          </div2>
-         <div2>
+         <div2 id="pr.line-separator">
             <head><code>file:line-separator</code></head>
             <eg>
 <ex:function>file:line-separator</ex:function>() as <ex:type>xs:string</ex:type></eg>
@@ -764,7 +860,7 @@ return file:read-text($path)</pre>
                Windows systems and <code>&amp;#13;</code> on Mac systems.</p>
             <p diff="add">This function is ·nondeterministic·.</p>
          </div2>
-         <div2>
+         <div2 id="pr.path-separator">
             <head><code>file:path-separator</code></head>
             <eg>
 <ex:function>file:path-separator</ex:function>() as <ex:type>xs:string</ex:type></eg>
@@ -772,7 +868,7 @@ return file:read-text($path)</pre>
                   <code>:</code> on UNIX-based systems and <code>;</code> on Windows systems.</p>
             <p diff="ad">This function is ·nondeterministic·.</p>
          </div2>
-         <div2 diff="add">
+         <div2 diff="add" id="pr.temp-dir">
             <head><code>file:temp-dir</code></head>
             <eg>
 <ex:function>file:temp-dir</ex:function>() as <ex:type>xs:string</ex:type></eg>
@@ -782,7 +878,7 @@ return file:read-text($path)</pre>
       </div1>
    </body>
    <back>
-      <div1>
+      <div1 id="refs">
          <head>References</head>
          <blist>
             <bibl id="ser30" key="XSLT and XQuery Serialization 3.0">
@@ -796,17 +892,14 @@ return file:read-text($path)</pre>
       <div1>
          <head>Summary of Error Conditions</head>
          <blist>
-            <bibl id="errFILE0001" key="err:FILE0001">The specified path does not exist.</bibl>
-            <bibl id="errFILE0002" key="err:FILE0002">The specified path already exists.</bibl>
-            <bibl id="errFILE0003" key="err:FILE0003">The specified path does not point to a
-               directory.</bibl>
-            <bibl id="errFILE0004" key="err:FILE0004">The specified path points to a
-               directory.</bibl>
-            <bibl id="errFILE0005" key="err:FILE0005">The specified encoding is not
-               supported.</bibl>
-            <bibl id="errFILE0006" key="err:FILE0006" diff="add">The specified offset or length is negative,
+            <bibl id="errNF" key="file:not-found">The specified path does not exist.</bibl>
+            <bibl id="errE"  key="file:exists">The specified path already exists.</bibl>
+            <bibl id="errND" key="file:no-dir">The specified path does not point to a directory.</bibl>
+            <bibl id="errID" key="file:is-dir">The specified path points to a directory.</bibl>
+            <bibl id="errUE" key="file:unknown-encoding">The specified encoding is not supported.</bibl>
+            <bibl id="errOOR" key="file:out-of-range">The specified offset or length is negative,
                or the chosen values would exceed the file bounds.</bibl>
-            <bibl id="errFILE9999" key="err:FILE9999">A generic file system error occurred.</bibl>
+            <bibl id="errIE" key="file:io-error">A generic file system error occurred.</bibl>
          </blist>
       </div1>
    </back>
