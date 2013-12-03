@@ -9,7 +9,7 @@
     <environment name="binary">
         <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
         <namespace prefix="binJAVA" uri="java:org.expath.ns.binary.EXPathBinary"/>
-        <namespace prefix="err" uri="http://expath.org/ns/binary"/>
+        <!--<namespace prefix="err" uri="http://expath.org/ns/binary"/>-->
         <param name="empty.bin" select="xs:base64Binary('')"/>
         <!-- 'Man' in base64 - 3 octets, 4 characters -->
         <param name="man.base" select="xs:base64Binary('TWFu')"/>
