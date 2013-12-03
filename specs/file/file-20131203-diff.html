@@ -143,7 +143,7 @@ B <a href="#errors">Summary of Error Conditions</a><br />
                representation (which usually is the representation of the underlying operating system).</p><div class="diff-add"><p>If a function returns a string that refers to a directory,
                it will always be suffixed with the system-specific directory separator.</p></div><div class="diff-add"><p>The standard function <code>fn:static-base-uri</code> can be used to
                resolve file operations against the base URI:</p></div><div class="diff-add"><div class="exampleInner"><pre class="diff-add">let $filename := "input.txt"
-let $dir := file:dir-name(static-base-uri())
+let $dir := file:parent(static-base-uri())
 let $path := concat($dir, $filename)
 return file:read-text($path)</pre></div></div></div><div class="div2">
 <h3><a name="exec" id="exec"></a>2.3 Query Execution</h3><p><span class="diff-del"><span>Functions on File Properties (Section 2) and Input/Output (Section 3) are</span></span>
@@ -474,8 +474,9 @@ return file:read-text($path)</pre></div></div></div><div class="div2">
 <code class="function">file:name</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><p>Returns the name of a file or directory.</p><p>An empty string is returned if the path points to the root directory,
                or if it contains no directory separators.</p><p>This function is ·deterministic· (no path existence check is made).</p></div></div><div class="diff-add"><div class="div2">
 <h3><a name="fn.parent" id="fn.parent"></a>5.2 <code>file:parent</code></h3><div class="exampleInner"><pre>
-<code class="function">file:parent</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string?</code></pre></div><p>Returns the parent directory of a file or directory.</p><p>An empty sequence is returned if the path points to a root directory,
-               or if it contains no directory separators.</p><p>This function is ·deterministic· (no path existence check is made).</p></div></div><div class="diff-del"><div class="div2">
+<code class="function">file:parent</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string?</code></pre></div><p>Transforms the given path into an absolute path, as specified by
+                   <a href="#fn.resolve-path">file:resolve-path</a>,
+                   and returns the parent directory.</p><p>An empty sequence is returned if the path points to a root directory.</p><p>This function is ·nondeterministic·.</p></div></div><div class="diff-del"><div class="div2">
 <h3><a name="fn.base-name" id="fn.base-name"></a>5.3 <code>file:base-name</code></h3><div class="exampleInner"><pre>
 <code class="function">file:base-name</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
 <code class="function">file:base-name</code>($path as <code class="type">xs:string</code>,
