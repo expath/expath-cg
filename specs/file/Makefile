@@ -29,3 +29,9 @@ file-20120614.html: file-20120614.xml
 
 file-20120614-diff.html: file-20120614-diff.xml
 	saxon -s:$< -xsl:$(DIFFSPEC) > $@
+
+file-20131203.html: file-20131203.xml
+	saxon -s:$< -xsl:$(XMLSPEC) > $@
+
+file-20131203-diff.html: file-20131203-diff.xml
+	saxon -s:$< -xsl:$(DIFFSPEC) > $@
