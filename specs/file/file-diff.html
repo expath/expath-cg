@@ -142,10 +142,10 @@ B <a href="#errors">Summary of Error Conditions</a><br />
             <span class="diff-add"><span>are</span></span> normalized to an implementation-defined
                representation (which usually is the representation of the underlying operating system).</p><div class="diff-add"><p>If a function returns a string that refers to a directory,
                it will always be suffixed with the system-specific directory separator.</p></div><div class="diff-add"><p>The standard function <code>fn:static-base-uri</code> can be used to
-               resolve file operations against the base URI:</p></div><div class="diff-add"><pre diff="add">let $filename := "input.txt"
+               resolve file operations against the base URI:</p></div><div class="diff-add"><div class="exampleInner"><pre class="diff-add">let $filename := "input.txt"
 let $dir := file:dir-name(static-base-uri())
 let $path := concat($dir, $filename)
-return file:read-text($path)</pre></div></div><div class="div2">
+return file:read-text($path)</pre></div></div></div><div class="div2">
 <h3><a name="exec" id="exec"></a>2.3 Query Execution</h3><p><span class="diff-del"><span>Functions on File Properties (Section 2) and Input/Output (Section 3) are</span></span>
                <span class="diff-add"><span>Some function are marked as</span></span>
                ·nondeterministic·, which means they are not guaranteed to perform the same operations
