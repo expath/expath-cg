@@ -118,7 +118,7 @@ div.exampleHeader { font-weight: bold;
     6.4 <a href="#pr.temp-dir">file:temp-dir</a><br />
 </p>
 <h3><a name="appendices" id="appendices"></a>Appendices</h3><p class="toc">A <a href="#refs">References</a><br />
-B <a href="#d4e2117">Summary of Error Conditions</a><br />
+B <a href="#errors">Summary of Error Conditions</a><br />
 </p></div><hr /><div class="body"><div class="diff-add"><div class="div1">
 <h2><a name="status" id="status"></a>1 Status of this document</h2><p>This document is in a final draft stage. Comments are welcomed at <a href="mailto:public-expath@w3.org">public-expath@w3.org</a> mailing list (<a href="http://lists.w3.org/Archives/Public/public-expath/">archive</a>).</p></div></div><div class="div1">
 <h2><a name="intro" id="intro"></a>2 Introduction</h2><div class="div2">
@@ -142,10 +142,10 @@ B <a href="#d4e2117">Summary of Error Conditions</a><br />
             <span class="diff-add"><span>are</span></span> normalized to an implementation-defined
                representation (which usually is the representation of the underlying operating system).</p><div class="diff-add"><p>If a function returns a string that refers to a directory,
                it will always be suffixed with the system-specific directory separator.</p></div><div class="diff-add"><p>The standard function <code>fn:static-base-uri</code> can be used to
-               resolve file operations against the base URI:</p></div><div class="diff-add"><pre diff="add">let $filename := "input.txt"
+               resolve file operations against the base URI:</p></div><div class="diff-add"><div class="exampleInner"><pre class="diff-add">let $filename := "input.txt"
 let $dir := file:dir-name(static-base-uri())
 let $path := concat($dir, $filename)
-return file:read-text($path)</pre></div></div><div class="div2">
+return file:read-text($path)</pre></div></div></div><div class="div2">
 <h3><a name="exec" id="exec"></a>2.3 Query Execution</h3><p><span class="diff-del"><span>Functions on File Properties (Section 2) and Input/Output (Section 3) are</span></span>
                <span class="diff-add"><span>Some function are marked as</span></span>
                ·nondeterministic·, which means they are not guaranteed to perform the same operations
@@ -526,7 +526,7 @@ return file:read-text($path)</pre></div></div><div class="div2">
                   Serialization 3.0</a>. Henry Zongaro. W3C Working Draft 14 December 2010.</dd><dt class="label"><a name="fo30" id="fo30"></a>XQuery and XPath Functions and Operators 3.0</dt><dd>
                <a href="http://www.w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and
                   Operators 3.0</a>. Michael Kay. W3C Working Draft 14 December 2010.</dd></dl></div><div class="div1">
-<h2><a name="d4e2117" id="d4e2117"></a>B Summary of Error Conditions</h2><dl><dt class="label"><a name="errNF" id="errNF"></a>file:not-found</dt><dd>The specified path does not exist.</dd><dt class="label"><a name="errE" id="errE"></a>file:exists</dt><dd>The specified path already exists.</dd><dt class="label"><a name="errND" id="errND"></a>file:no-dir</dt><dd>The specified path does not point to a directory.</dd><dt class="label"><a name="errID" id="errID"></a>file:is-dir</dt><dd>The specified path points to a directory.</dd><dt class="label"><a name="errUE" id="errUE"></a>file:unknown-encoding</dt><dd>The specified encoding is not supported.</dd><dt class="label"><a name="errOOR" id="errOOR"></a>file:out-of-range</dt><dd>The specified offset or length is negative,
+<h2><a name="errors" id="errors"></a>B Summary of Error Conditions</h2><dl><dt class="label"><a name="errNF" id="errNF"></a>file:not-found</dt><dd>The specified path does not exist.</dd><dt class="label"><a name="errE" id="errE"></a>file:exists</dt><dd>The specified path already exists.</dd><dt class="label"><a name="errND" id="errND"></a>file:no-dir</dt><dd>The specified path does not point to a directory.</dd><dt class="label"><a name="errID" id="errID"></a>file:is-dir</dt><dd>The specified path points to a directory.</dd><dt class="label"><a name="errUE" id="errUE"></a>file:unknown-encoding</dt><dd>The specified encoding is not supported.</dd><dt class="label"><a name="errOOR" id="errOOR"></a>file:out-of-range</dt><dd>The specified offset or length is negative,
                or the chosen values would exceed the file bounds.</dd><dt class="label"><a name="errIE" id="errIE"></a>file:io-error</dt><dd>A generic file system error occurred.</dd></dl></div></div><script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));

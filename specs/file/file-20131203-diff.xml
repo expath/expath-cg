@@ -134,10 +134,10 @@
                it will always be suffixed with the system-specific directory separator.</p>
             <p diff="add">The standard function <code>fn:static-base-uri</code> can be used to
                resolve file operations against the base URI:</p>
-            <pre diff="add">let $filename := "input.txt"
+            <eg diff="add">let $filename := "input.txt"
 let $dir := file:dir-name(static-base-uri())
 let $path := concat($dir, $filename)
-return file:read-text($path)</pre>
+return file:read-text($path)</eg>
          </div2>
          <div2 id="exec">
             <head>Query Execution</head>
@@ -889,7 +889,7 @@ return file:read-text($path)</pre>
                   Operators 3.0</loc>. Michael Kay. W3C Working Draft 14 December 2010.</bibl>
          </blist>
       </div1>
-      <div1>
+      <div1 id="errors">
          <head>Summary of Error Conditions</head>
          <blist>
             <bibl id="errNF" key="file:not-found">The specified path does not exist.</bibl>
