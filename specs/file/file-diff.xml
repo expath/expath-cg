@@ -889,7 +889,7 @@ return file:read-text($path)</pre>
                   Operators 3.0</loc>. Michael Kay. W3C Working Draft 14 December 2010.</bibl>
          </blist>
       </div1>
-      <div1>
+      <div1 id="errors">
          <head>Summary of Error Conditions</head>
          <blist>
             <bibl id="errNF" key="file:not-found">The specified path does not exist.</bibl>
