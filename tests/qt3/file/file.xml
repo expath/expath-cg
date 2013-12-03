@@ -2579,5 +2579,20 @@
       </any-of>
     </result>
   </test-case>
+  
+  <test-case name="file-tempDir-001">
+    <description>file:temp-dir return</description>
+    <created by="John Lumley" on="2013-12-03"/>
+    <environment ref="file"/>
+    <test>
+        file:temp-dir()
+    </test>
+    <result>
+      <any-of>
+        <assert>matches($result, "/.*/")</assert>
+        <assert>matches($result, "[A-Za-z]:\\.*\\")</assert>
+      </any-of> 
+    </result>
+  </test-case>
 
 </test-set>
