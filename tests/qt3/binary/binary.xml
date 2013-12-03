@@ -355,7 +355,7 @@
       <environment ref="binary"/>
       <test> bin:join(($man.base,123)) </test>
       <result>
-        <error code="Q{http://www.w3.org/2005/xqt-errors.}FORG0006"/>
+        <error code="Q{http://www.w3.org/2005/xqt-errors}FORG0006"/>
       </result>
    </test-case>
    <test-case name="binary-insert-before-001">
