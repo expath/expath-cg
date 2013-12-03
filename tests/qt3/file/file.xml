@@ -2235,6 +2235,44 @@
       </all-of>
     </result>
   </test-case>
+  <test-case name="file-writeBinary3-005">
+    <description>Use file:write-binary with three arguments, file already exists, offset just before end</description>
+    <created by="John Lumley" on="2013-12-02"/>
+    <environment ref="file"/>
+    <test>
+        (if (file:exists("sandpit/test.bin")) 
+          then file:delete("sandpit/test.bin")
+          else ()), 
+        file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304"))),
+        file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0506")),4)
+      </test>
+    <result>
+      <all-of>
+        <assert-empty/>
+        <assert>xs:hexBinary(Q{http://expath.org/ns/file}read-binary("sandpit/test.bin")) eq
+          xs:hexBinary("000102030506")</assert>
+      </all-of>
+    </result>
+  </test-case>
+  <test-case name="file-writeBinary3-005">
+    <description>Use file:write-binary with three arguments, file already exists, offset just at end</description>
+    <created by="John Lumley" on="2013-12-02"/>
+    <environment ref="file"/>
+    <test>
+        (if (file:exists("sandpit/test.bin")) 
+          then file:delete("sandpit/test.bin")
+          else ()), 
+        file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304"))),
+        file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0506")),5)
+      </test>
+    <result>
+      <all-of>
+        <assert-empty/>
+        <assert>xs:hexBinary(Q{http://expath.org/ns/file}read-binary("sandpit/test.bin")) eq
+          xs:hexBinary("00010203040506")</assert>
+      </all-of>
+    </result>
+  </test-case>
 
   <test-case name="file-name1-001">
     <description>Use file:name on a text file</description>
@@ -2304,7 +2342,7 @@
         file:name("/")
       </test>
     <result>
-      <assert-eq/>
+      <assert-eq>""</assert-eq>
     </result>
   </test-case>
   <test-case name="file-name1-007">
@@ -2315,7 +2353,7 @@
         file:name("")
       </test>
     <result>
-      <assert-eq/>
+      <assert-eq>""</assert-eq>
     </result>
   </test-case>
 
@@ -2332,9 +2370,9 @@
     </test>
     <result>
       <any-of>
-        <assert-eq>"sandpit/"</assert-eq>
-        <assert-eq>"sandpit\"</assert-eq>
-      </any-of>
+        <assert>matches($result, "/.*sandpit/")</assert>
+        <assert>matches($result, "[A-Za-z]:\\.*sandpit\\")</assert>
+      </any-of>      
     </result>
   </test-case>
   <test-case name="file-parent-002">
@@ -2346,9 +2384,9 @@
     </test>
     <result>
       <any-of>
-        <assert-eq>"sandpit/"</assert-eq>
-        <assert-eq>"sandpit\"</assert-eq>
-      </any-of>
+        <assert>matches($result, "/.*sandpit/")</assert>
+        <assert>matches($result, "[A-Za-z]:\\.*sandpit\\")</assert>
+      </any-of> 
     </result>
   </test-case>
   <test-case name="file-parent-003">
@@ -2360,9 +2398,9 @@
     </test>
     <result>
       <any-of>
-        <assert-eq>"sandpit/"</assert-eq>
-        <assert-eq>"sandpit\"</assert-eq>
-      </any-of>
+        <assert>matches($result, "/.*sandpit/")</assert>
+        <assert>matches($result, "[A-Za-z]:\\.*sandpit\\")</assert>
+      </any-of> 
     </result>
   </test-case>
   <test-case name="file-parent-004">
