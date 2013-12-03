@@ -78,7 +78,7 @@
       <description>Join with type mismatch sequences</description>
       <test> bin:join(($man.base,123)) </test>
       <result>
-        <error code="Q{http://www.w3.org/2005/xqt-errors.}XPTY0004"/>
+        <error code="Q{http://www.w3.org/2005/xqt-errors.}FORG0006"/>
       </result>
     </test-case>
   </expand>
@@ -301,7 +301,6 @@
       <test> bin:find(xs:base64Binary("TWFuAAAA"),1,xs:base64Binary("")) </test>
       <modified by="John Lumley" on="2013-11-25" change="Empty search supported"/>
       <result>
-        <!--<error code="Q{http://expath.org/ns/binary}empty-search-item"/>-->
         <all-of>
           <assert-type>xs:integer</assert-type>
           <assert-eq>1</assert-eq>
