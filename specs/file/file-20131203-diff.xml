@@ -362,7 +362,11 @@ return file:read-text($path)</eg>
                   local names.</li>
                <li> if <code>$target</code> is a directory, <phrase diff="del">all files are copied from the source</phrase>
                   <phrase diff="add">the source directory with all its files will be copied</phrase>
-                  into the target directory. If a file already exists, it will be overwritten.</li>
+                  into the target directory. <phrase diff="del">If a file already exists, it will be overwritten.</phrase>
+                  <phrase diff="add">At each level, if a file already exists
+                     in the target with the same name as in the source, it is overwritten.  If a directory
+                     already exists in the target with the same name as in the source, it is not removed,
+                     it is recursed in place (if it does not exist, it is created before recursing).</phrase></li>
             </ol>
             <p>Other cases will raise one of the errors listed below.</p>
             <p>The function returns the empty sequence if the operation is successful. If an error

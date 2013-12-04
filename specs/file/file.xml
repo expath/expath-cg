@@ -438,7 +438,10 @@ return file:read-text($path)</eg>
                       files of the source directory are copied to this directory with their existing
                       local names.</li>
                    <li> if <code>$target</code> is a directory, the source directory with all its files
-                      will be copied into the target directory. If a file already exists, it will be overwritten.</li>
+                      will be copied into the target directory.  At each level, if a file already exists
+                      in the target with the same name as in the source, it is overwritten.  If a directory
+                      already exists in the target with the same name as in the source, it is not removed,
+                      it is recursed in place (if it does not exist, it is created before recursing).</li>
                 </ol>
                 <p>Other cases will raise one of the errors listed below.</p>
                 <p>The function returns the empty sequence if the operation is successful. If an error
