@@ -64,7 +64,7 @@
    </xsl:template>
 
    <!-- Make each link in prevlocs appears on its own line -->
-   <xsl:template match="prevlocs/loc">
+   <xsl:template match="publoc/loc|latestloc/loc|prevlocs/loc">
       <xsl:next-match/>
       <br/>
    </xsl:template>
