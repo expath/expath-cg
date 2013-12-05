@@ -6,7 +6,7 @@
    <header>
       <title>File Module</title>
       <w3c-designation>w3c-designation</w3c-designation>
-      <w3c-doctype>EXPath Proposed Module</w3c-doctype>
+      <w3c-doctype>EXPath <phrase diff="del">Candidate</phrase> <phrase diff="add">Proposed</phrase> Module</w3c-doctype>
       <pubdate diff="chg">
          <day>03</day>
          <month>December</month>
