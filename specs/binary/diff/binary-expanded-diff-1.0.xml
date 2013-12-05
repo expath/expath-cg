@@ -58,16 +58,19 @@
     </authlist>
     <copyright>
       <p>Copyright © 2013 Jirka Kosek and John Lumley, published by the <loc
-          href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
-          href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
-          License Agreement (CLA)</loc>. A human-readable <loc
-          href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
-        available.</p>
+          href="http://w3.org/community/expath/">EXPath Community Group</loc> under the
+          <loc diff="del" href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</loc>
+          <loc diff="add" href="https://www.w3.org/community/about/agreements/final/">W3C Community Final Specification Agreement (FSA)</loc>.
+          A human-readable
+          <loc diff="del" href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc>
+          <loc diff="add" href="http://www.w3.org/community/about/agreements/fsa-deed/">summary</loc>
+          is available.</p>
       <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
           >EXPath Community Group</loc>. It is not a W3C Standard nor is it on the W3C Standards
-        Track. Please note that under the <loc
-          href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License
-          Agreement (CLA)</loc> there is a limited opt-out and other conditions apply. Learn more
+        Track. Please note that under the
+        <phrase diff="del"><loc href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</loc> there is a limited opt-out and</phrase>
+        <loc diff="add" href="http://www.w3.org/community/about/agreements/final/">W3C Community Final Specification Agreement (FSA)</loc>
+        other conditions apply. Learn more
         about <loc href="http://www.w3.org/community/">W3C Community and Business Groups</loc>.</p>
     </copyright>
     <abstract>
@@ -91,9 +94,10 @@
   <body>
     <div1 id="status">
       <head>Status of this document</head>
-      <p>This document is in a final draft stage. Comments are welcomed at <loc
+      <p>This document is <phrase diff="del">in a final draft stage. Comments are welcomed at <loc
           href="mailto:public-expath@w3.org">public-expath@w3.org</loc> mailing list (<loc
-          href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
+          href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>)</phrase>
+        <phrase diff="add">a final specification.</phrase>.</p>
     </div1>
     <div1 id="introduction">
       <head>Introduction</head>
