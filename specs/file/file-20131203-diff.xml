@@ -527,7 +527,9 @@ return file:read-text($path)</eg>
                   local names.</li>
                <li> if <code>$target</code> is a directory, <phrase diff="del">all files are moved from the source</phrase>
                   <phrase diff="add">the source directory with all its files will be moved</phrase>
-                  into the target directory. If a file already exists, it will be overwritten.</li>
+                  into the target directory. <phrase diff="del">If a file already exists, it will be
+                  overwritten.</phrase> <phrase diff="add">If the target directory contains a directory with
+                  the same name as the source, the error <bibref ref="errID"/> is raised.</phrase></li>
             </ol>
             <p>Other cases will raise one of the errors listed below.</p>
             <p>The function returns the empty sequence if the operation is successful. If an error
@@ -544,9 +546,9 @@ return file:read-text($path)</eg>
                     <bibref diff="add" ref="errND"/> is raised if the parent directory of
                      <code>$source</code> does not exist.</div>
                <div><bibref diff="del" ref="errFILE0004"/>
-                    <bibref diff="add" ref="errID"/> is raised if <code>$source</code> points to a file
-                  and <code>$target</code> points to a directory, in which a subdirectory exists
-                  with the name of the source file.</div>
+                    <bibref diff="add" ref="errID"/> is raised if <phrase diff="del"><code>$source</code> points to a file
+                  and</phrase> <code>$target</code> points to a directory, in which a subdirectory exists
+                  with the name of the source <phrase diff="del">file</phrase>.</div>
                <div><bibref diff="del" ref="errFILE9999"/>
                     <bibref diff="add" ref="errIE"/> is raised if any other error occurs.</div>
             </p>

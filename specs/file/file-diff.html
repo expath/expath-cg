@@ -349,7 +349,8 @@ return file:read-text($path)</pre></div></div></div><div class="div2">
                   files of the source directory are moved to this directory with their existing
                   local names.</li><li> if <code>$target</code> is a directory, <span class="diff-del"><span>all files are moved from the source</span></span>
                   <span class="diff-add"><span>the source directory with all its files will be moved</span></span>
-                  into the target directory. If a file already exists, it will be overwritten.</li></ol><p>Other cases will raise one of the errors listed below.</p><p>The function returns the empty sequence if the operation is successful. If an error
+                     into the target directory. <span class="diff-del">If a file already exists, it will be overwritten.</span> <span class="diff-add">If the target directory contains a
+                        directory with the same name as the source, the error <a href="#errID">[file:is-dir]</a> is raised.</span></li></ol><p>Other cases will raise one of the errors listed below.</p><p>The function returns the empty sequence if the operation is successful. If an error
                occurs during the operation, no rollback to the original state will be possible </p><div class="diff-add"><p>This function is ·nondeterministic·.</p></div><p>
                <div><span class="diff-del"><a href="#">[errFILE0001]</a></span><span class="diff-add"><a href="#errNF">[file:not-found]</a></span> is raised if the <code>$source</code> path does not
                   exist.</div>
@@ -357,9 +358,9 @@ return file:read-text($path)</pre></div></div></div><div class="div2">
                   directory and <code>$target</code> points to an existing file.</div>
                <div><span class="diff-del"><a href="#">[errFILE0003]</a></span><span class="diff-add"><a href="#errND">[file:no-dir]</a></span> is raised if the parent directory of
                      <code>$source</code> does not exist.</div>
-               <div><span class="diff-del"><a href="#">[errFILE0004]</a></span><span class="diff-add"><a href="#errID">[file:is-dir]</a></span> is raised if <code>$source</code> points to a file
-                  and <code>$target</code> points to a directory, in which a subdirectory exists
-                  with the name of the source file.</div>
+               <div><span class="diff-del"><a href="#">[errFILE0004]</a></span><span class="diff-add"><a href="#errID">[file:is-dir]</a></span> is raised if <span class="diff-del"><code>$source</code> points to a file
+                  and</span> <code>$target</code> points to a directory, in which a subdirectory exists
+                  with the name of the source <span class="diff-del">file</span>.</div>
                <div><span class="diff-del"><a href="#">[errFILE9999]</a></span><span class="diff-add"><a href="#errIE">[file:io-error]</a></span> is raised if any other error occurs.</div>
             </p></div><div class="div2">
 <h3><a name="fn.read-binary" id="fn.read-binary"></a>4.12 <code>file:read-binary</code></h3><div class="exampleInner"><pre>

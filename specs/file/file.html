@@ -265,13 +265,14 @@ return file:read-text($path)</pre></div></div><div class="div2">
                       overwritten.</li></ol><p>The following cases may occur if <code>$source</code> points to a directory:</p><ol type="a"><li> if <code>$target</code> does not exist, it will be created as directory, and all
                       files of the source directory are moved to this directory with their existing
                       local names.</li><li> if <code>$target</code> is a directory, the source directory with all its files
-                      will be moved into the target directory. If a file already exists, it will be overwritten.</li></ol><p>Other cases will raise one of the errors listed below.</p><p>The function returns the empty sequence if the operation is successful. If an error
+                         will be moved into the target directory. If the target directory contains a
+                         directory with the same name as the source, the error <a href="#errID">[file:is-dir]</a> is raised.</li></ol><p>Other cases will raise one of the errors listed below.</p><p>The function returns the empty sequence if the operation is successful. If an error
                    occurs during the operation, no rollback to the original state will be possible </p><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><a href="#errNF">[file:not-found]</a> is raised if the <code>$source</code> path does not
                     exist.</li><li><a href="#errE">[file:exists]</a> is raised if <code>$source</code> points to a
                     directory and <code>$target</code> points to an existing file.</li><li><a href="#errND">[file:no-dir]</a> is raised if the parent directory of
-                       <code>$source</code> does not exist.</li><li><a href="#errID">[file:is-dir]</a> is raised if <code>$source</code> points to a file
-                    and <code>$target</code> points to a directory, in which a subdirectory exists
-                    with the name of the source file.</li><li><a href="#errIE">[file:io-error]</a> is raised if any other error occurs.</li></ul></dd></div><div class="div2">
+                       <code>$source</code> does not exist.</li><li><a href="#errID">[file:is-dir]</a> is raised if
+                    <code>$target</code> points to a directory, in which a subdirectory exists
+                    with the name of the source.</li><li><a href="#errIE">[file:io-error]</a> is raised if any other error occurs.</li></ul></dd></div><div class="div2">
 <h3><a name="fn.read-binary" id="fn.read-binary"></a>4.12 <code>file:read-binary</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre>
 <code class="function">file:read-binary</code>($file as <code class="type">xs:string</code>) as <code class="type">xs:base64Binary</code>
 <code class="function">file:read-binary</code>($file as <code class="type">xs:string</code>,

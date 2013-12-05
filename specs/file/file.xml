@@ -669,7 +669,8 @@ return file:read-text($path)</eg>
                       files of the source directory are moved to this directory with their existing
                       local names.</li>
                    <li> if <code>$target</code> is a directory, the source directory with all its files
-                      will be moved into the target directory. If a file already exists, it will be overwritten.</li>
+                     will be moved into the target directory. If the target directory contains a
+                     directory with the same name as the source, the error <bibref ref="errID"/> is raised.</li>
                 </ol>
                 <p>Other cases will raise one of the errors listed below.</p>
                 <p>The function returns the empty sequence if the operation is successful. If an error
@@ -687,9 +688,8 @@ return file:read-text($path)</eg>
                     directory and <code>$target</code> points to an existing file.</item>
                  <item><bibref ref="errND"/> is raised if the parent directory of
                        <code>$source</code> does not exist.</item>
-                 <item><bibref ref="errID"/> is raised if <code>$source</code> points to a file
-                    and <code>$target</code> points to a directory, in which a subdirectory exists
-                    with the name of the source file.</item>
+                 <item><bibref ref="errID"/> is raised if <code>$target</code> points to a directory,
+                    in which a subdirectory exists with the name of the source.</item>
                  <item><bibref ref="errIE"/> is raised if any other error occurs.</item>
                 </ulist>
               </def>
