@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Archive Module</title><link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/TR/base.css" /><style type="text/css">
+<html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Archive Module -- Review Version</title><link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/TR/base.css" /><style type="text/css">
 code           { font-family: monospace; }
 
 div.constraint,
@@ -32,23 +32,36 @@ div.exampleWrapper { margin: 4px }
 div.exampleHeader { font-weight: bold;
                     margin: 4px}
 
-      code.function { font-weight: bold; }
-      code.type { font-style: italic; }
-      /* h1, h2, h3 { color: #84001C; background: white } */
-      /* a, :link, :visited, a:active { color: #84005C; background: white } */
-      body {
-        background-image: url(http://expath.org/images/logo-candidate.png);
-      }
-   </style></head><body><p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p><div class="head">
+            div.diff-add  { background-color: #FFFF99; }
+            div.diff-del  { text-decoration: line-through; }
+            div.diff-chg  { background-color: #99FF99; }
+            div.diff-off  {  }
+
+            span.diff-add { background-color: #FFFF99; }
+            span.diff-del { text-decoration: line-through; }
+            span.diff-chg { background-color: #99FF99; }
+            span.diff-off {  }
+
+            td.diff-add   { background-color: #FFFF99; }
+            td.diff-del   { text-decoration: line-through }
+            td.diff-chg   { background-color: #99FF99; }
+            td.diff-off   {  }
+         
+       code.function { font-weight: bold; }
+      code.type { font-style: italic; } body { background-image: url(http://expath.org/images/logo-candidate.png); } </style></head><body><div><p>The presentation of this document has been augmented to
+            identify changes from a previous version. Three kinds of changes
+            are highlighted: <span class="diff-add">new, added text</span>,
+            <span class="diff-chg">changed text</span>, and
+            <span class="diff-del">deleted text</span>.</p><hr /></div><p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p><div class="head">
 <h1><a name="title" id="title"></a>Archive Module</h1>
 <h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 5 December 2013</h2><dl><dt>This version:</dt><dd>
-      <a href="http://expath.org/spec/archive/20131205">http://expath.org/spec/archive/20131205</a>
+      <span class="diff-chg"><a href="http://expath.org/spec/archive/20131205">http://expath.org/spec/archive/20131205</a></span>
     </dd><dt>Latest version:</dt><dd>
       <a href="http://expath.org/spec/archive">http://expath.org/spec/archive</a>
     </dd><dt>Previous versions:</dt><dd>
-      <a href="http://expath.org/spec/archive/20130930">http://expath.org/spec/archive/20130930</a><br />
+      <span class="diff-add"><a href="http://expath.org/spec/archive/20130930">http://expath.org/spec/archive/20130930</a></span><br />
       <a href="http://expath.org/spec/zip/20101012">http://expath.org/spec/zip/20101012</a><br />
-    </dd><dt>Editor:</dt><dd>John Lumley, Saxonica Ltd &lt;<a href="mailto:john@saxonica.com">john@saxonica.com</a>&gt;</dd><dt>Contributors:</dt><dd>Christian Grün, BaseX GmbH &lt;<a href="mailto:christian.gruen@gmail.com">christian.gruen@gmail.com</a>&gt;</dd><dd>Matthias Brantner, 28msec GmbH &lt;<a href="mailto:matthias.brantner@28msec.com">matthias.brantner@28msec.com</a>&gt;</dd><dd>Florent Georges, H2O Consulting</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/archive/20131205.xml">XML</a>.</p><p class="copyright">Copyright © 2013 John Lumley, Christian Grün, Matthias Brantner and Florent Georges,
+    </dd><dt>Editor:</dt><dd>John Lumley, Saxonica Ltd &lt;<a href="mailto:john@saxonica.com">john@saxonica.com</a>&gt;</dd><dt>Contributors:</dt><dd>Christian Grün, BaseX GmbH &lt;<a href="mailto:christian.gruen@gmail.com">christian.gruen@gmail.com</a>&gt;</dd><dd>Matthias Brantner, 28msec GmbH &lt;<a href="mailto:matthias.brantner@28msec.com">matthias.brantner@28msec.com</a>&gt;</dd><dd>Florent Georges, H2O Consulting</dd></dl><p>This document is also available in these non-normative formats: <span class="diff-chg"><a href="http://expath.org/spec/archive/20131205.xml">XML</a></span>.</p><p class="copyright">Copyright © 2013 John Lumley, Christian Grün, Matthias Brantner and Florent Georges,
         published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a>
         under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community
           Contributor License Agreement (CLA)</a>. A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is
@@ -64,8 +77,8 @@ div.exampleHeader { font-weight: bold;
         2.0 usage. Some additional features for use in XPath 3.0 are also defined.</p></div><div class="toc">
 <h2><a name="contents" id="contents"></a>Table of Contents</h2><p class="toc">1 <a href="#status">Status of this document</a><br />
 2 <a href="#introduction">Introduction</a><br />
-    2.1 <a href="#d5e133">Namespace conventions</a><br />
-    2.2 <a href="#d5e188">Error management</a><br />
+    2.1 <a href="#d6e133">Namespace conventions</a><br />
+    2.2 <a href="#d6e188">Error management</a><br />
     2.3 <a href="#type">Archive representation</a><br />
     2.4 <a href="#archive.types">Archive types</a><br />
 3 <a href="#use-cases">Use cases</a><br />
@@ -89,7 +102,7 @@ div.exampleHeader { font-weight: bold;
     8.2 <a href="#fn.update">arch:update</a><br />
 9 <a href="#creating">Creating an archive</a><br />
     9.1 <a href="#fn.create">arch:create</a><br />
-10 <a href="#extracting">Creating and extracting complete archives</a><br />
+10 <a href="#extracting">Creating and extracting complete archives from and to file systems</a><br />
     10.1 <a href="#fn.from.files">arch:from-files</a><br />
     10.2 <a href="#fn.to.files">arch:to-files</a><br />
 11 <a href="#maps">Functions using XPath3.0 map() type</a><br />
@@ -110,7 +123,7 @@ B <a href="#errors">Summary of error conditions</a><br />
 </p></div><hr /><div class="body"><div class="div1">
 <h2><a name="status" id="status"></a>1 Status of this document</h2><p>This document is in an interim draft stage. Comments are welcomed at <a href="mailto:public-expath@w3.org">public-expath@w3.org</a> mailing list (<a href="http://lists.w3.org/Archives/Public/public-expath/">archive</a>).</p></div><div class="div1">
 <h2><a name="introduction" id="introduction"></a>2 Introduction</h2><div class="div2">
-<h3><a name="d5e133" id="d5e133"></a>2.1 Namespace conventions</h3><p>The module defined by this document defines several functions, all contained in the
+<h3><a name="d6e133" id="d6e133"></a>2.1 Namespace conventions</h3><p>The module defined by this document defines several functions, all contained in the
           namespace <code>http://expath.org/ns/archive</code>. In this document, the
             <code>arch</code> prefix, when used, is bound to this namespace URI.</p><p>Alternative versions of these functions using the proposed XPath3.0 <code>map()</code>
           type (see <a href="#using.maps"><b>4.3 Using map types to describe entries and options</b></a>) are defined in the namespace
@@ -123,13 +136,13 @@ B <a href="#errors">Summary of error conditions</a><br />
             <code>http://expath.org/ns/file</code>. In this document, the <code>file</code> prefix,
           when used, is bound to this namespace URI.</p><p>Manipulation of binary data itself can employ functions from <a href="#expathbinary">[EXPath Binary]</a>, which defines functions in the namespace <code>http://expath.org/ns/binary</code>. In
           this document, the <code>bin</code> prefix, when used, is bound to this namespace URI.</p></div><div class="div2">
-<h3><a name="d5e188" id="d5e188"></a>2.2 Error management</h3><p>Error conditions are identified by a code (a <code>QName</code>.) When such an error
+<h3><a name="d6e188" id="d6e188"></a>2.2 Error management</h3><p>Error conditions are identified by a code (a <code>QName</code>.) When such an error
           condition is reached in the evaluation of an expression, a dynamic error is thrown, with
           the corresponding error code (as if the standard XPath function <code>error()</code> had
-          been called.) The namespace of the code follows that of the module within whose processing
+          been called.)<span class="diff-add"><span> The namespace of the code follows that of the module within whose processing
           the error occurs, i.e. <code>http://expath.org/ns/archive</code> for errors in archive
           manipulation, <code>http://expath.org/ns/file</code> for errors in file operations and
-            <code>http://expath.org/ns/binary</code> for errors in processing binary data.</p></div><div class="div2">
+            <code>http://expath.org/ns/binary</code> for errors in processing binary data.</span></span></p></div><div class="div2">
 <h3><a name="type" id="type"></a>2.3 Archive representation</h3><p>Archives in this module are represented principally as items of type
             <code>xs:base64Binary</code>, i.e. in their basic binary (byte sequence) forms.</p><p>Archives are treated as being arranged structurally as a description of overall options
           of the archive and a sequence of named entries. Each entry has:</p><ul><li><p>A <b>name</b>, which is treated as a sequence of Unicode characters. In many cases
@@ -223,8 +236,9 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
    ....,
    "net.sf.saxon.option.sql.SQLUpdate" 
 </pre></div></div><div class="div2">
-<h3><a name="example.zip.to" id="example.zip.to"></a>3.3 Extracting a ZIP archive to a file system</h3><p>The following XSLT function will unzip an archive to the current directory, using the
-          file writing functions of <a href="#expathfile">[EXPath File]</a>: </p><div class="exampleInner"><pre>
+<h3><a name="example.zip.to" id="example.zip.to"></a>3.3 Extracting a ZIP archive to a file system</h3><p><span class="diff-del"><span>Assuming the ZIP file in question has (empty) entries denoting any directories
+          required, the</span></span><span class="diff-add"><span>The</span></span> following XSLT function will unzip an archive to the current directory, using the
+          file writing functions of <a href="#expathfile">[EXPath File]</a>: </p><div class="diff-chg"><div class="exampleInner"><pre class="diff-chg">
 &lt;xsl:function name="arch:extract-to-files"&gt;
     &lt;xsl:param name="archive" as="xs:base64Binary"/&gt;
     &lt;xsl:variable name="entries" select="arch:entries($archive)"/&gt;
@@ -239,9 +253,11 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
         select="for $f in ($entries except $dirs) 
                 return file:write-binary($f,arch:extract-binary($archive,$f))"/&gt;
 &lt;/xsl:function&gt;
-</pre></div><p>The function will create empty directories described but not filled in the archive.
+</pre></div></div><p><span class="diff-add"><span>The function will create empty directories described but not filled in the archive.</span></span>
             <code>file:create-dir()</code> creates necessary intermediate directories, so
-            <code>$dirs</code> does not need to be in a sorted order.</p></div><div class="div2">
+          <code>$dirs</code> does not need to be in a sorted order.<span class="diff-del"><span> If the ZIP archive does
+            <em>not</em> have entries for all directories, further intermediate code is
+            required to identify those missing.)</span></span></p></div><div class="diff-add"><div class="div2">
 <h3><a name="example.zip.from" id="example.zip.from"></a>3.4 Creating a ZIP archive from a file tree</h3><p>The following XSLT function will create an archive from files and (recursive) directories
           named relative to the current directory, using the file reading functions of <a href="#expathfile">[EXPath File]</a>: </p><div class="exampleInner"><pre>
 &lt;xsl:function name="arch:from-files" as="xs:base64Binary"&gt;
@@ -253,7 +269,7 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
       select="for $f in $normalized.names return if(file:is-dir($f)) then xs:base64Binary('') else file:read-binary($f)"/&gt;
     &lt;xsl:sequence select="arch:create($normalized.names,$content)"/&gt;
 &lt;/xsl:function&gt;
-</pre></div></div></div><div class="div1">
+</pre></div></div></div></div><div class="div1">
 <h2><a name="descriptions" id="descriptions"></a>4 Describing archives and entries</h2><p>The properties of overall archives and individual entries at the XDM level are described by
         small structured elements, with optional information attached. <em>In this proposal this
           information is attached as attributes.</em></p><div class="note"><p class="prefix"><b>Note:</b></p><p>Parallels with XPath 3.0 serialization parameters, which are now sets of (element) nodes,
@@ -398,22 +414,22 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
           <em>last</em> matching entry name. </p></dd><dt class="label">Error Conditions</dt><dd><p><a href="#error.entryDataMismatch">[arch:entry-data-mismatch]</a> is raised if <code>count($entries) ne
           count($new)</code>.</p><p><a href="#error.archiveReadError">[arch:read-error]</a> is raised if there was an unspecified problem in
         reading or creating the archive.</p></dd></dl></div></div><div class="div1">
-<h2><a name="creating" id="creating"></a>9 Creating an archive</h2><p>new archives need to be created </p><div class="div2">
+<h2><a name="creating" id="creating"></a>9 Creating an archive</h2><p><span class="diff-del"><span>new archives need to be created</span></span><span class="diff-add"><span>New archives can be created in empty or filled states.</span></span></p><div class="div2">
 <h3><a name="fn.create" id="fn.create"></a>9.1 arch:create</h3><dl><dt class="label">Summary</dt><dd><p>Returns a new archive with each of the given entries in <code>$entries</code> set to the
         corresponding values in the sequence <code>$new</code>.</p></dd><dt class="label">Signatures</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">arch:create</code>(<code class="arg">$entries</code><code class="as"> as </code><code class="type">xs:string*</code>, <code class="arg">$new</code><code class="as"> as </code><code class="type">xs:base64Binary*</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div><div xmlns="" class="exampleInner"><div class="proto"><table border="0" cellpadding="0" cellspacing="0" summary="Function prototype"><tr><td valign="baseline" rowspan="3"><code class="function">arch:create</code>(</td><td valign="baseline"><code class="arg">$entries</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:string*</code>,</td></tr><tr><td valign="baseline"><code class="arg">$new</code></td><td valign="baseline"><code class="as"> as </code><code class="type">xs:base64Binary*</code>,</td></tr><tr><td valign="baseline"><code class="arg">$options</code></td><td valign="baseline"><code class="as"> as </code><code class="type">element(arch:options)</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></td></tr></table></div></div></p></dd><dt class="label">Rules</dt><dd><p>Returns an archive of format specified by <code>$options</code> with each of the given
         entries in <code>$entries</code> set to the corresponding value in the sequence
-          <code>$new</code>.</p><p>The relative order of new entries within the archive follows that of the input.</p><p>Content provided for any entry considered to be a directory is ignored.</p><p>When duplicate names appear in the entry list, the value of the entry in the resulting
+          <code>$new</code>.</p><p>The relative order of new entries within the archive follows that of the input.</p><div class="diff-add"><p>Content provided for any entry considered to be a directory is ignored.</p></div><p>When duplicate names appear in the entry list, the value of the entry in the resulting
         archive will be that of the value of <code>$new</code> corresponding to the
           <em>last</em> matching entry name. </p></dd><dt class="label">Error Conditions</dt><dd><p><a href="#error.entryDataMismatch">[arch:entry-data-mismatch]</a> is raised if <code>count($entries) ne
           count($new)</code>.</p><p><a href="#error.archiveReadError">[arch:read-error]</a> is raised if there was an unspecified problem in
-        reading or creating the archive.</p></dd></dl></div></div><div class="div1">
-<h2><a name="extracting" id="extracting"></a>10 Creating and extracting complete archives</h2><div class="div2">
-<h3><a name="fn.from.files" id="fn.from.files"></a>10.1 arch:from-files</h3><dl><dt class="label">Summary</dt><dd><p>Collects all the binary file contents from <code>$files</code> and writes them into an new
-        archive which is returned.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">arch:from-files</code>(<code class="arg">$files</code><code class="as"> as </code><code class="type">xs:string*</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>Collects all the binary file contents from <code>$files</code> and writes them into an new
+        reading or creating the archive.</p></dd></dl></div></div><div class="diff-add"><div class="div1">
+<h2><a name="extracting" id="extracting"></a>10 Creating and extracting complete archives from and to file systems</h2><div class="div2">
+<h3><a name="fn.from.files" id="fn.from.files"></a>10.1 arch:from-files</h3><dl><dt class="label"><span class="diff-add">Summary</span></dt><dd><div class="diff-add"><p>Collects all the binary file contents from <code>$files</code> and writes them into an new
+        archive which is returned.</p></div></dd><dt class="label"><span class="diff-add">Signature</span></dt><dd><div class="diff-add"><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">arch:from-files</code>(<code class="arg">$files</code><code class="as"> as </code><code class="type">xs:string*</code>)<code class="as"> as </code><code class="return-type">xs:base64Binary</code></div></div></p></div></dd><dt class="label"><span class="diff-add">Rules</span></dt><dd><div class="diff-add"><p>Collects all the binary file contents from <code>$files</code> and writes them into an new
         archive which is returned.</p><p>All file content is collected in binary mode, with no attempt at any conversion or
-        decoding.</p><p>File and directory path names are normalised to use the solidus ('/') path separator.</p><p>Directories are written as empty entries.</p></dd><dt class="label">Error Conditions</dt><dd><p>Error conditions from <a href="#expathfile">[EXPath File]</a> may be raised if there are problems on
+        decoding.</p><p>File and directory path names are normalized to use the solidus ('/') path separator.</p><p>Directories are written as empty entries.</p></div></dd><dt class="label"><span class="diff-add">Error Conditions</span></dt><dd><div class="diff-add"><p>Error conditions from <a href="#expathfile">[EXPath File]</a> may be raised if there are problems on
         reading from the filesystem, most noteably:</p><ul><li><a href="#error.fileNotFound">[file:not-found]</a> is raised if any of the specified file paths do not
-          exist.</li><li><a href="#error.genericFile">[file:io-error]</a> is raised if any other error occurs.</li></ul></dd><dt class="label">Notes</dt><dd><p>This function should be equivalent to the following XSLT function, already described in
+          exist.</li><li><a href="#error.genericFile">[file:io-error]</a> is raised if any other error occurs.</li></ul></div></dd><dt class="label"><span class="diff-add">Notes</span></dt><dd><div class="diff-add"><p>This function should be equivalent to the following XSLT function, already described in
           <a href="#example.zip.from"><b>3.4 Creating a ZIP archive from a file tree</b></a>:</p><div class="exampleInner"><pre>
 &lt;xsl:function name="arch:from-files" as="xs:base64Binary"&gt;
     &lt;xsl:param name="files" as="xs:string*"/&gt;
@@ -427,16 +443,16 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
 </pre></div><p>This function may be provided by an XSLT package (which will probably use functions from
           <a href="#expathfile">[EXPath File]</a>, and from which appropriate error conditions may be propagated,
         or caught within the package) or by a purpose-built extension function that may be able to
-        support such an operation within a context of streaming processing.</p></dd></dl></div><div class="div2">
-<h3><a name="fn.to.files" id="fn.to.files"></a>10.2 arch:to-files</h3><dl><dt class="label">Summary</dt><dd><p>Extracts all the entries from <code>$archive</code> and writes them into an equivalent tree
-        of directories and files in the filesystem at the current directory.</p></dd><dt class="label">Signature</dt><dd><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">arch:to-files</code>(<code class="arg">$archive</code><code class="as"> as </code><code class="type">xs:base64Binary</code>)<code class="as"> as </code><code class="return-type">()</code></div></div></p></dd><dt class="label">Rules</dt><dd><p>Extracts all the entries from <code>$archive</code> and writes them into an equivalent tree
-        of directories and files in the filesystem at the current directory.</p><p>All entries are written in binary mode, with no attempt at any conversion or decoding.</p><p>Entry names are considered as file paths, with '/' and '\' separators normalised to the
-        path separator for the execution operating system.</p><p>Necessary intermediate directories are created.</p></dd><dt class="label">Error Conditions</dt><dd><p><a href="#error.archiveReadError">[arch:read-error]</a> is raised if there was an unspecified problem in
+        support such an operation within a context of streaming processing.</p></div></dd></dl></div><div class="div2">
+<h3><a name="fn.to.files" id="fn.to.files"></a>10.2 arch:to-files</h3><dl><dt class="label"><span class="diff-add">Summary</span></dt><dd><div class="diff-add"><p>Extracts all the entries from <code>$archive</code> and writes them into an equivalent tree
+        of directories and files in the filesystem at the current directory.</p></div></dd><dt class="label"><span class="diff-add">Signature</span></dt><dd><div class="diff-add"><p><div xmlns="" class="exampleInner"><div class="proto"><code class="function">arch:to-files</code>(<code class="arg">$archive</code><code class="as"> as </code><code class="type">xs:base64Binary</code>)<code class="as"> as </code><code class="return-type">()</code></div></div></p></div></dd><dt class="label"><span class="diff-add">Rules</span></dt><dd><div class="diff-add"><p>Extracts all the entries from <code>$archive</code> and writes them into an equivalent tree
+        of directories and files in the filesystem at the current directory.</p><p>All entries are written in binary mode, with no attempt at any conversion or decoding.</p><p>Entry names are considered as file paths, with '/' and '\' separators normalized to the
+        path separator for the execution operating system.</p><p>Necessary intermediate directories are created.</p></div></dd><dt class="label"><span class="diff-add">Error Conditions</span></dt><dd><div class="diff-add"><p><a href="#error.archiveReadError">[arch:read-error]</a> is raised if there was an unspecified problem in
         reading the archive.</p><p>Error conditions from <a href="#expathfile">[EXPath File]</a> may be raised if there are problems on
         writing to the filesystem, most noteably:</p><ul><li><a href="#error.fileExists">[file:exists]</a> is raised if the specified path, or any of its parent
           directories, points to an existing file. </li><li><a href="#error.noParent">[file:no-dir]</a> is raised if the parent directory of an entry does not
           exist. (This should not happen.)</li><li><a href="#error.overwriteDirectory">[file:is-dir]</a> is raised if an entry is being written on to an
-          existing directory.</li><li><a href="#error.genericFile">[file:io-error]</a> is raised if any other error occurs.</li></ul></dd><dt class="label">Notes</dt><dd><p>This function should be equivalent to the following XSLT function, already described in
+          existing directory.</li><li><a href="#error.genericFile">[file:io-error]</a> is raised if any other error occurs.</li></ul></div></dd><dt class="label"><span class="diff-add">Notes</span></dt><dd><div class="diff-add"><p>This function should be equivalent to the following XSLT function, already described in
           <a href="#example.zip.to"><b>3.3 Extracting a ZIP archive to a file system</b></a>:</p><div class="exampleInner"><pre>
 &lt;xsl:function name="arch:to-files"&gt;
     &lt;xsl:param name="archive" as="xs:base64Binary"/&gt;
@@ -455,7 +471,7 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
 </pre></div><p>This function may be provided by an XSLT package (which will probably use functions from
           <a href="#expathfile">[EXPath File]</a>, and from which appropriate error conditions may be propagated,
         or caught within the package) or by a purpose-built extension function that may be able to
-        support such an operation within a context of streaming processing.</p></dd></dl></div></div><div class="div1">
+        support such an operation within a context of streaming processing.</p></div></dd></dl></div></div></div><div class="div1">
 <h2><a name="maps" id="maps"></a>11 Functions using XPath3.0 map() type</h2><p>Maps proposed for XPath3.0 can increase the coherence of the functions in the module,
         mainly by retaining the structured connection between the entry name and its properties and
         content. In addition the properties of the overall archive (and its defaults for new
@@ -623,10 +639,10 @@ return
           reading the archive</dd><dt class="label"><a name="error.unknownEntry" id="error.unknownEntry"></a>arch:unknown-entry</dt><dd>The specified entry does not exist in
           this archive.</dd><dt class="label"><a name="error.entryDataMismatch" id="error.entryDataMismatch"></a>arch:entry-data-mismatch</dt><dd>The sequence of entry
           names is not the same length as the sequence of updated values.</dd><dt class="label"><a name="error.unknownEncoding" id="error.unknownEncoding"></a>arch:unknown-encoding</dt><dd>The specified encoding is not
-          supported.</dd><dt class="label"><a name="error.decoding" id="error.decoding"></a>arch:decoding-error</dt><dd>Error in decoding a string.</dd></dl><p>Errors possibly generated by code executed from module <a href="#expathfile">[EXPath File]</a>:</p><dl><dt class="label"><a name="error.fileNotFound" id="error.fileNotFound"></a>file:not-found</dt><dd>The specified path does not exist.</dd><dt class="label"><a name="error.fileExists" id="error.fileExists"></a>file:exists</dt><dd>The specified path already exists.</dd><dt class="label"><a name="error.noParent" id="error.noParent"></a>file:no-dir</dt><dd>The specified path does not point to a
+          supported.</dd><dt class="label"><a name="error.decoding" id="error.decoding"></a>arch:decoding-error</dt><dd>Error in decoding a string.</dd></dl><div class="diff-add"><p>Errors possibly generated by code executed from module <a href="#expathfile">[EXPath File]</a>:</p></div><div class="diff-add"><dl><dt class="label"><a name="error.fileNotFound" id="error.fileNotFound"></a>file:not-found</dt><dd>The specified path does not exist.</dd><dt class="label"><a name="error.fileExists" id="error.fileExists"></a>file:exists</dt><dd>The specified path already exists.</dd><dt class="label"><a name="error.noParent" id="error.noParent"></a>file:no-dir</dt><dd>The specified path does not point to a
           directory.</dd><dt class="label"><a name="error.overwriteDirectory" id="error.overwriteDirectory"></a>file:is-dir</dt><dd>The specified path points to a
           directory.</dd><dt class="label"><a name="error.genericFile" id="error.genericFile"></a>file:io-error</dt><dd>A generic file system error
-          occurred.</dd></dl></div></div><script type="text/javascript">
+          occurred.</dd></dl></div></div></div><script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
          </script><script type="text/javascript">

@@ -29,17 +29,17 @@
       <year>2013</year>
     </pubdate>
     <publoc>
-      <loc href="http://expath.org/spec/archive/20131205"/>
+      <loc diff="chg" href="http://expath.org/spec/archive/20131205"/>
     </publoc>
     <altlocs>
-      <loc href="http://expath.org/spec/archive/20131205.xml">XML</loc>
+      <loc  diff="chg" href="http://expath.org/spec/archive/20131205.xml">XML</loc>
     </altlocs>
     <latestloc>
       <loc href="http://expath.org/spec/archive"/>
     </latestloc>
 
     <prevlocs>
-      <loc href="http://expath.org/spec/archive/20130930"/>
+      <loc diff="add" href="http://expath.org/spec/archive/20130930"/>
       <loc href="http://expath.org/spec/zip/20101012"/>
     </prevlocs>
 
@@ -128,10 +128,10 @@
         <p>Error conditions are identified by a code (a <code>QName</code>.) When such an error
           condition is reached in the evaluation of an expression, a dynamic error is thrown, with
           the corresponding error code (as if the standard XPath function <code>error()</code> had
-          been called.) The namespace of the code follows that of the module within whose processing
+          been called.)<phrase diff="add"> The namespace of the code follows that of the module within whose processing
           the error occurs, i.e. <code>http://expath.org/ns/archive</code> for errors in archive
           manipulation, <code>http://expath.org/ns/file</code> for errors in file operations and
-            <code>http://expath.org/ns/binary</code> for errors in processing binary data.</p>
+            <code>http://expath.org/ns/binary</code> for errors in processing binary data.</phrase></p>
       </div2>
       <div2 id="type">
         <head>Archive representation</head>
@@ -289,9 +289,10 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
       </div2>
       <div2 id="example.zip.to">
         <head>Extracting a ZIP archive to a file system</head>
-        <p>The following XSLT function will unzip an archive to the current directory, using the
+        <p><phrase diff="del">Assuming the ZIP file in question has (empty) entries denoting any directories
+          required, the</phrase><phrase diff="add">The</phrase> following XSLT function will unzip an archive to the current directory, using the
           file writing functions of <bibref ref="expathfile"/>: </p>
-        <eg xml:space="preserve">
+        <eg diff="chg" xml:space="preserve">
 &lt;xsl:function name="arch:extract-to-files"&gt;
     &lt;xsl:param name="archive" as="xs:base64Binary"/&gt;
     &lt;xsl:variable name="entries" select="arch:entries($archive)"/&gt;
@@ -307,11 +308,13 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
                 return file:write-binary($f,arch:extract-binary($archive,$f))"/&gt;
 &lt;/xsl:function&gt;
 </eg>
-        <p>The function will create empty directories described but not filled in the archive.
+        <p><phrase diff="add">The function will create empty directories described but not filled in the archive.</phrase>
             <code>file:create-dir()</code> creates necessary intermediate directories, so
-            <code>$dirs</code> does not need to be in a sorted order.</p>
+          <code>$dirs</code> does not need to be in a sorted order.<phrase diff="del"> If the ZIP archive does
+            <emph>not</emph> have entries for all directories, further intermediate code is
+            required to identify those missing.)</phrase></p>
       </div2>
-      <div2 id="example.zip.from">
+      <div2 diff="add" id="example.zip.from">
         <head>Creating a ZIP archive from a file tree</head>
         <p>The following XSLT function will create an archive from files and (recursive) directories
           named relative to the current directory, using the file reading functions of <bibref ref="expathfile"/>: </p>
@@ -696,7 +699,7 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
     </div1>
     <div1 id="creating">
       <head>Creating an archive</head>
-      <p>new archives need to be created </p>
+      <p><phrase diff="del">new archives need to be created</phrase><phrase diff="add">New archives can be created in empty or filled states.</phrase></p>
       <div2 id="fn.create">
         <head>arch:create</head><glist><gitem><label>Summary</label><def>
       <p>Returns a new archive with each of the given entries in <code>$entries</code> set to the
@@ -713,7 +716,7 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
         entries in <code>$entries</code> set to the corresponding value in the sequence
           <code>$new</code>.</p>
       <p>The relative order of new entries within the archive follows that of the input.</p>
-      <p>Content provided for any entry considered to be a directory is ignored.</p>
+      <p diff="add">Content provided for any entry considered to be a directory is ignored.</p>
       <p>When duplicate names appear in the entry list, the value of the entry in the resulting
         archive will be that of the value of <code>$new</code> corresponding to the
           <emph>last</emph> matching entry name. </p>
@@ -725,8 +728,8 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
     </def></gitem></glist>
       </div2>
     </div1>
-    <div1 id="extracting">
-      <head>Creating and extracting complete archives</head>
+    <div1 diff="add" id="extracting">
+      <head>Creating and extracting complete archives from and to file systems</head>
       <div2 id="fn.from.files">
         <head>arch:from-files</head><glist><gitem><label>Summary</label><def>
       <p>Collects all the binary file contents from <code>$files</code> and writes them into an new
@@ -738,7 +741,7 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
         archive which is returned.</p>
       <p>All file content is collected in binary mode, with no attempt at any conversion or
         decoding.</p>
-      <p>File and directory path names are normalised to use the solidus ('/') path separator.</p>
+      <p>File and directory path names are normalized to use the solidus ('/') path separator.</p>
       <p>Directories are written as empty entries.</p>
     </def></gitem><gitem><label>Error Conditions</label><def>
       <!--<p><bibref ref="error.archiveReadError"/> is raised if there was an unspecified problem
@@ -784,7 +787,7 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
       <p>Extracts all the entries from <code>$archive</code> and writes them into an equivalent tree
         of directories and files in the filesystem at the current directory.</p>
       <p>All entries are written in binary mode, with no attempt at any conversion or decoding.</p>
-      <p>Entry names are considered as file paths, with '/' and '\' separators normalised to the
+      <p>Entry names are considered as file paths, with '/' and '\' separators normalized to the
         path separator for the execution operating system.</p>
       <p>Necessary intermediate directories are created.</p>
     </def></gitem><gitem><label>Error Conditions</label><def>
@@ -1259,8 +1262,8 @@ return
           supported.</bibl>
         <bibl id="error.decoding" key="arch:decoding-error">Error in decoding a string.</bibl>
       </blist>
-      <p>Errors possibly generated by code executed from module <bibref ref="expathfile"/>:</p>
-      <blist>
+      <p diff="add">Errors possibly generated by code executed from module <bibref ref="expathfile"/>:</p>
+      <blist diff="add">
         <bibl id="error.fileNotFound" key="file:not-found">The specified path does not exist.</bibl>
         <bibl id="error.fileExists" key="file:exists">The specified path already exists.</bibl>
         <bibl id="error.noParent" key="file:no-dir">The specified path does not point to a
