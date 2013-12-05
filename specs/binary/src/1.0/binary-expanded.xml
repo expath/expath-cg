@@ -32,8 +32,8 @@
       <loc href="http://expath.org/spec/binary/1.0"/>
     </publoc>
     <altlocs>
-      <loc href="http://expath.org/spec/binary/editor.xml">XML</loc>
-      <loc href="http://expath.org/spec/binary/20131203/diff">Revision Markup</loc>
+      <loc href="http://expath.org/spec/binary/1.0.xml">XML</loc>
+      <loc href="http://expath.org/spec/binary/1.0/diff">Revision Markup</loc>
     </altlocs>
     <latestloc>
       <loc href="http://expath.org/spec/binary"/>
