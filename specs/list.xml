@@ -117,4 +117,14 @@
          <file href="pkg/pkg-diff.xml"  format="xml"  diff="true"/>
       </editor>
    </spec>
+   <spec name="webapp">
+      <revision version="20130401" latest="true">
+         <file href="webapp/webapp-20130401.html" format="html" diff="false"/>
+         <file href="webapp/webapp-20130401.xml"  format="xml"  diff="false"/>
+      </revision>
+      <editor>
+         <file href="webapp/webapp.html" format="html" diff="false"/>
+         <file href="webapp/webapp.xml"  format="xml"  diff="false"/>
+      </editor>
+   </spec>
 </specs>
