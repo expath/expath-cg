@@ -77,12 +77,12 @@
          <file href="file/file-diff.xml"  format="xml"  diff="true"/>
       </editor>
    </spec>
-   <spec name="http">
+   <!--spec name="http">
       <editor latest="true">
          <file href="http/http.html" format="html" diff="false"/>
          <file href="http/http.xml"  format="xml"  diff="false"/>
       </editor>
-   </spec>
+   </spec-->
    <spec name="pkg">
       <revision version="20090901">
          <file href="pkg/pkg-20090901.html" format="html" diff="false"/>
