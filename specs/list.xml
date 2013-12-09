@@ -40,7 +40,7 @@
          <file href="binary/html/binary-20131125-diff.html"         format="html" diff="true"/>
          <file href="binary/diff/binary-expanded-diff-20131125.xml" format="xml"  diff="true"/>
       </revision>
-      <revision version="1.0">
+      <revision version="1.0" latest="true">
          <file href="binary/html/binary-1.0.html"              format="html" diff="false"/>
          <file href="binary/src/1.0/binary-expanded.xml"       format="xml"  diff="false"/>
          <file href="binary/html/binary-1.0-diff.html"         format="html" diff="true"/>
