@@ -1066,7 +1066,7 @@
 	    <xsl:text>Editor's Draft</xsl:text>
 	  </xsl:when>
 	  <xsl:otherwise>
-	    <xsl:value-of select="w3c-doctype[1]"/>
+	    <xsl:apply-templates select="w3c-doctype/node()"/>
 	  </xsl:otherwise>
 	</xsl:choose>
 	<xsl:text> </xsl:text>

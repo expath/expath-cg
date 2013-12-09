@@ -1,217 +1,212 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <spec role="editors-copy" xmlns:ex="http://expath.org/ns/xmlspec" ex:w3c="true">
-   <header>
-      <title>Archive Module</title>
-      <w3c-designation>w3c-designation</w3c-designation>
-      <w3c-doctype>EXPath Candidate Module</w3c-doctype>
-      <pubdate>
-         <day>30</day>
-         <month>September</month>
-         <year>2013</year>
-      </pubdate>
-      <publoc>
-         <loc href="http://expath.org/spec/archive/20130930"/>
-      </publoc>
-      <altlocs>
-         <loc href="http://expath.org/spec/archive/20130930.xml">XML</loc>
-      </altlocs>
-      <latestloc>
-         <loc href="http://expath.org/spec/archive"/>
-      </latestloc>
+  <header>
+    <title>Archive Module</title>
+    <w3c-designation>w3c-designation</w3c-designation>
+    <w3c-doctype>EXPath Candidate Module</w3c-doctype>
+    <pubdate>
+      <day>5</day>
+      <month>December</month>
+      <year>2013</year>
+    </pubdate>
+    <publoc>
+      <loc href="http://expath.org/spec/archive/20131205"/>
+    </publoc>
+    <altlocs>
+      <loc href="http://expath.org/spec/archive/20131205.xml">XML</loc>
+    </altlocs>
+    <latestloc>
+      <loc href="http://expath.org/spec/archive"/>
+    </latestloc>
 
-      <prevlocs>
-         <loc href="http://expath.org/spec/zip/20101012"/>
-      </prevlocs>
+    <prevlocs>
+      <loc href="http://expath.org/spec/archive/20130930"/>
+      <loc href="http://expath.org/spec/zip/20101012"/>
+    </prevlocs>
 
-      <authlist>
-         <author role="editor">
-            <name>John Lumley</name>
-            <affiliation>Saxonica Ltd</affiliation>
-            <email href="mailto:john@saxonica.com">john@saxonica.com</email>
-         </author>
-         <author role="contrib">
-            <name>Christian Grün</name>
-            <affiliation>BaseX GmbH</affiliation>
-            <email href="mailto:christian.gruen@gmail.com">christian.gruen@gmail.com</email>
-         </author>
-         <author role="contrib">
-            <name>Matthias Brantner</name>
-            <affiliation>28msec GmbH</affiliation>
-            <email href="mailto:matthias.brantner@28msec.com">matthias.brantner@28msec.com</email>
-         </author>
-         <author role="contrib">
-            <name>Florent Georges</name>
-            <affiliation>H2O Consulting</affiliation>
-         </author>
-      </authlist>
-      <copyright>
-         <p>Copyright © 2013 John Lumley, Christian Grün, Matthias Brantner and Florent Georges,
-            published by the <loc href="http://w3.org/community/expath/">EXPath Community Group</loc>
-            under the <loc href="https://www.w3.org/community/about/agreements/cla/">W3C Community
-               Contributor License Agreement (CLA)</loc>. A human-readable <loc
-               href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
-            available.</p>
-         <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
-               >EXPath Community Group</loc>. It is not a W3C Standard nor is it on the W3C
-            Standards Track. Please note that under the <loc
-               href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
-               License Agreement (CLA)</loc> there is a limited opt-out and other conditions apply.
-            Learn more about <loc href="http://www.w3.org/community/">W3C Community and Business
-               Groups</loc>.</p>
-      </copyright>
-      <abstract>
-         <p>This proposal provides an API for XPath 2.0 and XPath 3.0 to handle archive data (i.e.
-            collected and possibly compressed sets of files and directories). It defines extension
-            functions to process data from and to such archives files, including creation,
-            determining and setting properties, listing and extracting contents and adding and
-            updating entries. It has been designed to be compatible with XQuery 1.0 and XSLT 2.0, as
-            well as any other XPath 2.0 usage. Some additional features for use in XPath 3.0 are
-            also defined.</p>
-      </abstract>
-      <status>
-         <p/>
-      </status>
-      <langusage>
-         <language>en-US</language>
-      </langusage>
-      <revisiondesc>
-         <p>revisiondesc</p>
-      </revisiondesc>
-   </header>
-   <body>
-      <div1 id="status">
-         <head>Status of this document</head>
-         <p>This document is in an interim draft stage. Comments are welcomed at <loc
-               href="mailto:public-expath@w3.org">public-expath@w3.org</loc> mailing list (<loc
-               href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
-      </div1>
-      <div1 id="introduction">
-         <head>Introduction</head>
-         <div2>
-            <head>Namespace conventions</head>
-            <p>The module defined by this document defines several functions, all contained in the
-               namespace <code>http://expath.org/ns/archive</code>. In this document, the
-                  <code>arch</code> prefix, when used, is bound to this namespace URI.</p>
-            <p>Alternative versions of these functions using the proposed XPath3.0
-                  <code>map()</code> type (see <specref ref="using.maps"/>) are defined in the
-               namespace <code>http://expath.org/ns/archive-map</code>. In this document, the
-                  <code>archM</code> prefix, when used, is bound to this namespace URI. </p>
-            <p>Error codes are defined in the same namespace
-                  (<code>http://expath.org/ns/archive</code>), and in this document are displayed
-               with the same prefix, <code>arch</code>.</p>
+    <authlist>
+      <author role="editor">
+        <name>John Lumley</name>
+        <affiliation>Saxonica Ltd</affiliation>
+        <email href="mailto:john@saxonica.com">john@saxonica.com</email>
+      </author>
+      <author role="contrib">
+        <name>Christian Grün</name>
+        <affiliation>BaseX GmbH</affiliation>
+        <email href="mailto:christian.gruen@gmail.com">christian.gruen@gmail.com</email>
+      </author>
+      <author role="contrib">
+        <name>Matthias Brantner</name>
+        <affiliation>28msec GmbH</affiliation>
+        <email href="mailto:matthias.brantner@28msec.com">matthias.brantner@28msec.com</email>
+      </author>
+      <author role="contrib">
+        <name>Florent Georges</name>
+        <affiliation>H2O Consulting</affiliation>
+      </author>
+    </authlist>
+    <copyright>
+      <p>Copyright © 2013 John Lumley, Christian Grün, Matthias Brantner and Florent Georges,
+        published by the <loc href="http://w3.org/community/expath/">EXPath Community Group</loc>
+        under the <loc href="https://www.w3.org/community/about/agreements/cla/">W3C Community
+          Contributor License Agreement (CLA)</loc>. A human-readable <loc
+          href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
+        available.</p>
+      <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
+          >EXPath Community Group</loc>. It is not a W3C Standard nor is it on the W3C Standards
+        Track. Please note that under the <loc
+          href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License
+          Agreement (CLA)</loc> there is a limited opt-out and other conditions apply. Learn more
+        about <loc href="http://www.w3.org/community/">W3C Community and Business Groups</loc>.</p>
+    </copyright>
+    <abstract>
+      <p>This proposal provides an API for XPath 2.0 and XPath 3.0 to handle archive data (i.e.
+        collected and possibly compressed sets of files and directories). It defines extension
+        functions to process data from and to such archives files, including creation, determining
+        and setting properties, listing and extracting contents and adding and updating entries. It
+        has been designed to be compatible with XQuery 1.0 and XSLT 2.0, as well as any other XPath
+        2.0 usage. Some additional features for use in XPath 3.0 are also defined.</p>
+    </abstract>
+    <status>
+      <p/>
+    </status>
+    <langusage>
+      <language>en-US</language>
+    </langusage>
+    <revisiondesc>
+      <p>revisiondesc</p>
+    </revisiondesc>
+  </header>
+  <body>
+    <div1 id="status">
+      <head>Status of this document</head>
+      <p>This document is in an interim draft stage. Comments are welcomed at <loc
+          href="mailto:public-expath@w3.org">public-expath@w3.org</loc> mailing list (<loc
+          href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
+    </div1>
+    <div1 id="introduction">
+      <head>Introduction</head>
+      <div2>
+        <head>Namespace conventions</head>
+        <p>The module defined by this document defines several functions, all contained in the
+          namespace <code>http://expath.org/ns/archive</code>. In this document, the
+            <code>arch</code> prefix, when used, is bound to this namespace URI.</p>
+        <p>Alternative versions of these functions using the proposed XPath3.0 <code>map()</code>
+          type (see <specref ref="using.maps"/>) are defined in the namespace
+            <code>http://expath.org/ns/archive-map</code>. In this document, the <code>archM</code>
+          prefix, when used, is bound to this namespace URI. </p>
+        <p>Error codes are defined in the same namespace
+          (<code>http://expath.org/ns/archive</code>), and in this document are displayed with the
+          same prefix, <code>arch</code>.</p>
+        <note>
+          <p>This follows the suggestion (in late August 2013) for a coherent naming standard in
+            EXPath modules.</p>
+        </note>
+        <p>Binary file I/O, to read and write complete archives to files, uses facilities defined in
+            <bibref ref="expathfile"/>, which defines functions in the namespace
+            <code>http://expath.org/ns/file</code>. In this document, the <code>file</code> prefix,
+          when used, is bound to this namespace URI.</p>
+        <p>Manipulation of binary data itself can employ functions from <bibref ref="expathbinary"
+          />, which defines functions in the namespace <code>http://expath.org/ns/binary</code>. In
+          this document, the <code>bin</code> prefix, when used, is bound to this namespace URI.</p>
+      </div2>
+      <div2>
+        <head>Error management</head>
+        <p>Error conditions are identified by a code (a <code>QName</code>.) When such an error
+          condition is reached in the evaluation of an expression, a dynamic error is thrown, with
+          the corresponding error code (as if the standard XPath function <code>error()</code> had
+          been called.) The namespace of the code follows that of the module within whose processing
+          the error occurs, i.e. <code>http://expath.org/ns/archive</code> for errors in archive
+          manipulation, <code>http://expath.org/ns/file</code> for errors in file operations and
+            <code>http://expath.org/ns/binary</code> for errors in processing binary data.</p>
+      </div2>
+      <div2 id="type">
+        <head>Archive representation</head>
+        <p>Archives in this module are represented principally as items of type
+            <code>xs:base64Binary</code>, i.e. in their basic binary (byte sequence) forms.</p>
+        <p>Archives are treated as being arranged structurally as a description of overall options
+          of the archive and a sequence of named entries. Each entry has:</p>
+        <ulist>
+          <item>
+            <p>A <kw>name</kw>, which is treated as a sequence of Unicode characters. In many cases
+              the solidus character (<code>/</code>) is used to imply the entries being logically
+              arranged in positions within a directory tree, but this is not mandatory.</p>
+          </item>
+          <item>
+            <p>A set of <kw>properties</kw>, denoting at least the uncompressed size of the entry,
+              archive internal properties for the entry, such as the compression method used on the
+              stored data and other indications such as the date of last modification.</p>
+          </item>
+          <item>
+            <p><kw>Data</kw>, treated as (possibly null) binary data.</p>
+          </item>
+        </ulist>
+        <p>It is most common that archives are considered to be arranged logically as directories,
+          using the entry names to denote paths and file names (e.g.
+            <code>tests/qt3/archive/main.xml</code>) In such circumstances, archives may contain
+          entries to represent the directories themselves (e.g. <code>tests/qt3/archive/</code>)
+          presumably with no data. [This could be used such that full extraction of an archive to a
+          file system generates empty output directories for example.] This specification makes no
+          distinction between these two cases – if an archive has an empty 'directory' entry it will
+          be treated similarly to any other 'file' entry. <emph>Semantic intrepretation of entry
+            names as files in directory trees is an application issue.</emph></p>
+        <note>
+          <p>Behaviour when entries with duplicate names are detected in an archive is
+            implementation dependent. Nevertheless, if an error is not thrown, only <emph>one</emph>
+            entry should be returned when reading. Implementations <rfc2119>must not</rfc2119> write
+            duplicate entries in result archives.</p>
+        </note>
+      </div2>
+      <div2 id="archive.types">
+        <head>Archive types</head>
+        <p>The module is designed to be able to support a number of different types of archive,
+          providing a coherent access mechanism.</p>
+        <p>The following archive types are required to be supported:</p>
+        <ulist>
+          <item>
+            <p><bibref ref="zip"/>: (which also covers derivative archive formats, such as JAR or
+              OpenDocument.)</p>
+          </item>
+          <item>
+            <p><bibref ref="gzip"/> : A compressed archive of a sequence of files</p>
             <note>
-               <p>This follows the suggestion (in late August 2013) for a coherent naming standard
-                  in EXPath modules.</p>
+              <p>Within GZIP names of entries (original file names) are optional, on a per-file
+                basis, so special measures may need to be taken to handle 'unnamed' sections.</p>
             </note>
-            <p>Binary file I/O, to read and write complete archives to files, uses facilities
-               defined in <bibref ref="expathfile"/>, which defines functions in the namespace
-               <code>http://expath.org/ns/file</code>. In this document, the <code>file</code> prefix,
-               when used, is bound to this namespace URI.</p>
-            <p>Manipulation of binary data itself can employ functions from <bibref
-                  ref="expathbinary"/>, which defines functions in the namespace
-               <code>http://expath.org/ns/binary</code>. In this document, the <code>bin</code> prefix,
-               when used, is bound to this namespace URI.</p>
-         </div2>
-         <div2>
-            <head>Error management</head>
-            <p>Error conditions are identified by a code (a <code>QName</code>.) When such an error
-               condition is reached in the evaluation of an expression, a dynamic error is thrown,
-               with the corresponding error code (as if the standard XPath function
-                  <code>error()</code> had been called.)</p>
-         </div2>
-         <div2 id="type">
-            <head>Archive representation</head>
-            <p>Archives in this module are represented principally as items of type
-                  <code>xs:base64Binary</code>, i.e. in their basic binary (byte sequence)
-               forms.</p>
-            <p>Archives are treated as being arranged structurally as a description of overall
-               options of the archive and a sequence of named entries. Each entry has:</p>
-            <ulist>
-               <item>
-                  <p>A <kw>name</kw>, which is treated as a sequence of Unicode characters. In many
-                     cases the solidus character (<code>/</code>) is used to imply the entries being
-                     logically arranged in positions within a directory tree, but this is not
-                     mandatory.</p>
-               </item>
-               <item>
-                  <p>A set of <kw>properties</kw>, denoting at least the uncompressed size of the
-                     entry, archive internal properties for the entry, such as the compression method
-                     used on the stored data and other indications such as the date of last
-                     modification.</p>
-               </item>
-               <item>
-                  <p><kw>Data</kw>, treated as (possibly null) binary data.</p>
-               </item>
-            </ulist>
-            <p>It is most common that archives are considered to be arranged logically as
-               directories, using the entry names to denote paths and file names (e.g.
-                  <code>tests/qt3/archive/main.xml</code>) In such circumstances, archives may
-               contain entries to represent the directories themselves (e.g.
-                  <code>tests/qt3/archive/</code>) presumably with no data. [This could be used such
-               that full extraction of an archive to a file system generates empty output
-               directories for example.] This specification makes no distinction between these two
-               cases - if an archive has an empty 'directory' entry it will be treated similarly to
-               any other 'file' entry. <emph>Semantic intrepretation of entry names as files in
-                  directory trees is an application issue.</emph></p>
-            <note>
-               <p>Behaviour when entries with duplicate names are detected in an archive is
-                  implementation dependent. Nevertheless, if an error is not thrown, only
-                     <emph>one</emph> entry should be returned when reading. Implementations
-                     <rfc2119>must not</rfc2119> write duplicate entries in result archives.</p>
-            </note>
-         </div2>
-         <div2 id="archive.types">
-            <head>Archive types</head>
-            <p>The module is designed to be able to support a number of different types of archive,
-               providing a coherent access mechanism.</p>
-            <p>The following archive types are required to be supported:</p>
-            <ulist>
-               <item>
-                  <p><bibref ref="zip"/>: (which also covers derivative archive formats, such as JAR
-                     or OpenDocument.)</p>
-               </item>
-               <item>
-                  <p><bibref ref="gzip"/> : A compressed archive of a sequence of files</p>
-                  <note>
-                     <p>Within GZIP names of entries (original file names) are optional, on a
-                        per-file basis, so special measures may need to be taken to handle 'unnamed'
-                        sections.</p>
-                  </note>
-               </item>
-            </ulist>
-            <p>Specific issues arise from i) archives used in streaming situations, where the
-               internal manifests of the archives cannot be completed until all data is written, ii)
-               archives where the order of entries is important, such as JAR, where the mainfest
-               entries need to be first.</p>
-            <note>
-               <p>Currently there are no proposals within this module to cover encrypted
-                  archives.</p>
-            </note>
-         </div2>
+          </item>
+        </ulist>
+        <p>Specific issues arise from i) archives used in streaming situations, where the internal
+          manifests of the archives cannot be completed until all data is written, ii) archives
+          where the order of entries is important, such as JAR, where the mainfest entries need to
+          be first.</p>
+        <note>
+          <p>Currently there are no proposals within this module to cover encrypted archives.</p>
+        </note>
+      </div2>
 
-      </div1>
-      <div1 id="use-cases">
-         <head>Use cases</head>
-         <p>Development of this specification was driven by requirements which some XML developers
-            regularly encounter in examining or generating data which is presented in archival
-            forms. Some typical use cases include:</p>
-         <ulist>
-            <item>
-               <p>Manipulating EPUB documents.</p>
-            </item>
-            <item>
-               <p>Examining Java classes and resources stored in <code>JAR</code> formats.</p>
-            </item>
-         </ulist>
-         <div2 id="example.epub">
-            <head>Creating a simple EPUB document</head>
-            <p>An <bibref ref="epub"/> document is a collection of content sections, written in
-               XHTML, with a metadata descriptor (usually the <code>content.opf</code> file) and a
-               navigation description (usually the <code>toc.ncx</code> file), all collected
-               together and potentially compressed in a ZIP format. A simple example of creating
-               such a document in XQuery is:</p>
-            <eg xml:space="preserve"><![CDATA[
+    </div1>
+    <div1 id="use-cases">
+      <head>Use cases</head>
+      <p>Development of this specification was driven by requirements which some XML developers
+        regularly encounter in examining or generating data which is presented in archival forms.
+        Some typical use cases include:</p>
+      <ulist>
+        <item>
+          <p>Manipulating EPUB documents.</p>
+        </item>
+        <item>
+          <p>Examining Java classes and resources stored in <code>JAR</code> formats.</p>
+        </item>
+      </ulist>
+      <div2 id="example.epub">
+        <head>Creating a simple EPUB document</head>
+        <p>An <bibref ref="epub"/> document is a collection of content sections, written in XHTML,
+          with a metadata descriptor (usually the <code>content.opf</code> file) and a navigation
+          description (usually the <code>toc.ncx</code> file), all collected together and
+          potentially compressed in a ZIP format. A simple example of creating such a document in
+          XQuery is:</p>
+        <eg xml:space="preserve"><![CDATA[
 arch:create(
     (
       { "name" : "mimetype", "compression" : "store" },
@@ -231,11 +226,11 @@ arch:create(
     )
   )
 ]]></eg>
-            <p>The user-supplied XQuery function <code>content:mimetype()</code> returns the
-               appropriate mimetype description for the EPUB document as a string
-               ("application/epub+zip"). Each of the other <code>content:*()</code> functions
-               generates a serialized form of the appropriate XML structure, e.g.:</p>
-            <eg xml:space="preserve"><![CDATA[
+        <p>The user-supplied XQuery function <code>content:mimetype()</code> returns the appropriate
+          mimetype description for the EPUB document as a string ("application/epub+zip"). Each of
+          the other <code>content:*()</code> functions generates a serialized form of the
+          appropriate XML structure, e.g.:</p>
+        <eg xml:space="preserve"><![CDATA[
 declare function content:title() as xs:string
 {
   fn:serialize(
@@ -257,19 +252,19 @@ declare function content:title() as xs:string
   )
 };
 ]]></eg>
-            <p>Using a map struture to define an entry enables properties such as compression to be
-               altered on on entry-by-entry basis. For and EPUB document the mimetype entry
-                  <emph>must</emph> be uncompressed (so effectively it can be read by simple string
-               searching), but other entries may be compressed.</p>
-         </div2>
-         <div2 id="example.jar">
-            <head>Examining a JAR file</head>
-            <p>JAR files contain class code and definitions for Java classes, in entries whose names
-               are <code><emph>path/classname</emph>.class</code>. Local classes (classes defined
-               within a class) have separate code entries with a classname
-                     <code><emph>outerclass</emph>$<emph>innerclass</emph></code>. To find all the
-               main package-qualified classes the following XPath should suffice: </p>
-            <eg xml:space="preserve"><![CDATA[
+        <p>Using a map struture to define an entry enables properties such as compression to be
+          altered on on entry-by-entry basis. For and EPUB document the mimetype entry
+            <emph>must</emph> be uncompressed (so effectively it can be read by simple string
+          searching), but other entries may be compressed.</p>
+      </div2>
+      <div2 id="example.jar">
+        <head>Examining a JAR file</head>
+        <p>JAR files contain class code and definitions for Java classes, in entries whose names are
+              <code><emph>path/classname</emph>.class</code>. Local classes (classes defined within
+          a class) have separate code entries with a classname
+              <code><emph>outerclass</emph>$<emph>innerclass</emph></code>. To find all the main
+          package-qualified classes the following XPath should suffice: </p>
+        <eg xml:space="preserve"><![CDATA[
 for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.class') and not(contains(.,'$'))] 
   return replace(replace($e,'\.class$',''),'/','.')
 => 
@@ -279,364 +274,395 @@ for $e in arch:entries(file:read-binary("lib/saxon9-sql.jar"))[ends-with(.,'.cla
    ....,
    "net.sf.saxon.option.sql.SQLUpdate" 
 ]]></eg>
-         </div2>
-         <div2 id="example.zip">
-            <head>Extracting a ZIP archive to a file system</head>
-            <p>Assuming the ZIP file in question has (empty) entries denoting any directories
-               required, the following XSLT will unzip an archive to the current directory, using
-               the file writing functions of <bibref ref="expathfile"/>: </p>
-            <eg xml:space="preserve"><![CDATA[
-<xsl:variable name="arch" select="file:read-binary($uri)"/>
-<xsl:variable name="entries" select="arch:entries($arch)"/>
-<xsl:variable name="dirs" select="$entries[ends-with(.,'/')]"/>
-<xsl:variable name="required.dirs"
-            select="for $r in distinct-values(($entries except $dirs) return
-            replace($r,'/[^/]+$','/'))[ends-with(.,'/')]"/>
-<xsl:sequence select="for $d in distinct-values(($required.dirs,$dirs))
-         return file:create-dir(replace($d,'/$',''))"/>
-<xsl:sequence select="for $f in ($entries except $dirs) 
-        return file:write-binary($f,arch:extract-binary($arch,$f))"/>
+      </div2>
+      <div2 id="example.zip.to">
+        <head>Extracting a ZIP archive to a file system</head>
+        <p>The following XSLT function will unzip an archive to the current directory, using the
+          file writing functions of <bibref ref="expathfile"/>: </p>
+        <eg xml:space="preserve"><![CDATA[
+<xsl:function name="arch:extract-to-files">
+    <xsl:param name="archive" as="xs:base64Binary"/>
+    <xsl:variable name="entries" select="arch:entries($archive)"/>
+    <xsl:variable name="dirs" select="$entries[ends-with(.,'/')]"/>
+    <xsl:variable name="required.dirs"
+        select="distinct-values(for $r in ($entries except $dirs) 
+                  return replace($r,'/[^/]+$','/'))[ends-with(.,'/')]"/>
+    <xsl:sequence
+        select="for $d in distinct-values(($required.dirs,$dirs)) 
+                return file:create-dir(replace($d,'/$',''))"/>
+    <xsl:sequence
+        select="for $f in ($entries except $dirs) 
+                return file:write-binary($f,arch:extract-binary($archive,$f))"/>
+</xsl:function>
 ]]></eg>
-            <p>(<code>file:create-dir()</code> creates necessary intermediate directories, so
-                  <code>$dirs</code> does not need to be in a sorted order. If the ZIP archive does
-                  <emph>not</emph> have entries for all directories, further intermediate code is
-               required to identify those missing.)</p>
-         </div2>
-      </div1>
-      <div1 id="descriptions">
-         <head>Describing archives and entries</head>
-         <p>The properties of overall archives and individual entries at the XDM level are described
-            by small structured elements, with optional information attached. <emph>In this proposal
-               this information is attached as attributes.</emph></p>
-         <note>
-            <p>Parallels with XPath 3.0 serialization parameters, which are now sets of (element)
-               nodes, become awkward. In <code>arch:entry</code> we would need to add an element
-                  <code>arch:name</code> to hold the name of an entry, rather than rely on the
-               string value. The major point in favour of using elements rather than attributes
-               would be where we need to read or set complex structured parameters, such as
-               character maps. This needs discussion.</p>
-         </note>
-         <div2 id="archive.properties">
-            <head>Archive properties and options</head>
-            <p>Archive options and properties are described as a structured element
-                  (<code>element(arch:options)</code>) with the following attributes:</p>
-            <ulist>
-               <item>
-                  <p><code>format</code>: the type of the archive, e.g. "zip". This is
-                     mandatory.</p>
-               </item>
-               <item>
-                  <p><code>algorithm</code>: the default compression used in the archive, e.g.
-                     "deflate".</p>
-               </item>
-            </ulist>
-            <p>Other attributes may be dependent upon the type of the archive and the
-               implementation.</p>
-         </div2>
-         <div2 id="entry.structures">
-            <head>Entry descriptions</head>
-            <p>Entries within the archive can be accessed by name (<code>xs:string</code>) or a
-               structured element (<code>element(arch:entry)</code>). In the latter case the entry
-               name is the string value of the element.</p>
-            <p>When describing an existing entry in an archive, <code>element(arch:entry)</code> may
-               be returned with the following optional attributes:</p>
-            <ulist>
-               <item>
-                  <p><code>size</code>: the original file size of the entry.</p>
-               </item>
-               <item>
-                  <p><code>compressed-size</code>: the compressed file size of the entry, i.e. the
-                     number of bytes it occupies in the archive.</p>
-               </item>
-               <item>
-                  <p><code>last-modified</code>: the date of last modification of this entry, in
-                        <code>xs:dateTime</code> notation.</p>
-               </item>
-               <item>
-                  <p><code>compression-level</code>: an indicator of the level of (lossless?)
-                     compression.</p>
-               </item>
-            </ulist>
-            <p>When used to create or update an entry in an archive,
-                  <code>element(arch:entry)</code> may also have the following optional
-               attributes:</p>
-            <ulist>
-               <item>
-                  <p><code>last-modified</code>: the date of last modification to be written on this
-                     entry, in <code>xs:dateTime</code> notation.</p>
-               </item>
-               <item>
-                  <p><code>compression-level</code>: the level of (lossless?) compression to be used
-                     in writing the entry into the archive.</p>
-               </item>
-               <item>
-                  <p><code>encoding</code>: the encoding to be used for converting textual items to
-                     a byte sequence, prior to possible compression and writing to the archive.</p>
-               </item>
-            </ulist>
-            <p>(In writing actions, unknown attributes are ignored.)</p>
-         </div2>
-         <div2 id="using.maps">
-            <head>Using map types to describe entries and options</head>
-            <p>Proposals in XPath 3.0 have been made for a type
-                  <code>map(xs:untypedAtomic,item()*)</code>, which could be exploited beneficially
-               for manipulating archives, using the entry name as the key and the
-                  (<code>xs:base64Binary</code>) value of the entry as the corresponding value in
-               the map. These maps could be used both as output (in <code>arch:entries()</code> and
-                  <code>arch:extract-[text|binary]()</code>) or for input (in
-                  <code>arch:update()</code> and <code>arch:create()</code>). Equally well such maps
-               can be used, reading keys only in <code>arch:delete()</code>.</p>
-            <p>An attractive alternative would be for each entry itself to be a <code>map($property
-                  as xs:string, $value as item()*)</code>, with suitable keys, e.g.
-                  <code>content</code> -> <code>xs:base64Binary</code>. Thus the entry 'set' can be
-               a map <code>map(xs;string, map(xs:string,item()*))</code>.</p>
+        <p>The function will create empty directories described but not filled in the archive.
+            <code>file:create-dir()</code> creates necessary intermediate directories, so
+            <code>$dirs</code> does not need to be in a sorted order.</p>
+      </div2>
+      <div2 id="example.zip.from">
+        <head>Creating a ZIP archive from a file tree</head>
+        <p>The following XSLT function will create an archive from files and (recursive) directories
+          named relative to the current directory, using the file reading functions of <bibref
+            ref="expathfile"/>: </p>
+        <eg xml:space="preserve"><![CDATA[
+<xsl:function name="arch:from-files" as="xs:base64Binary">
+    <xsl:param name="files" as="xs:string*"/>
+    <xsl:variable name="all" as="xs:string*"
+      select="for $f in $files return if(file:is-dir($f)) then (for $f1 in file:list($f,true()) return concat($f,$f1)) else $f"/>
+    <xsl:variable name="normalized.names" select="for $n in $all return replace($n,'\\','/')"/>
+    <xsl:variable name="content" as="xs:base64Binary*"
+      select="for $f in $normalized.names return if(file:is-dir($f)) then xs:base64Binary('') else file:read-binary($f)"/>
+    <xsl:sequence select="arch:create($normalized.names,$content)"/>
+</xsl:function>
+]]></eg>
+
+      </div2>
+    </div1>
+    <div1 id="descriptions">
+      <head>Describing archives and entries</head>
+      <p>The properties of overall archives and individual entries at the XDM level are described by
+        small structured elements, with optional information attached. <emph>In this proposal this
+          information is attached as attributes.</emph></p>
+      <note>
+        <p>Parallels with XPath 3.0 serialization parameters, which are now sets of (element) nodes,
+          become awkward. In <code>arch:entry</code> we would need to add an element
+            <code>arch:name</code> to hold the name of an entry, rather than rely on the string
+          value. The major point in favour of using elements rather than attributes would be where
+          we need to read or set complex structured parameters, such as character maps. This needs
+          discussion.</p>
+      </note>
+      <div2 id="archive.properties">
+        <head>Archive properties and options</head>
+        <p>Archive options and properties are described as a structured element
+            (<code>element(arch:options)</code>) with the following attributes:</p>
+        <ulist>
+          <item>
+            <p><code>format</code>: the type of the archive, e.g. "zip". This is mandatory.</p>
+          </item>
+          <item>
+            <p><code>algorithm</code>: the default compression used in the archive, e.g.
+              "deflate".</p>
+          </item>
+        </ulist>
+        <p>Other attributes may be dependent upon the type of the archive and the
+          implementation.</p>
+      </div2>
+      <div2 id="entry.structures">
+        <head>Entry descriptions</head>
+        <p>Entries within the archive can be accessed by name (<code>xs:string</code>) or a
+          structured element (<code>element(arch:entry)</code>). In the latter case the entry name
+          is the string value of the element.</p>
+        <p>When describing an existing entry in an archive, <code>element(arch:entry)</code> may be
+          returned with the following optional attributes:</p>
+        <ulist>
+          <item>
+            <p><code>size</code>: the original file size of the entry.</p>
+          </item>
+          <item>
+            <p><code>compressed-size</code>: the compressed file size of the entry, i.e. the number
+              of bytes it occupies in the archive.</p>
+          </item>
+          <item>
+            <p><code>last-modified</code>: the date of last modification of this entry, in
+                <code>xs:dateTime</code> notation.</p>
+          </item>
+          <item>
+            <p><code>compression-level</code>: an indicator of the level of (lossless?)
+              compression.</p>
+          </item>
+        </ulist>
+        <p>When used to create or update an entry in an archive, <code>element(arch:entry)</code>
+          may also have the following optional attributes:</p>
+        <ulist>
+          <item>
+            <p><code>last-modified</code>: the date of last modification to be written on this
+              entry, in <code>xs:dateTime</code> notation.</p>
+          </item>
+          <item>
+            <p><code>compression-level</code>: the level of (lossless?) compression to be used in
+              writing the entry into the archive.</p>
+          </item>
+          <item>
+            <p><code>encoding</code>: the encoding to be used for converting textual items to a byte
+              sequence, prior to possible compression and writing to the archive.</p>
+          </item>
+        </ulist>
+        <p>(In writing actions, unknown attributes are ignored.)</p>
+      </div2>
+      <div2 id="using.maps">
+        <head>Using map types to describe entries and options</head>
+        <p>Proposals in XPath 3.0 have been made for a type
+            <code>map(xs:untypedAtomic,item()*)</code>, which could be exploited beneficially for
+          manipulating archives, using the entry name as the key and the
+            (<code>xs:base64Binary</code>) value of the entry as the corresponding value in the map.
+          These maps could be used both as output (in <code>arch:entries()</code> and
+            <code>arch:extract-[text|binary]()</code>) or for input (in <code>arch:update()</code>
+          and <code>arch:create()</code>). Equally well such maps can be used, reading keys only in
+            <code>arch:delete()</code>.</p>
+        <p>An attractive alternative would be for each entry itself to be a <code>map($property as
+            xs:string, $value as item()*)</code>, with suitable keys, e.g. <code>content</code> ->
+            <code>xs:base64Binary</code>. Thus the entry 'set' can be a map <code>map(xs;string,
+            map(xs:string,item()*))</code>.</p>
+        <note>
+          <p>Functions using such maps for arguments and results could either have separate names
+            (e.g. <code>arch:entries-as-map()</code>) or be defined in a separate namespace
+              (<code>archM:entries()</code>) – in this current draft the second is used. Details are
+            discussed in <specref ref="maps"/></p>
+        </note>
+
+        <p>Support for similar approaches using other map representations, such as <bibref
+            ref="jsoniq"/> objects may be implementation dependent.</p>
+      </div2>
+    </div1>
+    <div1 id="loading">
+      <head>Loading and saving archives</head>
+      <p>This module defines no specific functions for reading and writing archives from files, as
+        distinct from their binary data. The EXPath File Module <bibref ref="expathfile"/> provides
+        two suitable functions to do this:</p>
+      <ulist>
+        <item>
+          <p>
+            <ex:function><a href="http://expath.org/spec/file#d3e954"
+              >file:read-binary</a></ex:function>($file as <ex:type>xs:string</ex:type>) as
+              <ex:type>xs:base64Binary</ex:type>. Returns the content of a file in its Base64
+            representation.</p>
+        </item>
+        <item>
+          <p>
+            <ex:function><a href="http://expath.org/spec/file#d3e1359"
+              >file:write-binary</a></ex:function>($file as <ex:type>xs:string</ex:type>, $value as
+              <ex:type>xs:base64Binary</ex:type>) as <ex:type>empty-sequence()</ex:type>. Writes a
+            Base64 item as binary to a file. </p>
+        </item>
+      </ulist>
+      <note>
+        <p>There may be some desire for some convenience functions <code>arch:write($file as
+              <ex:type>xs:string</ex:type>,....) as empty-sequence()</code> which does creation and
+          file writing as one action.</p>
+      </note>
+    </div1>
+    <div1 id="information">
+      <head>Information about an archive and its contents</head>
+
+      <div2 id="fn.options">
+        <head><?function arch:options?></head>
+      </div2>
+      <div2 id="fn.entries">
+        <head><?function arch:entries?></head>
+      </div2>
+    </div1>
+    <div1 id="extraction">
+      <head>Extracting entries from an archive</head>
+      <p>The module does not attempt to discern the 'type' of an entry (such as 'text', 'XML',
+        'raw-binary'), leaving that to the programmer. Two forms of reading result are supported:
+        raw binary (<code>xs:base64Binary</code>) and decoded text (<code>xs:string</code>). </p>
+      <div2 id="fn.extract.binary">
+        <head><?function arch:extract-binary?></head>
+      </div2>
+      <div2 id="fn.extract.text">
+        <head><?function arch:extract-text?></head>
+      </div2>
+    </div1>
+    <div1 id="updating">
+      <head>Updating entries in an archive</head>
+      <p>There are two atomic actions available to change entries within an archive: complete
+        deletion of an entry, or complete updating (overwriting) of that entry – the latter adds new
+        entries when the given name does not already exist in the archive</p>
+      <div2 id="fn.delete">
+        <head><?function arch:delete?></head>
+      </div2>
+      <div2 id="fn.update">
+        <head><?function arch:update?></head>
+      </div2>
+    </div1>
+    <div1 id="creating">
+      <head>Creating an archive</head>
+      <p>new archives need to be created </p>
+      <div2 id="fn.create">
+        <head><?function arch:create?></head>
+      </div2>
+    </div1>
+    <div1 id="extracting">
+      <head>Creating and extracting complete archives from and to file systems</head>
+      <div2 id="fn.from.files">
+        <head><?function arch:from-files?></head>
+      </div2>
+      <div2 id="fn.to.files">
+        <head><?function arch:to-files?></head>
+      </div2>
+    </div1>
+    <div1 id="maps">
+      <head>Functions using XPath3.0 map() type</head>
+      <p>Maps proposed for XPath3.0 can increase the coherence of the functions in the module,
+        mainly by retaining the structured connection between the entry name and its properties and
+        content. In addition the properties of the overall archive (and its defaults for new
+        entries) can similarly be defined in a single map.</p>
+      <p>This section proposes parallel functions to those above using maps.</p>
+      <note>
+        <p><code>map:keys($map as map(*)) as xs:anyAtomicType*</code> returns the keys that are
+          present in a map, in unpredictable order. This means that if order within an archive is
+          important (either in extraction or updating) other mechanisms may be needed.</p>
+        <p>In general when using maps for denoting the entries to be manipulated, the arguments
+          might be considered to be a (possibly empty) sequence of maps that are treated as if
+          concatentated. [THIS NEEDS THOUGHT ABOUT OVERWRITING/MERGING COMMON KEYS]</p>
+      </note>
+      <div2 id="archive.options.map">
+        <head>Archive property maps</head>
+        <p>Using a reserved name within the overall map (such as <code>arch:options</code>) would
+          allow the options/properties for an archive to be stored alongside the entries.</p>
+      </div2>
+      <div2 id="entry.structures.map">
+        <head>Entry property maps</head>
+        <p>Entries within the archive can be also be accessed or described by entries in a map
+            (<code>map(xs:string,map(xs:string,item()*))</code>). In this case the map key gives the
+          (path)name of the archive entry (e.g. <code>build/build-j.xml</code>) and the value is a
+          map of the properties of that entry.</p>
+        <p>The following keys are provided when reporting on entries:</p>
+        <ulist>
+          <item>
+            <p><code>size</code>: the original file size of the entry as <code>xs:integer</code></p>
+          </item>
+          <item>
+            <p><code>compressed-size</code>: the compressed file size of the entry as
+                <code>xs:integer</code>, i.e. the number of bytes it occupies in the archive.</p>
+          </item>
+          <item>
+            <p><code>last-modified</code>: the date of last modification of this entry, in
+                <code>xs:dateTime</code> notation</p>
+          </item>
+          <item>
+            <p><code>compression-level</code>: an indicator of the level of (lossless?)
+              compression.</p>
+          </item>
+          <item>
+            <p><code>content</code>: the value of the entry read from the archive, as
+                <code>xs:base64Binary</code>. This will only be set if <code>$return-content</code>
+              is requested in the call to <code>archM:entries()</code>.</p>
+          </item>
+        </ulist>
+        <p>When used to extract an entry from an archive, this map may have the following optional
+          key/value pairs:</p>
+        <ulist>
+          <item>
+            <p><code>encoding</code>: the encoding to be used for converting textual items from a
+              byte sequence.</p>
+          </item>
+        </ulist>
+        <p>When used to create or update an entry in an archive, this map may have the following
+          optional key/value pairs:</p>
+        <ulist>
+          <item>
+            <p><code>content</code>: the value of the entry to be written in the archive, either as
+                <code>xs:base64Binary</code> or, when <code>encoding</code> is set, as
+                <code>xs:string</code>.</p>
             <note>
-               <p>Functions using such maps for arguments and results could either have separate
-                  names (e.g. <code>arch:entries-as-map()</code>) or be defined in a separate
-                  namespace (<code>archM:entries()</code>) - in this current draft the second is
-                  used. Details are discussed in <specref ref="maps"/></p>
+              <p><emph>This is awkward – why not just insist on <code>xs:base64Binary</code> and let
+                  the programmer encode?</emph></p>
             </note>
-
-            <p>Support for similar approaches using other map representations, such as <bibref
-                  ref="jsoniq"/> objects may be implementation dependent.</p>
-         </div2>
-      </div1>
-      <div1 id="loading">
-         <head>Loading and saving archives</head>
-         <p>This module defines no specific functions for reading and writing archives from files,
-            as distinct from their binary data. The EXPath File Module <bibref ref="expathfile"/>
-            provides two suitable functions to do this:</p>
-         <ulist>
-            <item>
-               <p>
-                  <ex:function><a href="http://expath.org/spec/file#d3e954"
-                     >file:read-binary</a></ex:function>($file as <ex:type>xs:string</ex:type>) as
-                     <ex:type>xs:base64Binary</ex:type>. Returns the content of a file in its Base64
-                  representation.</p>
-            </item>
-            <item>
-               <p>
-                  <ex:function><a href="http://expath.org/spec/file#d3e1359"
-                     >file:write-binary</a></ex:function>($file as <ex:type>xs:string</ex:type>,
-                  $value as <ex:type>xs:base64Binary</ex:type>) as
-                     <ex:type>empty-sequence()</ex:type>. Writes a Base64 item as binary to a file.
-               </p>
-            </item>
-         </ulist>
-         <note>
-            <p>There may be some desire for some convenience functions <code>arch:write($file as
-                     <ex:type>xs:string</ex:type>,....) as empty-sequence()</code> which does
-               creation and file writing as one action.</p>
-         </note>
-      </div1>
-      <div1 id="information">
-         <head>Information about an archive and its contents</head>
-
-         <div2 id="options">
-            <head><?function arch:options?></head>
-         </div2>
-         <div2 id="entries">
-            <head><?function arch:entries?></head>
-         </div2>
-      </div1>
-      <div1 id="extraction">
-         <head>Extracting entries from an archive</head>
-         <p>The module does not attempt to discern the 'type' of an entry (such as 'text', 'XML',
-            'raw-binary'), leaving that to the programmer. Two forms of reading result are
-            supported: raw binary (<code>xs:base64Binary</code>) and decoded text
-               (<code>xs:string</code>). </p>
-         <div2 id="extract.binary">
-            <head><?function arch:extract-binary?></head>
-         </div2>
-         <div2 id="extract.text">
-            <head><?function arch:extract-text?></head>
-         </div2>
-      </div1>
-      <div1 id="updating">
-         <head>Updating entries in an archive</head>
-         <p>There are two atomic actions available to change entries within an archive: complete
-            deletion of an entry, or complete updating (overwriting) of that entry - the latter adds
-            new entries when the given name does not already exist in the archive</p>
-         <div2 id="delete">
-            <head><?function arch:delete?></head>
-         </div2>
-         <div2 id="update">
-            <head><?function arch:update?></head>
-         </div2>
-      </div1>
-      <div1 id="creating">
-         <head>Creating an archive</head>
-         <p>new archives need to be created </p>
-         <div2 id="create">
-            <head><?function arch:create?></head>
-         </div2>
-      </div1>
-      <div1 id="maps">
-         <head>Functions using XPath3.0 map() type</head>
-         <p>Maps proposed for XPath3.0 can increase the coherence of the functions in the module,
-            mainly by retaining the structured connection between the entry name and its properties
-            and content. In addition the properties of the overall archive (and its defaults for new
-            entries) can similarly be defined in a single map.</p>
-         <p>This section proposes parallel functions to those above using maps.</p>
-         <note>
-            <p><code>map:keys($map as map(*)) as xs:anyAtomicType*</code> returns the keys that are
-               present in a map, in unpredictable order. This means that if order within an archive
-               is important (either in extraction or updating) other mechanisms may be needed.</p>
-            <p>In general when using maps for denoting the entries to be manipulated, the arguments
-               might be considered to be a (possibly empty) sequence of maps that are treated as if
-               concatentated. [THIS NEEDS THOUGHT ABOUT OVERWRITING/MERGING COMMON KEYS]</p>
-         </note>
-         <div2 id="archive.options.map">
-            <head>Archive property maps</head>
-            <p>Using a reserved name within the overall map (such as <code>arch:options</code>)
-               would allow the options/properties for an archive to be stored alongside the
-               entries.</p>
-         </div2>
-         <div2 id="entry.structures.map">
-            <head>Entry property maps</head>
-            <p>Entries within the archive can be also be accessed or described by entries in a map
-                  (<code>map(xs:string,map(xs:string,item()*))</code>). In this case the map key
-               gives the (path)name of the archive entry (e.g. <code>build/build-j.xml</code>) and
-               the value is a map of the properties of that entry.</p>
-            <p>The following keys are provided when reporting on entries:</p>
-            <ulist>
-               <item>
-                  <p><code>size</code>: the original file size of the entry as
-                        <code>xs:integer</code></p>
-               </item>
-               <item>
-                  <p><code>compressed-size</code>: the compressed file size of the entry as
-                        <code>xs:integer</code>, i.e. the number of bytes it occupies in the
-                     archive.</p>
-               </item>
-               <item>
-                  <p><code>last-modified</code>: the date of last modification of this entry, in
-                        <code>xs:dateTime</code> notation</p>
-               </item>
-               <item>
-                  <p><code>compression-level</code>: an indicator of the level of (lossless?)
-                     compression.</p>
-               </item>
-               <item>
-                  <p><code>content</code>: the value of the entry read from the archive, as
-                        <code>xs:base64Binary</code>. This will only be set if
-                        <code>$return-content</code> is requested in the call to
-                        <code>archM:entries()</code>.</p>
-               </item>
-            </ulist>
-            <p>When used to extract an entry from an archive, this map may have the following
-               optional key/value pairs:</p>
-            <ulist>
-               <item>
-                  <p><code>encoding</code>: the encoding to be used for converting textual items
-                     from a byte sequence.</p>
-               </item>
-            </ulist>
-            <p>When used to create or update an entry in an archive, this map may have the following
-               optional key/value pairs:</p>
-            <ulist>
-               <item>
-                  <p><code>content</code>: the value of the entry to be written in the archive,
-                     either as <code>xs:base64Binary</code> or, when <code>encoding</code> is set,
-                     as <code>xs:string</code>.</p>
-                  <note>
-                     <p><emph>This is awkward - why not just insist on <code>xs:base64Binary</code>
-                           and let the programmer encode?</emph></p>
-                  </note>
-               </item>
-               <item>
-                  <p><code>last-modified</code>: the date of last modification to be written on this
-                     entry, in <code>xs:dateTime</code> notation</p>
-               </item>
-               <item>
-                  <p><code>compression-level</code>: the level of (lossless?) compression to be used
-                     in writing the entry into the archive.</p>
-               </item>
-               <item>
-                  <p><code>encoding</code>: the encoding to be used for converting textual items to
-                     a byte sequence, prior to possible compression and writing to the archive.</p>
-               </item>
-            </ulist>
-         </div2>
-         <div2 id="options.map">
-            <head><?function archM:options?></head>
-         </div2>
-         <div2 id="entries.map">
-            <head><?function archM:entries?></head>
-         </div2>
-         <div2 id="entry.names.map">
-            <head><?function archM:entry-names?></head>
-         </div2>
-         <div2 id="extractmap">
-            <head><?function archM:extract?></head>
-         </div2>
-         <div2 id="extract.binary.map">
-            <head><?function archM:extract-binary?></head>
-         </div2>
-         <div2 id="extract.text.map">
-            <head><?function archM:extract-text?></head>
-         </div2>
-         <div2 id="create.map">
-            <head><?function archM:create?></head>
-         </div2>
-         <div2 id="update.map">
-            <head><?function archM:update?></head>
-         </div2>
-         <div2 id="delete.map">
-            <head><?function archM:delete?></head>
-         </div2>
-      </div1>
+          </item>
+          <item>
+            <p><code>last-modified</code>: the date of last modification to be written on this
+              entry, in <code>xs:dateTime</code> notation</p>
+          </item>
+          <item>
+            <p><code>compression-level</code>: the level of (lossless?) compression to be used in
+              writing the entry into the archive.</p>
+          </item>
+          <item>
+            <p><code>encoding</code>: the encoding to be used for converting textual items to a byte
+              sequence, prior to possible compression and writing to the archive.</p>
+          </item>
+        </ulist>
+      </div2>
+      <div2 id="fn.options.map">
+        <head><?function archM:options?></head>
+      </div2>
+      <div2 id="fn.entries.map">
+        <head><?function archM:entries?></head>
+      </div2>
+      <div2 id="fn.entry.names.map">
+        <head><?function archM:entry-names?></head>
+      </div2>
+      <div2 id="fn.extractmap">
+        <head><?function archM:extract?></head>
+      </div2>
+      <div2 id="fn.extract.binary.map">
+        <head><?function archM:extract-binary?></head>
+      </div2>
+      <div2 id="fn.extract.text.map">
+        <head><?function archM:extract-text?></head>
+      </div2>
+      <div2 id="fn.create.map">
+        <head><?function archM:create?></head>
+      </div2>
+      <div2 id="fn.update.map">
+        <head><?function archM:update?></head>
+      </div2>
+      <div2 id="fn.delete.map">
+        <head><?function archM:delete?></head>
+      </div2>
+    </div1>
 
 
-   </body>
+  </body>
 
-   <back>
-      <div1 id="references">
-         <head>References</head>
-         <blist>
+  <back>
+    <div1 id="references">
+      <head>References</head>
+      <blist>
 
-            <bibl id="epub" key="EPUB">
-               <loc href="http://www.idpf.org/epub/30/spec/epub30-overview.html">EPUB 3
-                  Overview</loc>. International Digital Publishing Forum. Recommended Specification
-               11 October 2011.</bibl>
-            <bibl id="expathfile" key="EXPath File">
-               <loc href="http://expath.org/spec/file">File Module</loc>. Christian Grün and
-               Matthias Brantner, editors. EXPath Candidate Module. 14 June 2012.</bibl>
-            <bibl id="expathbinary" key="EXPath Binary">
-               <loc href="http://expath.org/spec/binary">Binary Module</loc>. Jirka Kosek and John
-               Lumley, editors. EXPath Candidate Module. 6 August 2013.</bibl>
-            <bibl id="fo30" key="F&amp;O 3.0">
-               <loc href="http://www.w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and
-                  Operators 3.0</loc>. Michael Kay, editor. W3C Candidate Recommendation 21 May
-               2013.</bibl>
-            <bibl id="gzip" key="GZIP">
-               <loc href="http://www.gzip.org/zlib/rfc-gzip.html">GZIP file format specification
-                  version 4.3</loc>. L. Peter Deutsch, 1996.</bibl>
-            <bibl id="jsoniq" key="JSONiq">
-               <loc href="http://www.jsoniq.org/">JSONiq - The JSON Query Language</loc>. FLWOR
-               Foundation. 2013.</bibl>
-            <bibl id="xmlschema1.1" key="XML Schema 1.1 Part 2">
-               <loc href="http://www.w3.org/TR/xmlschema11-2/">W3C XML Schema Definition Language
-                  (XSD) 1.1 Part 2: Datatypes</loc>. David Peterson et al, editors.W3C
-               Recommendation 5 April 2012.</bibl>
-            <bibl id="zip" key="ZIP">
-               <loc href="http://www.pkware.com/documents/casestudies/APPNOTE.TXT">ZIP File Format
-                  Specification</loc>.PKWare, Version 6.3.3, 1 September 2012.</bibl>
-         </blist>
-      </div1>
-      <div1 id="errors">
-         <head>Summary of error conditions</head>
-         <blist>
-            <bibl id="error.archiveReadError" key="arch:read-error">There was an general error in
-               reading the archive</bibl>
-            <bibl id="error.unknownEntry" key="arch:unknown-entry">The specified entry does not
-               exist in this archive.</bibl>
-            <bibl id="error.entryDataMismatch" key="arch:entry-data-mismatch">The sequence of entry
-               names is not the same length as the sequence of updated values.</bibl>
-            <bibl id="error.unknownEncoding" key="arch:unknown-encoding">The specified encoding is
-               not supported.</bibl>
-            <bibl id="error.decoding" key="arch:decoding-error">Error in decoding a string.</bibl>
-         </blist>
-      </div1>
-   </back>
+        <bibl id="epub" key="EPUB">
+          <loc href="http://www.idpf.org/epub/30/spec/epub30-overview.html">EPUB 3 Overview</loc>.
+          International Digital Publishing Forum. Recommended Specification 11 October 2011.</bibl>
+        <bibl id="expathfile" key="EXPath File">
+          <loc href="http://expath.org/spec/file">File Module</loc>. Christian Grün and Matthias
+          Brantner, editors. EXPath Candidate Module. 14 June 2012.</bibl>
+        <bibl id="expathbinary" key="EXPath Binary">
+          <loc href="http://expath.org/spec/binary">Binary Module</loc>. Jirka Kosek and John
+          Lumley, editors. EXPath Candidate Module. 6 August 2013.</bibl>
+        <bibl id="fo30" key="F&amp;O 3.0">
+          <loc href="http://www.w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and
+            Operators 3.0</loc>. Michael Kay, editor. W3C Candidate Recommendation 21 May
+          2013.</bibl>
+        <bibl id="gzip" key="GZIP">
+          <loc href="http://www.gzip.org/zlib/rfc-gzip.html">GZIP file format specification version
+            4.3</loc>. L. Peter Deutsch, 1996.</bibl>
+        <bibl id="jsoniq" key="JSONiq">
+          <loc href="http://www.jsoniq.org/">JSONiq – The JSON Query Language</loc>. FLWOR
+          Foundation. 2013.</bibl>
+        <bibl id="xmlschema1.1" key="XML Schema 1.1 Part 2">
+          <loc href="http://www.w3.org/TR/xmlschema11-2/">W3C XML Schema Definition Language (XSD)
+            1.1 Part 2: Datatypes</loc>. David Peterson et al, editors.W3C Recommendation 5 April
+          2012.</bibl>
+        <bibl id="zip" key="ZIP">
+          <loc href="http://www.pkware.com/documents/casestudies/APPNOTE.TXT">ZIP File Format
+            Specification</loc>.PKWare, Version 6.3.3, 1 September 2012.</bibl>
+      </blist>
+    </div1>
+    <div1 id="errors">
+      <head>Summary of error conditions</head>
+      <blist>
+        <bibl id="error.archiveReadError" key="arch:read-error">There was an general error in
+          reading the archive</bibl>
+        <bibl id="error.unknownEntry" key="arch:unknown-entry">The specified entry does not exist in
+          this archive.</bibl>
+        <bibl id="error.entryDataMismatch" key="arch:entry-data-mismatch">The sequence of entry
+          names is not the same length as the sequence of updated values.</bibl>
+        <bibl id="error.unknownEncoding" key="arch:unknown-encoding">The specified encoding is not
+          supported.</bibl>
+        <bibl id="error.decoding" key="arch:decoding-error">Error in decoding a string.</bibl>
+      </blist>
+      <p>Errors possibly generated by code executed from module <bibref ref="expathfile"/>:</p>
+      <blist>
+        <bibl id="error.fileNotFound" key="file:not-found">The specified path does not exist.</bibl>
+        <bibl id="error.fileExists" key="file:exists">The specified path already exists.</bibl>
+        <bibl id="error.noParent" key="file:no-dir">The specified path does not point to a
+          directory.</bibl>
+        <bibl id="error.overwriteDirectory" key="file:is-dir">The specified path points to a
+          directory.</bibl>
+        <bibl id="error.genericFile" key="file:io-error">A generic file system error
+          occurred.</bibl>
+      </blist>
+    </div1>
+  </back>
 </spec>

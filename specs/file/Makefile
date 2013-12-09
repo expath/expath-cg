@@ -5,8 +5,10 @@
 # saxon -s:xxx.xml -xsl:http://expath.org/ns/xmlspec/xmlspec.xsl
 # saxon -s:xxx.xml -xsl:http://expath.org/ns/xmlspec/diffspec.xsl
 
-XMLSPEC=http://expath.org/ns/xmlspec/xmlspec.xsl
-DIFFSPEC=http://expath.org/ns/xmlspec/diffspec.xsl
+#XMLSPEC=http://expath.org/ns/xmlspec/xmlspec.xsl
+#DIFFSPEC=http://expath.org/ns/xmlspec/diffspec.xsl
+XMLSPEC=../../tools/expathspec/src/xmlspec.xsl
+DIFFSPEC=../../tools/expathspec/src/diffspec.xsl
 
 latest: file-20120614.html file-20120614-diff.html
 
@@ -26,4 +28,10 @@ file-20120614.html: file-20120614.xml
 	saxon -s:$< -xsl:$(XMLSPEC) > $@
 
 file-20120614-diff.html: file-20120614-diff.xml
+	saxon -s:$< -xsl:$(DIFFSPEC) > $@
+
+file-20131203.html: file-20131203.xml
+	saxon -s:$< -xsl:$(XMLSPEC) > $@
+
+file-20131203-diff.html: file-20131203-diff.xml
 	saxon -s:$< -xsl:$(DIFFSPEC) > $@
