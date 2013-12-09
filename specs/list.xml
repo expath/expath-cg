@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<specs>
+   <spec name="archive">
+      <revision version="20130930">
+         <file href="archive/html/archive-20130930.html"        format="html" diff="false"/>
+         <file href="archive/src/20130930/archive-expanded.xml" format="xml"  diff="false"/>
+      </revision>
+      <editor>
+         <file href="archive/html/archive.html"        format="html" diff="false"/>
+         <file href="archive/src/archive-expanded.xml" format="xml"  diff="false"/>
+         <file href="archive/html/archive-diff.html"   format="html" diff="true"/>
+         <file href="diff/archive-expanded-diff.xml"   format="xml"  diff="true"/>
+      </editor>
+   </spec>
+   <spec name="binary">
+      <revision version="20130312">
+         <file href="binary/html/binary-20130312.html"        format="html" diff="false"/>
+         <file href="binary/src/20130312/binary-expanded.xml" format="xml"  diff="false"/>
+      </revision>
+      <revision version="20130731">
+         <file href="binary/html/binary-20130731.html"        format="html" diff="false"/>
+         <file href="binary/src/20130731/binary-expanded.xml" format="xml"  diff="false"/>
+      </revision>
+      <revision version="20130920">
+         <file href="binary/html/binary-20130920.html"              format="html" diff="false"/>
+         <file href="binary/src/20130920/binary-expanded.xml"       format="xml"  diff="false"/>
+         <file href="binary/html/binary-20130920-diff.html"         format="html" diff="true"/>
+         <file href="binary/diff/binary-expanded-diff-20130920.xml" format="xml"  diff="true"/>
+      </revision>
+      <revision version="20131113">
+         <file href="binary/html/binary-20131113.html"              format="html" diff="false"/>
+         <file href="binary/src/20131113/binary-expanded.xml"       format="xml"  diff="false"/>
+         <file href="binary/html/binary-20131113-diff.html"         format="html" diff="true"/>
+         <file href="binary/diff/binary-expanded-diff-20131113.xml" format="xml"  diff="true"/>
+      </revision>
+      <revision version="20131125">
+         <file href="binary/html/binary-20131125.html"              format="html" diff="false"/>
+         <file href="binary/src/20131125/binary-expanded.xml"       format="xml"  diff="false"/>
+         <file href="binary/html/binary-20131125-diff.html"         format="html" diff="true"/>
+         <file href="binary/diff/binary-expanded-diff-20131125.xml" format="xml"  diff="true"/>
+      </revision>
+      <revision version="1.0">
+         <file href="binary/html/binary-1.0.html"              format="html" diff="false"/>
+         <file href="binary/src/1.0/binary-expanded.xml"       format="xml"  diff="false"/>
+         <file href="binary/html/binary-1.0-diff.html"         format="html" diff="true"/>
+         <file href="binary/diff/binary-expanded-diff-1.0.xml" format="xml"  diff="true"/>
+      </revision>
+      <editor>
+         <file href="binary/html/binary.html"              format="html" diff="false"/>
+         <file href="binary/src/binary-expanded.xml"       format="xml"  diff="false"/>
+         <file href="binary/html/binary-diff.html"         format="html" diff="true"/>
+         <file href="binary/diff/binary-expanded-diff.xml" format="xml"  diff="true"/>
+      </editor>
+   </spec>
+   <spec name="file">
+      <revision version="20100517">
+         <file href="file/file-20100517.html" format="html" diff="false"/>
+         <file href="file/file-20100517.xml"  format="xml"  diff="false"/>
+      </revision>
+      <revision version="20120614">
+         <file href="file/file-20120614.html"      format="html" diff="false"/>
+         <file href="file/file-20120614.xml"       format="xml"  diff="false"/>
+         <file href="file/file-20120614-diff.html" format="html" diff="true"/>
+         <file href="file/file-20120614-diff.xml"  format="xml"  diff="true"/>
+      </revision>
+      <revision version="20131203">
+         <file href="file/file-20131203.html"      format="html" diff="false"/>
+         <file href="file/file-20131203.xml"       format="xml"  diff="false"/>
+         <file href="file/file-20131203-diff.html" format="html" diff="true"/>
+         <file href="file/file-20131203-diff.xml"  format="xml"  diff="true"/>
+      </revision>
+      <editor>
+         <file href="file/file.html"      format="html" diff="false"/>
+         <file href="file/file.xml"       format="xml"  diff="false"/>
+         <file href="file/file-diff.html" format="html" diff="true"/>
+         <file href="file/file-diff.xml"  format="xml"  diff="true"/>
+      </editor>
+   </spec>
+   <spec name="http">
+      <editor>
+         <file href="http/http.html" format="html" diff="false"/>
+         <file href="http/http.xml"  format="xml"  diff="false"/>
+      </editor>
+   </spec>
+   <spec name="pkg">
+      <revision version="20090901">
+         <file href="pkg/pkg-20090901.html" format="html" diff="false"/>
+         <file href="pkg/pkg-20090901.xml"  format="xml"  diff="false"/>
+      </revision>
+      <revision version="20091118">
+         <file href="pkg/pkg-20091118.html" format="html" diff="false"/>
+         <file href="pkg/pkg-20091118.xml"  format="xml"  diff="false"/>
+      </revision>
+      <revision version="20100107">
+         <file href="pkg/pkg-20100107.html"      format="html" diff="false"/>
+         <file href="pkg/pkg-20100107.xml"       format="xml"  diff="false"/>
+         <file href="pkg/pkg-20100107-diff.html" format="html" diff="true"/>
+         <file href="pkg/pkg-20100107-diff.xml"  format="xml"  diff="true"/>
+      </revision>
+      <revision version="20101111">
+         <file href="pkg/pkg-20101111.html"      format="html" diff="false"/>
+         <file href="pkg/pkg-20101111.xml"       format="xml"  diff="false"/>
+         <file href="pkg/pkg-20101111-diff.html" format="html" diff="true"/>
+         <file href="pkg/pkg-20101111-diff.xml"  format="xml"  diff="true"/>
+      </revision>
+      <revision version="20120509">
+         <file href="pkg/pkg-20120509.html"      format="html" diff="false"/>
+         <file href="pkg/pkg-20120509.xml"       format="xml"  diff="false"/>
+         <file href="pkg/pkg-20120509-diff.html" format="html" diff="true"/>
+         <file href="pkg/pkg-20120509-diff.xml"  format="xml"  diff="true"/>
+      </revision>
+      <editor>
+         <file href="pkg/pkg.html"      format="html" diff="false"/>
+         <file href="pkg/pkg.xml"       format="xml"  diff="false"/>
+         <file href="pkg/pkg-diff.html" format="html" diff="true"/>
+         <file href="pkg/pkg-diff.xml"  format="xml"  diff="true"/>
+      </editor>
+   </spec>
+</specs>
