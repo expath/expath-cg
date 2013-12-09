@@ -194,7 +194,7 @@
             </xsl:when>
             <xsl:otherwise>
                <a href="http://expath.org/">
-                  <img src="http://expath.org/images/expath-icon.png"
+                  <img src="http://expath.org/images/expath-logo.png"
                        alt="EXPath" height="32" width="32"/>
                </a>
             </xsl:otherwise>
