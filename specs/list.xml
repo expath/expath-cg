@@ -2,7 +2,7 @@
 
 <specs>
    <spec name="archive">
-      <revision version="20130930">
+      <revision version="20130930" latest="true">
          <file href="archive/html/archive-20130930.html"        format="html" diff="false"/>
          <file href="archive/src/20130930/archive-expanded.xml" format="xml"  diff="false"/>
       </revision>
@@ -64,7 +64,7 @@
          <file href="file/file-20120614-diff.html" format="html" diff="true"/>
          <file href="file/file-20120614-diff.xml"  format="xml"  diff="true"/>
       </revision>
-      <revision version="20131203">
+      <revision version="20131203" latest="true">
          <file href="file/file-20131203.html"      format="html" diff="false"/>
          <file href="file/file-20131203.xml"       format="xml"  diff="false"/>
          <file href="file/file-20131203-diff.html" format="html" diff="true"/>
@@ -78,7 +78,7 @@
       </editor>
    </spec>
    <spec name="http">
-      <editor>
+      <editor latest="true">
          <file href="http/http.html" format="html" diff="false"/>
          <file href="http/http.xml"  format="xml"  diff="false"/>
       </editor>
@@ -104,7 +104,7 @@
          <file href="pkg/pkg-20101111-diff.html" format="html" diff="true"/>
          <file href="pkg/pkg-20101111-diff.xml"  format="xml"  diff="true"/>
       </revision>
-      <revision version="20120509">
+      <revision version="20120509" latest="true">
          <file href="pkg/pkg-20120509.html"      format="html" diff="false"/>
          <file href="pkg/pkg-20120509.xml"       format="xml"  diff="false"/>
          <file href="pkg/pkg-20120509-diff.html" format="html" diff="true"/>
