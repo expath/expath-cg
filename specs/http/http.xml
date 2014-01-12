@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?oxygen RNGSchema="http://expath.org/ns/xmlspec/xmlspec.rnc"?>
+
+<spec role="editors-copy" xmlns:ex="http://expath.org/ns/xmlspec" ex:w3c="true">
+   <header>
+      <title>HTTP Model</title>
+      <w3c-designation>w3c-designation</w3c-designation>
+      <w3c-doctype>EXPath Candidate Module</w3c-doctype>
+      <pubdate>
+         <day>11</day>
+         <month>January</month>
+         <year>2013</year>
+      </pubdate>
+      <publoc>
+         <loc href="http://expath.org/spec/http/editor"/>
+      </publoc>
+      <altlocs>
+         <loc href="http://expath.org/spec/http/editor.xml">XML</loc>
+         <!--loc href="http://expath.org/spec/http/20120509/diff">Revision markup</loc-->
+      </altlocs>
+      <latestloc>
+         <loc href="http://expath.org/spec/http"/>
+      </latestloc>
+      <!--prevlocs>
+         <loc href="http://expath.org/spec/http/20101111"/>
+      </prevlocs-->
+      <authlist>
+         <author role="editor">
+            <name>Florent Georges</name>
+            <affiliation><loc href="http://h2oconsulting.be/">H2O Consulting</loc></affiliation>
+         </author>
+      </authlist>
+      <!--
+          The copyright has to be adapted when this spec passes into "Final Report" status.
+          See http://www.w3.org/community/reports/reqs/.
+      -->
+      <copyright>
+         <p>Copyright © 2012-2013 Florent Georges, published by the <loc
+               href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
+               href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+               License Agreement (CLA)</loc>. A human-readable <loc
+               href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
+            available.</p>
+         <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
+               >EXPath Community Group</loc>. It is not a W3C Standard nor is it on the W3C
+            Standards Track. Please note that under the <loc
+               href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+               License Agreement (CLA)</loc> there is a limited opt-out and other conditions apply.
+            Learn more about <loc href="http://www.w3.org/community/">W3C Community and Business
+               Groups</loc>.</p>
+      </copyright>
+      <abstract>
+         <p>This module defines an XML format for HTTP requests and responses, as well as a set of
+            functions to access specific informations of those requests and responses.</p>
+      </abstract>
+      <status>
+         <p>Must be ignored, but is required by the schema...</p>
+      </status>
+      <langusage>
+         <language>langusage</language>
+      </langusage>
+      <revisiondesc>
+         <p>revisiondesc</p>
+      </revisiondesc>
+   </header>
+   <body>
+      <div1 id="ns">
+         <head>Namespace conventions</head>
+         <p>This module defines an XML format for HTTP requests and responses, as well as a set of
+            functions to access specific informations of those requests and responses. Elements and
+            functions defined by this module are in the namespace
+               <code>http://expath.org/ns/http</code>. In this document, the <code>http</code>
+            prefix, when used, is bound to this namespace URI.</p>
+      </div1>
+      <div1 id="intro">
+         <head>Introduction</head>
+         <p>One of the obvious usages of XML if to transfer information between different systems,
+            as a universally supported information representation language. In that regard, it is
+            often used together with HTTP, as a universally supported transfert protocol. XPath and
+            associated programming languages like XQuery and XSLT, are therefore often used to
+            create or consume XML documents received or to be sent through HTTP. But they have no
+            (standard) way to access or represent the information in the HTTP layer itself.</p>
+         <p>This specification defines an XML format to represent HTTP requests and responses, which
+            cary all the semantics of the HTTP layer. They are low-level formats aimed at mapping as
+            closely as possible the HTTP specification, so all the power and expressiveness of HTTP
+            is available to XPath. Libraries or other specifications can then use those requests and
+            responses, to provide more high-level features on top of them. This specification does
+            not define any way to send a request (as a client) or to receive a request and serve the
+            corresponding response (as a server). Those features would have to be defined by other
+            specifications or by specific products.</p>
+         <p>Here is an example of HTTP request:</p>
+         <eg><![CDATA[<http:request ...>
+   ...
+</http:request>]]></eg>
+         <p>The corresponding response could look like:</p>
+         <eg><![CDATA[<http:response ...>
+   ...
+</http:response>]]></eg>
+         <p>Accessing the value of the header Content-Type in the response (given it is bound to the
+            variable $response) could be done in XPath as following:</p>
+         <eg>$response/http:header[@name eq 'content-type']/string(@value)</eg>
+         <p>The exact same result can be achived by using the function http:header defined in this
+            specification:</p>
+         <eg>http:header($response, 'Content-Type')</eg>
+         <p>This specification provides, in the appendices, the XML Schema for the XML format, as
+            well as an XQuery library module and an XSLT stylesheet defining the functions as
+            standard XQuery and XSLT functions. This is only informative, and an implementation can
+            provide built-in functions as long as they provide the same results.</p>
+      </div1>
+      <div1 id="randr">
+         <head>Requests and responses</head>
+         <p>TODO: Do we use the elements http:request and http:response, or like a single element
+            http:entity? (with an attribute or element to tell whether they are or they are intended
+            to be a request or a response) This allows to define functions for instance that accept
+            either of them (like http:header() for instance). Other possibilities to solve this
+            problem is to define a base type in XML Schema and use it in function signatures...</p>
+         <p>The request and response are defined by the following elements:</p>
+         <eg><![CDATA[<http:request
+   method = method
+   href = anyURI >
+    (http:uri?,
+     http:param*,
+     http:header*,
+     (http:body
+      |http:multipart)?
+</http:request>
+
+<http:response
+   code = code
+   status = string? >
+    (http:header*,
+     (http:body
+      |http:multipart)?
+</http:response>]]></eg>
+         <p>TODO: Is it possible to have query parameters in @href? It would be useful in the
+            context of an HTTP client. In the context of a server-side container, it would be less a
+            problem, as the user would mostly access the information, and we could provide different
+            functions to access different "flavours" of the URI (with or without the query
+            parameters, with or w/o the fragment identifier, etc.) The same is true for the element
+            http:uri: it is useful mostly as a convenience to access the "parsed" URI, but this is
+            not a big deal if we provide accessor functions (and we can provide as well a function
+            to construct the full URI based on an element http:uri).</p>
+         <p>TODO: Define that http:response/@status is optional in a server context (when the user
+            constructs the response, so the implementation can set the standard status phrase for
+            the given response code), but is mandatory in a client context (the implementation must
+            then provide the user with the status phrase returned to the client). Same for
+            http:request/http:uri, mandatory in a server context (but certainly not in a client
+            context).</p>
+         <p>The method name and the header names are always lower case. Because the case is not
+            significant, it is then possible to the user to compare them (for instance to check the
+            method or to select a specific header) by simple string comparison, instead of having to
+            handle the case insensitivity (the corresponsing accessor functions provide the case
+            insensitivity feature though).</p>
+         <p>The element http:uri in the request is defined as follow:</p>
+         <eg><![CDATA[<http:uri>
+    (http:scheme,
+     http:part,
+     http:authority,
+     (http:part,
+      http:port)?,
+     http:part*
+</http:uri>]]></eg>
+         <p>TODO: Include the query parameters and the fragment identifier as well?</p>
+         <p>The element http:scheme is the HTTP scheme, either http or https. The element authority
+            is the machine name, either an IP address or a domain name. The element port is,
+            unsurprisingly, the port number, as an integer. The elements http:part contain any other
+            text part of the URI, as a string. The first one has always the value "://". The one
+            before the port, if any, has always the value ":". The following elements http:part can
+            present the URI split in any number of pieces, as defined by the implementation. The
+            rule is that concatenating the value of all the elements in the document order
+            reconstruct the same URI as in http:request/@href. The element http:part is defined
+            as:</p>
+         <eg><![CDATA[<http:part
+   name = token? >
+    text
+</http:part>]]></eg>
+         <p>In particular, note the optional attribute @name. A server-side implementation can
+            provide a way to "parse" the request URI, for instance for RESTfull services, and break
+            it down to pieces, annotating some of them with names. The following URI for
+            instance:</p>
+         <eg>http://example.org/users/fgeorges</eg>
+         <p>could result in the following element http:uri:</p>
+         <eg><![CDATA[<http:uri>
+   <http:scheme>http</http:scheme>
+   <http:part>://</http:part>
+   <http:authority>example.org</http:authority>
+   <http:part>/users/</http:part>
+   <http:part name="id">fgeorges</http:part>
+</http:uri>]]></eg>
+         <p>The way names are attributed is implementation-defined. With the above http:uri element,
+            the user can then easily retrieve the ID of the user from the URI with:</p>
+         <eg>$request/http:uri/http:part[@name eq 'id']/string(.)</eg>
+         <p>Note: Informally, the intend is to provide server context libraries, framworks and
+            specifications the ability to "parse" the URI and name some specific parts. This is
+            useful in RESTful environment for instance, like the above example suggests. If a
+            RESTful specification defines a way to map requests to implementations based on URI path
+            patterns, the above example could be generated by the following pattern (on example.org
+            then): "/users/{id}".</p>
+         <p>The elements http:param and http:header are defined as follow:</p>
+         <eg><![CDATA[<http:param
+   name = token? >
+    text
+</http:param>
+
+<http:header
+   name = token? >
+    text
+</http:header>]]></eg>
+         <p>The elements http:body and http:multipart are defined as follow:</p>
+         <eg><![CDATA[<http:multipart
+   content-type = string
+   separator = string? >
+    (http:header*,
+     http:body)+
+</http:multipart>
+
+<http:body
+   content-type = string
+   position = integer? >
+    (text
+     |document-node)?
+</http:body>]]></eg>
+         <p>The attribute content-type is the content of the multipart or single body. The attribute
+            position is used on the body elements when they are children of a multipart entity. The
+            attribute separator is the multipart separator string (it is optional so when it is used
+            on a response in a server-side context, or on a request in a client context, the
+            implementation can compute it automatically; it must be present on a request in a
+            server-side context and on a response in a client-side context).</p>
+         <p>The content of a body element is optional. Besides the fact that the content of a body
+            can be empty, this is also a way to let a specific library or specification to define a
+            way to pass the content of a body alongside the HTTP element, instead of embedding it
+            (this is outside the scope of this specification). For instance, an HTTP client could
+            accept an HTTP request element and a sequence of items representing the content of the
+            bodies (or it could require the content to be embedded in the http:body elements all the
+            time).</p>
+      </div1>
+      <div1 id="functions">
+         <head>Functions</head>
+         <p>Most of the functions defined in this specification are convenience functions to access
+            specific information from the request and response elements. They take such a request or
+            a response as parameter (except <xtermref href="#f.request">http:request</xtermref>),
+            and a such could be written as standard user functions in XQuery or XSLT. Defining those
+            functions in this specification achieves 3 different goals: 1) providing the user with
+            those functions even in XPath, which does not allow defining user functions, 2)
+            providing the user with those functions without requiring to write them over and over
+            again, in XQuery and XSLT, or to have to import libraries, and 3) providing the
+            implementation with optimization opportunities.</p>
+         <p>The function <xtermref href="#f.request">http:request</xtermref> is different in this
+            regards, as it does not return inormation from a request or a response, but it returns
+            the "<emph>current in-scope request</emph>". All other functions are functional, in the
+            sense that they return some values based on their parameters (the returned values depend
+            only on the parameters, and are always the same for the same parameters). But the
+            function <xtermref href="#f.request">http:request</xtermref> does not take any
+            parameter, it depends on the dynamic context when it is called, and so makes the
+            function it is called from not functional.</p>
+         <p>The use of the function <xtermref href="#f.request">http:request</xtermref> is
+            deprecated as much as possible. In a server-side environment, the specification or the
+            product defining the HTTP layer should provide a way to pass the HTTP request to the
+            user code, e.g. through a stylesheet or a query parameter.</p>
+         <p>The other functions take an HTTP entity as first parameter. Some functions expect a
+            request, some expect a response, and others expect any of them.</p>
+         <note>
+            <p>TODO: Describe the advantages and drawbacks of having 2 different names for
+                  <code>http:request</code> and <code>http:response</code> (probably deriving from
+               the same common XML Schema base type), versus having one element
+                  <code>http:entity</code> with an attribute telling whether it is a request or a
+               response.</p>
+         </note>
+         <div2 id="f.header">
+            <head>http:header</head>
+            <eg>
+<ex:function>http:header</ex:function>($entity as element(*, http:entity),
+            $name   as xs:string) as xs:string*
+</eg>
+            <p>This function returns the values of the headers with the name $name in the HTTP
+               entity $entity. A header can appear several times in HTTP, so the return value is a
+               sequence of string. If the header does not appear in the entity, the empty sequence
+               is returned.</p>
+            <p>The names of the headers are case-insensitive. The following calls therefore all
+               return the same values:</p>
+            <eg>http:header($response, 'Content-Type')
+http:header($response, 'content-type')
+http:header($response, 'CoNtEnT-tYpE')</eg>
+         </div2>
+         <div2 id="f.header-names">
+            <head>http:header-names</head>
+            <eg>
+<ex:function>http:header-names</ex:function>($entity as element(*, http:entity)) as xs:string*
+</eg>
+            <p>This function returns the name of all the headers in the $entity. If a header appears
+               more than once, its name is returned only once. The order of the names is undefined,
+               but is stable accros several calls on the same element.</p>
+         </div2>
+         <div2 id="f.param">
+            <head>http:param</head>
+            <eg>
+<ex:function>http:param</ex:function>($entity as element(*, http:entity),
+           $name   as xs:string) as xs:string*
+</eg>
+            <p>This function returns the values of the parameters with the name $name in the HTTP
+               entity $entity. If the parameter does not appear in the entity, the empty sequence is
+               returned. A parameter is either a query parameter from the URI, or a parameter from
+               the body (TODO: define exactly under which conditions, which match the HTML
+               specification, like x-www-url-encoded-parameters, are something like that).</p>
+         </div2>
+         <div2 id="f.param-names">
+            <head>http:param-names</head>
+            <eg>
+<ex:function>http:param-names</ex:function>($entity as element(*, http:entity)) as xs:string*
+</eg>
+            <p>This function returns the name of all the parameters in the $entity. Parameters are
+               defined in the definition of the function http:param. The order of the names is
+               undefined, but is stable accros several calls on the same element.</p>
+         </div2>
+         <div2 id="f.is-request">
+            <head>http:is-request</head>
+            <eg>
+<ex:function>http:is-request</ex:function>($entity as element(*, http:entity)) as boolean
+</eg>
+            <p>This function returns true if $entity is an HTTP request, false if it is a
+               response.</p>
+         </div2>
+         <div2 id="f.is-response">
+            <head>http:is-response</head>
+            <eg>
+<ex:function>http:is-response</ex:function>($entity as element(*, http:entity)) as boolean
+</eg>
+            <p>This function returns true if $entity is an HTTP response, false if it is a
+               request.</p>
+         </div2>
+         <div2 id="f.method">
+            <head>http:method</head>
+            <eg>
+<ex:function>http:method</ex:function>($request as element(http:request)) as xs:string
+</eg>
+            <p>This function returns the method of $request. The method name is always in lower
+               case.</p>
+         </div2>
+         <div2 id="f.href">
+            <head>http:href</head>
+            <eg>
+<ex:function>http:href</ex:function>($request as element(http:request)) as xs:string?
+</eg>
+            <p>This function returns the href of $request.</p>
+            <p>TODO: Define what it contains (fragment identifier?, query parameters?, etc.)</p>
+         </div2>
+         <div2 id="f.scheme">
+            <head>http:scheme</head>
+            <eg>
+<ex:function>http:scheme</ex:function>($request as element(http:request)) as xs:string?
+</eg>
+            <p>This function returns the URI scheme of $request. The scheme is either 'http' ot
+               'https'.</p>
+         </div2>
+         <div2 id="f.authority">
+            <head>http:authority</head>
+            <eg>
+<ex:function>http:authority</ex:function>($request as element(http:request)) as xs:string?
+</eg>
+            <p>This function returns the URI scheme of $request.</p>
+         </div2>
+         <div2 id="f.port">
+            <head>http:port</head>
+            <eg>
+<ex:function>http:port</ex:function>($request as element(http:request)) as xs:integer
+</eg>
+            <p>This function returns the port number of $request. This is the actual port a request
+               has to be sent to (in a client context) or has been received on (in a server
+               context), regardless whether is has been explicitely written or not in the request
+               URI.</p>
+         </div2>
+         <div2 id="f.uri-part">
+            <head>http:uri-part</head>
+            <eg>
+<ex:function>http:uri-part</ex:function>($request as element(http:request),
+              $name    as xs:string) as xs:string?
+</eg>
+            <p>This function returns the value of the URI part with the same name as $name. The name
+               comparison is using the codepoint collation. The way some parts are named is
+               implementation-defined (see also the definition of [http:uri]).</p>
+         </div2>
+         <div2 id="f.code">
+            <head>http:code</head>
+            <eg>
+<ex:function>http:code</ex:function>($response as element(http:response)) as xs:integer
+</eg>
+            <p>This function returns the result code of $response. For instance 200 for a succesful
+               response, or 404 for a "Page not found" error.</p>
+         </div2>
+         <div2 id="f.status">
+            <head>http:status</head>
+            <eg>
+<ex:function>http:status</ex:function>($response as element(http:response)) as xs:string
+</eg>
+            <p>This function returns the status line of $response. In a server context, if $response
+               has not been given an explicit status line, then this function returns the default
+               value the implementation will use, given $response status code (as defined in the
+               HTTP specification, e.g. "OK" for 200 or "Page not found" for 404).</p>
+         </div2>
+         <div2 id="f.bodies">
+            <head>http:bodies</head>
+            <eg>
+<ex:function>http:bodies</ex:function>($entity as element(*, http:entity)) as element(http:body)*
+</eg>
+            <p>This function returns the body descriptors of $entity. There is one optional body
+               descriptor (that is one element http:body) for single part requests and responses,
+               but there can be several body descriptors in case of multipart requests or responses
+               (one of them for each part in the multipart entity).</p>
+         </div2>
+         <div2 id="f.body">
+            <head>http:body</head>
+            <eg>
+<ex:function>http:body</ex:function>($entity as element(*, http:entity)) as element(http:body)?
+<ex:function>http:body</ex:function>($entity as element(*, http:entity),
+          $pos    as xs:integer) as element(http:body)?
+</eg>
+            <p>This function returns a specific body descriptor of $entity. The first arity can be
+               used only for single part requests and responses. It throws the error
+               http:not-a-single-part if $entity has a multipart content type. The second arity
+               returns the body descriptor at position $pos, in case of multipart (the position
+               numbering starts at 1). If $pos is 1 and $entity is a single part content type, it
+               return the same results as the first arity. If $pos is greater than 1 and $entity has
+               a single part content type, it throws the error http:not-multipart. Both arities
+               throw the error http:out-of-bound if $pos is lower than 1. If there is no body
+               corresponding to position $pos (or if the single part has no body for the first
+               arity), the empty sequence is returned.</p>
+         </div2>
+         <div2 id="f.get-body">
+            <head>http:get-body</head>
+            <eg>
+<ex:function>http:get-body</ex:function>($body as element(http:body)) as item()
+<ex:function>http:get-body</ex:function>($body   as element(http:body),
+              $bodies as item()*) as item()
+</eg>
+            <p>This function returns the actual content associated with a body descriptor. The first
+               arity get the content from the body descriptor only, whilst the second arity can use
+               the body content list passed as $bodies. In some cases, a server context
+               implementation can provide the user code with an http:request and a body content
+               list, so the body content can be lazy evaluated more easily, without being embedded
+               in http:request. More fundamentally, if the body content is XML, we really want a
+               separate XML document node to be returned, instead of an element node, child of the
+               http:body (traversing the parent or ancestor axis would then be surprising, by
+               returning the http:body or http:request, which is really not what we want from a body
+               content.</p>
+            <p>TODO: Should we define more precisely the body content list? Should we use a map?
+               Should we then impose such a separate list? (which makes a lot of sense for XML
+               document bodies, to avoid them to be poluted by their http:body parent, like in SOAP
+               envelopes). But then, it would make sense to make the map itself representing the
+               whole request or response, and so to make it the parameter of most functions here. So
+               it would be not possible to implement it without map support... Which really is a an
+               acceptable strategy (isn't it what the Binary Module is doing?)</p>
+         </div2>
+         <div2 id="f.id">
+            <head>http:id</head>
+            <eg>
+<ex:function>http:id</ex:function>($entity as element(*, http:entity)) as xs:string
+</eg>
+            <p>This function returns a string which is unique to $entity. The context of uniqueness
+               is implementation-defined, but is losely defined to be a single web server or client,
+               not restricted to one XPath, XQuery or XSLT evaluation.</p>
+            <note>
+               <p>Note: For instance, on a server, this can be used to log each request received in
+                  a separate file, as the returned ID will be different for all
+                     <code>http:request</code> elements, but always the same for the same request.
+                  This is guaranteed by the implementation even between different evaluations.</p>
+            </note>
+         </div2>
+         <div2 id="f.request">
+            <head>http:request</head>
+            <eg>
+<ex:function>http:request</ex:function>() as element(http:request)
+</eg>
+            <p>This function returns the HTTP request from the context, in a server context.</p>
+            <p>It is the only function in this specification depending on the context, all other
+               functions get an explicit HTTP request or response as parameter. An implementation
+               might chose not to support it (in which case it throws an error http:not-supported).
+               If an implementation chose to support this function, it is encouraged to provide the
+               user with the ability to enable or disable this support (e.g. through some
+               implementation-defined configuration machanism). A server context library, framework
+               or specification using this module is then encouraged to define another way to pass
+               the HTTP request to the user code (e.g. through external parameters for an XQuery
+               main module), so the user always have a way not to use this function. If only for
+               that, it is better and easier to test to write code not using the execution
+               context.</p>
+            <p>...</p>
+         </div2>
+      </div1>
+   </body>
+</spec>
