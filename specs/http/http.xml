@@ -10,7 +10,7 @@
       <pubdate>
          <day>11</day>
          <month>January</month>
-         <year>2013</year>
+         <year>2014</year>
       </pubdate>
       <publoc>
          <loc href="http://expath.org/spec/http/editor"/>
@@ -36,7 +36,7 @@
           See http://www.w3.org/community/reports/reqs/.
       -->
       <copyright>
-         <p>Copyright © 2012-2013 Florent Georges, published by the <loc
+         <p>Copyright © 2012-2014 Florent Georges, published by the <loc
                href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
                href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
                License Agreement (CLA)</loc>. A human-readable <loc
