@@ -56,6 +56,50 @@
       <assert-true/>
     </result>
   </test-case>
+  
+  <test-case name="file-exists-005">
+    <description>Use file:exists on an empty sequence</description>
+    <created by="Michael Kay" on="2014-04-22"/>
+    <environment ref="file"/>
+    <test>
+        file:exists(())</test>
+    <result>
+      <error code="XPTY0004"/>
+    </result>
+  </test-case>
+  
+  <test-case name="file-exists-006">
+    <description>Use file:exists on a URI (works by virtue of URI promotion)</description>
+    <created by="Michael Kay" on="2014-04-22"/>
+    <environment ref="file"/>
+    <test>
+        file:exists(xs:anyURI('sandpit'))</test>
+    <result>
+      <assert-true/>
+    </result>
+  </test-case>
+  
+  <test-case name="file-exists-007">
+    <description>Use file:exists on a sequence of names</description>
+    <created by="Michael Kay" on="2014-04-22"/>
+    <environment ref="file"/>
+    <test>
+        file:exists(("sandpit", "."))</test>
+    <result>
+      <error code="XPTY0004"/>
+    </result>
+  </test-case>
+  
+  <test-case name="file-exists-008">
+    <description>Use file:exists on an integer</description>
+    <created by="Michael Kay" on="2014-04-22"/>
+    <environment ref="file"/>
+    <test>
+        file:exists(if (current-date() gt xs:date('1900-01-01')) then 23 else 'sandpit')</test>
+    <result>
+      <error code="XPTY0004"/>
+    </result>
+  </test-case>
 
   <test-case name="file-isDir-001">
     <description>Use file:is-dir on an existing file</description>
@@ -101,7 +145,7 @@
     </result>
   </test-case>
 
-  <test-case name="file-isDir-004">
+  <test-case name="file-isDir-005">
     <description>Use file:is-dir on the parent of the current directory</description>
     <created by="Michael Kay" on="2012-06-11"/>
     <environment ref="file"/>
@@ -109,6 +153,28 @@
         file:is-dir("..")</test>
     <result>
       <assert-true/>
+    </result>
+  </test-case>
+  
+  <test-case name="file-isDir-006">
+    <description>Use file:is-dir on an empty sequence</description>
+    <created by="Michael Kay" on="2014-04-22"/>
+    <environment ref="file"/>
+    <test>
+        file:is-dir(())</test>
+    <result>
+      <error code="XPTY0004"/>
+    </result>
+  </test-case>
+  
+  <test-case name="file-isDir-007">
+    <description>Use file:is-dir on an sequence of more than one entry</description>
+    <created by="Michael Kay" on="2014-04-22"/>
+    <environment ref="file"/>
+    <test>
+        file:is-dir((".", ".."))</test>
+    <result>
+      <error code="XPTY0004"/>
     </result>
   </test-case>
 
@@ -153,6 +219,28 @@
         file:is-file(".")</test>
     <result>
       <assert-false/>
+    </result>
+  </test-case>
+  
+  <test-case name="file-isFile-005">
+    <description>Use file:is-file on a URI</description>
+    <created by="Michael Kay" on="2014-04-22"/>
+    <environment ref="file"/>
+    <test>
+        file:is-file(xs:anyURI('sandpit/test.bin'))</test>
+    <result>
+      <assert-true/>
+    </result>
+  </test-case>
+  
+  <test-case name="file-isFile-006">
+    <description>Use file:is-file on a QName</description>
+    <created by="Michael Kay" on="2014-04-22"/>
+    <environment ref="file"/>
+    <test>
+        file:is-file(QName('http://saxon.sf.net/', 'local-name'))</test>
+    <result>
+      <error code="XPTY0004"/>
     </result>
   </test-case>
 
@@ -245,7 +333,10 @@
         file:write-binary("sandpit/test.bin", xs:base64Binary(xs:hexBinary("0001020304"))),
         file:size("sandpit/test.bin")</test>
     <result>
-      <assert-eq>5</assert-eq>
+      <all-of>
+        <assert-eq>5</assert-eq>
+        <assert-type>xs:integer</assert-type>
+      </all-of>  
     </result>
   </test-case>
 
@@ -307,6 +398,17 @@
         <assert-empty/>
         <assert><![CDATA[ends-with(Q{http://expath.org/ns/file}read-text("sandpit/test.txt"), "<b/>")]]></assert>
       </all-of>
+    </result>
+  </test-case>
+  
+  <test-case name="file-append2-003">
+    <description>Use file:append with two arguments; first argument incorrect type</description>
+    <created by="Michael Kay" on="2014-04-22"/>
+    <environment ref="file"/>
+    <test>
+        file:append("sandpit/test.txt"[3], ("a", "b", "c", 10))</test>
+    <result>
+      <error code="XPTY0004"/>
     </result>
   </test-case>
 
@@ -478,6 +580,17 @@
         file:append-text("nonexistent/file.xml", "abc", "UTF-8")</test>
     <result>
       <error code="Q{http://expath.org/ns/file}no-dir"/>
+    </result>
+  </test-case>
+  
+  <test-case name="file-appendText3-006">
+    <description>Use file:append-text with three arguments: encoding is an empty sequence</description>
+    <created by="Michael Kay" on="2014-04-22"/>
+    <environment ref="file"/>
+    <test>
+        file:append-text("sandpit", "abc", ())</test>
+    <result>
+      <error code="XPTY0004"/>
     </result>
   </test-case>
 
