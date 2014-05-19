@@ -40,16 +40,16 @@
         <eg xml:space="preserve"><![CDATA[
 arch:options(file:read-binary($uri))
 => <arch:options>
-     <arch:format>ZIP</arch:format>
-     <arch:algorithm>deflate</arch:algorithm>
+     <arch:format value="ZIP"/>
+     <arch:algorithm value="deflate"/>
    </arch:options>]]></eg>
       </fos:example>
     </fos:examples>
   </fos:function>
 
-  <fos:function name="options" prefix="archM">
+  <fos:function name="options-map" prefix="arch">
     <fos:signatures>
-      <fos:proto name="options" return-type="map(xs:string,item()?)">
+      <fos:proto name="options-map" return-type="map(xs:string,item()?)">
         <fos:arg name="archive" type="xs:base64Binary"/>
       </fos:proto>
     </fos:signatures>
@@ -59,13 +59,13 @@ arch:options(file:read-binary($uri))
     <fos:rules>
       <p>The description is returned as a map <code>map(xs:string,item()?)</code> with entries
         describing the details. The following are currently supported:</p>
-      <ul>
-        <li><code>format</code>: format of this archive</li>
-        <li><code>compression</code>: the compression algorithm that was used.</li>
-      </ul>
+      <ulist>
+        <item><kw>format</kw>: format of this archive</item>
+        <item><kw>compression</kw>: the compression algorithm that was used.</item>
+      </ulist>
       <p>If the archive format supports a compression algorithm varying on a per-entry basis, and
         more than one algorithm has been used in the archive, <code>mixed</code> is returned for the
-          <code>compression</code> entry.</p>
+          <kw>compression</kw> entry.</p>
     </fos:rules>
     <fos:errors>
       <p><bibref ref="error.archiveReadError"/> is raised if there is an unspecified problem in
@@ -75,11 +75,30 @@ arch:options(file:read-binary($uri))
       <fos:example>
         <p>Finding the properties of the archive stored in a file located at <code>$uri</code>:</p>
         <eg xml:space="preserve"><![CDATA[
-archM:options(file:read-binary($uri))
-=> {'format' :'zip', 'compression' : 'deflate'}
+arch:options-map(file:read-binary($uri))
+=> map {'format' :'zip', 'compression' : 'deflate'}
 ]]></eg>
       </fos:example>
     </fos:examples>
+  </fos:function>
+  <fos:function name="entry-names" prefix="arch">
+    <fos:signatures>
+      <fos:proto name="entry-names" return-type="xs:string*">
+        <fos:arg name="archive" type="xs:base64Binary"/>
+      </fos:proto>
+    </fos:signatures>
+    <fos:summary>
+      <p>Returns the entry names for all the entries found within the archive as a sequence of
+        string values in the order in which they appear in the archive.</p>
+    </fos:summary>
+    <fos:rules>
+      <p>Returns the entry names for all the entries found within the archive as a sequence of
+        string values in the order in which they appear in the archive.</p>
+    </fos:rules>
+    <fos:errors>
+      <p><bibref ref="error.archiveReadError"/> is raised if there is an unspecified problem in
+        reading the archive.</p>
+    </fos:errors>
   </fos:function>
 
   <fos:function name="entries" prefix="arch">
@@ -111,25 +130,30 @@ archM:options(file:read-binary($uri))
         <p>Finding the entries of the archive stored in a file located at <code>$uri</code>:</p>
         <eg xml:space="preserve"><![CDATA[
 arch:entries(file:read-binary($uri))
-=> <arch:entry size="2194" compressed-size="652" last-modified="2013-07-18T11:22:12">build.xml</arch:entry>
+=> <arch:entry>
+      <arch:name value="lumley.jpg"/>
+      <arch:size value="2194"/>
+      <arch:compressed-size value="652"/>
+      <arch:last-modified value="2013-07-18T11:22:12"/>
+   </arch:entry>
    <arch:entry size="84983" compressed-size="84872" last-modified="2009-03-23T11:15:06">lumley.jpg</arch:entry>
    <arch:entry size="10058" compressed-size="1381" last-modified="2013-08-06T13:14:08">tests/qt3/binary/binary.xml</arch:entry>
      ]]></eg>
-        <p>Counting the number of apparent XML files in the previous example:</p>
+        <p>Summing the size of the apparent XML files in the previous example:</p>
         <eg xml:space="preserve"><![CDATA[
-count(arch:entries(file:read-binary($uri))[ends-with(.,'.xml')])
-=> 2
+sum(arch:entries(file:read-binary($uri))[ends-with(arch:name/@value,'.xml')]arch:size/@value)
+=> 10058
      ]]></eg>
       </fos:example>
     </fos:examples>
   </fos:function>
 
-  <fos:function name="entries" prefix="archM">
+  <fos:function name="entries-map" prefix="arch">
     <fos:signatures>
-      <fos:proto name="entries" return-type="map(xs:string,map(xs:string,item()*))">
+      <fos:proto name="entries-map" return-type="map(xs:string,map(xs:string,item()*))">
         <fos:arg name="archive" type="xs:base64Binary"/>
       </fos:proto>
-      <fos:proto name="entries" return-type="map(xs:string,map(xs:string,item()*))">
+      <fos:proto name="entries-map" return-type="map(xs:string,map(xs:string,item()*))">
         <fos:arg name="archive" type="xs:base64Binary"/>
         <fos:arg name="return-content" type="xs:boolean"/>
       </fos:proto>
@@ -141,10 +165,25 @@ count(arch:entries(file:read-binary($uri))[ends-with(.,'.xml')])
     <fos:rules>
       <p>Keys to the returned map are the entry (path) names.</p>
       <p>The value for each map entry is a map describing the properties of that entry. For more
-        details of this structure see <specref ref="entry.structures.map"/>.</p>
-      <p>If <code>$return-content</code> is defined and equals <code>true()</code>, then the content
-        for each entry is returned as the <code>content</code> entry in the property map, as a
-          <code>xs:base64Binary</code> item.</p>
+        details of this structure see <specref ref="entry.structures.map"/>. The specific properties
+        returned are:</p>
+      <ulist>
+        <item>
+          <kw>size</kw>
+        </item>
+        <item>
+          <kw>compressed-size</kw>
+        </item>
+        <item>
+          <kw>last-modified</kw>
+        </item>
+        <item>
+          <kw>position</kw>
+        </item>
+        <item>
+          <kw>content</kw>: this will be set only if <code>$return-content</code> is defined and
+          equals <code>true()</code>. The type will be <code>xs:base64Binary</code>. </item>
+      </ulist>
     </fos:rules>
     <fos:errors>
       <p><bibref ref="error.archiveReadError"/> is raised if there is an unspecified problem in
@@ -152,48 +191,40 @@ count(arch:entries(file:read-binary($uri))[ends-with(.,'.xml')])
     </fos:errors>
     <fos:notes>
       <p>As the returned order of keys from <code>map:keys()</code> is not defined and can be
-        implementation-dependant, there may be a need for a simple function
-          (<code>archM:entry-names(xs:base64Binary) as xs:string*)</code> which returns purely the
-        names <em>in the order in which they appear in the archive.</em></p>
+        implementation-dependant, the results of the function
+          <code>arch:entry-names(xs:base64Binary) as xs:string*</code> can be used as a key sequence
+        to iterate through this map, or a sort based on the <kw>position</kw> property.</p>
       <p>Using <code>$return-content</code> makes it possible to return a complete archive in a
-        single call. <em>(What about the archive options?</em></p>
+        single call. Archive options can be added through a compound shown in the examples.</p>
     </fos:notes>
     <fos:examples>
       <fos:example>
         <p>Finding the entries of the archive stored in a file located at <code>$uri</code>:</p>
         <eg xml:space="preserve"><![CDATA[
-archM:entries(file:read-binary($uri))
+arch:entries-map(file:read-binary($uri))
 => map{ 
-  "build.xml" := map{ "size":=2194, "compressed-size":=652, "last-modified":="2013-07-18T11:22:12"},
-  "lumley.jpg" := map{ "size":=84983, "compressed-size":=84872, "last-modified":="2009-03-23T11:15:06"},
-  "tests/qt3/binary/binary.xml" := map{ "size":=10058, "compressed-size":=1381, "last-modified":="2013-08-06T13:14:08"}}
+  "build.xml" : map{ "size" : 2194, "compressed-size" : 652, "last-modified" : "2013-07-18T11:22:12"},
+  "lumley.jpg" : map{ "size" : 84983, "compressed-size" : 84872, "last-modified" : "2009-03-23T11:15:06"},
+  "tests/qt3/binary/binary.xml" : map{ "size" : 10058, "compressed-size" : 1381, "last-modified" : "2013-08-06T13:14:08"}}
      ]]></eg>
         <p>Counting the number of apparent XML files in the previous example:</p>
         <eg xml:space="preserve"><![CDATA[
-count(map:keys(archM:entries(file:read-binary($uri)))[ends-with(.,'.xml')])
+count(map:keys(arch:entries-map(file:read-binary($uri)))[ends-with(.,'.xml')])
 => 2
      ]]></eg>
       </fos:example>
+      <fos:example>
+        <p>Returning an archive complete with options:</p>
+        <eg xml:space="preserve"><![CDATA[
+map:new((map:new('arch:options',arch:options-map($archive)),arch:entries-map($archive)))
+=> map{
+  "arch:options" : map{ "format" : "ZIP", "compression" : "flat" },
+  "build.xml" : map{ "size" : 2194, "compressed-size" : 652, "last-modified" : "2013-07-18T11:22:12"},
+  "lumley.jpg" : map{ "size" : 84983, "compressed-size" : 84872, "last-modified" : "2009-03-23T11:15:06"},
+  "tests/qt3/binary/binary.xml" : map{ "size" : 10058, "compressed-size" : 1381, "last-modified" : "2013-08-06T13:14:08"}}
+     ]]></eg>
+      </fos:example>
     </fos:examples>
-  </fos:function>
-  <fos:function name="entry-names" prefix="archM">
-    <fos:signatures>
-      <fos:proto name="entry-names" return-type="xs:string*">
-        <fos:arg name="archive" type="xs:base64Binary"/>
-      </fos:proto>
-    </fos:signatures>
-    <fos:summary>
-      <p>Returns the entry names for all the entries found within the archive as a sequence of
-        string values in the order in which they appear in the archive.</p>
-    </fos:summary>
-    <fos:rules>
-      <p>Returns the entry names for all the entries found within the archive as a sequence of
-        string values in the order in which they appear in the archive.</p>
-    </fos:rules>
-    <fos:errors>
-      <p><bibref ref="error.archiveReadError"/> is raised if there is an unspecified problem in
-        reading the archive.</p>
-    </fos:errors>
   </fos:function>
 
 
@@ -215,7 +246,7 @@ count(map:keys(archM:entries(file:read-binary($uri)))[ends-with(.,'.xml')])
         encoding is assumed.</p>
     </fos:summary>
     <fos:rules>
-      <p>Returns as a string each entry in the archive <code>$in</code> that corresponds to the
+      <p>Returns as a string each entry in the archive <code>$archive</code> that corresponds to the
         entry name input, in sequence.</p>
       <p>If <code>$encoding</code> is specified the strings are decoded appropriately, otherwise
         UTF-8 encoding is assumed.</p>
@@ -237,8 +268,8 @@ count(map:keys(archM:entries(file:read-binary($uri)))[ends-with(.,'.xml')])
     <fos:notes>
       <p>This function should be equivalent to the use of <code>arch:extract-binary()</code> and the
         function <code>bin:decode-string()</code> from <bibref ref="expathbinary"/>:</p>
-      <eg>arch:extract-binary($in,$entries) ! bin:decode-string(.,$encoding) [XPath 3.0]</eg>
-      <eg>for $b in arch:extract-binary($in,$entries) return bin:decode-string($b,$encoding) [XPath
+      <eg>arch:extract-binary($archive,$entries) ! bin:decode-string(.,$encoding) [XPath 3.0]</eg>
+      <eg>for $b in arch:extract-binary($archive,$entries) return bin:decode-string($b,$encoding) [XPath
         2.0]</eg>
       <p>Further conversion into XML can be achieved using the XPath3.0 function
           <code>fn:parse-XML()</code> on each of the returned strings.</p>
@@ -272,7 +303,7 @@ arch:extract-text(file:read-binary($uri),'build.xml','UTF-8')
       <p>Returns the sequence of requested entries from the archive as binary data.</p>
     </fos:summary>
     <fos:rules>
-      <p>Returns as binary data each entry in the archive <code>$in</code> that corresponds to the
+      <p>Returns as binary data each entry in the archive <code>$archive</code> that corresponds to the
         entry name input, in sequence.</p>
       <p>The entries <rfc2119>must</rfc2119> be returned in the order corresponding to that of the
         entries requested in <code>$entries</code>, not in the order in which they may exist in the
@@ -305,9 +336,9 @@ arch:extract-binary(file:read-binary($uri),'build.xml')
     </fos:examples>
   </fos:function>
 
-  <fos:function name="extract" prefix="archM">
+  <fos:function name="extract-map" prefix="arch">
     <fos:signatures>
-      <fos:proto name="extract" return-type="map(xs:string,map(xs:string,item()?))">
+      <fos:proto name="extract-map" return-type="map(xs:string,map(xs:string,item()?))">
         <fos:arg name="archive" type="xs:base64Binary"/>
         <fos:arg name="entries" type="map(xs:string,map(xs:string,item()?))"/>
       </fos:proto>
@@ -317,10 +348,26 @@ arch:extract-binary(file:read-binary($uri),'build.xml')
         string data for the appropriate entry in the archive.</p>
     </fos:summary>
     <fos:rules>
+      <p>Return a copy of <code>$entries</code> with the <kw>content</kw> property of each entry set
+        to binary or decoded string data for the appropriate entry in the archive.</p>
       <p>The map entries in <code>$entries</code> define whether binary or decoded string data is to
-        be returned.</p>
+        be returned. (For details of properties see <specref ref="entry.structures.map"/>.) The only
+        relevant property is:</p>
+      <ulist>
+        <item>
+          <kw>encoding</kw>: if this is set, then the entry will be decoded from binary to
+            <code>xs:string</code> according to the named encoding. If absent, then the type will be
+            <code>xs:base64Binary</code>. </item>
+      </ulist>
+      <p>The value for each map entry in the return is the original entry from <code>$entries</code>
+        plus an additional or replaced property:</p>
+      <ulist>
+        <item>
+          <kw>content</kw>: the type will be <code>xs:string</code> or <code>xs:base64Binary</code>
+          dependant upon the presence of the <kw>encoding</kw> property.</item>
+      </ulist>
       <p>The behaviour of this function is defined by equivalent XPath:</p>
-      <eg><![CDATA[
+      <eg xml:space="preserve"><![CDATA[
 map:new(for $k in map:keys($entries) 
    return 
      let $a := $entries($k),
@@ -335,21 +382,27 @@ map:new(for $k in map:keys($entries)
        )
      ]]></eg>
     </fos:rules>
+
     <fos:errors>
       <p><bibref ref="error.unknownEntry"/> is raised if an entry requested does not exist in this
         archive.</p>
+      <p><bibref ref="error.decoding"/> is raised if there was an error in decoding an entry.</p>
       <p><bibref ref="error.archiveReadError"/> is raised if there was an unspecified problem in
         reading the archive.</p>
     </fos:errors>
+    <fos:notes>
+      <p>As the original <code>$entries</code> are returned in the result map, with content added,
+        other information , such as <kw>position</kw> is retained. </p>
+    </fos:notes>
     <fos:examples>
       <fos:example>
         <p>To collect all the XML entries as XML:</p>
-        <eg><![CDATA[
+        <eg xml:space="preserve"><![CDATA[
 let $archive := file:read-binary($uri)
-    $entries := archM:entries($archive),
+    $entries := arch:entries-map($archive),
     $xml-names := map:keys($entries)[ends-with(.,'.xml')],
     $get := map:new($xml-names ! map:entry(.,map:entry('encoding','UTF-8'))),
-    $content := archM:extract($archive,$get)
+    $content := arch:extract-map($archive,$get)
 return
     $xml-names ! fn:parse-XML($content(.)('content'))
      ]]></eg>
@@ -357,30 +410,21 @@ return
     </fos:examples>
   </fos:function>
 
-  <fos:function name="extract-binary" prefix="archM">
+  <fos:function name="extract-binary-map" prefix="arch">
     <fos:signatures>
-      <fos:proto name="extract-binary" return-type="xs:base64Binary*">
+      <fos:proto name="extract-binary-map" return-type="xs:base64Binary*">
         <fos:arg name="archive" type="xs:base64Binary"/>
-        <fos:arg name="entries" type="map(xs:string,map(xs:string,item()?))"/>
-      </fos:proto>
-      <fos:proto name="extract-binary" return-type="xs:base64Binary*">
-        <fos:arg name="archive" type="xs:base64Binary"/>
-        <fos:arg name="entries" type="xs:string*"/>
+        <fos:arg name="entries" type="map(xs:string,item()*)"/>
       </fos:proto>
     </fos:signatures>
     <fos:summary>
       <p>Returns the sequence of requested entries from the archive as binary data.</p>
     </fos:summary>
     <fos:rules>
-      <p>Returns as binary data each entry in the archive <code>$in</code> that corresponds to the
-        entry name input, or <code>map:keys($entries)</code>, in sequence.</p>
-      <p>When <code>$entries</code> has type <code>xs:string*</code>, the entries
-          <rfc2119>must</rfc2119> be returned in the order corresponding to that of the entries
-        requested in <code>$entries</code>, not in the order in which they may exist in the
-        archive.</p>
-      <p>When <code>$entries</code> has type <code>xs:string*</code>, multiple requests for the same
-        entry will be honoured, with copies of the entry appearing in corresponding multiple
-        locations in the output sequence .</p>
+      <p>Returns as binary data each entry in the archive <code>$archive</code> that corresponds to
+          <code>map:keys($entries)</code>, in sequence.</p>
+      <p>Any information in the values of each entry of <code>$entries</code> is ignored.</p>
+
     </fos:rules>
     <fos:errors>
       <p><bibref ref="error.unknownEntry"/> is raised if an entry requested does not exist in this
@@ -389,50 +433,43 @@ return
         reading the archive.</p>
     </fos:errors>
     <fos:notes>
-      <p>Collection of all the entries as binary data can be accomplished using
-          <code>archM:entries($archive,true())</code> and collecting the <code>'content'</code>
+      <p>Collection of all the entries as binary data can also be accomplished using
+          <code>arch:entries-map($archive,true())</code> and collecting the <code>'content'</code>
         entry from each of the returned maps.</p>
-      <p>The signatures with <code>$entries instance of xs:string*</code> are equivalent to
-          <code>arch:extract-binary()</code>.</p>
     </fos:notes>
   </fos:function>
-  <fos:function name="extract-text" prefix="archM">
+  <fos:function name="extract-text-map" prefix="arch">
     <fos:signatures>
-      <fos:proto name="extract-text" return-type="xs:string*">
+      <fos:proto name="extract-text-map" return-type="xs:string*">
         <fos:arg name="archive" type="xs:base64Binary"/>
         <fos:arg name="entries" type="map(xs:string,map(xs:string,item()?))"/>
       </fos:proto>
-      <fos:proto name="extract-text" return-type="xs:string*">
+      <fos:proto name="extract-text-map" return-type="xs:string*">
         <fos:arg name="archive" type="xs:base64Binary"/>
         <fos:arg name="entries" type="map(xs:string,map(xs:string,item()?))"/>
         <fos:arg name="encoding" type="xs:string"/>
       </fos:proto>
-      <fos:proto name="extract-text" return-type="xs:string*">
-        <fos:arg name="archive" type="xs:base64Binary"/>
-        <fos:arg name="entries" type="xs:string*"/>
-      </fos:proto>
-      <fos:proto name="extract-text" return-type="xs:string*">
-        <fos:arg name="archive" type="xs:base64Binary"/>
-        <fos:arg name="entries" type="xs:string*"/>
-        <fos:arg name="encoding" type="xs:string"/>
-      </fos:proto>
+
     </fos:signatures>
     <fos:summary>
       <p>Returns the sequence of requested entries from the archive as decoded string data.</p>
     </fos:summary>
     <fos:rules>
-      <p>Returns as decoded string data each entry in the archive <code>$in</code> that corresponds
-        to the entry name input, or <code>map:keys($entries)</code>, in sequence.</p>
-      <p>When <code>$entries</code> has type <code>xs:string*</code>, the entries
-          <rfc2119>must</rfc2119> be returned in the order corresponding to that of the entries
-        requested in <code>$entries</code>, not in the order in which they may exist in the
-        archive.</p>
-      <p>When <code>$entries</code> has type <code>xs:string*</code>, multiple requests for the same
-        entry will be honoured, with copies of the entry appearing in corresponding multiple
-        locations in the output sequence.</p>
-      <p>If <code>$encoding</code> is specified, or the field <code>'decoding'</code> appears in the
+      <p>Returns as decoded string data each entry in the archive <code>$archive</code> that corresponds
+        to <code>map:keys($entries)</code>, in sequence.</p>
+      <p>If <code>$encoding</code> is specified, or the property <kw>encoding</kw> appears in the
         entry in <code>$entries</code>, the strings are decoded according to that encoding,
         otherwise UTF-8 encoding is assumed.</p>
+      <p>The behaviour of this function is defined by equivalent XPath:</p>
+      <eg xml:space="preserve"><![CDATA[
+for $k in map:keys($entries) 
+   return 
+     let $a := $entries($k),
+         $thisEncoding := ($a('encoding'),$encoding,'UTF-8')[1],
+         $data := arch:extract-binary($archive,$k) // error if not found
+     return 
+         bin:decode-string($data,$thisEncoding)
+     ]]></eg>
     </fos:rules>
     <fos:errors>
       <p><bibref ref="error.unknownEntry"/> is raised if an entry requested does not exist in this
@@ -443,10 +480,7 @@ return
       <p><bibref ref="error.archiveReadError"/> is raised if there was an unspecified problem in
         reading the archive.</p>
     </fos:errors>
-    <fos:notes>
-      <p>The signatures with <code>$entries instance of xs:string*</code> are equivalent to
-          <code>arch:extract-text()</code>.</p>
-    </fos:notes>
+
   </fos:function>
 
   <fos:function name="delete" prefix="arch">
@@ -460,7 +494,7 @@ return
       <p>Returns an archive with the given entries deleted.</p>
     </fos:summary>
     <fos:rules>
-      <p>Returns an archive of the same format as <code>$in</code> with all the entries named in
+      <p>Returns an archive of the same format as <code>$archive</code> with all the entries named in
           <code>$entries</code> deleted.</p>
       <p>The relative order of the remaining entries within the archive is preserved.</p>
       <p>The uncompressed content, size and last-modified date of the remaining entries shall be the
@@ -478,8 +512,8 @@ return
       <p>Whilst the uncompressed entries remaining after deletion should of course be the same size
         and content as those before deletion, depending upon the (lossless) compression algorithm
         used, the compressed sizes and content might not be. In the absence of a special check, in
-        these circumstances <code>$in</code> may not be identical to
-          <code>arch:delete($in,())</code>. This needs discussion. </p>
+        these circumstances <code>$archive</code> may not be identical to
+          <code>arch:delete($archive,())</code>. This needs discussion. </p>
     </fos:notes>
     <fos:examples>
       <fos:example>
@@ -493,29 +527,24 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
     </fos:examples>
   </fos:function>
 
-  <fos:function name="delete" prefix="archM">
+  <fos:function name="delete-map" prefix="arch">
     <fos:signatures>
-      <fos:proto name="delete" return-type="xs:base64Binary">
+      <fos:proto name="delete-map" return-type="xs:base64Binary">
         <fos:arg name="archive" type="xs:base64Binary"/>
-        <fos:arg name="entries" type="xs:string*"/>
-      </fos:proto>
-      <fos:proto name="delete" return-type="xs:base64Binary">
-        <fos:arg name="archive" type="xs:base64Binary"/>
-        <fos:arg name="entries" type="map(xs:string,map(xs:string,item()))*"/>
+        <fos:arg name="entries" type="map(xs:string,item()*)"/>
       </fos:proto>
     </fos:signatures>
     <fos:summary>
       <p>Returns an archive with the given entries deleted.</p>
     </fos:summary>
     <fos:rules>
-      <p>Returns an archive of the same format as <code>$in</code> with all the entries named in
-          <code>$entries</code> or <code>$entries!map:keys(.)</code> deleted.</p>
+      <p>Returns an archive of the same format as <code>$archive</code> with all the entries named in
+          <code>map:keys($entries)</code> deleted.</p>
       <p>The relative order of the remaining entries within the archive is preserved.</p>
       <p>The uncompressed content, size and last-modified date of the remaining entries shall be the
         same as those for those entries before deletion. Compressed sizes may alter.</p>
-      <p>Duplicate entries in <code>$entries</code> are ignored.</p>
-      <p>If <code>$entries</code> is the empty sequence, or an empty map, the original archive shall
-        be returned.</p>
+      <p>If <code>$entries</code> is an empty map, the original archive shall be returned.</p>
+      <p>Any information in the values of each entry of <code>$entries</code> is ignored.</p>
     </fos:rules>
     <fos:errors>
       <p><bibref ref="error.unknownEntry"/> is raised if an entry requested for deletion does not
@@ -526,12 +555,9 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
     <fos:notes>
       <p>Whilst the uncompressed entries remaining after deletion should of course be the same size
         and content as those before deletion, depending upon the (lossless) compression algorithm
-        used, the compressed sizes and content might not be. In the absence of a special check, in
-        these circumstances <code>$in</code> may not be identical to
-          <code>arch:delete($in,())</code>. This needs discussion. </p>
-      <p>The signature with <code>$entries as xs:string*</code> is defined as a convenience, to
-        avoid the creation of a simple map. Otherwise it is completely analagous to
-          <code>arch:delete(xs:base64Binary,xs:string*)</code>.</p>
+        used, the compressed sizes and content might not be. In the absence of a special check,
+        implied in the rules,<code>$archive</code> may not be identical to
+          <code>arch:delete-map($archive,map:new())</code>.</p>
     </fos:notes>
 
   </fos:function>
@@ -547,10 +573,6 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
         <fos:arg name="new" type="xs:base64Binary*"/>
         <fos:arg name="options" type="element(arch:options)"/>
       </fos:proto>
-      <!--         <fos:proto name="create" return-type="xs:base64Binary">
-            <fos:arg name="entries" type="map(xs:string,xs:base64Binary)*"/>
-         </fos:proto>
--->
     </fos:signatures>
     <fos:summary>
       <p>Returns a new archive with each of the given entries in <code>$entries</code> set to the
@@ -574,14 +596,14 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
     </fos:errors>
   </fos:function>
 
-  <fos:function name="create" prefix="archM">
+  <fos:function name="create-map" prefix="arch">
     <fos:signatures>
-      <fos:proto name="create" return-type="xs:base64Binary">
-        <fos:arg name="entries" type="map(xs:string,map(xs:string,item()?))*"/>
+      <fos:proto name="create-map" return-type="xs:base64Binary">
+        <fos:arg name="entries" type="map(xs:string,map(xs:string,item()*))"/>
       </fos:proto>
-      <fos:proto name="create" return-type="xs:base64Binary">
-        <fos:arg name="entries" type="map(xs:string,map(xs:string,item()?))*"/>
-        <fos:arg name="options" type="map(xs:string,item())"/>
+      <fos:proto name="create-map" return-type="xs:base64Binary">
+        <fos:arg name="entries" type="map(xs:string,map(xs:string,item()*))"/>
+        <fos:arg name="options" type="map(xs:string,item()*)"/>
       </fos:proto>
     </fos:signatures>
     <fos:summary>
@@ -592,14 +614,62 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
     <fos:rules>
       <p>Returns an archive of format specified by <code>$options</code> with each of the given
         entries named as a key in <code>$entries</code> set to the corresponding value in
-          <code>$entries($key)('content')</code>..</p>
-      <p>The relative order of new entries within the archive follows that of the input.</p>
+          <code>$entries($key)('content')</code>, and with other properties defined by
+          <code>$entries($key)(*)</code> or <code>$options</code>.</p>
+      <p>The map <code>$options</code> can contain properties both for the archive itself, and
+        defaults for each entry. Relevant properties for the archive (see also <specref
+          ref="archive.options.map"/>) are:</p>
+      <ulist>
+        <item>
+          <kw>format</kw>
+        </item>
+        <item>
+          <kw>compression</kw>
+        </item>
+      </ulist>
+      <p>Relevant properties for entries (see also <specref ref="entry.structures.map"/>) are:</p>
+      <ulist>
+        <item>
+          <kw>compression-level</kw>
+        </item>
+        <item>
+          <kw>last-modified</kw>
+        </item>
+        <item>
+          <kw>position</kw>: position order for entries. These need not be contiguous, but should
+          not be duplicated. </item>
+        <item>
+          <kw>encoding</kw>. If this is set, then the <kw>content</kw> entry will be encoded from
+            <code>xs:string</code> to binary according to the named encoding. If absent, then
+            <kw>content</kw> is assumed of type <code>xs:base64Binary</code>. The only values which
+          every implementation is <rfc2119>required</rfc2119> to recognize are <code>utf-8</code>
+          and <code>utf-16</code>.</item>
+        <item>
+          <kw>content</kw>: the content to write, treated either as <code>xs:string</code> or
+            <code>xs:base64Binary</code>, dependent upon <kw>encoding</kw>.</item>
+      </ulist>
+      <p>The relative order of entries within the archive follows that of the <kw>position</kw>
+        property, if specified, followed by all those lacking such a property, in an
+        implementation-dependant order. The specific ordering is equivalent to:</p>
+      <eg xml:space="preserve"><![CDATA[
+<xsl:variable name="$keys" select="map:keys($entries)"/>
+<xsl:variable name="positioned" as="xs:string*">
+  <xsl:perform-sort select="$keys[map:contains($entries(.),'position']">
+    <xsl:sort select="$entries(.)('position')"/>
+  </xsl:perform-sort>
+</xsl:variable>
+<xsl:for-each select="$positioned, $keys[not(.=$positioned)]">
+      .... process ....
+</xsl:for-each>
+     ]]></eg>
       <p>If <code>$options</code> is specified, the overall archive properties (and defaults for the
         entries) are set to those specified in the map.</p>
     </fos:rules>
     <fos:errors>
       <p><bibref ref="error.archiveReadError"/> is raised if there was an unspecified problem in
         creating the archive.</p>
+      <p><bibref ref="error.duplicatePosition"/> is raised if two or more entries request the same
+        position in the archive.</p>
     </fos:errors>
   </fos:function>
 
@@ -623,9 +693,9 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
         entry is added to the end of the archive.</p>
     </fos:summary>
     <fos:rules>
-      <p>Returns an archive of the same format as <code>$in</code> with each of the given entries in
-          <code>$entries</code> updated to the corresponding value in the sequence
-        <code>$new</code>. If an entry is not found, a new entry for it is added to the end of the
+      <p>Returns an archive of the same format as <code>$archive</code> with each of the given
+        entries in <code>$entries</code> updated to the corresponding value in the sequence
+          <code>$new</code>. If an entry is not found, a new entry for it is added to the end of the
         archive.</p>
       <p>The relative order of all the existing and replaced entries within the archive is
         preserved. New entries appear at the end of the archive in the order in which they were
@@ -650,16 +720,16 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
     </fos:errors>
   </fos:function>
 
-  <fos:function name="update" prefix="archM">
+  <fos:function name="update-map" prefix="arch">
     <fos:signatures>
-      <fos:proto name="update" return-type="xs:base64Binary">
+      <fos:proto name="update-map" return-type="xs:base64Binary">
         <fos:arg name="archive" type="xs:base64Binary"/>
-        <fos:arg name="entries" type="map(xs:string,map(xs:string,item()?))"/>
+        <fos:arg name="entries" type="map(xs:string,map(xs:string,item()*))"/>
       </fos:proto>
-      <fos:proto name="update" return-type="xs:base64Binary">
+      <fos:proto name="update-map" return-type="xs:base64Binary">
         <fos:arg name="archive" type="xs:base64Binary"/>
-        <fos:arg name="entries" type="map(xs:string,map(xs:string,item()?))"/>
-        <fos:arg name="default" type="map(xs:string,item())"/>
+        <fos:arg name="entries" type="map(xs:string,map(xs:string,item()*))"/>
+        <fos:arg name="default.options" type="map(xs:string,item()*)"/>
       </fos:proto>
     </fos:signatures>
     <fos:summary>
@@ -669,15 +739,38 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
         entry is added to the end of the archive.</p>
     </fos:summary>
     <fos:rules>
-      <p>Returns an archive with each of the given entries in the keys of <code>$entries</code>
-        updated to the corresponding values in the <code>$entries($key)('content')</code> and with
-        other properties defined by <code>$entries($key)(*)</code>. If an entry is not found, a new
-        entry is added to the end of the archive.</p>
+      <p>Returns an archive of the same format as <code>$archive</code> with each of the given
+        entries in the keys of <code>$entries</code> updated to the corresponding values in the
+          <code>$entries($key)('content')</code> and with other properties defined by
+          <code>$entries($key)(*)</code> or <code>$default.options</code>. If an entry is not found,
+        a new entry is added to the end of the archive. Relevant properties (see also <specref
+          ref="entry.structures.map"/>) are:</p>
+      <ulist>
+        <item>
+          <kw>compression-level</kw>
+        </item>
+        <item>
+          <kw>last-modified</kw>
+        </item>
+        <item>
+          <kw>position</kw>: position order for new (as opposed to updated) entries. These need not
+          be contiguous, but should not be duplicated. </item>
+        <item>
+          <kw>encoding</kw>. If this is set, then the <kw>content</kw>entry will be encoded from
+            <code>xs:string</code> to binary according to the named encoding. If absent, then
+            <kw>content</kw> is assumed of type <code>xs:base64Binary</code>. The only values which
+          every implementation is <rfc2119>required</rfc2119> to recognize are <code>utf-8</code>
+          and <code>utf-16</code>.</item>
+        <item>
+          <kw>content</kw>: the content to write, treated either as <code>xs:string</code> or
+            <code>xs:base64Binary</code>, dependent upon <kw>encoding</kw>.</item>
+      </ulist>
       <p>If <code>$options</code> is specified, values will be used for the default properties for
         each entry, which may be overloaded by the property map for each individual entry.</p>
       <p>The relative order of all the existing and replaced entries within the archive is
-        preserved. New entries appear at the end of the archive in the order in which they were
-        specified in the call.</p>
+        preserved. New entries appear at the end of the archive: any which have a <kw>position</kw>
+        property specified, are ordered according to that property, followed by any others in an
+        implementation-dependent order.</p>
       <p>The uncompressed content, size and last-modified date of the remaining entries shall be the
         same as those for those entries before deletion. Compressed sizes may alter.</p>
       <p>The compression methods of the updated entries shall be preserved.</p>
@@ -686,6 +779,8 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
     <fos:errors>
       <p><bibref ref="error.archiveReadError"/> is raised if there was an unspecified problem in
         reading or creating the archive.</p>
+      <p><bibref ref="error.duplicatePosition"/> is raised if two or more entries request the same
+        position in the archive.</p>
     </fos:errors>
     <fos:notes>
       <p>Using the <code>$default</code> map a common compression method, last-modification date and
@@ -729,22 +824,21 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
       </ul>
     </fos:errors>
     <fos:notes>
-      <p>This function should be equivalent to the following XSLT function, already described in
-          <specref ref="example.zip.to"/>:</p>
+      <p>This function should be equivalent to the following XSLT function:</p>
       <eg xml:space="preserve"><![CDATA[
 <xsl:function name="arch:to-files">
     <xsl:param name="archive" as="xs:base64Binary"/>
     <xsl:variable name="entries" select="arch:entries($archive)"/>
     <xsl:variable name="dirs" select="$entries[ends-with(.,'/')]"/>
     <xsl:variable name="required.dirs"
-        select="distinct-values(for $r in ($entries except $dirs) 
-                  return replace($r,'/[^/]+$','/'))[ends-with(.,'/')]"/>
+        select="distinct-values(for $r in ($entries except $dirs) return
+                                    replace($r,'/[^/]+$','/'))[ends-with(.,'/')]"/>
     <xsl:sequence
-        select="for $d in distinct-values(($required.dirs,$dirs)) 
-                return file:create-dir(replace($d,'/$',''))"/>
+        select="for $d in distinct-values(($required.dirs,$dirs)) return 
+                    file:create-dir(replace($d,'/$',''))"/>
     <xsl:sequence
-        select="for $f in ($entries except $dirs) 
-                return file:write-binary($f,arch:extract-binary($archive,$f))"/>
+        select="for $f in ($entries except $dirs) return 
+                    file:write-binary($f,arch:extract-binary($archive,$f))"/>
 </xsl:function>
 ]]></eg>
       <p>This function may be provided by an XSLT package (which will probably use functions from
@@ -788,16 +882,21 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
       </ul>
     </fos:errors>
     <fos:notes>
-      <p>This function should be equivalent to the following XSLT function, already described in
-          <specref ref="example.zip.from"/>:</p>
+      <p>This function should be equivalent to the following XSLT function:</p>
       <eg xml:space="preserve"><![CDATA[
 <xsl:function name="arch:from-files" as="xs:base64Binary">
     <xsl:param name="files" as="xs:string*"/>
     <xsl:variable name="all" as="xs:string*"
-      select="for $f in $files return if(file:is-dir($f)) then (for $f1 in file:list($f,true()) return concat($f,$f1)) else $f"/>
+      select="for $f in $files return 
+                  if(file:is-dir($f)) 
+                  then (for $f1 in file:list($f,true()) return concat($f,$f1)) 
+                  else $f"/>
     <xsl:variable name="normalized.names" select="for $n in $all return replace($n,'\\','/')"/>
     <xsl:variable name="content" as="xs:base64Binary*"
-      select="for $f in $normalized.names return if(file:is-dir($f)) then xs:base64Binary('') else file:read-binary($f)"/>
+      select="for $f in $normalized.names return 
+                  if(file:is-dir($f)) 
+                  then xs:base64Binary('') 
+                  else file:read-binary($f)"/>
     <xsl:sequence select="arch:create($normalized.names,$content)"/>
 </xsl:function>
 ]]></eg>
@@ -807,6 +906,86 @@ arch:entries(arch:delete(file:read-binary($uri),'lumley.jpg'))
         support such an operation within a context of streaming processing.</p>
     </fos:notes>
 
+  </fos:function>
+
+  <fos:function name="text" prefix="arch">
+    <fos:signatures>
+      <fos:proto name="text" return-type="xs:base64Binary">
+        <fos:arg name="in" type="xs:string*"/>
+      </fos:proto>
+      <fos:proto name="text" return-type="xs:base64Binary">
+        <fos:arg name="in" type="xs:string*"/>
+        <fos:arg name="encoding" type="xs:string"/>
+      </fos:proto>
+    </fos:signatures>
+    <fos:summary>
+      <p>Encodes a string into binary data using a given encoding, suitable for content data for an
+        entry.</p>
+    </fos:summary>
+    <fos:rules>
+      <p>The <code>$encoding</code> argument is the name of an encoding. The values for this
+        attribute follow the same rules as for the <code>encoding</code> attribute in an XML
+        declaration. The only values which every implementation is <rfc2119>required</rfc2119> to
+        recognize are <code>utf-8</code> and <code>utf-16</code>.</p>
+      <p>If <code>$encoding</code> is ommitted, <code>utf-8</code> encoding is assumed.</p>
+      <p>If the value of <code>$in</code> is the empty sequence, the function returns an empty
+        binary data. <emph>This is unlike <code>bin:encode-string()</code>, which will return an
+          empty sequence</emph>.</p>
+    </fos:rules>
+    <fos:errors>
+      <p><bibref ref="error.unknownEncoding"/> is raised if <code>$encoding</code> is invalid or not
+        supported by the implementation.</p>
+      <p><bibref ref="error.encoding"/>is raised if there is an error or malformed input during
+        encoding the string. Additional information about the error may be passed through suitable
+        error reporting mechanisms – this is implementation-dependant.</p>
+    </fos:errors>
+  </fos:function>
+  <fos:function name="xml" prefix="arch">
+    <fos:signatures>
+      <fos:proto name="xml" return-type="xs:base64Binary">
+        <fos:arg name="args" type="item()*"/>
+      </fos:proto>
+      <fos:proto name="xml" return-type="xs:base64Binary">
+        <fos:arg name="args" type="item()*"/>
+        <fos:arg name="params" type="element(output:serialization-parameters)?"/>
+      </fos:proto>
+      <fos:proto name="xml" return-type="xs:base64Binary">
+        <fos:arg name="args" type="item()*"/>
+        <fos:arg name="params" type="element(output:serialization-parameters)?"/>
+        <fos:arg name="encoding" type="xs:string"/>
+      </fos:proto>
+    </fos:signatures>
+    <fos:summary>
+      <p>Encodes the serialization of an XML tree into binary data using a given encoding, suitable
+        for content data for an entry.</p>
+    </fos:summary>
+    <fos:rules>
+      <p>The single-argument version of this function has the same effect as the two-argument
+        version called with <code>$params</code> set to an empty sequence. This in turn is the same as the effect
+        of passing an <code>output:serialization-parameters</code> element with no child
+        elements.</p>
+      <p>The <code>$params</code> argument is used to identify a set of serialization parameters.
+        These are supplied in the form of an <code>output:serialization-parameters</code> element,
+        having the format described in <a
+          href="http://www.w3.org/TR/xslt-xquery-serialization-30/#serparams-in-xdm-instance"
+          >Section 3.1 Setting Serialization Parameters by Means of a Data Model Instance</a>.</p>
+      <p>The <code>$encoding</code> argument is the name of an encoding. The values for this
+        attribute follow the same rules as for the <code>encoding</code> attribute in an XML
+        declaration. The only values which every implementation is <rfc2119>required</rfc2119> to
+        recognize are <code>utf-8</code> and <code>utf-16</code>.</p>
+      <p>If <code>$encoding</code> is ommitted, <code>utf-8</code> encoding is assumed.</p>
+    </fos:rules>
+    <fos:errors>
+      <p><bibref ref="error.unknownEncoding"/> is raised if <code>$encoding</code> is invalid or not
+        supported by the implementation.</p>
+      <p><bibref ref="error.encoding"/>is raised if there is an error or malformed input during
+        encoding the string. Additional information about the error may be passed through suitable
+        error reporting mechanisms – this is implementation-dependant.</p>
+    </fos:errors>
+    <fos:notes>
+      <p>This function is equivalent to
+          <code>arch:text(fn:serialize($args,$params),$encoding)</code>.</p>
+    </fos:notes>
   </fos:function>
 
 </fos:functions>
