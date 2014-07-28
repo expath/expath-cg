@@ -32,8 +32,17 @@
    <xsl:variable name="base-css"         select="'http://www.w3.org/StyleSheets/TR/base.css'"/>
    <xsl:variable name="base-css-offline" select="'../../process/xmlspec/base.css'"/>
 
-   <xsl:variable name="logo"         select="'http://expath.org/images/logo-candidate.png'"/>
-   <xsl:variable name="logo-offline" select="'../../website/src/images/logo-candidate.png'"/>
+   <xsl:variable name="final-spec"   select="/spec/@role eq 'spec'"/>
+   <xsl:variable name="logo"         select="
+       if ( $final-spec ) then
+         'http://expath.org/images/logo-module.png'
+       else 
+         'http://expath.org/images/logo-candidate.png'"/>
+   <xsl:variable name="logo-offline" select="
+       if ( $final-spec ) then
+         '../../website/src/images/logo-module.png'
+       else 
+         '../../website/src/images/logo-candidate.png'"/>
 
    <xsl:variable name="is-w3c" select="/spec/@spec:w3c/xs:boolean(.)"/>
 
