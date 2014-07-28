@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<spec role="editors-copy" xmlns:ex="http://expath.org/ns/xmlspec" ex:w3c="true">
+<spec role="spec" xmlns:ex="http://expath.org/ns/xmlspec" ex:w3c="true">
   <header>
     <title>Binary Module 1.0</title>
     <w3c-designation>w3c-designation</w3c-designation>
