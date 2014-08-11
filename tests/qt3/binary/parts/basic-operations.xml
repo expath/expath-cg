@@ -4,9 +4,10 @@
     package. Note the tests are written on the assumption that the "working directory" for resolving
     relative filenames is the directory containing this test catalog file.</description>
 
-  <expand name="binary-part">
+  <expand name="EXPath-binary-part">
     <created by="John Lumley" on="2013-07-18"/>
-    <environment ref="binary"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary"/>
     <test-case>
       <description>Part of an empty sequence</description>
       <test> bin:part((),0) </test>
@@ -51,9 +52,10 @@
     </test-case>
   </expand>
 
-  <expand name="binary-join">
+  <expand name="EXPath-binary-join">
     <created by="John Lumley" on="2013-07-18"/>
-    <environment ref="binary"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary"/>
     <test-case>
       <description>Join of an empty sequence</description>
       <test> bin:join(()) </test>
@@ -83,9 +85,10 @@
     </test-case>
   </expand>
 
-  <expand name="binary-insert-before">
+  <expand name="EXPath-binary-insert-before">
     <created by="John Lumley" on="2013-08-06"/>
-    <environment ref="binary"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary"/>
     <test-case>
       <description>Insert-before with an empty sequence</description>
       <test> bin:insert-before((),0,$man.base) </test>
@@ -140,9 +143,10 @@
 
   </expand>
 
-  <expand name="binary-pad-left">
+  <expand name="EXPath-binary-pad-left">
     <created by="John Lumley" on="2013-07-18"/>
-    <environment ref="binary"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary"/>
     <test-case>
       <description>Pad left on an empty sequence</description>
       <test> bin:pad-left((),2) </test>
@@ -213,9 +217,10 @@
     </test-case>
   </expand>
 
-  <expand name="binary-pad-right">
+  <expand name="EXPath-binary-pad-right">
     <created by="John Lumley" on="2013-07-18"/>
-    <environment ref="binary"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary"/>
     <test-case>
       <description>Pad right on an empty sequence</description>
       <test> bin:pad-right((),2) </test>
@@ -286,9 +291,10 @@
     </test-case>
   </expand>
 
-  <expand name="binary-find">
+  <expand name="EXPath-binary-find">
     <created by="John Lumley" on="2013-07-18"/>
-    <environment ref="binary"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary"/>
     <test-case>
       <description>find on an empty sequence</description>
       <test> bin:find((),0,xs:base64Binary("TWFuAAAA")) </test>

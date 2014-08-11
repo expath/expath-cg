@@ -4,7 +4,7 @@
     tests are written on the assumption that the "working directory" for resolving relative
     filenames is the directory containing this test catalog file.</description>
 
-  <environment name="binary-bitwise">
+  <environment name="EXPath-binary-bitwise">
     <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
     <namespace prefix="binJAVA" uri="java:org.expath.ns.binary.EXPathBinary"/>
     <namespace prefix="err" uri="http://expath.org/ns/binary"/>
@@ -14,9 +14,10 @@
     <param name="c" select="xs:base64Binary(xs:hexBinary('0FABCD'))"/>
   </environment>
 
-  <expand name="binary-bitwise-or">
+  <expand name="EXPath-binary-bitwise-or">
     <created by="John Lumley" on="2013-07-22"/>
-    <environment ref="binary-bitwise"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary-bitwise"/>
     <test-case>
       <description>bitwise-or with differing lengths</description>
       <test> bin:or($a,$c) </test>
@@ -71,9 +72,10 @@
     </test-case>
   </expand>
 
-  <expand name="binary-bitwise-and">
+  <expand name="EXPath-binary-bitwise-and">
     <created by="John Lumley" on="2013-07-22"/>
-    <environment ref="binary-bitwise"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary-bitwise"/>
     <test-case>
       <description>bitwise-and with differing lengths</description>
       <test> bin:and($a,$c) </test>
@@ -127,9 +129,10 @@
       </result>
     </test-case>
   </expand>
-  <expand name="binary-bitwise-xor">
+  <expand name="EXPath-binary-bitwise-xor">
     <created by="John Lumley" on="2013-07-22"/>
-    <environment ref="binary-bitwise"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary-bitwise"/>
     <test-case>
       <description>bitwise-xor with differing lengths</description>
       <test> bin:xor($a,$c) </test>
@@ -183,9 +186,10 @@
       </result>
     </test-case>
   </expand>
-  <expand name="binary-bitwise-not">
+  <expand name="EXPath-binary-bitwise-not">
     <created by="John Lumley" on="2013-07-22"/>
-    <environment ref="binary-bitwise"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary-bitwise"/>
     <test-case>
       <description>bitwise-not with empty data</description>
       <test> bin:not($empty.bin) </test>
@@ -208,9 +212,10 @@
     </test-case>
   </expand>
 
-  <expand name="binary-bitwise-shift">
+  <expand name="EXPath-binary-bitwise-shift">
     <created by="John Lumley" on="2013-07-22"/>
-    <environment ref="binary-bitwise"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary-bitwise"/>
     <test-case>
       <description>bitwise-shift on empty sequence</description>
       <test> bin:shift((),5) </test>

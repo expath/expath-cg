@@ -6,29 +6,29 @@
     <link type="spec" document="http://expath.org/spec/binary"/>
 
 
-    <environment name="binary">
+    <environment name="EXPath-binary">
         <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
-        <namespace prefix="binJAVA" uri="java:org.expath.ns.binary.EXPathBinary"/>
-        <!--<namespace prefix="err" uri="http://expath.org/ns/binary"/>-->
         <param name="empty.bin" select="xs:base64Binary('')"/>
         <!-- 'Man' in base64 - 3 octets, 4 characters -->
         <param name="man.base" select="xs:base64Binary('TWFu')"/>
         <param name="man.octets" select="77,97,110"/>
     </environment>
 
-    <test-case name="binary-length-001">
+    <test-case name="EXPath-binary-length-001">
         <description>Use length on an empty value</description>
         <created by="Michael Kay" on="2013-07-11"/>
-        <environment ref="binary"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-binary"/>
         <test> bin:length(xs:base64Binary("")) </test>
         <result>
             <assert-eq>0</assert-eq>
         </result>
     </test-case>
-    <test-case name="binary-length-002">
+    <test-case name="EXPath-binary-length-002">
         <description>Use length on an quadruple octet value</description>
         <created by="John Lumley" on="2013-07-16"/>
-        <environment ref="binary"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-binary"/>
         <test> bin:length(xs:base64Binary(xs:hexBinary("face1234"))) </test>
         <result>
             <all-of>
@@ -39,10 +39,11 @@
     </test-case>
 
 
-    <expand name="binary-from-octets">
+    <expand name="EXPath-binary-from-octets">
         <created by="John Lumley" on="2013-07-18"/>
-        <environment ref="binary"/>
-        <test-case name="binary-from-octets-001">
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-binary"/>
+        <test-case>
             <description>Generate a zero-length binary from an empty set of octets</description>
             <test> bin:from-octets(()) </test>
             <result>
@@ -78,9 +79,10 @@
         </test-case>
     </expand>
 
-    <expand name="binary-to-octets">
+    <expand name="EXPath-binary-to-octets">
         <created by="John Lumley" on="2013-07-18"/>
-        <environment ref="binary"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-binary"/>
         <test-case>
             <description>Octets from a zero-length binary</description>
             <test> bin:to-octets(xs:base64Binary("")) </test>
@@ -100,9 +102,10 @@
         </test-case>
     </expand>
 
-    <expand name="binary-hex">
+    <expand name="EXPath-binary-hex">
         <created by="John Lumley" on="2013-07-18"/>
-        <environment ref="binary"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-binary"/>
         <test-case>
             <description>Generate a zero-length binary from an empty hex string</description>
             <test> bin:hex("") </test>
@@ -149,9 +152,10 @@
             </result>
         </test-case>
     </expand>
-    <expand name="binary-bin">
+    <expand name="EXPath-binary-bin">
         <created by="John Lumley" on="2013-07-18"/>
-        <environment ref="binary"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-binary"/>
         <test-case>
             <description>Generate a zero-length binary from an empty binary string</description>
             <test> bin:bin("") </test>
@@ -197,9 +201,10 @@
             </result>
         </test-case>
     </expand>
-    <expand name="binary-octal">
+    <expand name="EXPath-binary-octal">
         <created by="John Lumley" on="2013-07-18"/>
-        <environment ref="binary"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-binary"/>
         <test-case>
             <description>Generate a zero-length binary from an empty octal string</description>
             <test> bin:octal("") </test>

@@ -4,9 +4,10 @@
         Note the tests are written on the assumption that the "working directory" for resolving
         relative filenames is the directory containing this test catalog file.</description>
 
-    <expand name="binary-encode-string">
+    <expand name="EXPath-binary-encode-string">
         <created by="John Lumley" on="2013-07-18"/>
-        <environment ref="binary"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-binary"/>
         <test-case>
             <description>encode-string on an empty string</description>
             <test> bin:encode-string("","utf-8") </test>
@@ -70,9 +71,10 @@
         </test-case>
     </expand>
 
-    <expand name="binary-decode-string">
+    <expand name="EXPath-binary-decode-string">
         <created by="John Lumley" on="2013-07-19"/>
-        <environment ref="binary"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-binary"/>
         <test-case>
             <description>decode-string on an empty sequence</description>
             <test> bin:decode-string((),"utf-8") </test>

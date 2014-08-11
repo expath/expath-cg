@@ -7,9 +7,10 @@
     <link type="spec" document="http://expath.org/spec/archive"/>
 
 
-    <expand name="options-map">
+    <expand name="EXPath-archive-options-map">
         <created by="John Lumley" on="2013-08-28"/>
-        <environment ref="archive-map"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-archive.map"/>
         <test-case>
             <description>Options for a ZIP file</description>
             <test>

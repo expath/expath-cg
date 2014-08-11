@@ -4,7 +4,7 @@
     Note the tests are written on the assumption that the "working directory" for resolving relative
     filenames is the directory containing this test catalog file.</description>
 
-  <environment name="binary.numeric">
+  <environment name="EXPath-binary.numeric">
     <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
     <namespace prefix="binJAVA" uri="java:org.expath.ns.binary.EXPathBinary"/>
     <namespace prefix="err" uri="http://expath.org/ns/binary"/>
@@ -23,9 +23,10 @@
     <param name="int.short.B-1" select="xs:base64Binary(xs:hexBinary('ffff'))"/>
   </environment>
 
-  <expand name="binary-pack-integer">
+  <expand name="EXPath-binary-pack-integer">
     <created by="John Lumley" on="2013-07-19"/>
-    <environment ref="binary.numeric"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
     <test-case>
       <description>pack-integer with unknown octet-order</description>
       <test> bin:pack-integer(0,1,'MOST-sign-first') </test>
@@ -197,9 +198,10 @@
     </test-case>
   </expand>
 
-  <expand name="binary-pack-double">
+  <expand name="EXPath-binary-pack-double">
     <created by="John Lumley" on="2013-07-19"/>
-    <environment ref="binary.numeric"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
     <test-case>
       <description>pack-double with unknown octet-order</description>
       <test> bin:pack-double(xs:double(0.0),'MOST-sign-first') </test>
@@ -287,9 +289,10 @@
       </result>
     </test-case>
   </expand>
-  <expand name="binary-pack-float">
+  <expand name="EXPath-binary-pack-float">
     <created by="John Lumley" on="2013-07-19"/>
-    <environment ref="binary.numeric"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
     <test-case>
       <description>pack-float with unknown octet-order</description>
       <test> bin:pack-float(xs:float(0.0),'MOST-sign-first') </test>
@@ -368,9 +371,10 @@
     </test-case>
   </expand>
 
-  <expand name="binary-unpack-double">
+  <expand name="EXPath-binary-unpack-double">
     <created by="John Lumley" on="2013-07-19"/>
-    <environment ref="binary.numeric"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
     <test-case>
       <description>unpack-double with unknown octet-order</description>
       <test> bin:unpack-double(bin:from-octets($double.1.octets),0,'MOST-sign-first') </test>
@@ -451,9 +455,10 @@
       </result>
     </test-case>
   </expand>
-  <expand name="binary-unpack-float">
+  <expand name="EXPath-binary-unpack-float">
     <created by="John Lumley" on="2013-07-19"/>
-    <environment ref="binary.numeric"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
     <test-case>
       <description>unpack-float with unknown octet-order</description>
       <test> bin:unpack-float(bin:from-octets($float.1.octets),0,'MOST-sign-first') </test>
@@ -533,9 +538,10 @@
     </test-case>
   </expand>
 
-  <expand name="binary-unpack-unsigned-integer">
+  <expand name="EXPath-binary-unpack-unsigned-integer">
     <created by="John Lumley" on="2013-07-22"/>
-    <environment ref="binary.numeric"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
     <test-case>
       <description>unpack-unsigned-integer with unknown octet-order</description>
       <test> bin:unpack-unsigned-integer($int.byte.B,0,1,'MOST-sign-first') </test>
@@ -671,9 +677,10 @@
     </test-case>
   </expand>
 
-  <expand name="binary-unpack-integer">
+  <expand name="EXPath-binary-unpack-integer">
     <created by="John Lumley" on="2013-07-22"/>
-    <environment ref="binary.numeric"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
     <test-case>
       <description>unpack-integer with unknown octet-order</description>
       <test> bin:unpack-integer($int.byte.B,0,1,'MOST-sign-first') </test>

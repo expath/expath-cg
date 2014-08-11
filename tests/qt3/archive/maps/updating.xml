@@ -7,13 +7,14 @@
     <link type="spec" document="http://expath.org/spec/archive"/>
 
 
-    <expand name="delete-map">
+    <expand name="EXPath-archive-delete.map">
         <created by="John Lumley" on="2013-08-28"/>
-        <environment ref="archive-map"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-archive.map"/>
         <test-case>
             <description>Delete entry from a one-entry zip</description>
             <test>
-                arch:delete-map(arch:create-map($simple.Text.map),'simple.Text')
+                arch:delete-map(arch:create-map($simple.Text.map),map:entry('simple.Text',()))
             </test>
             <result>
                 <all-of>
@@ -26,7 +27,7 @@
             <description>Deletion with empty deletion request</description>
             <test>
                 let $a := arch:create-map($simple.Text.map)
-                 return arch:delete-map($a,()) = $a
+                 return arch:delete-map($a,map:new(())) = $a
             </test>
             <result>
                 <assert-true/>
@@ -63,9 +64,10 @@
         </test-case>-->
     </expand>
 
-    <expand name="update-map">
+    <expand name="EXPath-archive-update-map">
         <created by="John Lumley" on="2013-08-28"/>
-        <environment ref="archive-map"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-archive.map"/>
         <test-case>
             <description>Update entry in a one-entry zip</description>
             <test>
@@ -124,9 +126,10 @@
         </test-case>-->
     </expand>
 
-    <expand name="create-map">
+    <expand name="EXPath-archive-create-map">
         <created by="John Lumley" on="2013-08-28"/>
-        <environment ref="archive-map"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-archive.map"/>
         <test-case>
             <description>Create a one-entry ZIP</description>
             <test> 

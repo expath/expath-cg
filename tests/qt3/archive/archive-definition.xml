@@ -7,13 +7,10 @@
     <link type="spec" document="http://expath.org/spec/archive"/>
 
 
-    <environment name="archive">
+    <environment name="EXPath-archive">
         <namespace prefix="arch" uri="http://expath.org/ns/archive"/>
-        <!--<namespace prefix="arch" uri="java:org.expath.ns.archive.EXPathA.Archive"/>-->
         <namespace prefix="file" uri="http://expath.org/ns/file"/>
         <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
-        <!--<namespace prefix="bin" uri="java:org.expath.ns.binary.EXPathBinary"/>-->
-
 
         <param name="test1.ZIP" select="file:read-binary('sandpit/test1.zip')"/>
         <param name="test1.ZIP.BROKEN" select="bin:part(file:read-binary('sandpit/test1.zip'),4,50)"/>
@@ -25,12 +22,10 @@
         <param name="empty.bin" select="xs:base64Binary('')"/>
     </environment>
 
-    <environment name="archive-map">
+    <environment name="EXPath-archive.map">
         <namespace prefix="arch" uri="http://expath.org/ns/archive"/>
-        <!--<namespace prefix="arch" uri="java:org.expath.ns.archive.EXPathA.Archive"/>-->
         <namespace prefix="file" uri="http://expath.org/ns/file"/>
         <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
-        <!--<namespace prefix="bin" uri="java:org.expath.ns.binary.EXPathBinary"/>-->
         <namespace prefix="map" uri="http://www.w3.org/2005/xpath-functions/map"/>
 
 
