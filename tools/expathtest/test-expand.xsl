@@ -15,7 +15,7 @@
                 prefixes aren't bound, such as in assertions</li>
         </ul>
     </doc:doc>
-    <xsl:output method="xml" indent="yes"/>
+    <xsl:output method="xml" indent="yes" encoding="US-ASCII"/>
     <xsl:template match="@*|*|text()|comment()|processing-instruction()" mode="#default common">
         <xsl:copy>
             <xsl:apply-templates select="@*|*|text()|comment()|processing-instruction()"

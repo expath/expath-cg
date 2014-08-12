@@ -27,7 +27,8 @@
         </test-case>
         <test-case>
             <description>encode-string on a non-empty string</description>
-            <test> bin:encode-string("AêñüC","utf-8") </test>
+            <modified by="John Lumley" on="2014-08-12" change="Replace non-ASCII by encodings"/>
+            <test> bin:encode-string("A&#234;&#241;&#252;C","utf-8") </test>
             <result>
                 <all-of>
                     <assert-type>xs:base64Binary</assert-type>
@@ -37,7 +38,8 @@
         </test-case>
         <test-case>
             <description>encode-string on a non-empty string, converted to octets</description>
-            <test> bin:to-octets(bin:encode-string("AêñüC","utf-8")) </test>
+            <modified by="John Lumley" on="2014-08-12" change="Replace non-ASCII by encodings"/>
+            <test> bin:to-octets(bin:encode-string("A&#234;&#241;&#252;C","utf-8")) </test>
             <result>
                 <assert-deep-eq>(65,195,170,195,177,195,188,67)</assert-deep-eq>
             </result>
@@ -53,7 +55,8 @@
         <test-case>
             <description>encode-string on a non-empty string - UTF-16 - no control over
                 BOM</description>
-            <test> xs:hexBinary(bin:encode-string("Ğ","utf-16")) </test>
+            <modified by="John Lumley" on="2014-08-12" change="Replace non-ASCII by encodings"/>
+            <test> xs:hexBinary(bin:encode-string("&#286;","utf-16")) </test>
             <result>
                 <assert-eq>xs:hexBinary("feff011e")</assert-eq>
             </result>
@@ -62,7 +65,9 @@
         <test-case>
             <description>encode-string on a non-empty string using default encoding</description>
             <created by="John Lumley" on="2013-11-19"/>
-            <test> bin:encode-string("AêñüC") = bin:encode-string("AêñüC","utf-8") </test>
+            <modified by="John Lumley" on="2014-08-12" change="Replace non-ASCII by encodings"/>
+            <test> bin:encode-string("A&#234;&#241;&#252;C") =
+                bin:encode-string("A&#234;&#241;&#252;C","utf-8") </test>
             <result>
                 <all-of>
                     <assert-true/>
@@ -101,51 +106,57 @@
         </test-case>
         <test-case>
             <description>decode-string on non-empty binary data</description>
-            <test> bin:decode-string(bin:encode-string("Simple £ text","utf-8"),"utf-8") </test>
+            <modified by="John Lumley" on="2014-08-12" change="Replace non-ASCII by encodings"/>
+
+            <test> bin:decode-string(bin:encode-string("Simple &#163; text","utf-8"),"utf-8") </test>
             <result>
                 <all-of>
                     <assert-type>xs:string</assert-type>
-                    <assert-eq>"Simple £ text"</assert-eq>
+                    <assert-eq>"Simple &#163; text"</assert-eq>
                 </all-of>
             </result>
         </test-case>
         <test-case>
             <description>decode-string on non-empty binary data</description>
+            <modified by="John Lumley" on="2014-08-12" change="Replace non-ASCII by encodings"/>
             <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8") </test>
             <result>
                 <all-of>
                     <assert-type>xs:string</assert-type>
-                    <assert-eq>"AêñüC"</assert-eq>
+                    <assert-eq>"A&#234;&#241;&#252;C"</assert-eq>
                 </all-of>
             </result>
         </test-case>
         <test-case>
             <description>decode-string on non-empty binary data, converted from octets</description>
+            <modified by="John Lumley" on="2014-08-12" change="Replace non-ASCII by encodings"/>
             <test> bin:decode-string(bin:from-octets((65,195,170,195,177,195,188,67)),"utf-8") </test>
             <result>
                 <all-of>
                     <assert-type>xs:string</assert-type>
-                    <assert-eq>"AêñüC"</assert-eq>
+                    <assert-eq>"A&#234;&#241;&#252;C"</assert-eq>
                 </all-of>
             </result>
         </test-case>
         <test-case>
             <description>decode-string with offset</description>
             <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8",3) </test>
+            <modified by="John Lumley" on="2014-08-12" change="Replace non-ASCII by encodings"/>
             <result>
                 <all-of>
                     <assert-type>xs:string</assert-type>
-                    <assert-eq>"ñüC"</assert-eq>
+                    <assert-eq>"&#241;&#252;C"</assert-eq>
                 </all-of>
             </result>
         </test-case>
         <test-case>
             <description>decode-string with offset and size</description>
             <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8",3,4) </test>
+            <modified by="John Lumley" on="2014-08-12" change="Replace non-ASCII by encodings"/>
             <result>
                 <all-of>
                     <assert-type>xs:string</assert-type>
-                    <assert-eq>"ñü"</assert-eq>
+                    <assert-eq>"&#241;&#252;"</assert-eq>
                 </all-of>
             </result>
         </test-case>
@@ -179,8 +190,7 @@
         </test-case>
         <test-case>
             <description>decode-string on non-empty binary data in UTF-16</description>
-            <test>
-                bin:decode-string(xs:base64Binary(
+            <test> bin:decode-string(xs:base64Binary(
                 xs:hexBinary("feff00540068006900730020006900730020005500540046002d00310036")),
                 "utf-16") </test>
             <result>
@@ -193,22 +203,25 @@
         <test-case>
             <description>decode-string on non-empty binary data in UTF-16 with big-endian
                 BOM</description>
+            <modified by="John Lumley" on="2014-08-12" change="Replace non-ASCII by encodings"/>
             <test> bin:decode-string(xs:base64Binary(xs:hexBinary("feff011e")),"utf-16") </test>
             <result>
                 <all-of>
                     <assert-type>xs:string</assert-type>
-                    <assert-eq>"Ğ"</assert-eq>
+                    <assert-eq>"&#286;"</assert-eq>
                 </all-of>
             </result>
         </test-case>
         <test-case>
             <description>decode-string on non-empty binary data in UTF-16 with little endian
                 BOM</description>
+            <modified by="John Lumley" on="2014-08-12" change="Replace non-ASCII by encodings"/>
             <test> bin:decode-string(xs:base64Binary(xs:hexBinary("fffe1e01")),"utf-16") </test>
             <result>
                 <all-of>
                     <assert-type>xs:string</assert-type>
-                    <assert-eq>"Ğ"</assert-eq>
+
+                    <assert-eq>"&#286;"</assert-eq>
                 </all-of>
             </result>
         </test-case>
@@ -216,7 +229,8 @@
         <test-case>
             <description>decode-string on non-empty binary data with default encoding</description>
             <created by="John Lumley" on="2013-11-19"/>
-            <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM=")) = bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8") </test>
+            <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM=")) =
+                bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8") </test>
             <result>
                 <all-of>
                     <assert-true/>
