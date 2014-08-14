@@ -2046,6 +2046,8 @@
     <description>Use file:read-textlines with 1 arg: xAxD as newline</description>
     <created by="Michael Kay" on="2012-06-11"/>
     <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <modified by="John Lumley" on="2014-08-14" change="Added another possibility for MS-DOS environments. 
+      Note that the LF;CR;(blank)LF;CR combination counts the middle CR;LF as a single line break."/>
     <environment ref="EXPath-file"/>
     <test>
         (if (file:exists("sandpit/test.txt")) 
@@ -2054,9 +2056,10 @@
         file:write-text("sandpit/test.txt", string-join(("abcd", "defg", "", "hijk"), "&#xa;&#xd;")),
         file:read-text-lines("sandpit/test.txt")</test>
     <result>
-      <all-of>
+      <any-of>
         <assert-deep-eq>"abcd", "", "defg", "", "", "", "hijk"</assert-deep-eq>
-      </all-of>
+        <assert-deep-eq>"abcd", "", "defg", "", "", "hijk"</assert-deep-eq>
+      </any-of>
     </result>
   </test-case>
 

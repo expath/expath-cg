@@ -821,10 +821,11 @@
   <test-case name="bin-decode-string1">
     <description>Test for the decode-string function.</description>
     <created by="Christian Grün" on="2013-11-19+01:00"/>
+    <modified by="John Lumley" on="2014-08-13" change="changed assertion type to string from integer"/>
     <environment ref="binary"/>
     <test>bin:decode-string(xs:base64Binary(xs:hexBinary("3132")), "US-ASCII")</test>
     <result>
-      <assert-eq>12</assert-eq>
+      <assert-eq>'12'</assert-eq>
     </result>
   </test-case>
   <test-case name="bin-decode-string2">

@@ -74,6 +74,14 @@
                 </all-of>
             </result>
         </test-case>
+        
+        <test-case>
+            <description>encode-string with unsupported character</description>
+            <test> bin:encode-string("&#163;","US-ASCII") </test>
+            <result>
+                <error code="Q{http://expath.org/ns/binary}conversion-error"/>
+            </result>
+        </test-case>
     </expand>
 
     <expand name="EXPath-binary-decode-string">
