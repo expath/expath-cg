@@ -108,6 +108,50 @@
       <error code="XPTY0004"/>
     </result>
   </test-case>
+  
+  <test-case name="EXPath-file-exists-009">
+    <description>Use file:exists on an filename with spaces</description>
+    <created by="John Lumley" on="2015-01-13"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      file:exists("sandpit/my file.txt")</test>
+    <result>
+      <assert-true/>
+    </result>
+  </test-case>
+  
+  <test-case name="EXPath-file-exists-010">
+    <description>Use file:exists on an filename with spaces and backslashes</description>
+    <created by="John Lumley" on="2015-01-13"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      file:exists("sandpit//\my file.txt")</test>
+    <result>
+      <assert-true/>
+    </result>
+  </test-case>
+  
+  <test-case name="EXPath-file-exists-011">
+    <description>Use file:exists on a filename with encoded spaces</description>
+    <created by="John Lumley" on="2015-01-13"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      file:exists("sandpit/my%20file.txt")</test>
+    <result>
+      <assert-false/>
+    </result>
+  </test-case>
+  <test-case name="EXPath-file-exists-012">
+    <description>Use file:exists on a URI generated from a filename with spaces</description>
+    <created by="John Lumley" on="2015-01-13"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      file:exists(file:path-to-uri("sandpit/my file.txt"))</test>
+    <result>
+      <assert-true/>
+    </result>
+  </test-case>
+ 
 
   <test-case name="EXPath-file-isDir-001">
     <description>Use file:is-dir on an existing file</description>
@@ -2775,6 +2819,20 @@
     <result>
       <all-of>
         <assert>ends-with($result, "sandpit/test.txt")</assert>
+        <assert>starts-with($result, "file:/")</assert>
+      </all-of>
+    </result>
+  </test-case>
+  <test-case name="EXPath-file-pathToUri-002">
+    <description>Use file:path-to-uri on a text file with spaces</description>
+    <created by="John Lumley" on="2015-01-13"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      file:path-to-uri("sandpit/my file.txt")
+    </test>
+    <result>
+      <all-of>
+        <assert>ends-with($result, "sandpit/my%20file.txt")</assert>
         <assert>starts-with($result, "file:/")</assert>
       </all-of>
     </result>
