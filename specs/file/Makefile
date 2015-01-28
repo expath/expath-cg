@@ -9,29 +9,36 @@
 #DIFFSPEC=http://expath.org/ns/xmlspec/diffspec.xsl
 XMLSPEC=../../tools/expathspec/src/xmlspec.xsl
 DIFFSPEC=../../tools/expathspec/src/diffspec.xsl
+$(SAXON)=saxon
 
-latest: file-20120614.html file-20120614-diff.html
+latest: file-20150130.html file-diff-20150130.html
 
 file.html: file.xml
-	saxon -s:$< -xsl:$(XMLSPEC) > $@
+	$(SAXON) -s:$< -xsl:$(XMLSPEC) > $@
 
 file-diff.html: file-diff.xml
-	saxon -s:$< -xsl:$(DIFFSPEC) > $@
+	$(SAXON) -s:$< -xsl:$(DIFFSPEC) > $@
 
 file-20100517.html: file-20100517.xml
-	saxon -s:$< -xsl:$(XMLSPEC) > $@
+	$(SAXON) -s:$< -xsl:$(XMLSPEC) > $@
 
 file-20100517-diff.html: file-20100517-diff.xml
-	saxon -s:$< -xsl:$(DIFFSPEC) > $@
+	$(SAXON) -s:$< -xsl:$(DIFFSPEC) > $@
 
 file-20120614.html: file-20120614.xml
-	saxon -s:$< -xsl:$(XMLSPEC) > $@
+	$(SAXON) -s:$< -xsl:$(XMLSPEC) > $@
 
 file-20120614-diff.html: file-20120614-diff.xml
-	saxon -s:$< -xsl:$(DIFFSPEC) > $@
+	$(SAXON) -s:$< -xsl:$(DIFFSPEC) > $@
 
 file-20131203.html: file-20131203.xml
-	saxon -s:$< -xsl:$(XMLSPEC) > $@
+	$(SAXON) -s:$< -xsl:$(XMLSPEC) > $@
 
 file-20131203-diff.html: file-20131203-diff.xml
-	saxon -s:$< -xsl:$(DIFFSPEC) > $@
+	$(SAXON) -s:$< -xsl:$(DIFFSPEC) > $@
+
+file-20150130.html: file-20150130.xml
+	$(SAXON) -s:$< -xsl:$(XMLSPEC) > $@
+
+file-20150130-diff.html: file-20150130-diff.xml
+	$(SAXON) -s:$< -xsl:$(DIFFSPEC) > $@

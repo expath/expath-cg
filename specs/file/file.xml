@@ -8,21 +8,22 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Proposed Module</w3c-doctype>
       <pubdate>
-         <day>03</day>
-         <month>December</month>
-         <year>2013</year>
+         <day>28</day>
+         <month>January</month>
+         <year>2015</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/file/20131203"/>
+         <loc href="http://expath.org/spec/file/20150128"/>
       </publoc>
       <altlocs>
-         <loc href="http://expath.org/spec/file/20131203.xml">XML</loc>
-         <loc href="http://expath.org/spec/file/20131203/diff">Revision markup</loc>
+         <loc href="http://expath.org/spec/file/20150128.xml">XML</loc>
+         <loc href="http://expath.org/spec/file/20150128/diff">Revision markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/file"/>
       </latestloc>
       <prevlocs>
+         <loc href="http://expath.org/spec/file/20131203"/>
          <loc href="http://expath.org/spec/file/20120614"/>
          <loc href="http://expath.org/spec/file/20120517"/>
       </prevlocs>
@@ -127,12 +128,13 @@
             </ulist>
             <p>Before further processing, all paths are normalized to an implementation-defined
                representation (which usually is the representation of the underlying operating system).</p>
+            <p>An implementation may choose to raise <bibref ref="errIP"/> if a path is invalid.</p>
             <p>If a function returns a string that refers to a directory,
                it will always be suffixed with the system-specific directory separator.</p>
-            <p>The standard function <code>fn:static-base-uri</code> can be used to
-               resolve file operations against the base URI:</p>
+            <p>The function <loc href="#pr.base-dir">file:base-dir</loc> can be used to
+               resolve file operations against the directory of the base URI:</p>
             <eg>let $filename := "input.txt"
-let $dir := file:parent(static-base-uri())
+let $dir := file:base-dir()
 let $path := concat($dir, $filename)
 return file:read-text($path)</eg>
          </div2>
@@ -182,8 +184,7 @@ return file:read-text($path)</eg>
 
          <div2 id="pr.is-dir">
             <head><code>file:is-dir</code></head>
-            <eg>
-<ex:function>file:is-dir</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
+            <eg><ex:function>file:is-dir</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:boolean</ex:type></eg>
             <gitem>
               <label>Rules</label>
               <def>
@@ -628,6 +629,7 @@ return file:read-text($path)</eg>
                       <li><code>?</code> for matching one unknown character.</li>
                    </ul>
                 </p>
+                <p>A related function is <loc href="#fn.children">file:children</loc>.</p>
                 <p>This function is ·nondeterministic·.</p>
               </def>
             </gitem>
@@ -635,8 +637,8 @@ return file:read-text($path)</eg>
               <label>Error Conditions</label>
               <def>
                 <ulist>
-                 <item><bibref ref="errND"/> is raised <code>$dir</code> does not point to an
-                    existing directory.</item>
+                 <item><bibref ref="errNF"/> is raised if <code>$path</code> does not exist.</item>
+                 <item><bibref ref="errND"/> is raised if <code>$dir</code> does not point to a directory.</item>
                  <item><bibref ref="errIE"/> is raised if any other error occurs.</item>
                 </ulist>
               </def>
@@ -996,8 +998,42 @@ return file:read-text($path)</eg>
                 <p>Transforms the given path into an absolute path, as specified by
                    <loc href="#fn.resolve-path">file:resolve-path</loc>,
                    and returns the parent directory.</p>
+                <p>The inverse function is <loc href="#fn.children">file:children</loc>.</p>
                 <p>An empty sequence is returned if the path points to a root directory.</p>
                 <p>This function is ·nondeterministic·.</p>
+              </def>
+            </gitem>
+         </div2>
+
+         <div2 id="fn.children">
+            <head><code>file:children</code></head>
+            <gitem>
+              <label>Signature</label>
+              <def><p><eg>
+<ex:function>file:children</ex:function>($path as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg></p></def>
+            </gitem>
+            <gitem>
+              <label>Rules</label>
+              <def>
+                <p>Lists all files and directories in a given directory. The order of the items in the
+                   resulting sequence is not defined. The "." and ".." items are never returned. The
+                   returned paths are relative to the provided directory <code>$dir</code>.</p>
+                <p>Returns the paths of all files and directories that are located in the given directory.
+                   The order of the items in the resulting sequence is not defined.
+                   The "." and ".." items are never returned.</p>
+                <p>The inverse function is <loc href="#fn.parent">file:parent</loc>;
+                   a related function is <loc href="#fn.list">file:list</loc>.</p>
+                <p>This function is ·nondeterministic·.</p>
+              </def>
+            </gitem>
+            <gitem>
+              <label>Error Conditions</label>
+              <def>
+                <ulist>
+                 <item><bibref ref="errNF"/> is raised if <code>$path</code> does not exist.</item>
+                 <item><bibref ref="errND"/> is raised if <code>$path</code> does not point to a directory.</item>
+                 <item><bibref ref="errIE"/> is raised if any other error occurs.</item>
+                </ulist>
               </def>
             </gitem>
          </div2>
@@ -1136,6 +1172,40 @@ return file:read-text($path)</eg>
               </def>
             </gitem>
          </div2>
+
+         <div2 id="pr.base-dir">
+            <head><code>file:base-dir</code></head>
+            <gitem>
+              <label>Signature</label>
+              <def><p><eg><ex:function>file:base-dir</ex:function>() as <ex:type>xs:string?</ex:type></eg></p></def>
+            </gitem>
+            <gitem>
+              <label>Rules</label>
+              <def>
+                <p>Returns the parent directory of the static base URI.
+                If the Base URI property is undefined, the empty sequence is returned. -
+                If a static base URI exists, and if points to a local file path,
+                this function returns the same result as the expression
+                <code>file:parent(static-base-uri())</code>.</p>
+              </def>
+            </gitem>
+         </div2>
+
+         <div2 id="pr.current-dir">
+            <head><code>file:current-dir</code></head>
+            <gitem>
+              <label>Signature</label>
+              <def><p><eg><ex:function>file:current-dir</ex:function>() as <ex:type>xs:string</ex:type></eg></p></def>
+            </gitem>
+            <gitem>
+              <label>Rules</label>
+              <def>
+                <p>Returns the current working directory. -
+                This function returns the same result as the function call
+                <code>file:resolve-path('.')</code>.</p>
+              </def>
+            </gitem>
+         </div2>
       </div1>
    </body>
 
@@ -1155,6 +1225,7 @@ return file:read-text($path)</eg>
          <head>Summary of Error Conditions</head>
          <blist>
             <bibl id="errNF" key="file:not-found">The specified path does not exist.</bibl>
+            <bibl id="errIP" key="file:invalid-path">The specified path is invalid.</bibl>
             <bibl id="errE"  key="file:exists">The specified path already exists.</bibl>
             <bibl id="errND" key="file:no-dir">The specified path does not point to a directory.</bibl>
             <bibl id="errID" key="file:is-dir">The specified path points to a directory.</bibl>
