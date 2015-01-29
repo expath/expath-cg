@@ -41,15 +41,15 @@ div.exampleHeader { font-weight: bold;
       }
    </style></head><body><p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p><div class="head">
 <h1><a name="title" id="title"></a>File Module</h1>
-<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Proposed Module 30 January 2015</h2><dl><dt>This version:</dt><dd>
-         <a href="http://expath.org/spec/file/20150130">http://expath.org/spec/file/20150130</a><br />
+<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Proposed Module 28 January 2015</h2><dl><dt>This version:</dt><dd>
+         <a href="http://expath.org/spec/file/20150128">http://expath.org/spec/file/20150128</a><br />
       </dd><dt>Latest version:</dt><dd>
          <a href="http://expath.org/spec/file">http://expath.org/spec/file</a><br />
       </dd><dt>Previous versions:</dt><dd>
          <a href="http://expath.org/spec/file/20131203">http://expath.org/spec/file/20131203</a><br />
          <a href="http://expath.org/spec/file/20120614">http://expath.org/spec/file/20120614</a><br />
          <a href="http://expath.org/spec/file/20120517">http://expath.org/spec/file/20120517</a><br />
-      </dd><dt>Editors:</dt><dd>Christian Grün, BaseX GmbH</dd><dd>Matthias Brantner, 28msec GmbH</dd><dt>Contributor:</dt><dd>Gabriel Petrovay, 28msec GmbH</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/file/20150130.xml">XML</a> and <a href="http://expath.org/spec/file/20150130/diff">Revision markup</a>.</p><p class="copyright">Copyright © 2010-2013 Christian Grün, published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+      </dd><dt>Editors:</dt><dd>Christian Grün, BaseX GmbH</dd><dd>Matthias Brantner, 28msec GmbH</dd><dt>Contributor:</dt><dd>Gabriel Petrovay, 28msec GmbH</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/file/20150128.xml">XML</a> and <a href="http://expath.org/spec/file/20150128/diff">Revision markup</a>.</p><p class="copyright">Copyright © 2010-2013 Christian Grün, published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
                License Agreement (CLA)</a>. A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is
             available.</p><p class="copyright">This specification was published by the <a href="http://www.w3.org/community/expath/">EXPath Community Group</a>. It is not a W3C Standard nor is it on the W3C
             Standards Track. Please note that under the <a href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
@@ -258,7 +258,7 @@ return file:read-text($path)</pre></div></div><div class="div2">
                    the given directory.</p><p>The optional <code>$pattern</code> parameter defines a name pattern in the glob
                    syntax. If this is provided, only the paths of the files and directories whose names
                    are matching the pattern will be returned.</p><p>An implementation must support at least the following glob syntax for the pattern: <ul><li><code>*</code> for matching any number of unknown characters and</li><li><code>?</code> for matching one unknown character.</li></ul>
-                </p><p>A related function is <a href="#fn.children">file:children</a>.</p><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><a href="#errNF">[file:not-found]</a> is raised if <code>$path</code> does not exist.</li><li><a href="#errND">[file:no-dir]</a> is raised if <code>$dir</code> does not point to a directory.</li><li><a href="#errIE">[file:io-error]</a> is raised if any other error occurs.</li></ul></dd></div><div class="div2">
+                </p><p>A related function is <a href="#fn.children">file:children</a>.</p><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><a href="#errND">[file:no-dir]</a> is raised if <code>$dir</code> does not point to an existing directory.</li><li><a href="#errIE">[file:io-error]</a> is raised if any other error occurs.</li></ul></dd></div><div class="div2">
 <h3><a name="fn.move" id="fn.move"></a>4.11 <code>file:move</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre>
 <code class="function">file:move</code>($source as <code class="type">xs:string</code>,
           $target as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Moves a file or a directory given a source and a target path/URI. The following cases
@@ -365,12 +365,13 @@ return file:read-text($path)</pre></div></div><div class="div2">
                    returned paths are relative to the provided directory <code>$dir</code>.</p><p>Returns the paths of all files and directories that are located in the given directory.
                    The order of the items in the resulting sequence is not defined.
                    The "." and ".." items are never returned.</p><p>The inverse function is <a href="#fn.parent">file:parent</a>;
-                   a related function is <a href="#fn.list">file:list</a>.</p><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><a href="#errNF">[file:not-found]</a> is raised if <code>$path</code> does not exist.</li><li><a href="#errND">[file:no-dir]</a> is raised if <code>$path</code> does not point to a directory.</li><li><a href="#errIE">[file:io-error]</a> is raised if any other error occurs.</li></ul></dd></div><div class="div2">
+                   a related function is <a href="#fn.list">file:list</a>.</p><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><a href="#errND">[file:no-dir]</a> is raised if <code>$path</code> does not point to an existing directory.</li><li><a href="#errIE">[file:io-error]</a> is raised if any other error occurs.</li></ul></dd></div><div class="div2">
 <h3><a name="fn.path-to-native" id="fn.path-to-native"></a>5.4 <code>file:path-to-native</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre>
 <code class="function">file:path-to-native</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Transforms a URI, an absolute path, or relative path to a canonical, system-dependent
                    path representation. A canonical path is both absolute and unique and thus contains
                    no redirections such as references to parent directories or symbolic links.</p><p>If the resulting path points to a directory,
-                   it will be suffixed with the system-specific directory separator.</p><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><a href="#errIE">[file:io-error]</a> is raised if an error occurs while trying to obtain
+                   it will be suffixed with the system-specific directory separator.</p><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><a href="#errNF">[file:not-found]</a> is raised if <code>$path</code> does not
+                    exist.</li><li><a href="#errIE">[file:io-error]</a> is raised if an error occurs while trying to obtain
                     the native path.</li></ul></dd></div><div class="div2">
 <h3><a name="fn.path-to-uri" id="fn.path-to-uri"></a>5.5 <code>file:path-to-uri</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre>
 <code class="function">file:path-to-uri</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:anyURI</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Transforms a file system path into a URI with the <code>file://</code> scheme. If the

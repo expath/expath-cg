@@ -637,8 +637,7 @@ return file:read-text($path)</eg>
               <label>Error Conditions</label>
               <def>
                 <ulist>
-                 <item diff="add"><bibref ref="errNF"/> is raised if <code>$path</code> does not exist.</item>
-                 <item><bibref ref="errND"/> is raised if <code>$dir</code> does not point to a<phrase diff="del">n existing</phrase> directory.</item>
+                 <item><bibref ref="errND"/> is raised if <code>$dir</code> does not point to an existing directory.</item>
                  <item><bibref ref="errIE"/> is raised if any other error occurs.</item>
                 </ulist>
               </def>
@@ -1030,8 +1029,7 @@ return file:read-text($path)</eg>
               <label>Error Conditions</label>
               <def>
                 <ulist>
-                 <item><bibref ref="errNF"/> is raised if <code>$path</code> does not exist.</item>
-                 <item><bibref ref="errND"/> is raised if <code>$path</code> does not point to a directory.</item>
+                 <item><bibref ref="errND"/> is raised if <code>$path</code> does not point to an existing directory.</item>
                  <item><bibref ref="errIE"/> is raised if any other error occurs.</item>
                 </ulist>
               </def>
@@ -1060,7 +1058,9 @@ return file:read-text($path)</eg>
               <label>Error Conditions</label>
               <def>
                 <ulist>
-                 <item><bibref ref="errIE"/> is raised if an error occurs while trying to obtain
+                  <item diff="add"><bibref ref="errNF"/> is raised if <code>$path</code> does not
+                    exist.</item>
+                  <item><bibref ref="errIE"/> is raised if an error occurs while trying to obtain
                     the native path.</item>
                 </ulist>
               </def>

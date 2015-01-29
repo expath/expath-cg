@@ -8,16 +8,16 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Proposed Module</w3c-doctype>
       <pubdate>
-         <day>30</day>
+         <day>28</day>
          <month>January</month>
          <year>2015</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/file/20150130"/>
+         <loc href="http://expath.org/spec/file/20150128"/>
       </publoc>
       <altlocs>
-         <loc href="http://expath.org/spec/file/20150130.xml">XML</loc>
-         <loc href="http://expath.org/spec/file/20150130/diff">Revision markup</loc>
+         <loc href="http://expath.org/spec/file/20150128.xml">XML</loc>
+         <loc href="http://expath.org/spec/file/20150128/diff">Revision markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/file"/>
@@ -637,8 +637,7 @@ return file:read-text($path)</eg>
               <label>Error Conditions</label>
               <def>
                 <ulist>
-                 <item><bibref ref="errNF"/> is raised if <code>$path</code> does not exist.</item>
-                 <item><bibref ref="errND"/> is raised if <code>$dir</code> does not point to a directory.</item>
+                 <item><bibref ref="errND"/> is raised if <code>$dir</code> does not point to an existing directory.</item>
                  <item><bibref ref="errIE"/> is raised if any other error occurs.</item>
                 </ulist>
               </def>
@@ -1030,8 +1029,7 @@ return file:read-text($path)</eg>
               <label>Error Conditions</label>
               <def>
                 <ulist>
-                 <item><bibref ref="errNF"/> is raised if <code>$path</code> does not exist.</item>
-                 <item><bibref ref="errND"/> is raised if <code>$path</code> does not point to a directory.</item>
+                 <item><bibref ref="errND"/> is raised if <code>$path</code> does not point to an existing directory.</item>
                  <item><bibref ref="errIE"/> is raised if any other error occurs.</item>
                 </ulist>
               </def>
@@ -1060,7 +1058,9 @@ return file:read-text($path)</eg>
               <label>Error Conditions</label>
               <def>
                 <ulist>
-                 <item><bibref ref="errIE"/> is raised if an error occurs while trying to obtain
+                  <item><bibref ref="errNF"/> is raised if <code>$path</code> does not
+                    exist.</item>
+                  <item><bibref ref="errIE"/> is raised if an error occurs while trying to obtain
                     the native path.</item>
                 </ulist>
               </def>
