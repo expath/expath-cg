@@ -7,23 +7,23 @@
       <title>Cryptographic Module</title>
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Candidate Module</w3c-doctype>
-      <pubdate>
+      <pubdate diff="chg">
          <day>14</day>
          <month>February</month>
          <year>2015</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/crypto/20150214"/>
+         <loc href="http://expath.org/spec/crypto/20150214" diff="chg"/>
       </publoc>
       <altlocs>
-         <loc href="http://expath.org/spec/crypto/20150214.xml">XML</loc>
-         <loc href="http://expath.org/spec/crypto/20150214/diff">Revision markup</loc>
+         <loc href="http://expath.org/spec/crypto/20150214.xml" diff="chg">XML</loc>
+         <loc href="http://expath.org/spec/crypto/20150214/diff" diff="chg">Revision markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/crypto"/>
       </latestloc>
       <prevlocs>
-         <loc href="http://expath.org/spec/crypto/20110810"/>
+         <loc href="http://expath.org/spec/crypto/20110810" diff="add"/>
       </prevlocs>
       <authlist>
          <author role="editor">
@@ -256,6 +256,11 @@
                      the Signature element cannot be found, this is an error <bibref ref="errCX15"/>.</p>
                </item>
             </ulist>
+         </div2>
+         <div2  diff="del">
+            <head>The <code>crypto:generate-self-signed-certificate</code> function</head>
+            <p>This function generates, for development purposes, a self signed digital certificate.
+               TODO: To be developed, if such function is of any use.</p>
          </div2>
       </div1>
       <div1>
