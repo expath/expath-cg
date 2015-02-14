@@ -53,6 +53,24 @@
          <file href="binary/diff/binary-expanded-diff.xml" format="xml"  diff="true"/>
       </editor>
    </spec>
+   <spec name="crypto">
+      <revision version="20110810">
+         <file href="crypto/crypto-20110810.html" format="html" diff="false"/>
+         <file href="crypto/crypto-20110810.xml"  format="xml"  diff="false"/>
+      </revision>
+      <revision version="20150214" latest="true">
+         <file href="crypto/crypto-20150214.html"      format="html" diff="false"/>
+         <file href="crypto/crypto-20150214.xml"       format="xml"  diff="false"/>
+         <file href="crypto/crypto-20150214-diff.html" format="html" diff="true"/>
+         <file href="crypto/crypto-20150214-diff.xml"  format="xml"  diff="true"/>
+      </revision>
+      <editor>
+         <file href="crypto/crypto.html"      format="html" diff="false"/>
+         <file href="crypto/crypto.xml"       format="xml"  diff="false"/>
+         <file href="crypto/crypto-diff.html" format="html" diff="true"/>
+         <file href="crypto/crypto-diff.xml"  format="xml"  diff="true"/>
+      </editor>
+   </spec>
    <spec name="file">
       <revision version="20100517">
          <file href="file/file-20100517.html" format="html" diff="false"/>
