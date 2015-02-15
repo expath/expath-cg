@@ -105,11 +105,11 @@
                </item>
                <item>
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this
-                  is an error <bibref ref="errCX21"/>.</p>
+                  is an error <bibref ref="error.algOrTransf"/>.</p>
                </item>
                <item>
                   <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default value is "base64". 
-                  If the format is not supprted, this is an error <bibref ref="errCX24"/>.</p>
+                  If the format is not supprted, this is an error <bibref ref="error.outputFormat"/>.</p>
                </item>               
             </ulist>
          </div2>
@@ -143,11 +143,11 @@
                </item>               
                <item>
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this
-                  is an error <bibref ref="errCX21"/>.</p>
+                  is an error <bibref ref="error.algOrTransf"/>.</p>
                </item>
                <item>
                   <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default value is "base64". 
-                  If the format is not supprted, this is an error <bibref ref="errCX24"/>.</p>
+                  If the format is not supprted, this is an error <bibref ref="error.outputFormat"/>.</p>
                </item>              
             </ulist>
          </div2>
@@ -320,7 +320,7 @@
                <item>
                   <p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for
                      encryption. If the parameter specifies an unsupported algorithm, this is an
-                     error <bibref ref="error.algorithm"/>.</p>
+                     error <bibref ref="error.algOrTransf"/>.</p>
                </item>
             </ulist>
          </div2>
@@ -353,7 +353,7 @@
                <item>
                   <p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for
                      encryption. If the parameter specifies an unsupported algorithm, this is an
-                     error <bibref ref="error.algorithm"/>
+                     error <bibref ref="error.algOrTransf"/>
                   </p>
                </item>
             </ulist>
@@ -424,8 +424,9 @@
             <bibl id="error.encType" key="crypto:encryption-type-error">The encryption type is not supported.</bibl>
             <bibl id="error.secretKey" key="crypto:invalid-secret-key">The secret key is invalid.</bibl>
             <bibl id="error.blockSize" key="crypto:block-size-error">Illegal block size.</bibl>
-            <bibl id="error.algorithm" key="crypto:algorithm-error">The algorithm is not supported.</bibl>
+            <bibl id="error.algOrTransf" key="crypto:algorithm-or-transformation-error">The algorithm or transformation is not supported.</bibl>
             <bibl id="error.decryptionType" key="crypto:decryption-type-error">The decryption type is not supported.</bibl>
+            <bibl id="error.outputFormat" key="crypto.output-format-error">The output format is not supported.</bibl>
          </blist>
       </div1>
    </back>
