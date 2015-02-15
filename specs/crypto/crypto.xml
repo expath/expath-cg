@@ -344,28 +344,37 @@
       <div1>
          <head>References</head>
          <blist>
+         	<bibl id="xpath-30" key="XPath 3.0">
+	        	<loc href="http://w3.org/TR/xpath-30/">XML Path Language (XPath) 3.0</loc>.
+	            Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>         
+	        <bibl id="xslt-30" key="XSLT 3.0">                        
+	            <loc href="http://w3.org/TR/xslt-30/">XSL Transformations (XSLT) Version 3.0</loc>.
+	            Michael Kay, editor. W3C Working Draft, 10 July 2012.</bibl>         
+	        <bibl id="xquery-30" key="XQuery 3.0">                        
+	            <loc href="http://w3.org/TR/xquery-30/">XQuery 3.0: An XML Query Language</loc>.
+	            Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>
+	        <bibl id="xpath-functions-30" key="XPath and XQuery Functions and Operators 3.0">
+	            <loc href="http://w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and Operators 3.0</loc>.
+	            Michael Kay, editor. W3C Working Draft, 13 December 2011.</bibl>
+	        <bibl id="xpath-datamodel-30" key="XQuery and XPath Data Model 3.0">
+	            <loc href="http://w3.org/TR/xpath-datamodel-30/">XQuery and XPath Data Model 3.0</loc>.
+               	Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>               	   	                        
             <bibl id="rfc2104" key="RFC 2104">
-               <loc href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
-                  Authentication</loc>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
-               Working Group. February, 1997. </bibl>
+                <loc href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
+                Authentication</loc>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
+                Working Group. February, 1997. </bibl>
             <bibl id="rfc2617" key="RFC 2617">
-               <loc href="http://ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Authentication: Basic and
-                  Digest Access Authentication</loc>. J. Franks, P. Hallam-Baker, J. Hostetler, S.
-               Lawrence, P. Leach, A. Luotonen, L. Stewart. June, 1999. </bibl>
-            <bibl id="fo11" key="F&amp;O 1.1">
-               <loc href="http://w3.org/TR/xpath-functions-11/">XPath and XQuery Functions and
-                  Operators 1.1</loc>. Michael Kay, editor. W3C Working Draft. 15 January 2009. </bibl>
-            <bibl id="xslt20" key="XSLT 2.0">
-               <loc href="http://w3.org/TR/xslt20/">XSL Transformations (XSLT) Version 2.0</loc>.
-               Michael Kay, editor. W3C Recommendation. 23 January 2007. </bibl>
+                <loc href="http://ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Authentication: Basic and
+                Digest Access Authentication</loc>. J. Franks, P. Hallam-Baker, J. Hostetler, S.
+                Lawrence, P. Leach, A. Luotonen, L. Stewart. June, 1999. </bibl>
             <bibl id="xml-dig-sig-core" key="XML Signature">
-               <loc href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
+                <loc href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
                   (Second Edition)</loc>. Donald Eastlake, Joseph Reagle, David Solo, Frederick
-               Hirsch, Thomas Roessler, editors. Mark Bartel, John Boyer, Barb Fox, Brian LaMacchia,
-               Ed Simon, authors. W3C Recommendation, 10 June 2008. </bibl>
+                 Hirsch, Thomas Roessler, editors. Mark Bartel, John Boyer, Barb Fox, Brian LaMacchia,
+                 Ed Simon, authors. W3C Recommendation, 10 June 2008. </bibl>
             <bibl id="xml-dig-sig-xpath-filer20" key="XML-Signature XPath Filter 2.0">
-               <loc href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</loc>.
-               John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
+                <loc href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</loc>.
+                John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
                November 2002. </bibl>
          </blist>
       </div1>
