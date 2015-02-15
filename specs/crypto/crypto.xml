@@ -69,11 +69,11 @@
          <p>A related technique of cryptography is to apply a one-way hash or digest function to
             data; replicating the operation with the same data and function can ensure the integrity
             of the data.</p>
-         <p>This proposal defines a set of XPath 2.0 extension functions to perform these
+         <p>This proposal defines a set of XPath 3.0 extension functions to perform these
             cryptographic operations. It defines extension functions related to XML Digital
             Signature, to encryption and decryption, and to hash and digest messages. It has been
-            designed to be compatible with XQuery 1.0 and XSLT 2.0, as well as any other standard
-            based on XPath 2.0.</p>
+            designed to be compatible with XQuery 3.0 and XSLT 3.0, as well as any other standard
+            based on XPath 3.0.</p>
          <div2>
             <head>Namespace conventions</head>
             <p>The module defined by this document defines functions and elements in the namespace
