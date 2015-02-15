@@ -381,31 +381,31 @@
       <div1>
          <head>Summary of Error Conditions</head>
          <blist>
-            <bibl id="error.canonAlg" key="err:CX01">The canonicalization algorithm is not
+            <bibl id="error.canonAlg" key="crypto:canonicalization-algorithm-error">The canonicalization algorithm is not
                supported.</bibl>
-            <bibl id="error.digestAlg" key="err:CX02">The digest algorithm is not supported.</bibl>
-            <bibl id="error.sigAlg" key="err:CX03">The signature algorithm is not supported.</bibl>
-            <bibl id="error.xpathExpr" key="err:CX04">The XPath expression is invalid.</bibl>
-            <bibl id="error.rootElem" key="err:CX05">The root element of argument $digital-certificate must
+            <bibl id="error.digestAlg" key="crypto:digest-algorithm-error">The digest algorithm is not supported.</bibl>
+            <bibl id="error.sigAlg" key="crypto:signature-algorithm-error">The signature algorithm is not supported.</bibl>
+            <bibl id="error.xpathExpr" key="crypto:invalid-xpath-expression">The XPath expression is invalid.</bibl>
+            <bibl id="error.rootElem" key="crypto:invalid-root-element">The root element of argument $digital-certificate must
                have the name 'digital-certificate'.</bibl>
-            <bibl id="error.childElem" key="err:CX06">The child element of argument $digital-certificate
+            <bibl id="error.childElem" key="crypto:invalid-child-element">The child element of argument $digital-certificate
                having position $position must have the name $child-element-name.</bibl>
-            <bibl id="error.nullKeystore" key="err:CX07">The keystore is null.</bibl>
-            <bibl id="error.readKeystore" key="err:CX08">I/O error while reading keystore.</bibl>
-            <bibl id="error.deniedKeystore" key="err:CX09">Permission denied to read keystore.</bibl>
-            <bibl id="error.keystoreUrl" key="err:CX10">The keystore URL is invalid.</bibl>
-            <bibl id="error.keystoreType" key="err:CX11">The keystore type is not supported.</bibl>
-            <bibl id="error.aliasKey" key="err:CX12">Cannot find key for alias in given keystore.</bibl>
-            <bibl id="error.hashAlg" key="err:CX13">The hashing algorithm is not supported.</bibl>
-            <bibl id="error.encMethod" key="err:CX14">The encoding method is not supported.</bibl>
-            <bibl id="error.sigElem" key="err:CX15">Cannot find Signature element.</bibl>
-            <bibl id="error.noPadding" key="err:CX16">No such padding.</bibl>
-            <bibl id="error.incorrectPadding" key="err:CX17">Incorrect padding.</bibl>
-            <bibl id="error.encType" key="err:CX18">The encryption type is not supported.</bibl>
-            <bibl id="error.secretKey" key="err:CX19">The secret key is invalid.</bibl>
-            <bibl id="error.blockSize" key="err:CX20">Illegal block size.</bibl>
-            <bibl id="error.algorithm" key="err:CX21">The algorithm is not supported.</bibl>
-            <bibl id="error.decryptionType" key="err:CX22">The decryption type is not supported.</bibl>
+            <bibl id="error.nullKeystore" key="crypto:null-keystore">The keystore is null.</bibl>
+            <bibl id="error.readKeystore" key="crypto:error-reading-keystore">I/O error while reading keystore.</bibl>
+            <bibl id="error.deniedKeystore" key="crypto:denied-reading-keystore">Permission denied to read keystore.</bibl>
+            <bibl id="error.keystoreUrl" key="crypto:invalid-keystore-url">The keystore URL is invalid.</bibl>
+            <bibl id="error.keystoreType" key="crypto:keystore-type-error">The keystore type is not supported.</bibl>
+            <bibl id="error.aliasKey" key="crypto:no-key-for-alias">Cannot find key for alias in given keystore.</bibl>
+            <bibl id="error.hashAlg" key="crypto:hashing-algorithm-error">The hashing algorithm is not supported.</bibl>
+            <bibl id="error.encMethod" key="crypto:encoding-method-error">The encoding method is not supported.</bibl>
+            <bibl id="error.sigElem" key="crypto:signature-element-error">Cannot find Signature element.</bibl>
+            <bibl id="error.noPadding" key="crypto:padding-error">No such padding.</bibl>
+            <bibl id="error.incorrectPadding" key="crypto:incorrect-padding">Incorrect padding.</bibl>
+            <bibl id="error.encType" key="crypto:encryption-type-error">The encryption type is not supported.</bibl>
+            <bibl id="error.secretKey" key="crypto:invalid-secret-key">The secret key is invalid.</bibl>
+            <bibl id="error.blockSize" key="crypto:block-size-error">Illegal block size.</bibl>
+            <bibl id="error.algorithm" key="crypto:algorithm-error">The algorithm is not supported.</bibl>
+            <bibl id="error.decryptionType" key="crypto:decryption-type-error">The decryption type is not supported.</bibl>
          </blist>
       </div1>
    </back>
