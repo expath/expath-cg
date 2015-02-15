@@ -151,47 +151,6 @@
                </item>              
             </ulist>
          </div2>
-      </div1>      
-      <div1>
-         <head>HMAC: Keyed-Hashing for Message Authentication</head>
-         <p>HMAC is a mechanism for message authentication using cryptographic hash functions. HMAC
-            can be used with any iterative cryptographic hash function, e.g. MD5 or SHA-1, in
-            combination with a secret shared key. Typically, message authentication codes are used
-            between two parties that share a secret key in order to validate information transmitted
-            between these parties.</p>
-         <div2>
-            <head>The <code>crypto:hmac</code> function</head>
-            <p>This function generates a message authentication code, based on the input message, by
-               using a cryptographic algorithm and a secret key.</p>
-            <eg>
-<spec:function>crypto:hmac</spec:function>($message as <spec:type>xs:string</spec:type>,
-            $secret-key as <spec:type>xs:string</spec:type>,
-            $algorithm as <spec:type>xs:string</spec:type>) as <spec:type>xs:string</spec:type>
-
-<spec:function>crypto:hmac</spec:function>($message as <spec:type>xs:string</spec:type>,
-            $secret-key as <spec:type>xs:string</spec:type>,
-            $algorithm as <spec:type>xs:string</spec:type>,
-            $encoding as <spec:type>xs:string</spec:type>) as <spec:type>xs:string</spec:type></eg>
-            <ulist>
-               <item>
-                  <p><code>$message</code> is the message to be authenticated.</p>
-               </item>
-               <item>
-                  <p><code>$secret-key</code> is the secret key used for calculating the
-                     authentication code.</p>
-               </item>
-               <item>
-                  <p><code>$algorithm</code> is the cryptographic hashing algorithm. If the
-                     parameter specifies an unsupported algorithm, this is an error <bibref
-                        ref="error.hashAlg"/>.</p>
-               </item>
-               <item>
-                  <p><code>$encoding</code> is the method used for encoding of the authentication
-                     code. Default value: "base64". If the parameter specifies an unsupported
-                     method, this is an error <bibref ref="error.encMethod"/>.</p>
-               </item>
-            </ulist>
-         </div2>
       </div1>
       <div1>
          <head>XML Digital Signature</head>
