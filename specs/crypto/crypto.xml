@@ -79,9 +79,8 @@
             <p>The module defined by this document defines functions and elements in the namespace
                   <code>http://expath.org/ns/crypto</code>. In this document, the
                   <code>crypto</code> prefix, when used, is bound to this namespace URI.</p>
-            <p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>. In
-               this document, the <code>err</code> prefix, when used, is bound to this namespace
-               URI.</p>
+            <p>Error codes are defined in the same namespace (<code>http://expath.org/ns/crypto</code>),
+            and in this document are displayed with the same prefix, <code>crypto</code>.</p>               
          </div2>
          <div2>
             <head>Error management</head>
