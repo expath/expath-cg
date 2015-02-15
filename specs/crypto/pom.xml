@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.expath.specs</groupId>
+	<artifactId>crypto</artifactId>
+	<version>1.0</version>
+	<name>Specification for EXPath Cryptographic Module</name>
+	<packaging>pom</packaging>
+	<url>http://expath.org/spec/crypto/</url>
+
+	<properties>
+		<java-package-name>crypto</java-package-name>
+		<libName>Library for EXPath Cryptographic Module</libName>
+		<libVersion>0.2.5</libVersion>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>ro.kuberam.maven.plugins</groupId>
+				<artifactId>kuberam-expath-plugin</artifactId>
+				<version>0.4.1</version>
+				<executions>
+					<execution>
+						<id>generate-first-spec</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>transform-spec-to-html</goal>
+						</goals>
+						<configuration>
+							<specFile>${basedir}/${project.artifactId}.xml</specFile>
+							<outputDir>${basedir}</outputDir>
+							<googleAnalyticsAccountId>UA-43293529-1</googleAnalyticsAccountId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
