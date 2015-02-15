@@ -122,12 +122,12 @@
                <item>
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. If the
                      parameter specifies an unsupported algorithm, this is an error <bibref
-                        ref="errCX13"/>.</p>
+                        ref="error.hashAlg"/>.</p>
                </item>
                <item>
                   <p><code>$encoding</code> is the method used for encoding of the authentication
                      code. Default value: "base64". If the parameter specifies an unsupported
-                     method, this is an error <bibref ref="errCX14"/>.</p>
+                     method, this is an error <bibref ref="error.encMethod"/>.</p>
                </item>
             </ulist>
          </div2>
@@ -197,19 +197,19 @@
                      Possible values are: "exclusive", "exclusive-with-comments", "inclusive", and
                      "inclusive-with-comments". The default value is "inclusive-with-comments". If
                      the parameter specifies an unsupported algorithm, this is an error <bibref
-                        ref="errCX01"/>.</p>
+                        ref="error.canonAlg"/>.</p>
                </item>
                <item>
                   <p><code>$digest-algorithm</code> is the digest algorithm to be applied to the
                      signed object. Possible values are: "SHA1", "SHA256", and "SHA512". The default
                      value is "SHA1". If the parameter specifies an unsupported algorithm, this is
-                     an error <bibref ref="errCX02"/>.</p>
+                     an error <bibref ref="error.digestAlg"/>.</p>
                </item>
                <item>
                   <p><code>$signature-algorithm</code> is the algorithm used for signature
                      generation and validation. Possible values are: "DSA_SHA1", and "RSA_SHA1". The
                      default value is "RSA_SHA1". If the parameter specifies an unsupported
-                     algorithm, this is an error <bibref ref="errCX03"/>.</p>
+                     algorithm, this is an error <bibref ref="error.sigAlg"/>.</p>
                </item>
                <item>
                   <p><code>$signature-namespace-prefix</code> is the namespace prefix for
@@ -223,7 +223,7 @@
                <item>
                   <p><code>$xpath-expression</code> is the XPath expression used for selecting the
                      subset to be signed. If the XPath expression is invalid, this is an error
-                        <bibref ref="errCX04"/>.</p>
+                        <bibref ref="error.xpathExpr"/>.</p>
                </item>
                <item>
                   <p><code>$digital-certificate</code> is the digital certificate to be used for
@@ -238,9 +238,9 @@
    &lt;keystore-uri&gt;/db/mykeystoreEXist&lt;/keystore-uri&gt;
 &lt;/digital-certificate&gt;</eg>
                   <p>The following errors can be raised relative to the structure and content of
-                     $digital-certificate parameter: <bibref ref="errCX05"/>, <bibref ref="errCX06"
-                     />, <bibref ref="errCX07"/>, <bibref ref="errCX08"/>, <bibref ref="errCX09"/>,
-                        <bibref ref="errCX10"/>, <bibref ref="errCX11"/>, and <bibref ref="errCX12"
+                     $digital-certificate parameter: <bibref ref="error.rootElem"/>, <bibref ref="error.childElem"
+                     />, <bibref ref="error.nullKeystore"/>, <bibref ref="error.readKeystore"/>, <bibref ref="error.deniedKeystore"/>,
+                        <bibref ref="error.keystoreUrl"/>, <bibref ref="error.keystoreType"/>, and <bibref ref="error.aliasKey"
                      />.</p>
                </item>
             </ulist>
@@ -253,7 +253,7 @@
             <ulist>
                <item>
                   <p><code>$input-doc</code> is the enveloped, enveloping, or detached signature. If
-                     the Signature element cannot be found, this is an error <bibref ref="errCX15"/>.</p>
+                     the Signature element cannot be found, this is an error <bibref ref="error.sigElem"/>.</p>
                </item>
             </ulist>
          </div2>
@@ -282,25 +282,25 @@
                <item>
                   <p><code>$input-string</code> is the string to be encrypted. When a particular
                      padding mechanism is requested, but is not available, this is an error <bibref
-                        ref="errCX16"/>. Also, when a particular padding mechanism is expected, but
-                     the data is not padded properly, this is an error <bibref ref="errCX17"/>.</p>
+                        ref="error.noPadding"/>. Also, when a particular padding mechanism is expected, but
+                     the data is not padded properly, this is an error <bibref ref="error.incorrectPadding"/>.</p>
                </item>
                <item>
                   <p>
                      <code>$encryption-type</code> is the type of encryption. Legal values:
                      "symmetric", and "asymmetric". If the parameter has an illegal value, this is
-                     an error <bibref ref="errCX18"/>.</p>
+                     an error <bibref ref="error.encType"/>.</p>
                </item>
                <item>
                   <p><code>$secret-key</code> is the secret key used for encryption, as string. If
-                     the key is invalid, this is an error <bibref ref="errCX19"/>. If the length of
+                     the key is invalid, this is an error <bibref ref="error.secretKey"/>. If the length of
                      data provided to the block cipher is incorrect, this is an error <bibref
-                        ref="errCX20"/>.</p>
+                        ref="error.blockSize"/>.</p>
                </item>
                <item>
                   <p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for
                      encryption. If the parameter specifies an unsupported algorithm, this is an
-                     error <bibref ref="errCX21"/>.</p>
+                     error <bibref ref="error.algorithm"/>.</p>
                </item>
             </ulist>
          </div2>
@@ -316,24 +316,24 @@
                <item>
                   <p><code>$input-string</code> is the string to be decrypted. When a particular
                      padding mechanism is requested, but is not available, this is an error <bibref
-                        ref="errCX16"/>. Also, when a particular padding mechanism is expected, but
-                     the data is not padded properly, this is an error <bibref ref="errCX17"/>.</p>
+                        ref="error.noPadding"/>. Also, when a particular padding mechanism is expected, but
+                     the data is not padded properly, this is an error <bibref ref="error.incorrectPadding"/>.</p>
                </item>
                <item>
                   <p><code>$encryption-type</code> is the type of encryption. Legal values:
                      "symmetric", and "asymmetric". If the parameter has an illegal value, this is
-                     an error <bibref ref="errCX22"/>.</p>
+                     an error <bibref ref="error.decryptionType"/>.</p>
                </item>
                <item>
                   <p><code>$secret-key</code> is the secret key used for encryption, as string. If
-                     the key is invalid, this is an error <bibref ref="errCX19"/>. If the length of
+                     the key is invalid, this is an error <bibref ref="error.secretKey"/>. If the length of
                      data provided to the block cipher is incorrect, this is an error <bibref
-                        ref="errCX20"/>.</p>
+                        ref="error.blockSize"/>.</p>
                </item>
                <item>
                   <p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for
                      encryption. If the parameter specifies an unsupported algorithm, this is an
-                     error <bibref ref="errCX21"/>
+                     error <bibref ref="error.algorithm"/>
                   </p>
                </item>
             </ulist>
@@ -381,31 +381,31 @@
       <div1>
          <head>Summary of Error Conditions</head>
          <blist>
-            <bibl id="errCX01" key="err:CX01">The canonicalization algorithm is not
+            <bibl id="error.canonAlg" key="err:CX01">The canonicalization algorithm is not
                supported.</bibl>
-            <bibl id="errCX02" key="err:CX02">The digest algorithm is not supported.</bibl>
-            <bibl id="errCX03" key="err:CX03">The signature algorithm is not supported.</bibl>
-            <bibl id="errCX04" key="err:CX04">The XPath expression is invalid.</bibl>
-            <bibl id="errCX05" key="err:CX05">The root element of argument $digital-certificate must
+            <bibl id="error.digestAlg" key="err:CX02">The digest algorithm is not supported.</bibl>
+            <bibl id="error.sigAlg" key="err:CX03">The signature algorithm is not supported.</bibl>
+            <bibl id="error.xpathExpr" key="err:CX04">The XPath expression is invalid.</bibl>
+            <bibl id="error.rootElem" key="err:CX05">The root element of argument $digital-certificate must
                have the name 'digital-certificate'.</bibl>
-            <bibl id="errCX06" key="err:CX06">The child element of argument $digital-certificate
+            <bibl id="error.childElem" key="err:CX06">The child element of argument $digital-certificate
                having position $position must have the name $child-element-name.</bibl>
-            <bibl id="errCX07" key="err:CX07">The keystore is null.</bibl>
-            <bibl id="errCX08" key="err:CX08">I/O error while reading keystore.</bibl>
-            <bibl id="errCX09" key="err:CX09">Permission denied to read keystore.</bibl>
-            <bibl id="errCX10" key="err:CX10">The keystore URL is invalid.</bibl>
-            <bibl id="errCX11" key="err:CX11">The keystore type is not supported.</bibl>
-            <bibl id="errCX12" key="err:CX12">Cannot find key for alias in given keystore.</bibl>
-            <bibl id="errCX13" key="err:CX13">The hashing algorithm is not supported.</bibl>
-            <bibl id="errCX14" key="err:CX14">The encoding method is not supported.</bibl>
-            <bibl id="errCX15" key="err:CX15">Cannot find Signature element.</bibl>
-            <bibl id="errCX16" key="err:CX16">No such padding.</bibl>
-            <bibl id="errCX17" key="err:CX17">Incorrect padding.</bibl>
-            <bibl id="errCX18" key="err:CX18">The encryption type is not supported.</bibl>
-            <bibl id="errCX19" key="err:CX19">The secret key is invalid.</bibl>
-            <bibl id="errCX20" key="err:CX20">Illegal block size.</bibl>
-            <bibl id="errCX21" key="err:CX21">The algorithm is not supported.</bibl>
-            <bibl id="errCX22" key="err:CX22">The decryption type is not supported.</bibl>
+            <bibl id="error.nullKeystore" key="err:CX07">The keystore is null.</bibl>
+            <bibl id="error.readKeystore" key="err:CX08">I/O error while reading keystore.</bibl>
+            <bibl id="error.deniedKeystore" key="err:CX09">Permission denied to read keystore.</bibl>
+            <bibl id="error.keystoreUrl" key="err:CX10">The keystore URL is invalid.</bibl>
+            <bibl id="error.keystoreType" key="err:CX11">The keystore type is not supported.</bibl>
+            <bibl id="error.aliasKey" key="err:CX12">Cannot find key for alias in given keystore.</bibl>
+            <bibl id="error.hashAlg" key="err:CX13">The hashing algorithm is not supported.</bibl>
+            <bibl id="error.encMethod" key="err:CX14">The encoding method is not supported.</bibl>
+            <bibl id="error.sigElem" key="err:CX15">Cannot find Signature element.</bibl>
+            <bibl id="error.noPadding" key="err:CX16">No such padding.</bibl>
+            <bibl id="error.incorrectPadding" key="err:CX17">Incorrect padding.</bibl>
+            <bibl id="error.encType" key="err:CX18">The encryption type is not supported.</bibl>
+            <bibl id="error.secretKey" key="err:CX19">The secret key is invalid.</bibl>
+            <bibl id="error.blockSize" key="err:CX20">Illegal block size.</bibl>
+            <bibl id="error.algorithm" key="err:CX21">The algorithm is not supported.</bibl>
+            <bibl id="error.decryptionType" key="err:CX22">The decryption type is not supported.</bibl>
          </blist>
       </div1>
    </back>
