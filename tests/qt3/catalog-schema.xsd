@@ -195,6 +195,16 @@
                                 </xs:documentation>
                             </xs:annotation>
                         </xs:enumeration>
+                        <xs:enumeration value="http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive">
+                            <xs:annotation>
+                                <xs:documentation>
+                                    <p>This URI is used to represent the case-blind collation defined in HTML5, which
+                                    must be supported by all XPath 3.1 and XQuery 3.1 processors. It is defined only
+                                    for use in equality comparisons, not for ordering. ASCII letters are compared
+                                    case-blind; all other Unicode characters are compared by codepoint.</p>
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
                     </xs:restriction>
                 </xs:simpleType>
              </xs:attribute>
@@ -242,6 +252,7 @@
             <xs:attribute name="percent" type="one-char"/>
             <xs:attribute name="per-mille" type="one-char"/>
             <xs:attribute name="pattern-separator" type="one-char"/>
+            <xs:attribute name="exponent-separator" type="one-char"/>
             <xs:attribute name="infinity" type="xs:string"/>
             <xs:attribute name="NaN" type="xs:string"/>
         </xs:complexType>
@@ -595,6 +606,7 @@
             </xs:sequence>
             <xs:attributeGroup ref="nameAttr" />
             <xs:attributeGroup ref="coversAttr" />
+            <xs:attributeGroup ref="covers30Attr" />
         </xs:complexType>
     </xs:element>
     
@@ -669,6 +681,7 @@
             </xs:sequence>
             <xs:attributeGroup ref="nameAttr" />
             <xs:attributeGroup ref="coversAttr" />
+            <xs:attributeGroup ref="covers30Attr" />
         </xs:complexType>
     </xs:element>
     
@@ -1039,9 +1052,10 @@
                     <h3>assert-serialization-error</h3>
                     <p>
                         Asserts that the query can be executed without error, but serializing the result
-                        produces a serialization error. The expression result is serialized using the default
-                        serialization parameters method="xml" indent="no" omit-xml-declaration="yes".
-                    </p>
+                        produces a serialization error. 
+                        The result of the query must be serialized using the serialization
+                        options specified within the query (if any).
+                     </p>
                 </div> 
             </xs:documentation>
         </xs:annotation>
@@ -1333,6 +1347,29 @@
                 <xs:list itemType="xs:NCName"/>
             </xs:simpleType>
         </xs:attribute>    
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="covers30Attr">
+        <xs:annotation>
+            <xs:documentation>
+                <div>
+                    <h3>covers-30</h3>
+                    <p>
+                        An attribute used to cross-reference tests or test-sets to the changes in the 3.0 specification
+                        that the tests are designed to cover.
+                    </p>
+                    <p> The value is syntactically similar to an xs:IDREFS value, in that it contains a space-separated
+                    list of change identifiers; however it is not actually an xs:IDREFS value, because the identfiers are
+                    in a different XML document, specifically the identifiers of changes appearing in the changes.xml file.</p>
+
+                </div>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="covers-30" use="optional">
+            <xs:simpleType>
+                <xs:list itemType="xs:NCName"/>
+            </xs:simpleType>
+        </xs:attribute>
     </xs:attributeGroup>
     
     <xs:attributeGroup name="creatorAttr">
