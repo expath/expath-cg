@@ -33,11 +33,7 @@
             <name>Christian Grün</name>
             <affiliation>BaseX GmbH</affiliation>
          </author>
-         <author diff="del" role="editor">
-            <name>Matthias Brantner</name>
-            <affiliation>28msec GmbH</affiliation>
-         </author>
-         <author diff="add" role="contrib">
+         <author role="contrib">
             <name>Matthias Brantner</name>
             <affiliation>28msec GmbH</affiliation>
          </author>
