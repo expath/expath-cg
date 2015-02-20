@@ -11,7 +11,7 @@ XMLSPEC=../../tools/expathspec/src/xmlspec.xsl
 DIFFSPEC=../../tools/expathspec/src/diffspec.xsl
 SAXON=saxon
 
-latest: file-20150220.html file-20150220-diff.html
+latest: file-1.0.html file-1.0-diff.html
 
 file.html: file.xml
 	$(SAXON) -s:$< -xsl:$(XMLSPEC) > $@
@@ -37,8 +37,8 @@ file-20131203.html: file-20131203.xml
 file-20131203-diff.html: file-20131203-diff.xml
 	$(SAXON) -s:$< -xsl:$(DIFFSPEC) > $@
 
-file-20150220.html: file-20150220.xml
+file-1.0.html: file-1.0.xml
 	$(SAXON) -s:$< -xsl:$(XMLSPEC) > $@
 
-file-20150220-diff.html: file-20150220-diff.xml
+file-1.0-diff.html: file-1.0-diff.xml
 	$(SAXON) -s:$< -xsl:$(DIFFSPEC) > $@
