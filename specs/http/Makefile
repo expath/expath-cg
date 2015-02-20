@@ -8,7 +8,7 @@
 #XMLSPEC=http://expath.org/ns/xmlspec/xmlspec.xsl
 #DIFFSPEC=http://expath.org/ns/xmlspec/diffspec.xsl
 XMLSPEC=../../tools/expathspec/src/xmlspec.xsl
-DIFFSPEC=http://expath.org/ns/xmlspec/diffspec.xsl
+DIFFSPEC=../../tools/expathspec/src/diffspec.xsl
 
 #editorial: http.html http-diff.html
 editorial: http.html
@@ -19,8 +19,8 @@ http.html: http.xml
 http-diff.html: http-diff.xml
 	saxon -s:$< -xsl:$(DIFFSPEC) > $@
 
-http-20120509.html: http-20120509.xml
+http-20140228.html: http-20140228.xml
 	saxon -s:$< -xsl:$(XMLSPEC) > $@
 
-http-20120509-diff.html: http-20120509-diff.xml
+http-20140228-diff.html: http-20140228-diff.xml
 	saxon -s:$< -xsl:$(DIFFSPEC) > $@
