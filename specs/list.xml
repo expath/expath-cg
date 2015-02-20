@@ -82,11 +82,17 @@
          <file href="file/file-20120614-diff.html" format="html" diff="true"/>
          <file href="file/file-20120614-diff.xml"  format="xml"  diff="true"/>
       </revision>
-      <revision version="20131203" latest="true">
+      <revision version="20131203">
          <file href="file/file-20131203.html"      format="html" diff="false"/>
          <file href="file/file-20131203.xml"       format="xml"  diff="false"/>
          <file href="file/file-20131203-diff.html" format="html" diff="true"/>
          <file href="file/file-20131203-diff.xml"  format="xml"  diff="true"/>
+      </revision>
+      <revision version="20150220" latest="true">
+         <file href="file/file-20150220.html"      format="html" diff="false"/>
+         <file href="file/file-20150220.xml"       format="xml"  diff="false"/>
+         <file href="file/file-20150220-diff.html" format="html" diff="true"/>
+         <file href="file/file-20150220-diff.xml"  format="xml"  diff="true"/>
       </revision>
       <editor>
          <file href="file/file.html"      format="html" diff="false"/>
