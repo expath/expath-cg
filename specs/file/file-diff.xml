@@ -1214,10 +1214,10 @@ return file:read-text($path)</eg>
          <blist>
             <bibl id="ser30" key="XSLT and XQuery Serialization 3.0">
                <loc href="http://www.w3.org/TR/xslt-xquery-serialization-30/">XSLT and XQuery
-                  Serialization 3.0</loc>. Henry Zongaro. W3C Working Draft 14 December 2010.</bibl>
+                  Serialization 3.0</loc>. Henry Zongaro, et al. W3C Recommendation 08 April 2014.</bibl>
             <bibl id="fo30" key="XQuery and XPath Functions and Operators 3.0">
                <loc href="http://www.w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and
-                  Operators 3.0</loc>. Michael Kay. W3C Working Draft 14 December 2010.</bibl>
+                  Operators 3.0</loc>. Michael Kay. W3C Recommendation 08 April 2014.</bibl>
          </blist>
       </div1>
       <div1 id="errors">
