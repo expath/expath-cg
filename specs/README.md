@@ -13,6 +13,11 @@ contains:
 * pkg -- the Packaging System
 * webapp -- the Web Applications specification
 
+TODO: Create a checklist when adding a new module (for the specs, the
+website, etc.), and a checklist when publishing a new draft (write an
+announce, a news entry, add to specs/list.xml, etc.)  Sketch below, to
+improve...
+
 Add a new spec
 --------------
 
