@@ -364,38 +364,62 @@ map {
       <div1>
          <head>References</head>
          <blist>
-         	<bibl id="xpath-30" key="XPath 3.0">
-	        	<loc href="http://w3.org/TR/xpath-30/">XML Path Language (XPath) 3.0</loc>.
-	            Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>         
-	        <bibl id="xslt-30" key="XSLT 3.0">                        
-	            <loc href="http://w3.org/TR/xslt-30/">XSL Transformations (XSLT) Version 3.0</loc>.
-	            Michael Kay, editor. W3C Working Draft, 10 July 2012.</bibl>         
-	        <bibl id="xquery-30" key="XQuery 3.0">                        
-	            <loc href="http://w3.org/TR/xquery-30/">XQuery 3.0: An XML Query Language</loc>.
-	            Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>
-	        <bibl id="xpath-functions-30" key="XPath and XQuery Functions and Operators 3.0">
-	            <loc href="http://w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and Operators 3.0</loc>.
-	            Michael Kay, editor. W3C Working Draft, 13 December 2011.</bibl>
-	        <bibl id="xpath-datamodel-30" key="XQuery and XPath Data Model 3.0">
-	            <loc href="http://w3.org/TR/xpath-datamodel-30/">XQuery and XPath Data Model 3.0</loc>.
-               	Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>               	   	                        
+	            <bibl id="xpath-30" key="XPath 3.0">
+	               <loc href="http://w3.org/TR/xpath-30/">XML Path Language (XPath) 3.0</loc>.
+	               Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>
+	            <bibl id="xslt-30" key="XSLT 3.0">                        
+	               <loc href="http://w3.org/TR/xslt-30/">XSL Transformations (XSLT) Version 3.0</loc>.
+	               Michael Kay, editor. W3C Working Draft, 10 July 2012.</bibl>         
+	            <bibl id="xquery-30" key="XQuery 3.0">                        
+	               <loc href="http://w3.org/TR/xquery-30/">XQuery 3.0: An XML Query Language</loc>.
+	               Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>
+	             <bibl id="xpath-functions-30" key="XPath and XQuery Functions and Operators 3.0">
+               <loc href="http://w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and Operators 3.0</loc>.
+               Michael Kay, editor. W3C Working Draft, 13 December 2011.</bibl>                                
+            <bibl id="xpath-datamodel-30" key="XQuery and XPath Data Model 3.0">
+               <loc href="http://w3.org/TR/xpath-datamodel-30/">XQuery and XPath Data Model 3.0</loc>.
+               Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>         
+            <bibl id="rfc1321" key="RFC 1321">
+               <loc href="http://ietf.org/rfc/rfc1321.txt">RFC 1321: The MD5 Message-Digest Algorithm</loc>. 
+               Ronald L. Rivest, editor. Network Working Group. April 1992.</bibl>
+            <bibl id="fips-pub-180-1" key="FIPS PUB 180-1">
+               <loc href="http://itl.nist.gov/fipspubs/fip180-1.htm">Secure Hash Standard</loc>. 
+               U.S. Department Of Commerce, National Institute of Standards and Technology. 1995 April 17.</bibl>
+            <bibl id="fips-pub-186" key="FIPS PUB 186">
+               <loc href="http://itl.nist.gov/fipspubs/fip186.htm">Digital Signature Standard (DSS)</loc>. 
+               U.S. Department Of Commerce, National Institute of Standards and Technology. 1994 May 19.</bibl>            
+            <bibl id="rfc1750" key="RFC 1750">
+               <loc href="http://ietf.org/rfc/rfc1750.txt">RFC 1750: Randomness Recommendations for Security</loc>. 
+               D. Eastlake, 3rd, S. Crocker, J. Schiller, editors. Network Working Group. December 1994.</bibl>
+            <bibl id="rfc3852" key="RFC 3852">
+               <loc href="http://ietf.org/rfc/rfc3852.txt">RFC 3852: Cryptographic Message Syntax (CMS)</loc>. 
+               R. Housley, editor. Network Working Group. July 2004.</bibl>
+            <bibl id="rfc5958" key="RFC 5958">
+               <loc href="http://tools.ietf.org/html/rfc5958">RFC 5958: Asymmetric Key Packages</loc>. 
+               S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.</bibl>               
+            <bibl id="rfc5959" key="RFC 5959">
+               <loc href="http://tools.ietf.org/html/rfc5959">RFC 5959: Algorithms for Asymmetric Key Package Content Type</loc>. 
+               S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.</bibl>                 
+                              
+               
+                        
             <bibl id="rfc2104" key="RFC 2104">
-                <loc href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
-                Authentication</loc>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
-                Working Group. February, 1997. </bibl>
+               <loc href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
+                  Authentication</loc>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
+               Working Group. February, 1997.</bibl>
             <bibl id="rfc2617" key="RFC 2617">
-                <loc href="http://ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Authentication: Basic and
-                Digest Access Authentication</loc>. J. Franks, P. Hallam-Baker, J. Hostetler, S.
-                Lawrence, P. Leach, A. Luotonen, L. Stewart. June, 1999. </bibl>
+               <loc href="http://ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Authentication: Basic and
+                  Digest Access Authentication</loc>. J. Franks, P. Hallam-Baker, J. Hostetler, S.
+               Lawrence, P. Leach, A. Luotonen, L. Stewart. June, 1999.</bibl>
             <bibl id="xml-dig-sig-core" key="XML Signature">
-                <loc href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
+               <loc href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
                   (Second Edition)</loc>. Donald Eastlake, Joseph Reagle, David Solo, Frederick
-                 Hirsch, Thomas Roessler, editors. Mark Bartel, John Boyer, Barb Fox, Brian LaMacchia,
-                 Ed Simon, authors. W3C Recommendation, 10 June 2008. </bibl>
+               Hirsch, Thomas Roessler, editors. Mark Bartel, John Boyer, Barb Fox, Brian LaMacchia,
+               Ed Simon, authors. W3C Recommendation, 10 June 2008.</bibl>
             <bibl id="xml-dig-sig-xpath-filer20" key="XML-Signature XPath Filter 2.0">
-                <loc href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</loc>.
-                John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
-               November 2002. </bibl>
+               <loc href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</loc>.
+               John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
+               November 2002.</bibl>
          </blist>
       </div1>
       <div1>
