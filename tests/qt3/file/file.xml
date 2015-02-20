@@ -609,8 +609,8 @@
 
   <test-case name="EXPath-file-appendText3-002">
     <description>Use file:append-text with three arguments: UTF-16 encoding</description>
-    <modified by="Christian Grün" on="2013-11-20" change="Alternative without BOM added"/>
     <created by="Michael Kay" on="2012-06-11"/>
+    <modified by="Christian Grün" on="2013-11-20" change="Alternative without BOM added"/>
     <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
     <environment ref="EXPath-file"/>
     <test>
@@ -2632,8 +2632,10 @@
         file:name(".")
     </test>
     <result>
-      <assert-type>xs:string</assert-type>
-      <assert-eq>'Fred'</assert-eq>
+      <all-of>
+        <assert-type>xs:string</assert-type>
+        <assert-eq>'Fred'</assert-eq>
+      </all-of>
     </result>
   </test-case>
   <test-case name="EXPath-file-name1-005">
@@ -3051,11 +3053,13 @@
       file:base-dir()
     </test>
     <result>
-      <assert>ends-with($result, file:dir-separator())</assert>
-      <assert>
-        for $base := static-base-uri()
-        return empty($base) or $result = file:parent($base)
-      </assert>
+      <all-of>
+        <assert>ends-with($result, file:dir-separator())</assert>
+        <assert>
+          for $base := static-base-uri()
+          return empty($base) or $result = file:parent($base)
+        </assert>
+      </all-of>
     </result>
   </test-case>
 
@@ -3067,8 +3071,10 @@
       file:current-dir()
     </test>
     <result>
-      <assert>ends-with($result, file:dir-separator())</assert>
-      <assert>$result = file:resolve-path('.')</assert>
+      <all-of>
+        <assert>ends-with($result, file:dir-separator())</assert>
+        <assert>$result = file:resolve-path('.')</assert>
+      </all-of>
     </result>
   </test-case>
 
