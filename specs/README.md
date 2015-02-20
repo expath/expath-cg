@@ -30,6 +30,11 @@ the following pages:
 - [Tests](https://www.w3.org/community/expath/wiki/Tests)
 - [Editors](https://www.w3.org/community/expath/wiki/Editors)
 
+**Checklist**:
+
+- ...
+- update the [Modules](https://www.w3.org/community/expath/wiki/Modules) page on the wiki
+
 Publish a new version
 ---------------------
 
@@ -40,3 +45,8 @@ URL ending with `/editor`, e.g. http://expath.org/spec/http/editor.
 In order to publish a new version, either a dated working draft or a
 final 1.0 report, you need to update `list.xml`.  Please ask Florent
 first, if this is the first time you do it.
+
+**Checklist**:
+
+- ...
+- update the [Modules](https://www.w3.org/community/expath/wiki/Modules) page on the wiki
