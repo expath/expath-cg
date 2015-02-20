@@ -4,20 +4,20 @@
 
 <spec role="editors-copy" xmlns:ex="http://expath.org/ns/xmlspec" ex:w3c="true">
    <header>
-      <title>File Module</title>
+      <title>File Module 1.0</title>
       <w3c-designation>w3c-designation</w3c-designation>
-      <w3c-doctype>EXPath Proposed Module</w3c-doctype>
+      <w3c-doctype>EXPath Module</w3c-doctype>
       <pubdate>
-         <day>28</day>
-         <month>January</month>
+         <day>20</day>
+         <month>February</month>
          <year>2015</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/file/20150128"/>
+         <loc href="http://expath.org/spec/file/1.0"/>
       </publoc>
       <altlocs>
-         <loc href="http://expath.org/spec/file/20150128.xml">XML</loc>
-         <loc href="http://expath.org/spec/file/20150128/diff">Revision markup</loc>
+         <loc href="http://expath.org/spec/file/1.0.xml">XML</loc>
+         <loc href="http://expath.org/spec/file/1.0/diff">Revision markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/file"/>
@@ -32,7 +32,7 @@
             <name>Christian Grün</name>
             <affiliation>BaseX GmbH</affiliation>
          </author>
-         <author role="editor">
+         <author role="contrib">
             <name>Matthias Brantner</name>
             <affiliation>28msec GmbH</affiliation>
          </author>
@@ -98,7 +98,9 @@
          <div2 id="file-paths">
             <head>File Paths</head>
             <p>All file paths are specified as strings, and are resolved against the current working
-               directory. An implementation must accept absolute and relative UNIX/Linux and Windows
+               directory. The current working directory is implementation-defined: It can
+               e. g. be the file system directory from which a query processor was started.</p>
+            <p>An implementation must accept absolute and relative UNIX/Linux and Windows
                paths as well as absolute file URIs. Some examples: </p>
             <ulist>
                <item>
@@ -1014,9 +1016,6 @@ return file:read-text($path)</eg>
             <gitem>
               <label>Rules</label>
               <def>
-                <p>Lists all files and directories in a given directory. The order of the items in the
-                   resulting sequence is not defined. The "." and ".." items are never returned. The
-                   returned paths are relative to the provided directory <code>$dir</code>.</p>
                 <p>Returns the paths of all files and directories that are located in the given directory.
                    The order of the items in the resulting sequence is not defined.
                    The "." and ".." items are never returned.</p>

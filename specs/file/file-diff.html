@@ -59,11 +59,10 @@ div.exampleHeader { font-weight: bold;
       </dd><dt>Latest version:</dt><dd>
          <a href="http://expath.org/spec/file">http://expath.org/spec/file</a><br />
       </dd><dt>Previous versions:</dt><dd>
-         <span class="diff-add"><a href="http://expath.org/spec/file/20150128">http://expath.org/spec/file/20150128</a></span><br />
-         <a href="http://expath.org/spec/file/20131203">http://expath.org/spec/file/20131203</a><br />
+         <span class="diff-add"><a href="http://expath.org/spec/file/20131203">http://expath.org/spec/file/20131203</a></span><br />
          <a href="http://expath.org/spec/file/20120614">http://expath.org/spec/file/20120614</a><br />
          <a href="http://expath.org/spec/file/20120517">http://expath.org/spec/file/20120517</a><br />
-      </dd><dt>Editors:</dt><dd>Christian Grün, BaseX GmbH</dd><dd><span class="diff-del">Matthias Brantner, 28msec GmbH</span></dd><dt>Contributors:</dt><dd><span class="diff-add">Matthias Brantner, 28msec GmbH</span></dd><dd>Gabriel Petrovay, 28msec GmbH</dd></dl><p>This document is also available in these non-normative formats: <span class="diff-chg"><a href="http://expath.org/spec/file/1.0.xml">XML</a></span> and <span class="diff-chg"><a href="http://expath.org/spec/file/1.0/diff">Revision markup</a></span>.</p><p class="copyright">Copyright © 2010-2013 Christian Grün, published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+      </dd><dt>Editor:</dt><dd>Christian Grün, BaseX GmbH</dd><dt>Contributors:</dt><dd>Matthias Brantner, 28msec GmbH</dd><dd>Gabriel Petrovay, 28msec GmbH</dd></dl><p>This document is also available in these non-normative formats: <span class="diff-chg"><a href="http://expath.org/spec/file/1.0.xml">XML</a></span> and <span class="diff-chg"><a href="http://expath.org/spec/file/1.0/diff">Revision markup</a></span>.</p><p class="copyright">Copyright © 2010-201<span class="diff-chg"><span>5</span></span> Christian Grün, published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
                License Agreement (CLA)</a>. A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is
             available.</p><p class="copyright">This specification was published by the <a href="http://www.w3.org/community/expath/">EXPath Community Group</a>. It is not a W3C Standard nor is it on the W3C
             Standards Track. Please note that under the <a href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
@@ -140,12 +139,12 @@ B <a href="#errors">Summary of Error Conditions</a><br />
                      working directory.</p></li><li><p><code>file:///C:/Test%20Dir/my%20file.xml</code>: An absolute file URI on
                      Windows platforms.</p></li><li><p><code>file:///Test%20Dir/my%20file.xml</code>: An absolute path on UNIX-based
                      platforms.</p></li></ul><p>Before further processing, all paths are normalized to an implementation-defined
-               representation (which usually is the representation of the underlying operating system).</p><p>An implementation may choose to raise <a href="#errIP">[file:invalid-path]</a> if a path is invalid.</p><p>If a function returns a string that refers to a directory,
-               it will always be suffixed with the system-specific directory separator.</p><p>The function <a href="#pr.base-dir">file:base-dir</a> can be used to
-               resolve file operations against the directory of the base URI:</p><div class="exampleInner"><pre>let $filename := "input.txt"
+               representation (which usually is the representation of the underlying operating system).</p><div class="diff-add"><p>An implementation may choose to raise <a href="#errIP">[file:invalid-path]</a> if a path is invalid.</p></div><p>If a function returns a string that refers to a directory,
+               it will always be suffixed with the system-specific directory separator.</p><div class="diff-chg"><p>The function <a href="#pr.base-dir">file:base-dir</a> can be used to
+               resolve file operations against the directory of the base URI:</p></div><div class="diff-chg"><div class="exampleInner"><pre class="diff-chg">let $filename := "input.txt"
 let $dir := file:base-dir()
 let $path := concat($dir, $filename)
-return file:read-text($path)</pre></div></div><div class="div2">
+return file:read-text($path)</pre></div></div></div><div class="div2">
 <h3><a name="exec" id="exec"></a>2.3 Query Execution</h3><p>Some function are marked as ·nondeterministic·, which means they are not guaranteed to
                perform the same operations and produce identical results from repeated calls. A query
                processor must ensure that these functions are not relocated or pre-evaluated and that
@@ -273,7 +272,7 @@ return file:read-text($path)</pre></div></div><div class="div2">
                    the given directory.</p><p>The optional <code>$pattern</code> parameter defines a name pattern in the glob
                    syntax. If this is provided, only the paths of the files and directories whose names
                    are matching the pattern will be returned.</p><p>An implementation must support at least the following glob syntax for the pattern: <ul><li><code>*</code> for matching any number of unknown characters and</li><li><code>?</code> for matching one unknown character.</li></ul>
-                </p><p>A related function is <a href="#fn.children">file:children</a>.</p><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><a href="#errND">[file:no-dir]</a> is raised if <code>$dir</code> does not point to an existing directory.</li><li><a href="#errIE">[file:io-error]</a> is raised if any other error occurs.</li></ul></dd></div><div class="div2">
+                </p><div class="diff-add"><p>A related function is <a href="#fn.children">file:children</a>.</p></div><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><a href="#errND">[file:no-dir]</a> is raised if <code>$dir</code> does not point to an existing directory.</li><li><a href="#errIE">[file:io-error]</a> is raised if any other error occurs.</li></ul></dd></div><div class="div2">
 <h3><a name="fn.move" id="fn.move"></a>4.11 <code>file:move</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre>
 <code class="function">file:move</code>($source as <code class="type">xs:string</code>,
           $target as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Moves a file or a directory given a source and a target path/URI. The following cases
@@ -373,20 +372,18 @@ return file:read-text($path)</pre></div></div><div class="div2">
 <h3><a name="fn.parent" id="fn.parent"></a>5.2 <code>file:parent</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre>
 <code class="function">file:parent</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string?</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Transforms the given path into an absolute path, as specified by
                    <a href="#fn.resolve-path">file:resolve-path</a>,
-                   and returns the parent directory.</p><p>The inverse function is <a href="#fn.children">file:children</a>.</p><p>An empty sequence is returned if the path points to a root directory.</p><p>This function is ·nondeterministic·.</p></dd></div><div class="div2">
-<h3><a name="fn.children" id="fn.children"></a>5.3 <code>file:children</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre>
-<code class="function">file:children</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string*</code></pre></div></p></dd><dt class="label">Rules</dt><dd><div class="diff-del"><p>Lists all files and directories in a given directory. The order of the items in the
-                   resulting sequence is not defined. The "." and ".." items are never returned. The
-                   returned paths are relative to the provided directory <code>$dir</code>.</p></div><p>Returns the paths of all files and directories that are located in the given directory.
+                   and returns the parent directory.</p><div class="diff-add"><p>The inverse function is <a href="#fn.children">file:children</a>.</p></div><p>An empty sequence is returned if the path points to a root directory.</p><p>This function is ·nondeterministic·.</p></dd></div><div class="diff-add"><div class="div2">
+<h3><a name="fn.children" id="fn.children"></a>5.3 <code>file:children</code></h3><dt class="label"><span class="diff-add">Signature</span></dt><dd><div class="diff-add"><p><div class="exampleInner"><pre>
+<code class="function">file:children</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string*</code></pre></div></p></div></dd><dt class="label"><span class="diff-add">Rules</span></dt><dd><div class="diff-add"><p>Returns the paths of all files and directories that are located in the given directory.
                    The order of the items in the resulting sequence is not defined.
                    The "." and ".." items are never returned.</p><p>The inverse function is <a href="#fn.parent">file:parent</a>;
-                   a related function is <a href="#fn.list">file:list</a>.</p><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><a href="#errND">[file:no-dir]</a> is raised if <code>$path</code> does not point to an existing directory.</li><li><a href="#errIE">[file:io-error]</a> is raised if any other error occurs.</li></ul></dd></div><div class="div2">
+                   a related function is <a href="#fn.list">file:list</a>.</p><p>This function is ·nondeterministic·.</p></div></dd><dt class="label"><span class="diff-add">Error Conditions</span></dt><dd><div class="diff-add"><ul><li><a href="#errND">[file:no-dir]</a> is raised if <code>$path</code> does not point to an existing directory.</li><li><a href="#errIE">[file:io-error]</a> is raised if any other error occurs.</li></ul></div></dd></div></div><div class="div2">
 <h3><a name="fn.path-to-native" id="fn.path-to-native"></a>5.4 <code>file:path-to-native</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre>
 <code class="function">file:path-to-native</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Transforms a URI, an absolute path, or relative path to a canonical, system-dependent
                    path representation. A canonical path is both absolute and unique and thus contains
                    no redirections such as references to parent directories or symbolic links.</p><p>If the resulting path points to a directory,
-                   it will be suffixed with the system-specific directory separator.</p><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><a href="#errNF">[file:not-found]</a> is raised if <code>$path</code> does not
-                    exist.</li><li><a href="#errIE">[file:io-error]</a> is raised if an error occurs while trying to obtain
+                   it will be suffixed with the system-specific directory separator.</p><p>This function is ·nondeterministic·.</p></dd><dt class="label">Error Conditions</dt><dd><ul><div class="diff-add"><li><a href="#errNF">[file:not-found]</a> is raised if <code>$path</code> does not
+                    exist.</li></div><li><a href="#errIE">[file:io-error]</a> is raised if an error occurs while trying to obtain
                     the native path.</li></ul></dd></div><div class="div2">
 <h3><a name="fn.path-to-uri" id="fn.path-to-uri"></a>5.5 <code>file:path-to-uri</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre>
 <code class="function">file:path-to-uri</code>($path as <code class="type">xs:string</code>) as <code class="type">xs:anyURI</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Transforms a file system path into a URI with the <code>file://</code> scheme. If the
@@ -404,15 +401,15 @@ return file:read-text($path)</pre></div></div><div class="div2">
                    Windows systems and <code>&amp;#13;</code> on Mac systems.</p><p>This function is ·nondeterministic·.</p></dd></div><div class="div2">
 <h3><a name="pr.path-separator" id="pr.path-separator"></a>6.3 <code>file:path-separator</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre><code class="function">file:path-separator</code>() as <code class="type">xs:string</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Returns the value of the operating system-specific path separator, which usually is
                       <code>:</code> on UNIX-based systems and <code>;</code> on Windows systems.</p><p>This function is ·nondeterministic·.</p></dd></div><div class="div2">
-<h3><a name="pr.temp-dir" id="pr.temp-dir"></a>6.4 <code>file:temp-dir</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre><code class="function">file:temp-dir</code>() as <code class="type">xs:string</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Returns the path to the default temporary-file directory of an operating system.</p><p>This function is ·nondeterministic·.</p></dd></div><div class="div2">
-<h3><a name="pr.base-dir" id="pr.base-dir"></a>6.5 <code>file:base-dir</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre><code class="function">file:base-dir</code>() as <code class="type">xs:string?</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Returns the parent directory of the static base URI.
+<h3><a name="pr.temp-dir" id="pr.temp-dir"></a>6.4 <code>file:temp-dir</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre><code class="function">file:temp-dir</code>() as <code class="type">xs:string</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Returns the path to the default temporary-file directory of an operating system.</p><p>This function is ·nondeterministic·.</p></dd></div><div class="diff-add"><div class="div2">
+<h3><a name="pr.base-dir" id="pr.base-dir"></a>6.5 <code>file:base-dir</code></h3><dt class="label"><span class="diff-add">Signature</span></dt><dd><div class="diff-add"><p><div class="exampleInner"><pre><code class="function">file:base-dir</code>() as <code class="type">xs:string?</code></pre></div></p></div></dd><dt class="label"><span class="diff-add">Rules</span></dt><dd><div class="diff-add"><p>Returns the parent directory of the static base URI.
                 If the Base URI property is undefined, the empty sequence is returned. -
                 If a static base URI exists, and if points to a local file path,
                 this function returns the same result as the expression
-                <code>file:parent(static-base-uri())</code>.</p></dd></div><div class="div2">
-<h3><a name="pr.current-dir" id="pr.current-dir"></a>6.6 <code>file:current-dir</code></h3><dt class="label">Signature</dt><dd><p><div class="exampleInner"><pre><code class="function">file:current-dir</code>() as <code class="type">xs:string</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Returns the current working directory. -
+                <code>file:parent(static-base-uri())</code>.</p></div></dd></div></div><div class="diff-add"><div class="div2">
+<h3><a name="pr.current-dir" id="pr.current-dir"></a>6.6 <code>file:current-dir</code></h3><dt class="label"><span class="diff-add">Signature</span></dt><dd><div class="diff-add"><p><div class="exampleInner"><pre><code class="function">file:current-dir</code>() as <code class="type">xs:string</code></pre></div></p></div></dd><dt class="label"><span class="diff-add">Rules</span></dt><dd><div class="diff-add"><p>Returns the current working directory. -
                 This function returns the same result as the function call
-                <code>file:resolve-path('.')</code>.</p></dd></div></div></div><div class="back"><div class="div1">
+                <code>file:resolve-path('.')</code>.</p></div></dd></div></div></div></div><div class="back"><div class="div1">
 <h2><a name="refs" id="refs"></a>A References</h2><dl><dt class="label"><a name="ser30" id="ser30"></a>XSLT and XQuery Serialization 3.0</dt><dd>
                <a href="http://www.w3.org/TR/xslt-xquery-serialization-30/">XSLT and XQuery
                   Serialization 3.0</a>. Henry Zongaro. W3C Working Draft 14 December 2010.</dd><dt class="label"><a name="fo30" id="fo30"></a>XQuery and XPath Functions and Operators 3.0</dt><dd>

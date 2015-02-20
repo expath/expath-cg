@@ -23,8 +23,7 @@
          <loc href="http://expath.org/spec/file"/>
       </latestloc>
       <prevlocs>
-         <loc href="http://expath.org/spec/file/20150128" diff="add"/>
-         <loc href="http://expath.org/spec/file/20131203"/>
+         <loc href="http://expath.org/spec/file/20131203" diff="add"/>
          <loc href="http://expath.org/spec/file/20120614"/>
          <loc href="http://expath.org/spec/file/20120517"/>
       </prevlocs>
@@ -33,11 +32,7 @@
             <name>Christian Grün</name>
             <affiliation>BaseX GmbH</affiliation>
          </author>
-         <author diff="del" role="editor">
-            <name>Matthias Brantner</name>
-            <affiliation>28msec GmbH</affiliation>
-         </author>
-         <author diff="add" role="contrib">
+         <author role="contrib">
             <name>Matthias Brantner</name>
             <affiliation>28msec GmbH</affiliation>
          </author>
@@ -47,7 +42,7 @@
          </author>
       </authlist>
       <copyright>
-         <p>Copyright © 2010-2013 Christian Grün, published by the <loc
+         <p>Copyright © 2010-201<phrase diff="chg">5</phrase> Christian Grün, published by the <loc
                href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
                href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
                License Agreement (CLA)</loc>. A human-readable <loc
@@ -135,12 +130,12 @@
             </ulist>
             <p>Before further processing, all paths are normalized to an implementation-defined
                representation (which usually is the representation of the underlying operating system).</p>
-            <p>An implementation may choose to raise <bibref ref="errIP"/> if a path is invalid.</p>
+            <p diff="add">An implementation may choose to raise <bibref ref="errIP"/> if a path is invalid.</p>
             <p>If a function returns a string that refers to a directory,
                it will always be suffixed with the system-specific directory separator.</p>
-            <p>The function <loc href="#pr.base-dir">file:base-dir</loc> can be used to
+            <p diff="chg">The function <loc href="#pr.base-dir">file:base-dir</loc> can be used to
                resolve file operations against the directory of the base URI:</p>
-            <eg>let $filename := "input.txt"
+            <eg diff="chg">let $filename := "input.txt"
 let $dir := file:base-dir()
 let $path := concat($dir, $filename)
 return file:read-text($path)</eg>
@@ -636,7 +631,7 @@ return file:read-text($path)</eg>
                       <li><code>?</code> for matching one unknown character.</li>
                    </ul>
                 </p>
-                <p>A related function is <loc href="#fn.children">file:children</loc>.</p>
+                <p diff="add">A related function is <loc href="#fn.children">file:children</loc>.</p>
                 <p>This function is ·nondeterministic·.</p>
               </def>
             </gitem>
@@ -1004,14 +999,14 @@ return file:read-text($path)</eg>
                 <p>Transforms the given path into an absolute path, as specified by
                    <loc href="#fn.resolve-path">file:resolve-path</loc>,
                    and returns the parent directory.</p>
-                <p>The inverse function is <loc href="#fn.children">file:children</loc>.</p>
+                <p diff="add">The inverse function is <loc href="#fn.children">file:children</loc>.</p>
                 <p>An empty sequence is returned if the path points to a root directory.</p>
                 <p>This function is ·nondeterministic·.</p>
               </def>
             </gitem>
          </div2>
 
-         <div2 id="fn.children">
+         <div2 id="fn.children" diff="add">
             <head><code>file:children</code></head>
             <gitem>
               <label>Signature</label>
@@ -1021,9 +1016,6 @@ return file:read-text($path)</eg>
             <gitem>
               <label>Rules</label>
               <def>
-                <p diff="del">Lists all files and directories in a given directory. The order of the items in the
-                   resulting sequence is not defined. The "." and ".." items are never returned. The
-                   returned paths are relative to the provided directory <code>$dir</code>.</p>
                 <p>Returns the paths of all files and directories that are located in the given directory.
                    The order of the items in the resulting sequence is not defined.
                    The "." and ".." items are never returned.</p>
@@ -1065,7 +1057,7 @@ return file:read-text($path)</eg>
               <label>Error Conditions</label>
               <def>
                 <ulist>
-                  <item><bibref ref="errNF"/> is raised if <code>$path</code> does not
+                  <item diff="add"><bibref ref="errNF"/> is raised if <code>$path</code> does not
                     exist.</item>
                   <item><bibref ref="errIE"/> is raised if an error occurs while trying to obtain
                     the native path.</item>
@@ -1180,7 +1172,7 @@ return file:read-text($path)</eg>
             </gitem>
          </div2>
 
-         <div2 id="pr.base-dir">
+         <div2 id="pr.base-dir" diff="add">
             <head><code>file:base-dir</code></head>
             <gitem>
               <label>Signature</label>
@@ -1198,7 +1190,7 @@ return file:read-text($path)</eg>
             </gitem>
          </div2>
 
-         <div2 id="pr.current-dir">
+         <div2 id="pr.current-dir" diff="add">
             <head><code>file:current-dir</code></head>
             <gitem>
               <label>Signature</label>
