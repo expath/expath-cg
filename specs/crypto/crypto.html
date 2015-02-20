@@ -101,16 +101,16 @@ div.exampleHeader { font-weight: bold;
             3 <a href="#d4e238">Digital Signature</a><br />
             3.1 <a href="#d4e243">The crypto:generate-signature function</a><br />
             3.2 <a href="#d4e360">The crypto:validate-signature function</a><br />
-            4 <a href="#d4e386">Encryption and decryption</a><br />
+            4 <a href="#d4e386">Encryption and Decryption</a><br />
             4.1 <a href="#d4e395">The crypto:encrypt function</a><br />
-            4.2 <a href="#d4e457">The crypto:decrypt function</a><br />
+            4.2 <a href="#d4e475">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e519">References</a><br />
-            B <a href="#d4e604">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e555">References</a><br />
+            B <a href="#d4e640">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -413,7 +413,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e386" id="d4e386"></a>4 Encryption and decryption
+            <h2><a name="d4e386" id="d4e386"></a>4 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -423,27 +423,29 @@ map {
                plain text (original text).
             </p>
             <p>There are two main types of encryption: symmetric encryption, when both parties, the
-               sender and the receiver, use the same secret key, previously exchanged, and asymmetric
-               encryption, when a key pair, consisting of a private key and a private key, is used,
-               of
-               which the public key is used by sender to encrypt a message that can only be decrypted
-               by the receiver, who holds the private key of that key pair.
+               sender and the receiver, use the same secret key, previously exchanged,
+               and asymmetric encryption, when a key pair, consisting of a private key and a private
+               key, is used, of which the public key is used by sender to encrypt a message that
+               can only be decrypted by the receiver, who holds the private key of that key pair.
             </p>
             <div class="div2">
                
                <h3><a name="d4e395" id="d4e395"></a>4.1 The <code>crypto:encrypt</code> function
                </h3>
-               <p>This function encrypts an input string.</p>
+               <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:encrypt</code>($input-string as <code class="type">xs:string</code>,
+<code class="function">crypto:encrypt</code>($data as <code class="type">xs:anyAtomicType</code>,
                $encryption-type as <code class="type">xs:string</code>,
-               $secret-key as <code class="type">xs:string</code>,
-               $cryptographic-algorithm as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code></pre></div>
+               $cryptographic-key as <code class="type">xs:anyAtomicType</code>,
+               $cryptographic-algorithm as <code class="type">xs:string</code>,
+               $iv as <code class="type">xs:string?</code>,
+               $provider as <code class="type">xs:string?</code>) as <code class="type">xs:anyAtomicType</code></pre></div>
                <ul>
                   <li>
-                     <p><code>$input-string</code> is the string to be encrypted. When a particular
-                        padding mechanism is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:padding-error]</a>. Also, when a particular padding mechanism is expected, but
-                        the data is not padded properly, this is an error <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
+                     <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary,
+                        or xs:hexBinary. When a particular padding mechanism
+                        is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:padding-error]</a>. Also, when a particular padding mechanism is expected, but the data is not
+                        padded properly, this is an error <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
                      </p>
                   </li>
                   <li>
@@ -454,53 +456,80 @@ map {
                      </p>
                   </li>
                   <li>
-                     <p><code>$secret-key</code> is the secret key used for encryption, as string. If
-                        the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of
-                        data provided to the block cipher is incorrect, this is an error <a href="#error.blockSize">[crypto:block-size-error]</a>.
+                     <p><code>$cryptographic-key</code> is the cryptographic key used for encryption. This parameter can be of type xs:string,
+                        xs:base64Binary, or xs:hexBinary.
+                        If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                        <a href="#error.blockSize">[crypto:block-size-error]</a>.
                      </p>
                   </li>
                   <li>
-                     <p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for
-                        encryption. If the parameter specifies an unsupported algorithm, this is an
-                        error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
+                     <p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation
+                        name can be used.
+                        If the parameter specifies an unsupported algorithm or transformation name, this is
+                        an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$iv</code> is the initialization vector for symmetric encryption.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$provider</code> is the cryptographic provider for the current operation. If the provider is not specified,
+                        the implementation will use the
+                        default provider. If the provider does not exist, this is an error <a href="#error.noProvider">[crypto:no-provider]</a>.
                      </p>
                   </li>
                </ul>
             </div>
             <div class="div2">
                
-               <h3><a name="d4e457" id="d4e457"></a>4.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e475" id="d4e475"></a>4.2 The <code>crypto:decrypt</code> function
                </h3>
-               <p>This function decrypts an input string.</p>
+               <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:decrypt</code>($input-string as <code class="type">xs:string</code>,
+<code class="function">crypto:decrypt</code>($data as <code class="type">xs:anyAtomicType</code>,
                $decryption-type as <code class="type">xs:string</code>,
-               $secret-key as <code class="type">xs:string</code>,
-               $cryptographic-algorithm as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code></pre></div>
+               $cryptographic-key as <code class="type">xs:anyAtomicType</code>,
+               $cryptographic-algorithm as <code class="type">xs:string</code>,
+               $iv as <code class="type">xs:string?</code>,
+               $provider as <code class="type">xs:string?</code>) as <code class="type">xs:anyAtomicType</code></pre></div>
                <ul>
                   <li>
-                     <p><code>$input-string</code> is the string to be decrypted. When a particular
-                        padding mechanism is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:padding-error]</a>. Also, when a particular padding mechanism is expected, but
-                        the data is not padded properly, this is an error <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
+                     <p><code>$data</code> is the data to be decrypted. This parameter can be of type xs:string, xs:base64Binary,
+                        or xs:hexBinary. When a particular padding mechanism
+                        is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:padding-error]</a>. Also, when a particular padding mechanism is expected, but the data is not
+                        padded properly, this is an error <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
                      </p>
                   </li>
                   <li>
-                     <p><code>$encryption-type</code> is the type of encryption. Legal values:
-                        "symmetric", and "asymmetric". If the parameter has an illegal value, this is
-                        an error <a href="#error.decryptionType">[crypto:decryption-type-error]</a>.
+                     <p><code>$decryption-type</code> is the type of decryption. Legal values: "symmetric", and "asymmetric". If the parameter
+                        has an illegal value, this is an error
+                        <a href="#error.decryptionType">[crypto:decryption-type-error]</a>.
                      </p>
                   </li>
                   <li>
-                     <p><code>$secret-key</code> is the secret key used for encryption, as string. If
-                        the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of
-                        data provided to the block cipher is incorrect, this is an error <a href="#error.blockSize">[crypto:block-size-error]</a>.
+                     <p><code>$cryptographic-key</code> is the cryptographic key used for decryption. This parameter can be of type xs:string,
+                        xs:base64Binary, or xs:hexBinary.
+                        If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                        <a href="#error.blockSize">[crypto:block-size-error]</a>.
                      </p>
                   </li>
                   <li>
-                     <p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for
-                        encryption. If the parameter specifies an unsupported algorithm, this is an
-                        error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>
+                     <p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation
+                        name can be used.
+                        If the parameter specifies an unsupported algorithm or transformation name, this is
+                        an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
                         
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$iv</code> is the initialization vector for symmetric encryption.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$provider</code> is the cryptographic provider for the current operation. If the provider is not specified,
+                        the implementation will use the
+                        default provider. If the provider does not exist, this is an error <a href="#error.noProvider">[crypto:no-provider]</a>.
                      </p>
                   </li>
                </ul>
@@ -510,7 +539,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e519" id="d4e519"></a>A References
+            <h2><a name="d4e555" id="d4e555"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -624,7 +653,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e604" id="d4e604"></a>B Summary of Error Conditions
+            <h2><a name="d4e640" id="d4e640"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.canonAlg" id="error.canonAlg"></a>crypto:canonicalization-algorithm-error
