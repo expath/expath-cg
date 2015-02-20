@@ -103,14 +103,14 @@ div.exampleHeader { font-weight: bold;
             3.2 <a href="#d4e360">The crypto:validate-signature function</a><br />
             4 <a href="#d4e386">Encryption and Decryption</a><br />
             4.1 <a href="#d4e395">The crypto:encrypt function</a><br />
-            4.2 <a href="#d4e475">The crypto:decrypt function</a><br />
+            4.2 <a href="#d4e483">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e555">References</a><br />
-            B <a href="#d4e640">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e571">References</a><br />
+            B <a href="#d4e656">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -436,10 +436,7 @@ map {
                <div class="exampleInner"><pre>
 <code class="function">crypto:encrypt</code>($data as <code class="type">xs:anyAtomicType</code>,
                $encryption-type as <code class="type">xs:string</code>,
-               $cryptographic-key as <code class="type">xs:anyAtomicType</code>,
-               $cryptographic-algorithm as <code class="type">xs:string</code>,
-               $iv as <code class="type">xs:string?</code>,
-               $provider as <code class="type">xs:string?</code>) as <code class="type">xs:anyAtomicType</code></pre></div>
+               $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">xs:anyAtomicType</code></pre></div>
                <ul>
                   <li>
                      <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary,
@@ -450,49 +447,54 @@ map {
                   </li>
                   <li>
                      <p>
-                        <code>$encryption-type</code> is the type of encryption. Legal values:
-                        "symmetric", and "asymmetric". If the parameter has an illegal value, this is
-                        an error <a href="#error.encType">[crypto:encryption-type-error]</a>.
+                        <code>$encryption-type</code> is the type of encryption. Legal values: "symmetric", and "asymmetric". If the parameter
+                        has an illegal value, this is an error
+                        <a href="#error.encType">[crypto:encryption-type-error]</a>.
                      </p>
                   </li>
                   <li>
-                     <p><code>$cryptographic-key</code> is the cryptographic key used for encryption. This parameter can be of type xs:string,
-                        xs:base64Binary, or xs:hexBinary.
-                        If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
-                        <a href="#error.blockSize">[crypto:block-size-error]</a>.
+                     <p><code>$parameters</code> represents the parameters needed for the current operation. The parameters are the
+                        following:
                      </p>
-                  </li>
-                  <li>
-                     <p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation
-                        name can be used.
-                        If the parameter specifies an unsupported algorithm or transformation name, this is
-                        an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
-                     </p>
-                  </li>
-                  <li>
-                     <p><code>$iv</code> is the initialization vector for symmetric encryption.
-                     </p>
-                  </li>
-                  <li>
-                     <p><code>$provider</code> is the cryptographic provider for the current operation. If the provider is not specified,
-                        the implementation will use the
-                        default provider. If the provider does not exist, this is an error <a href="#error.noProvider">[crypto:no-provider]</a>.
-                     </p>
+                     <ul>
+                        <li>
+                           <p><code>cryptographic-key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for encryption. This parameter can be of type xs:string,
+                              xs:base64Binary, or xs:hexBinary.
+                              		                  If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              		                  <a href="#error.blockSize">[crypto:block-size-error]</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>cryptographic-algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation
+                              name can be used.
+                              		                  If the parameter specifies an unsupported algorithm or transformation
+                              name, this is an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>iv</code> as <code class="type">xs:string</code> is the initialization vector for symmetric encryption.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>provider</code> as <code class="type">xs:string?</code> is the cryptographic provider for the current operation. If the provider is not specified,
+                              the implementation will use the
+                              		                  default provider. If the provider does not exist, this is an error
+                              <a href="#error.noProvider">[crypto:no-provider]</a>.
+                           </p>
+                        </li>
+                     </ul>
                   </li>
                </ul>
             </div>
             <div class="div2">
                
-               <h3><a name="d4e475" id="d4e475"></a>4.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e483" id="d4e483"></a>4.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
 <code class="function">crypto:decrypt</code>($data as <code class="type">xs:anyAtomicType</code>,
                $decryption-type as <code class="type">xs:string</code>,
-               $cryptographic-key as <code class="type">xs:anyAtomicType</code>,
-               $cryptographic-algorithm as <code class="type">xs:string</code>,
-               $iv as <code class="type">xs:string?</code>,
-               $provider as <code class="type">xs:string?</code>) as <code class="type">xs:anyAtomicType</code></pre></div>
+               $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">xs:anyAtomicType</code></pre></div>
                <ul>
                   <li>
                      <p><code>$data</code> is the data to be decrypted. This parameter can be of type xs:string, xs:base64Binary,
@@ -508,29 +510,37 @@ map {
                      </p>
                   </li>
                   <li>
-                     <p><code>$cryptographic-key</code> is the cryptographic key used for decryption. This parameter can be of type xs:string,
-                        xs:base64Binary, or xs:hexBinary.
-                        If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
-                        <a href="#error.blockSize">[crypto:block-size-error]</a>.
+                     <p><code>$parameters</code> represents the parameters needed for the current operation. The parameters are the
+                        following:
                      </p>
-                  </li>
-                  <li>
-                     <p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation
-                        name can be used.
-                        If the parameter specifies an unsupported algorithm or transformation name, this is
-                        an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
-                        
-                     </p>
-                  </li>
-                  <li>
-                     <p><code>$iv</code> is the initialization vector for symmetric encryption.
-                     </p>
-                  </li>
-                  <li>
-                     <p><code>$provider</code> is the cryptographic provider for the current operation. If the provider is not specified,
-                        the implementation will use the
-                        default provider. If the provider does not exist, this is an error <a href="#error.noProvider">[crypto:no-provider]</a>.
-                     </p>
+                     <ul>
+                        <li>
+                           <p><code>cryptographic-key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for decryption. This parameter can be of type xs:string,
+                              xs:base64Binary, or xs:hexBinary.
+                              		                  If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              		                  <a href="#error.blockSize">[crypto:block-size-error]</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>cryptographic-algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation
+                              name can be used.
+                              		                  If the parameter specifies an unsupported algorithm or transformation
+                              name, this is an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
+                              		                  
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>iv</code> as <code class="type">xs:string?</code> is the initialization vector for symmetric encryption.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>provider</code> as <code class="type">xs:string?</code> is the cryptographic provider for the current operation. If the provider is not specified,
+                              the implementation will use the
+                              		                  default provider. If the provider does not exist, this is an error
+                              <a href="#error.noProvider">[crypto:no-provider]</a>.
+                           </p>
+                        </li>
+                     </ul>
                   </li>
                </ul>
             </div>
@@ -539,121 +549,121 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e555" id="d4e555"></a>A References
+            <h2><a name="d4e571" id="d4e571"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
                </dt>
                <dd>
-                  	               <a href="http://w3.org/TR/xpath-30/">XML Path Language (XPath) 3.0</a>.
-                  	               Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors.
-                  W3C Working Draft, 13 December 2011.
+                  <a href="http://w3.org/TR/xpath-30/">XML Path Language (XPath) 3.0</a>.
+                  Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft,
+                  13 December 2011.
                </dd>
                <dt class="label"><a name="xslt-30" id="xslt-30"></a>XSLT 3.0
                </dt>
                <dd>                        
-                  	               <a href="http://w3.org/TR/xslt-30/">XSL Transformations (XSLT) Version 3.0</a>.
-                  	               Michael Kay, editor. W3C Working Draft, 10 July 2012.
+                  <a href="http://w3.org/TR/xslt-30/">XSL Transformations (XSLT) Version 3.0</a>.
+                  Michael Kay, editor. W3C Working Draft, 10 July 2012.
                </dd>
                <dt class="label"><a name="xquery-30" id="xquery-30"></a>XQuery 3.0
                </dt>
                <dd>                        
-                  	               <a href="http://w3.org/TR/xquery-30/">XQuery 3.0: An XML Query Language</a>.
-                  	               Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors.
-                  W3C Working Draft, 13 December 2011.
+                  <a href="http://w3.org/TR/xquery-30/">XQuery 3.0: An XML Query Language</a>.
+                  Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft,
+                  13 December 2011.
                </dd>
                <dt class="label"><a name="xpath-functions-30" id="xpath-functions-30"></a>XPath and XQuery Functions and Operators 3.0
                </dt>
                <dd>
-                  <a href="http://w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and Operators 3.0</a>.
-                  Michael Kay, editor. W3C Working Draft, 13 December 2011.
+                  		<a href="http://w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and Operators 3.0</a>.
+                  		Michael Kay, editor. W3C Working Draft, 13 December 2011.
                </dd>
                <dt class="label"><a name="xpath-datamodel-30" id="xpath-datamodel-30"></a>XQuery and XPath Data Model 3.0
                </dt>
                <dd>
-                  <a href="http://w3.org/TR/xpath-datamodel-30/">XQuery and XPath Data Model 3.0</a>.
-                  Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December
+                  		<a href="http://w3.org/TR/xpath-datamodel-30/">XQuery and XPath Data Model 3.0</a>.
+                  		Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December
                   2011.
+               </dd>
+               <dt class="label"><a name="xml-dig-sig-core" id="xml-dig-sig-core"></a>XML Signature
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
+                     	(Second Edition)</a>. Donald Eastlake, Joseph Reagle, David Solo, Frederick
+                  		Hirsch, Thomas Roessler, editors. Mark Bartel, John Boyer, Barb Fox, Brian LaMacchia,
+                  		Ed Simon, authors. W3C Recommendation, 10 June 2008.
+               </dd>
+               <dt class="label"><a name="xml-dig-sig-xpath-filer20" id="xml-dig-sig-xpath-filer20"></a>XML-Signature XPath Filter 2.0
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</a>.
+                  		John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
+                  		November 2002.
                </dd>
                <dt class="label"><a name="rfc1321" id="rfc1321"></a>RFC 1321
                </dt>
                <dd>
-                  <a href="http://ietf.org/rfc/rfc1321.txt">RFC 1321: The MD5 Message-Digest Algorithm</a>. 
-                  Ronald L. Rivest, editor. Network Working Group. April 1992.
+                  		<a href="http://ietf.org/rfc/rfc1321.txt">RFC 1321: The MD5 Message-Digest Algorithm</a>. 
+                  		Ronald L. Rivest, editor. Network Working Group. April 1992.
                </dd>
                <dt class="label"><a name="fips-pub-180-1" id="fips-pub-180-1"></a>FIPS PUB 180-1
                </dt>
                <dd>
-                  <a href="http://itl.nist.gov/fipspubs/fip180-1.htm">Secure Hash Standard</a>. 
-                  U.S. Department Of Commerce, National Institute of Standards and Technology. 1995
+                  		<a href="http://itl.nist.gov/fipspubs/fip180-1.htm">Secure Hash Standard</a>. 
+                  		U.S. Department Of Commerce, National Institute of Standards and Technology. 1995
                   April 17.
                </dd>
                <dt class="label"><a name="fips-pub-186" id="fips-pub-186"></a>FIPS PUB 186
                </dt>
                <dd>
-                  <a href="http://itl.nist.gov/fipspubs/fip186.htm">Digital Signature Standard (DSS)</a>. 
-                  U.S. Department Of Commerce, National Institute of Standards and Technology. 1994
+                  		<a href="http://itl.nist.gov/fipspubs/fip186.htm">Digital Signature Standard (DSS)</a>. 
+                  		U.S. Department Of Commerce, National Institute of Standards and Technology. 1994
                   May 19.
                </dd>
                <dt class="label"><a name="rfc1750" id="rfc1750"></a>RFC 1750
                </dt>
                <dd>
-                  <a href="http://ietf.org/rfc/rfc1750.txt">RFC 1750: Randomness Recommendations for Security</a>. 
-                  D. Eastlake, 3rd, S. Crocker, J. Schiller, editors. Network Working Group. December
+                  		<a href="http://ietf.org/rfc/rfc1750.txt">RFC 1750: Randomness Recommendations for Security</a>. 
+                  		D. Eastlake, 3rd, S. Crocker, J. Schiller, editors. Network Working Group. December
                   1994.
                </dd>
                <dt class="label"><a name="rfc3852" id="rfc3852"></a>RFC 3852
                </dt>
                <dd>
-                  <a href="http://ietf.org/rfc/rfc3852.txt">RFC 3852: Cryptographic Message Syntax (CMS)</a>. 
-                  R. Housley, editor. Network Working Group. July 2004.
+                  		<a href="http://ietf.org/rfc/rfc3852.txt">RFC 3852: Cryptographic Message Syntax (CMS)</a>. 
+                  		R. Housley, editor. Network Working Group. July 2004.
                </dd>
                <dt class="label"><a name="rfc5958" id="rfc5958"></a>RFC 5958
                </dt>
                <dd>
-                  <a href="http://tools.ietf.org/html/rfc5958">RFC 5958: Asymmetric Key Packages</a>. 
-                  S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.
+                  		<a href="http://tools.ietf.org/html/rfc5958">RFC 5958: Asymmetric Key Packages</a>. 
+                  		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.
                </dd>
                <dt class="label"><a name="rfc5959" id="rfc5959"></a>RFC 5959
                </dt>
                <dd>
-                  <a href="http://tools.ietf.org/html/rfc5959">RFC 5959: Algorithms for Asymmetric Key Package Content Type</a>. 
-                  S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.
+                  		<a href="http://tools.ietf.org/html/rfc5959">RFC 5959: Algorithms for Asymmetric Key Package Content Type</a>. 
+                  		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.
                </dd>
                <dt class="label"><a name="rfc2104" id="rfc2104"></a>RFC 2104
                </dt>
                <dd>
-                  <a href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
-                     Authentication</a>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
-                  Working Group. February, 1997.
+                  		<a href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
+                     	Authentication</a>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
+                  		Working Group. February, 1997.
                </dd>
                <dt class="label"><a name="rfc2617" id="rfc2617"></a>RFC 2617
                </dt>
                <dd>
-                  <a href="http://ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Authentication: Basic and
-                     Digest Access Authentication</a>. J. Franks, P. Hallam-Baker, J. Hostetler, S.
-                  Lawrence, P. Leach, A. Luotonen, L. Stewart. June, 1999.
-               </dd>
-               <dt class="label"><a name="xml-dig-sig-core" id="xml-dig-sig-core"></a>XML Signature
-               </dt>
-               <dd>
-                  <a href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
-                     (Second Edition)</a>. Donald Eastlake, Joseph Reagle, David Solo, Frederick
-                  Hirsch, Thomas Roessler, editors. Mark Bartel, John Boyer, Barb Fox, Brian LaMacchia,
-                  Ed Simon, authors. W3C Recommendation, 10 June 2008.
-               </dd>
-               <dt class="label"><a name="xml-dig-sig-xpath-filer20" id="xml-dig-sig-xpath-filer20"></a>XML-Signature XPath Filter 2.0
-               </dt>
-               <dd>
-                  <a href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</a>.
-                  John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
-                  November 2002.
+                  		<a href="http://ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Authentication: Basic and
+                     	Digest Access Authentication</a>. J. Franks, P. Hallam-Baker, J. Hostetler, S.
+                  		Lawrence, P. Leach, A. Luotonen, L. Stewart. June, 1999.
                </dd>
             </dl>
          </div>
          <div class="div1">
             
-            <h2><a name="d4e640" id="d4e640"></a>B Summary of Error Conditions
+            <h2><a name="d4e656" id="d4e656"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.canonAlg" id="error.canonAlg"></a>crypto:canonicalization-algorithm-error
