@@ -153,7 +153,7 @@
          </div2>
       </div1>
       <div1>
-         <head>XML Digital Signature</head>
+         <head>Digital Signature</head>
          <p>The XML Signature is a method of associating a key with referenced data (octets); it
             does not normatively specify how keys are associated with persons or institutions, nor
             the meaning of the data being referenced and signed. XML Signatures are applied to
@@ -162,54 +162,50 @@
             then digested and cryptographically signed.</p>
          <div2>
             <head>The <code>crypto:generate-signature</code> function</head>
-            <p>This function has four signatures, as one have to consider that some applications
-               require the ability to specify a subset of a given XML document as the information
-               content to be signed (this is done by using XPath to indicate the subset), and also
-               the ability to use a digital certificate to obtain the key pair, instead of an
-               auto-generated key pair.</p>
-            <p>The first signature considers the case of auto-generated key pair, and signature for
-               the whole document.</p>
-            <p>The second signature considers the case of auto-generated key pair, and signature for
-               a subset of the document.</p>
-            <p>The third signature considers the case of key pair generated from an digital
-               certificate, and signature for the whole document.</p>
-            <p> The fourth signature considers the case of key pair generated from an digital
-               certificate, and signature for a subset of the document. </p>
+            <p>The function has its parameters passed as a <spec:type>map(xs:string, item())</spec:type>. If any of these parameters is missing, a default value will be used
+            instead. After the function's signature, an example of parameters is given. The syntax for the <code>$references</code> parameter is inspired by <bibref ref="xml-dig-sig-core"/>.</p>
             <eg>
-<spec:function>crypto:generate-signature</spec:function>($input-doc as <spec:type>node()</spec:type>,
-                          $canonicalization-algorithm as <spec:type>xs:string</spec:type>,
-                          $digest-algorithm as <spec:type>xs:string</spec:type>,
-                          $signature-algorithm as <spec:type>xs:string</spec:type>,
-                          $signature-namespace-prefix as <spec:type>xs:string</spec:type>,
-                          $signature-type as <spec:type>xs:string</spec:type>) as <spec:type>node()</spec:type>
-
-<spec:function>crypto:generate-signature</spec:function>($input-doc as <spec:type>node()</spec:type>,
-                          $canonicalization-algorithm as <spec:type>xs:string</spec:type>,
-                          $digest-algorithm as <spec:type>xs:string</spec:type>,
-                          $signature-algorithm as <spec:type>xs:string</spec:type>,
-                          $signature-namespace-prefix as <spec:type>xs:string</spec:type>,
-                          $signature-type as <spec:type>xs:string</spec:type>,
-                          $xpath-expression as <spec:type>xs:string</spec:type>) as <spec:type>node()</spec:type>
-
-<spec:function>crypto:generate-signature</spec:function>($input-doc as <spec:type>node()</spec:type>,
-                          $canonicalization-algorithm as <spec:type>xs:string</spec:type>,
-                          $digest-algorithm as <spec:type>xs:string</spec:type>,
-                          $signature-algorithm as <spec:type>xs:string</spec:type>,
-                          $signature-namespace-prefix as <spec:type>xs:string</spec:type>,
-                          $signature-type as <spec:type>xs:string</spec:type>,
-                          $digital-certificate as <spec:type>node()</spec:type>) as <spec:type>node()</spec:type>
-
-<spec:function>crypto:generate-signature</spec:function>($input-doc as <spec:type>node()</spec:type>,
-                          $canonicalization-algorithm as <spec:type>xs:string</spec:type>,
-                          $digest-algorithm as <spec:type>xs:string</spec:type>,
-                          $signature-algorithm as <spec:type>xs:string</spec:type>,
-                          $signature-namespace-prefix as <spec:type>xs:string</spec:type>,
-                          $signature-type as <spec:type>xs:string</spec:type>,
-                          $xpath-expression as <spec:type>xs:string</spec:type>,
-                          $digital-certificate as <spec:type>node()</spec:type>) as <spec:type>node()</spec:type></eg>
+<spec:function>crypto:generate-signature</spec:function>($data as <spec:type>node()*</spec:type>,
+    $parameters as <spec:type>map(xs:string, item())?</spec:type>) as <spec:type>node()</spec:type> 
+</eg>
+            <p>Example of parameters:</p>    
+        <eg xml:space="preserve">
+map {
+	"canonicalization-algorithm" := "inclusive-with-comments",
+ 	"digest-algorithm" := "SHA1",
+ 	"signature-algorithm" := "RSA_SHA1",
+ 	"signature-namespace-prefix" := "dsig",
+ 	"signature-type" := "enveloped",
+ 	"references" :=
+ 		( 
+			&lt;Reference xmlns="http://www.w3.org/2000/09/xmldsig#" URI=""&gt;
+				&lt;Transforms&gt;
+					&lt;Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2"&gt;
+						&lt;XPath Filter="intersect"&gt;//ToBeSigned&lt;/XPath&gt;
+						&lt;XPath Filter="subtract"&gt;//NotToBeSigned&lt;/XPath&gt;
+						&lt;XPath Filter="union"&gt;//ReallyToBeSigned&lt;/XPath&gt;
+					&lt;/Transform&gt;
+				&lt;/Transforms&gt;
+			&lt;/Reference&gt;,
+			&lt;Reference xmlns="http://www.w3.org/2000/09/xmldsig#" URI="#id"&gt;
+				&lt;Transforms&gt;
+					&lt;Transform Algorithm="http://www.w3.org/TR/2001/10/xml-exc-c14n" /&gt;
+				&lt;/Transforms&gt;
+			&lt;/Reference&gt;
+		)			
+ 	"digital-certificate" :=
+ 		map {
+ 			"keystore-type" := "JKS",
+ 			"keystore-password" := "password",
+ 			"key-alias" := "alias",
+ 			"private-key-password" := "password",
+ 			"keystore-url" := "/db/mykeystore"
+ 		} 	
+}
+</eg>
             <ulist>
                <item>
-                  <p><code>$input-doc</code> is the document to be signed.</p>
+                  <p><code>$data</code> is the data to be signed.</p>
                </item>
                <item>
                   <p><code>$canonicalization-algorithm</code> is the canonicalization algorithm
@@ -234,34 +230,38 @@
                <item>
                   <p><code>$signature-namespace-prefix</code> is the namespace prefix for
                      signature.</p>
-               </item>
+               </item>               
                <item>
                   <p><code>$signature-type</code> is the method used for signing the content of
                      signature. Possible values are: 'enveloping', 'enveloped', and 'detached'. The
                      default value is 'enveloped'.</p>
                </item>
                <item>
-                  <p><code>$xpath-expression</code> is the XPath expression used for selecting the
-                     subset to be signed. If the XPath expression is invalid, this is an error
-                        <bibref ref="error.xpathExpr"/>.</p>
+                  <p><code>$references</code> represents the resources to be signed. If this parameter is missing, the whole input document will be signed.</p>
                </item>
                <item>
-                  <p><code>$digital-certificate</code> is the digital certificate to be used for
-                     signing the input document or document subset. The structure of this parameter
-                     is as follows (this is an example):</p>
-                  <eg>
-&lt;digital-certificate&gt;
-   &lt;keystore-type&gt;JKS&lt;/keystore-type&gt;
-   &lt;keystore-password&gt;ab987c&lt;/keystore-password&gt;
-   &lt;key-alias&gt;eXist&lt;/key-alias&gt;
-   &lt;private-key-password&gt;kpi135&lt;/private-key-password&gt;
-   &lt;keystore-uri&gt;/db/mykeystoreEXist&lt;/keystore-uri&gt;
-&lt;/digital-certificate&gt;</eg>
-                  <p>The following errors can be raised relative to the structure and content of
-                     $digital-certificate parameter: <bibref ref="error.rootElem"/>, <bibref ref="error.childElem"
-                     />, <bibref ref="error.nullKeystore"/>, <bibref ref="error.readKeystore"/>, <bibref ref="error.deniedKeystore"/>,
-                        <bibref ref="error.keystoreUrl"/>, <bibref ref="error.keystoreType"/>, and <bibref ref="error.aliasKey"
-                     />.</p>
+                  <p><code>$digital-certificate</code> is the digital certificate to be used for signing the references. If this parameter is missing, an auto-generated key pair
+                  will be used. The components of this parameter are:</p>
+		            <ulist>
+		               <item>
+		                  <p><code>$keystore-type</code> is the keystore type. If the type is not supported, this is an error <bibref ref="error.keystoreType" />.</p>
+		               </item>
+		               <item>
+		                  <p><code>$keystore-password</code> is the keystore's password. If the keystore cannot be loaded or the password is incorrect, this is an error
+		                  <bibref ref="error.readKeystore" />.</p>
+		               </item>
+		               <item>
+		                  <p><code>$key-alias</code> is the alias for the key pair used for signing. If no key pair exists for this alias, this is an error <bibref ref="error.aliasKey"/>.</p>
+		               </item>
+		               <item>
+		                  <p><code>$private-key-password</code> is the password for the selected key.</p>
+		               </item>               
+		               <item>
+		                  <p><code>$keystore-url</code> is the URL of the keystore. If the URL is not correct, this is an error <bibref ref="error.keystoreUrl"/>. If the user has no
+		                  acces to the keystore, this is an error <bibref ref="error.deniedKeystore" />. 
+		                  </p>
+		               </item>
+		            </ulist>
                </item>
             </ulist>
          </div2>
@@ -269,10 +269,10 @@
             <head>The <code>crypto:validate-signature</code> function</head>
             <p>This function validates an XML Digital Signature.</p>
             <eg>
-<spec:function>crypto:validate-signature</spec:function>($input-doc as <spec:type>node()</spec:type>) as <spec:type>xs:boolean</spec:type></eg>
+<spec:function>crypto:validate-signature</spec:function>($data as <spec:type>node()</spec:type>) as <spec:type>xs:boolean</spec:type></eg>
             <ulist>
                <item>
-                  <p><code>$input-doc</code> is the enveloped, enveloping, or detached signature. If
+                  <p><code>$data</code> is the enveloped, enveloping, or detached signature. If
                      the Signature element cannot be found, this is an error <bibref ref="error.sigElem"/>.</p>
                </item>
             </ulist>
