@@ -584,34 +584,16 @@ map {
             <dl>
                <dt class="label"><a name="error.canonAlg" id="error.canonAlg"></a>crypto:canonicalization-algorithm-error
                </dt>
-               <dd>The canonicalization algorithm is not
-                  supported.
-               </dd>
+               <dd>The canonicalization algorithm is not supported.</dd>
                <dt class="label"><a name="error.digestAlg" id="error.digestAlg"></a>crypto:digest-algorithm-error
                </dt>
                <dd>The digest algorithm is not supported.</dd>
                <dt class="label"><a name="error.sigAlg" id="error.sigAlg"></a>crypto:signature-algorithm-error
                </dt>
                <dd>The signature algorithm is not supported.</dd>
-               <dt class="label"><a name="error.xpathExpr" id="error.xpathExpr"></a>crypto:invalid-xpath-expression
-               </dt>
-               <dd>The XPath expression is invalid.</dd>
-               <dt class="label"><a name="error.rootElem" id="error.rootElem"></a>crypto:invalid-root-element
-               </dt>
-               <dd>The root element of argument $digital-certificate must
-                  have the name 'digital-certificate'.
-               </dd>
-               <dt class="label"><a name="error.childElem" id="error.childElem"></a>crypto:invalid-child-element
-               </dt>
-               <dd>The child element of argument $digital-certificate
-                  having position $position must have the name $child-element-name.
-               </dd>
-               <dt class="label"><a name="error.nullKeystore" id="error.nullKeystore"></a>crypto:null-keystore
-               </dt>
-               <dd>The keystore is null.</dd>
                <dt class="label"><a name="error.readKeystore" id="error.readKeystore"></a>crypto:error-reading-keystore
                </dt>
-               <dd>I/O error while reading keystore.</dd>
+               <dd>I/O error while reading keystore, or the password is incorrect.</dd>
                <dt class="label"><a name="error.deniedKeystore" id="error.deniedKeystore"></a>crypto:denied-reading-keystore
                </dt>
                <dd>Permission denied to read keystore.</dd>
@@ -624,12 +606,6 @@ map {
                <dt class="label"><a name="error.aliasKey" id="error.aliasKey"></a>crypto:no-key-for-alias
                </dt>
                <dd>Cannot find key for alias in given keystore.</dd>
-               <dt class="label"><a name="error.hashAlg" id="error.hashAlg"></a>crypto:hashing-algorithm-error
-               </dt>
-               <dd>The hashing algorithm is not supported.</dd>
-               <dt class="label"><a name="error.encMethod" id="error.encMethod"></a>crypto:encoding-method-error
-               </dt>
-               <dd>The encoding method is not supported.</dd>
                <dt class="label"><a name="error.sigElem" id="error.sigElem"></a>crypto:signature-element-error
                </dt>
                <dd>Cannot find Signature element.</dd>
@@ -654,6 +630,9 @@ map {
                <dt class="label"><a name="error.decryptionType" id="error.decryptionType"></a>crypto:decryption-type-error
                </dt>
                <dd>The decryption type is not supported.</dd>
+               <dt class="label"><a name="error.noProvider" id="error.noProvider"></a>crypto:no-provider
+               </dt>
+               <dd>The provider is not set.</dd>
                <dt class="label"><a name="error.outputFormat" id="error.outputFormat"></a>crypto.output-format-error
                </dt>
                <dd>The output format is not supported.</dd>

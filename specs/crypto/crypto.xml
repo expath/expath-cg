@@ -400,24 +400,15 @@ map {
       </div1>
       <div1>
          <head>Summary of Error Conditions</head>
-         <blist>
-            <bibl id="error.canonAlg" key="crypto:canonicalization-algorithm-error">The canonicalization algorithm is not
-               supported.</bibl>
+         <blist id="summary-of-error-conditions">
+            <bibl id="error.canonAlg" key="crypto:canonicalization-algorithm-error">The canonicalization algorithm is not supported.</bibl>
             <bibl id="error.digestAlg" key="crypto:digest-algorithm-error">The digest algorithm is not supported.</bibl>
             <bibl id="error.sigAlg" key="crypto:signature-algorithm-error">The signature algorithm is not supported.</bibl>
-            <bibl id="error.xpathExpr" key="crypto:invalid-xpath-expression">The XPath expression is invalid.</bibl>
-            <bibl id="error.rootElem" key="crypto:invalid-root-element">The root element of argument $digital-certificate must
-               have the name 'digital-certificate'.</bibl>
-            <bibl id="error.childElem" key="crypto:invalid-child-element">The child element of argument $digital-certificate
-               having position $position must have the name $child-element-name.</bibl>
-            <bibl id="error.nullKeystore" key="crypto:null-keystore">The keystore is null.</bibl>
-            <bibl id="error.readKeystore" key="crypto:error-reading-keystore">I/O error while reading keystore.</bibl>
+            <bibl id="error.readKeystore" key="crypto:error-reading-keystore">I/O error while reading keystore, or the password is incorrect.</bibl>
             <bibl id="error.deniedKeystore" key="crypto:denied-reading-keystore">Permission denied to read keystore.</bibl>
             <bibl id="error.keystoreUrl" key="crypto:invalid-keystore-url">The keystore URL is invalid.</bibl>
             <bibl id="error.keystoreType" key="crypto:keystore-type-error">The keystore type is not supported.</bibl>
             <bibl id="error.aliasKey" key="crypto:no-key-for-alias">Cannot find key for alias in given keystore.</bibl>
-            <bibl id="error.hashAlg" key="crypto:hashing-algorithm-error">The hashing algorithm is not supported.</bibl>
-            <bibl id="error.encMethod" key="crypto:encoding-method-error">The encoding method is not supported.</bibl>
             <bibl id="error.sigElem" key="crypto:signature-element-error">Cannot find Signature element.</bibl>
             <bibl id="error.noPadding" key="crypto:padding-error">No such padding.</bibl>
             <bibl id="error.incorrectPadding" key="crypto:incorrect-padding">Incorrect padding.</bibl>
@@ -426,6 +417,7 @@ map {
             <bibl id="error.blockSize" key="crypto:block-size-error">Illegal block size.</bibl>
             <bibl id="error.algOrTransf" key="crypto:algorithm-or-transformation-error">The algorithm or transformation is not supported.</bibl>
             <bibl id="error.decryptionType" key="crypto:decryption-type-error">The decryption type is not supported.</bibl>
+            <bibl id="error.noProvider" key="crypto:no-provider">The provider is not set.</bibl>
             <bibl id="error.outputFormat" key="crypto.output-format-error">The output format is not supported.</bibl>
          </blist>
       </div1>
