@@ -29,7 +29,7 @@ Publish a new version
 ---------------------
 
 It is possible to an editor to edit a spec and create a pull request.
-The current state of a spec is available as an ''editor draft'', at a
+The current state of a spec is available as an *editor draft*, at a
 URL ending with `/editor`, e.g. http://expath.org/spec/http/editor.
 
 In order to publish a new version, either a dated working draft or a
