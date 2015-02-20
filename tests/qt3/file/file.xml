@@ -2627,6 +2627,7 @@
     <description>Use file:name on current directory</description>
     <created by="John Lumley" on="2013-12-02"/>
     <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <modified by="Christian Grün" on="2015-02-20" change="test result fixed"/>
     <environment ref="EXPath-file"/>
     <test>
         file:name(".")
@@ -2634,7 +2635,7 @@
     <result>
       <all-of>
         <assert-type>xs:string</assert-type>
-        <assert-eq>'Fred'</assert-eq>
+        <assert-eq>'.'</assert-eq>
       </all-of>
     </result>
   </test-case>
@@ -3056,7 +3057,7 @@
       <all-of>
         <assert>ends-with($result, file:dir-separator())</assert>
         <assert>
-          for $base := static-base-uri()
+          let $base := static-base-uri()
           return empty($base) or $result = file:parent($base)
         </assert>
       </all-of>
