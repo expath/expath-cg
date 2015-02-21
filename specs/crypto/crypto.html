@@ -171,13 +171,13 @@ div.exampleHeader { font-weight: bold;
                   algorithm. It returns the hash value as a string.
                </p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:hash</code>($data as <code class="type">xs:anyAtomicType</code>,
-            $hashing-algorithm as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
+<code class="function">crypto:hash</code>($data     as <code class="type">xs:anyAtomicType</code>,
+	     $algorithm as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
 </pre></div>
                <div class="exampleInner"><pre>
-<code class="function">crypto:hash</code>($data as <code class="type">xs:anyAtomicType</code>,
-            $hashing-algorithm as <code class="type">xs:string</code>,
-            $format as <code class="type">xs:string</code>?) as <code class="type">xs:string</code>
+<code class="function">crypto:hash</code>($data    as <code class="type">xs:anyAtomicType</code>,
+            $algorithm as <code class="type">xs:string</code>,
+            $format    as <code class="type">xs:string</code>?) as <code class="type">xs:string</code>
 </pre></div>
                <ul>
                   <li>
@@ -214,20 +214,19 @@ div.exampleHeader { font-weight: bold;
                   between these parties.
                </p>
                <p>This function generates a message authentication code, based on the input message,
-                  by
-                  using a cryptographic algorithm and a secret key. It returns the hash-based message
-                  authentication code as base64 string.
+                  by using a cryptographic algorithm and a secret key.
+                  It returns the hash-based message authentication code as base64 string.
                </p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:hmac</code>($data as <code class="type">xs:anyAtomicType</code>,
-            $secret-key as <code class="type">xs:anyAtomicType</code>,
-            $hashing-algorithm as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
+<code class="function">crypto:hmac</code>($data     as <code class="type">xs:anyAtomicType</code>,
+            $key        as <code class="type">xs:anyAtomicType</code>,
+            $algorithm  as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
 </pre></div>
                <div class="exampleInner"><pre>
-<code class="function">crypto:hmac</code>($data as <code class="type">xs:anyAtomicType</code>,
-            $secret-key as <code class="type">xs:anyAtomicType</code>,
-            $hashing-algorithm as <code class="type">xs:string</code>,
-            $format as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
+<code class="function">crypto:hmac</code>($data     as <code class="type">xs:anyAtomicType</code>,
+            $key        as <code class="type">xs:anyAtomicType</code>,
+            $algorithm  as <code class="type">xs:string</code>,
+            $format     as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
 </pre></div>
                <ul>
                   <li>
@@ -236,7 +235,7 @@ div.exampleHeader { font-weight: bold;
                      </p>
                   </li>
                   <li>
-                     <p><code>$secret-key</code> is the secret key used for calculating the authentication code. This parameter can
+                     <p><code>$key</code> is the secret key used for calculating the authentication code. This parameter can
                         be of type
                         xs:string, xs:base64Binary, or xs:hexBinary.
                      </p>
@@ -279,8 +278,8 @@ div.exampleHeader { font-weight: bold;
                   for the <code>$references</code> parameter is inspired by <a href="#xml-dig-sig-core">[XML Signature]</a>.
                </p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:generate-signature</code>($data as <code class="type">node()*</code>,
-    $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">node()</code> 
+<code class="function">crypto:generate-signature</code>($data     as <code class="type">node()*</code>,
+    			    $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">node()</code> 
 </pre></div>
                <p>Example of parameters:</p>
                <div class="exampleInner"><pre>
@@ -367,26 +366,26 @@ map {
                      </p>
                      <ul>
                         <li>
-                           <p><code>$keystore-type</code> is the keystore type. If the type is not supported, this is an error <a href="#error.keystoreType">[crypto:keystore-type-error]</a>.
+                           <p><code>keystore-type</code> is the keystore type. If the type is not supported, this is an error <a href="#error.keystoreType">[crypto:keystore-type-error]</a>.
                            </p>
                         </li>
                         <li>
-                           <p><code>$keystore-password</code> is the keystore's password. If the keystore cannot be loaded or the password is incorrect,
+                           <p><code>keystore-password</code> is the keystore's password. If the keystore cannot be loaded or the password is incorrect,
                               this is an error
                               		                  <a href="#error.readKeystore">[crypto:error-reading-keystore]</a>.
                            </p>
                         </li>
                         <li>
-                           <p><code>$key-alias</code> is the alias for the key pair used for signing. If no key pair exists for this alias,
+                           <p><code>key-alias</code> is the alias for the key pair used for signing. If no key pair exists for this alias,
                               this is an error <a href="#error.aliasKey">[crypto:no-key-for-alias]</a>.
                            </p>
                         </li>
                         <li>
-                           <p><code>$private-key-password</code> is the password for the selected key.
+                           <p><code>private-key-password</code> is the password for the selected key.
                            </p>
                         </li>
                         <li>
-                           <p><code>$keystore-url</code> is the URL of the keystore. If the URL is not correct, this is an error <a href="#error.keystoreUrl">[crypto:invalid-keystore-url]</a>. If the user has no
+                           <p><code>keystore-url</code> is the URL of the keystore. If the URL is not correct, this is an error <a href="#error.keystoreUrl">[crypto:invalid-keystore-url]</a>. If the user has no
                               		                  acces to the keystore, this is an error <a href="#error.deniedKeystore">[crypto:denied-reading-keystore]</a>. 
                               		                  
                            </p>
@@ -434,8 +433,8 @@ map {
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:encrypt</code>($data as <code class="type">xs:anyAtomicType</code>,
-               $encryption-type as <code class="type">xs:string</code>,
+<code class="function">crypto:encrypt</code>($data     as <code class="type">xs:anyAtomicType</code>,
+               $type       as <code class="type">xs:string</code>,
                $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">xs:anyAtomicType</code></pre></div>
                <ul>
                   <li>
@@ -447,7 +446,7 @@ map {
                   </li>
                   <li>
                      <p>
-                        <code>$encryption-type</code> is the type of encryption. Legal values: "symmetric", and "asymmetric". If the parameter
+                        <code>$type</code> is the type of encryption. Legal values: "symmetric", and "asymmetric". If the parameter
                         has an illegal value, this is an error
                         <a href="#error.encType">[crypto:encryption-type-error]</a>.
                      </p>
@@ -458,14 +457,14 @@ map {
                      </p>
                      <ul>
                         <li>
-                           <p><code>cryptographic-key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for encryption. This parameter can be of type xs:string,
+                           <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for encryption. This parameter can be of type xs:string,
                               xs:base64Binary, or xs:hexBinary.
                               		                  If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
                               		                  <a href="#error.blockSize">[crypto:block-size-error]</a>.
                            </p>
                         </li>
                         <li>
-                           <p><code>cryptographic-algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation
+                           <p><code>algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation
                               name can be used.
                               		                  If the parameter specifies an unsupported algorithm or transformation
                               name, this is an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
@@ -476,7 +475,7 @@ map {
                            </p>
                         </li>
                         <li>
-                           <p><code>provider</code> as <code class="type">xs:string?</code> is the cryptographic provider for the current operation. If the provider is not specified,
+                           <p><code>provider</code> as <code class="type">xs:string</code> is the cryptographic provider for the current operation. If the provider is not specified,
                               the implementation will use the
                               		                  default provider. If the provider does not exist, this is an error
                               <a href="#error.noProvider">[crypto:no-provider]</a>.
@@ -492,8 +491,8 @@ map {
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:decrypt</code>($data as <code class="type">xs:anyAtomicType</code>,
-               $decryption-type as <code class="type">xs:string</code>,
+<code class="function">crypto:decrypt</code>($data     as <code class="type">xs:anyAtomicType</code>,
+               $type       as <code class="type">xs:string</code>,
                $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">xs:anyAtomicType</code></pre></div>
                <ul>
                   <li>
@@ -504,7 +503,7 @@ map {
                      </p>
                   </li>
                   <li>
-                     <p><code>$decryption-type</code> is the type of decryption. Legal values: "symmetric", and "asymmetric". If the parameter
+                     <p><code>$type</code> is the type of decryption. Legal values: "symmetric", and "asymmetric". If the parameter
                         has an illegal value, this is an error
                         <a href="#error.decryptionType">[crypto:decryption-type-error]</a>.
                      </p>
@@ -515,14 +514,14 @@ map {
                      </p>
                      <ul>
                         <li>
-                           <p><code>cryptographic-key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for decryption. This parameter can be of type xs:string,
+                           <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for decryption. This parameter can be of type xs:string,
                               xs:base64Binary, or xs:hexBinary.
                               		                  If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
                               		                  <a href="#error.blockSize">[crypto:block-size-error]</a>.
                            </p>
                         </li>
                         <li>
-                           <p><code>cryptographic-algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation
+                           <p><code>algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation
                               name can be used.
                               		                  If the parameter specifies an unsupported algorithm or transformation
                               name, this is an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
@@ -534,7 +533,7 @@ map {
                            </p>
                         </li>
                         <li>
-                           <p><code>provider</code> as <code class="type">xs:string?</code> is the cryptographic provider for the current operation. If the provider is not specified,
+                           <p><code>provider</code> as <code class="type">xs:string</code> is the cryptographic provider for the current operation. If the provider is not specified,
                               the implementation will use the
                               		                  default provider. If the provider does not exist, this is an error
                               <a href="#error.noProvider">[crypto:no-provider]</a>.
