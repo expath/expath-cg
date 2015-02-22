@@ -7,9 +7,10 @@
     <link type="spec" document="http://expath.org/spec/archive"/>
 
 
-    <expand name="entries">
+    <expand name="EXPath-archive-entries">
         <created by="John Lumley" on="2013-08-28"/>
-        <environment ref="archive"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-archive"/>
         <test-case>
             <description>Count entries in a one-entry zip</description>
             <test> arch:entries($test1.ZIP) </test>

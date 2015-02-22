@@ -1,0 +1,326 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:web="http://expath.org/ns/webapp"
+           targetNamespace="http://expath.org/ns/webapp"
+           elementFormDefault="qualified">
+
+   <!--
+      Utility types.
+   -->
+   <xs:simpleType name="param-name">
+      <!-- TODO: Any more precise type for a URI param name? -->
+      <xs:restriction base="xs:string"/>
+   </xs:simpleType>
+
+   <xs:simpleType name="header-name">
+      <!-- TODO: Any more precise type for a HTTP/1.1 header name? -->
+      <xs:restriction base="xs:string"/>
+   </xs:simpleType>
+
+   <xs:simpleType name="method-name">
+      <!-- TODO: Any more precise type for a HTTP/1.1 method name? -->
+      <xs:restriction base="xs:NCName"/>
+   </xs:simpleType>
+
+   <xs:complexType name="header">
+      <xs:sequence/>
+      <xs:attribute name="name"  type="web:header-name" use="required"/>
+      <xs:attribute name="value" type="xs:string"       use="required"/>
+   </xs:complexType>
+
+   <xs:complexType name="multipart-header">
+      <xs:complexContent>
+         <xs:extension base="web:header">
+            <xs:attribute name="body" type="xs:integer"/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:simpleType name="catch">
+      <!-- TODO: Look at the production rule "CatchErrorList" in XQuery and XSLT 3.0. -->
+      <xs:restriction base="xs:string"/>
+   </xs:simpleType>
+
+   <!--
+      The HTTP request element.
+   -->
+   <xs:element name="request">
+      <xs:annotation>
+         <xs:documentation>
+            <p>The HTTP request element.</p>
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="url"          type="xs:anyURI"/>
+            <xs:element name="authority"    type="xs:anyURI"/>
+            <xs:element name="context-root" type="xs:anyURI"/>
+            <xs:element name="path"         type="web:request-path"/>
+            <xs:element name="param"        type="web:request-param" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="header"       type="web:header"        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0">
+               <xs:element name="body"      type="web:request-body"/>
+               <xs:element name="multipart" type="web:request-multipart"/>
+            </xs:choice>
+         </xs:sequence>
+         <xs:attribute name="servlet" type="xs:NCName"       use="required"/>
+         <xs:attribute name="path"    type="xs:string"       use="required"/>
+         <xs:attribute name="method"  type="web:method-name" use="required"/>
+      </xs:complexType>
+   </xs:element>
+
+   <xs:complexType name="request-path">
+      <xs:choice maxOccurs="unbounded">
+         <xs:element name="part" type="xs:anyURI"/>
+         <xs:element name="match">
+            <xs:complexType>
+               <xs:simpleContent>
+                  <xs:extension base="xs:string">
+                     <xs:attribute name="name" type="xs:NCName" use="required"/>
+                  </xs:extension>
+               </xs:simpleContent>
+            </xs:complexType>
+         </xs:element>
+      </xs:choice>
+   </xs:complexType>
+
+   <xs:complexType name="request-param">
+      <xs:sequence/>
+      <xs:attribute name="name"  type="web:param-name" use="required"/>
+      <xs:attribute name="value" type="xs:string"      use="required"/>
+   </xs:complexType>
+
+   <xs:complexType name="request-body">
+      <xs:sequence/>
+      <xs:attribute name="position"     type="xs:integer" use="required"/>
+      <xs:attribute name="content-type" type="xs:string"  use="required"/>
+   </xs:complexType>
+
+   <xs:complexType name="request-multipart">
+      <xs:sequence maxOccurs="unbounded">
+         <xs:element name="header" type="web:multipart-header" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="body"   type="web:request-body"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!--
+      The HTTP response element.
+   -->
+   <xs:element name="response">
+      <xs:annotation>
+         <xs:documentation>
+            <p>The HTTP response element.</p>
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="header" type="web:header" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0">
+               <xs:element name="body"      type="web:response-body"/>
+               <xs:element name="multipart" type="web:response-multipart"/>
+            </xs:choice>
+         </xs:sequence>
+         <xs:attribute name="status"  type="xs:integer" use="required"/>
+         <xs:attribute name="message" type="xs:string"  use="required"/>
+      </xs:complexType>
+   </xs:element>
+
+   <xs:complexType name="response-body">
+      <xs:complexContent mixed="true">
+         <xs:extension base="xs:anyType">
+            <xs:attribute name="item-position" type="xs:integer"/>
+            <xs:attribute name="src"           type="xs:anyURI"/>
+            <xs:attribute name="charset"       type="xs:string"/>
+            <xs:attribute name="content-type"  type="xs:string" use="required"/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="response-multipart">
+      <xs:sequence maxOccurs="unbounded">
+         <xs:element name="header" type="web:multipart-header" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="body"   type="web:response-body"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!--
+      The webapp descriptor.
+   -->
+   <xs:element name="webapp">
+      <xs:annotation>
+         <xs:documentation>
+            <p>The webapp descriptor.</p>
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="home"  type="xs:anyURI" minOccurs="0"/>
+            <xs:choice maxOccurs="unbounded">
+               <xs:element name="application" type="web:application"/>
+               <xs:element name="chain"       type="web:chain"/>
+               <xs:element name="error"       type="web:error"/>
+               <xs:element name="filter"      type="web:filter"/>
+               <xs:element name="group"       type="web:group"/>
+               <xs:element name="resource"    type="web:resource"/>
+               <xs:element name="servlet"     type="web:servlet"/>
+            </xs:choice>
+         </xs:sequence>
+         <xs:attribute name="name"    type="xs:anyURI" use="required"/>
+         <xs:attribute name="abbrev"  type="xs:NCName" use="required"/>
+         <xs:attribute name="version" type="xs:string" use="required"/>
+         <xs:attribute name="spec"    fixed="1.0"      use="required"/>
+      </xs:complexType>
+   </xs:element>
+
+   <xs:complexType name="filterable">
+      <xs:sequence/>
+      <xs:attribute name="filters">
+         <xs:simpleType>
+            <xs:list itemType="xs:NCName"/>
+         </xs:simpleType>
+      </xs:attribute>
+   </xs:complexType>
+
+   <xs:complexType name="application">
+      <xs:complexContent>
+         <xs:extension base="web:filterable"/>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="chain">
+      <xs:complexContent>
+         <xs:extension base="web:filterable">
+            <xs:choice minOccurs="0">
+               <xs:element name="chain">
+                  <xs:complexType>
+                     <xs:sequence/>
+                     <xs:attribute name="ref" type="xs:NCName" use="required"/>
+                  </xs:complexType>
+               </xs:element>
+               <!-- Either @ref or @catch+component -->
+               <xs:element name="error">
+                  <xs:complexType>
+                     <xs:sequence>
+                        <xs:element ref="web:component" minOccurs="0"/>
+                     </xs:sequence>
+                     <xs:attribute name="ref"   type="xs:NCName"/>
+                     <xs:attribute name="catch" type="web:catch"/>
+                  </xs:complexType>
+               </xs:element>
+               <!-- Either @ref or in?+out? -->
+               <xs:element name="filter">
+                  <xs:complexType>
+                     <xs:sequence>
+                        <xs:element name="in"  type="web:with-component" minOccurs="0"/>
+                        <xs:element name="out" type="web:with-component" minOccurs="0"/>
+                     </xs:sequence>
+                     <xs:attribute name="ref" type="xs:NCName"/>
+                  </xs:complexType>
+               </xs:element>
+            </xs:choice>
+            <xs:attribute name="name" type="xs:NCName" use="required"/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="error">
+      <xs:sequence>
+         <xs:element ref="web:component"/>
+      </xs:sequence>
+      <xs:attribute name="name"  type="xs:NCName" use="required"/>
+      <xs:attribute name="catch" type="web:catch" use="required"/>
+   </xs:complexType>
+
+   <xs:complexType name="filter">
+      <xs:complexContent>
+         <xs:extension base="web:filterable">
+            <xs:sequence>
+               <xs:element name="in"  type="web:with-component" minOccurs="0"/>
+               <xs:element name="out" type="web:with-component" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:NCName" use="required"/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="group">
+      <xs:complexContent>
+         <xs:extension base="web:filterable">
+            <xs:choice maxOccurs="unbounded">
+               <xs:element name="group"   type="web:group"/>
+               <xs:element name="servlet" type="web:servlet"/>
+            </xs:choice>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="resource">
+      <xs:complexContent>
+         <xs:extension base="web:filterable">
+            <xs:sequence/>
+            <xs:attribute name="pattern"    type="xs:string" use="required"/>
+            <xs:attribute name="rewrite"    type="xs:string"/>
+            <xs:attribute name="media-type" type="xs:string" use="required"/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="servlet">
+      <xs:complexContent>
+         <xs:extension base="web:filterable">
+            <xs:sequence>
+               <xs:element ref="web:component"/>
+               <xs:element name="url" type="web:url-pattern"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:NCName"/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="url-pattern">
+      <xs:sequence>
+         <xs:element name="match" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+               <xs:sequence/>
+               <xs:attribute name="group" type="xs:integer" use="required"/>
+               <xs:attribute name="name"  type="xs:NCName"  use="required"/>
+            </xs:complexType>
+         </xs:element>
+      </xs:sequence>
+      <xs:attribute name="pattern" type="xs:string" use="required"/>
+   </xs:complexType>
+
+   <!--
+      Components.
+   -->
+   <xs:complexType name="with-component">
+      <xs:sequence>
+         <xs:element ref="web:component"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <xs:element name="component" abstract="true"/>
+      
+   <xs:element name="xproc" substitutionGroup="web:component">
+      <xs:complexType>
+         <xs:attribute name="uri"  type="xs:anyURI" use="required"/>
+         <xs:attribute name="step" type="xs:QName"/>
+      </xs:complexType>
+   </xs:element>
+
+   <xs:element name="xquery" substitutionGroup="web:component">
+      <xs:complexType>
+         <xs:attribute name="uri"      type="xs:anyURI"/>
+         <xs:attribute name="function" type="xs:QName"/>
+      </xs:complexType>
+   </xs:element>
+
+   <xs:element name="xslt" substitutionGroup="web:component">
+      <xs:complexType>
+         <xs:attribute name="uri"      type="xs:anyURI" use="required"/>
+         <xs:attribute name="template" type="xs:QName"/>
+         <xs:attribute name="function" type="xs:QName"/>
+      </xs:complexType>
+   </xs:element>
+
+</xs:schema>

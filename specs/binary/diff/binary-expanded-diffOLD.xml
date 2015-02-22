@@ -24,16 +24,16 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Proposed Module</w3c-doctype>
       <pubdate>
-         <day>18</day>
-         <month>October</month>
+         <day>13</day>
+         <month>November</month>
          <year>2013</year>
       </pubdate>
       <publoc>
-         <loc diff="chg" href="http://expath.org/spec/binary/20131018"/>
+         <loc diff="chg" href="http://expath.org/spec/binary/20131113"/>
       </publoc>
       <altlocs>
          <loc href="http://expath.org/spec/binary/editor.xml">XML</loc>
-         <loc href="http://expath.org/spec/binary/20131018/diff">Revision Markup</loc>
+         <loc href="http://expath.org/spec/binary/20131113/diff">Revision Markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/binary"/>
@@ -131,6 +131,12 @@
                   containing the data, and differ only when being serialized to or parsed from text,
                   such casting in-process should not involve data copying.</p>
             </note>
+           <p diff="add">An item of type <code>xs:base64Binary</code> can be <emph>empty</emph>, i.e. contain no
+             data, (in the same way that items of type <code>xs:string</code> can contain no
+             characters.) Where 'data' arguments to functions that return binary data are optional
+             (i.e. <code><emph>$arg as type</emph>?</code>) and any of those optional arguments is set
+             to the empty sequence, in general an empty sequence is returned, rather than an empty item
+             of type <code>xs:base64Binary</code>. </p>
          </div2>
          <div2 id="testing" diff="add">
             <head diff="add">Test suite</head>
@@ -1543,7 +1549,7 @@
                   <def>
                      <p>Returns "bitwise or" applied between <code>$a</code> and
                         <code>$b</code>.</p>
-                     <p diff="add">If both arguments are the empty sequence, an empty sequence is
+                     <p diff="add">If either argument is the empty sequence, an empty sequence is
                         returned.</p>
                   </def>
                </gitem>
@@ -1551,8 +1557,7 @@
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.differentLengthArguments"/> is raised if the input
-                        arguments are of differing length<phrase diff="add"> or one is, but not both
-                           are, an empty sequence</phrase>.</p>
+                        arguments are of differing length.</p>
                   </def>
                </gitem>
             </glist>
@@ -1582,16 +1587,15 @@
                   <def>
                      <p>Returns "bitwise exclusive or" applied between <code>$a</code> and
                            <code>$b</code>.</p>
-                     <p diff="add">If both arguments are the empty sequence, an empty sequence is
-                        returned.</p>
+                    <p diff="add">If either argument is the empty sequence, an empty sequence is
+                      returned.</p>
                   </def>
                </gitem>
                <gitem>
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.differentLengthArguments"/> is raised if the input
-                        arguments are of differing length<phrase diff="add"> or one is, but not both
-                           are, an empty sequence</phrase>.</p>
+                        arguments are of differing length.</p>
                   </def>
                </gitem>
             </glist>
@@ -1621,16 +1625,15 @@
                   <def>
                      <p>Returns "bitwise and" applied between <code>$a</code> and
                         <code>$b</code>.</p>
-                     <p diff="add">If both arguments are the empty sequence, an empty sequence is
-                        returned.</p>
+                    <p diff="add">If either argument is the empty sequence, an empty sequence is
+                      returned.</p>
                   </def>
                </gitem>
                <gitem>
                   <label>Error Conditions</label>
                   <def>
                      <p><bibref ref="error.differentLengthArguments"/> is raised if the input
-                        arguments are of differing length<phrase diff="add"> or one is, but not both
-                           are, an empty sequence</phrase>.</p>
+                        arguments are of differing length.</p>
                   </def>
                </gitem>
             </glist>

@@ -1,819 +1,823 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-file-numeric-packing">
-    <description>Tests for the numeric packing extension functions in the EXPath "binary" package.
-        Note the tests are written on the assumption that the "working directory" for resolving
-        relative filenames is the directory containing this test catalog file.</description>
+  <description>Tests for the numeric packing extension functions in the EXPath "binary" package.
+    Note the tests are written on the assumption that the "working directory" for resolving relative
+    filenames is the directory containing this test catalog file.</description>
 
-    <environment name="binary.numeric">
-        <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
-        <namespace prefix="binJAVA" uri="java:org.expath.ns.binary.EXPathBinary"/>
-        <namespace prefix="err" uri="http://expath.org/ns/binary"/>
-        <param name="int.byte" select="5"/>
-        <param name="int.short" select="256 * 1 + 5"/>
-        <param name="int.3" select="65536 * 1 + 256 * 1 + 5"/>
-        <param name="int.int" select="16777216 * 1 + 65536 * 1 + 256 * 1 + 5"/>
-        <param name="int.long" select="4294967296 * 1 + 16777216 * 1 + 65536 * 1 + 256 * 1 + 5"/>
-        <param name="double.negative.0" select="xs:base64Binary(xs:hexBinary('8000000000000000'))"/>
-        <param name="double.1" select="xs:base64Binary(xs:hexBinary('3ff0000000000000'))"/>
-        <param name="double.1.octets" select="(63,240,0,0,0,0,0,0)"/>
-        <param name="float.negative.0" select="xs:base64Binary(xs:hexBinary('80000000'))"/>
-        <param name="float.1.octets" select="(63,128,0,0)"/>
-        <param name="int.byte.B" select="xs:base64Binary(xs:hexBinary('f0'))"/>
-        <param name="int.short.B" select="xs:base64Binary(xs:hexBinary('f040'))"/>
-        <param name="int.short.B-1" select="xs:base64Binary(xs:hexBinary('ffff'))"/>
-    </environment>
+  <environment name="EXPath-binary.numeric">
+    <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
+    <namespace prefix="binJAVA" uri="java:org.expath.ns.binary.EXPathBinary"/>
+    <namespace prefix="err" uri="http://expath.org/ns/binary"/>
+    <param name="int.byte" select="5"/>
+    <param name="int.short" select="256 * 1 + 5"/>
+    <param name="int.3" select="65536 * 1 + 256 * 1 + 5"/>
+    <param name="int.int" select="16777216 * 1 + 65536 * 1 + 256 * 1 + 5"/>
+    <param name="int.long" select="4294967296 * 1 + 16777216 * 1 + 65536 * 1 + 256 * 1 + 5"/>
+    <param name="double.negative.0" select="xs:base64Binary(xs:hexBinary('8000000000000000'))"/>
+    <param name="double.1" select="xs:base64Binary(xs:hexBinary('3ff0000000000000'))"/>
+    <param name="double.1.octets" select="(63,240,0,0,0,0,0,0)"/>
+    <param name="float.negative.0" select="xs:base64Binary(xs:hexBinary('80000000'))"/>
+    <param name="float.1.octets" select="(63,128,0,0)"/>
+    <param name="int.byte.B" select="xs:base64Binary(xs:hexBinary('f0'))"/>
+    <param name="int.short.B" select="xs:base64Binary(xs:hexBinary('f040'))"/>
+    <param name="int.short.B-1" select="xs:base64Binary(xs:hexBinary('ffff'))"/>
+  </environment>
 
-    <expand name="binary-pack-integer">
-        <created by="John Lumley" on="2013-07-19"/>
-        <environment ref="binary.numeric"/>
-        <test-case>
-            <description>pack-integer with unknown octet-order</description>
-            <test> bin:pack-integer(0,1,'MOST-sign-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
-            </result>
-        </test-case>
+  <expand name="EXPath-binary-pack-integer">
+    <created by="John Lumley" on="2013-07-19"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
+    <test-case>
+      <description>pack-integer with unknown octet-order</description>
+      <test> bin:pack-integer(0,1,'MOST-sign-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
+      </result>
+    </test-case>
 
-        <test-case>
-            <description>pack-integer octet-order comparison - most significant
-                synonyms</description>
-            <test> for $b in bin:pack-integer(34567,3,'most-significant-first') return $b eq
+    <test-case>
+      <description>pack-integer octet-order comparison - most significant synonyms</description>
+      <test> for $b in bin:pack-integer(34567,3,'most-significant-first') return $b eq
                 bin:pack-integer(34567,3,'big-endian') and $b eq bin:pack-integer(34567,3,'BE') </test>
-            <result>
-                <assert-true/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer octet-order comparison - least significant
-                synonyms</description>
-            <test> for $b in bin:pack-integer(34567,3,'least-significant-first') return $b eq
+      <result>
+        <assert-true/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer octet-order comparison - least significant synonyms</description>
+      <test> for $b in bin:pack-integer(34567,3,'least-significant-first') return $b eq
                 bin:pack-integer(34567,3,'little-endian') and $b eq bin:pack-integer(34567,3,'LE') </test>
-            <result>
-                <assert-true/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer octet-order comparison - least and most differ</description>
-            <test> bin:pack-integer(34567,3,'most-significant-first') eq
+      <result>
+        <assert-true/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer octet-order comparison - least and most differ</description>
+      <test> bin:pack-integer(34567,3,'most-significant-first') eq
                 bin:pack-integer(34567,3,'least-significant-first') </test>
-            <result>
-                <assert-false/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with negative length</description>
-            <test> bin:pack-integer(34567,-3,'most-significant-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}negative-size"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with zero length</description>
-            <test> bin:pack-integer(34567,0,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:base64Binary</assert-type>
-                    <assert-eq>xs:base64Binary("")</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with zero as byte</description>
-            <test> bin:pack-integer(0,1) </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:base64Binary</assert-type>
-                    <assert-eq>xs:base64Binary("AA==")</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as byte</description>
-            <test> bin:pack-integer($int.short,1) </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:base64Binary</assert-type>
-                    <assert-eq>xs:base64Binary("BQ==")</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with zero as short</description>
-            <test> bin:pack-integer(0,2) </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:base64Binary</assert-type>
-                    <assert-eq>xs:base64Binary("AAA=")</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as short - default - big-endian</description>
-            <test> bin:pack-integer($int.short,2) eq  bin:pack-integer($int.short,2,'BE')</test>
-            <result>
-                <assert-true/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as short - little-endian</description>
-            <test> bin:pack-integer($int.short,2,'least-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:base64Binary</assert-type>
-                    <assert-eq>xs:base64Binary("BQE=")</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as short - big-endian</description>
-            <test> bin:pack-integer($int.short,2,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:base64Binary</assert-type>
-                    <assert-eq>xs:base64Binary("AQU=")</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as short - big-endian</description>
-            <test> bin:to-octets(bin:pack-integer($int.short,2)) </test>
-            <result>
-                <assert-deep-eq>(1,5)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as short - big-endian</description>
-            <test> bin:to-octets(bin:pack-integer($int.short,2,'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(1,5)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as 3-byte - little-endian</description>
-            <test> bin:to-octets(bin:pack-integer($int.3,3,'LE')) </test>
-            <result>
-                <assert-deep-eq>(5,1,1)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as 3-byte - big-endian</description>
-            <test> bin:to-octets(bin:pack-integer($int.3,3,'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(1,1,5)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as int - little-endian</description>
-            <test> bin:to-octets(bin:pack-integer($int.int,4,'LE')) </test>
-            <result>
-                <assert-deep-eq>(5,1,1,1)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as int - big-endian</description>
-            <test> bin:to-octets(bin:pack-integer($int.int,4,'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(1,1,1,5)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as long - little-endian</description>
-            <test> bin:to-octets(bin:pack-integer($int.long,8,'LE')) </test>
-            <result>
-                <assert-deep-eq>(5,1,1,1,1,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as long - big-endian</description>
-            <test> bin:to-octets(bin:pack-integer($int.long,8,'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(0,0,0,1,1,1,1,5)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-integer with non-zero as BIG - big-endian</description>
-            <test> bin:to-octets(bin:pack-integer(12345678901234,12,'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(0, 0, 0, 0, 0, 0, 11, 58, 115, 206, 47, 242)</assert-deep-eq>
-            </result>
-        </test-case>
-    </expand>
+      <result>
+        <assert-false/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with negative length</description>
+      <test> bin:pack-integer(34567,-3,'most-significant-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}negative-size"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with zero length</description>
+      <test> bin:pack-integer(34567,0,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:base64Binary</assert-type>
+          <assert-eq>xs:base64Binary("")</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with zero as byte</description>
+      <test> bin:pack-integer(0,1) </test>
+      <result>
+        <all-of>
+          <assert-type>xs:base64Binary</assert-type>
+          <assert-eq>xs:base64Binary("AA==")</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as byte</description>
+      <test> bin:pack-integer($int.short,1) </test>
+      <result>
+        <all-of>
+          <assert-type>xs:base64Binary</assert-type>
+          <assert-eq>xs:base64Binary("BQ==")</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with zero as short</description>
+      <test> bin:pack-integer(0,2) </test>
+      <result>
+        <all-of>
+          <assert-type>xs:base64Binary</assert-type>
+          <assert-eq>xs:base64Binary("AAA=")</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as short - default - big-endian</description>
+      <test> bin:pack-integer($int.short,2) eq  bin:pack-integer($int.short,2,'BE')</test>
+      <result>
+        <assert-true/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as short - little-endian</description>
+      <test> bin:pack-integer($int.short,2,'least-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:base64Binary</assert-type>
+          <assert-eq>xs:base64Binary("BQE=")</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as short - big-endian</description>
+      <test> bin:pack-integer($int.short,2,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:base64Binary</assert-type>
+          <assert-eq>xs:base64Binary("AQU=")</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as short - big-endian</description>
+      <test> bin:to-octets(bin:pack-integer($int.short,2)) </test>
+      <result>
+        <assert-deep-eq>(1,5)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as short - big-endian</description>
+      <test> bin:to-octets(bin:pack-integer($int.short,2,'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(1,5)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as 3-byte - little-endian</description>
+      <test> bin:to-octets(bin:pack-integer($int.3,3,'LE')) </test>
+      <result>
+        <assert-deep-eq>(5,1,1)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as 3-byte - big-endian</description>
+      <test> bin:to-octets(bin:pack-integer($int.3,3,'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(1,1,5)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as int - little-endian</description>
+      <test> bin:to-octets(bin:pack-integer($int.int,4,'LE')) </test>
+      <result>
+        <assert-deep-eq>(5,1,1,1)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as int - big-endian</description>
+      <test> bin:to-octets(bin:pack-integer($int.int,4,'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(1,1,1,5)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as long - little-endian</description>
+      <test> bin:to-octets(bin:pack-integer($int.long,8,'LE')) </test>
+      <result>
+        <assert-deep-eq>(5,1,1,1,1,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as long - big-endian</description>
+      <test> bin:to-octets(bin:pack-integer($int.long,8,'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(0,0,0,1,1,1,1,5)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-integer with non-zero as BIG - big-endian</description>
+      <test> bin:to-octets(bin:pack-integer(12345678901234,12,'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(0, 0, 0, 0, 0, 0, 11, 58, 115, 206, 47, 242)</assert-deep-eq>
+      </result>
+    </test-case>
+  </expand>
 
-    <expand name="binary-pack-double">
-        <created by="John Lumley" on="2013-07-19"/>
-        <environment ref="binary.numeric"/>
-        <test-case>
-            <description>pack-double with unknown octet-order</description>
-            <test> bin:pack-double(xs:double(0.0),'MOST-sign-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-double with 0.0 - little endian</description>
-            <test> bin:pack-double(xs:double(0.0)) </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:base64Binary</assert-type>
-                    <assert-eq>xs:base64Binary("AAAAAAAAAAA=")</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-double with +0.0 - big-endian. Note the difference from IEEE regarding
-                no negative zero - in that case the leading octet is 128</description>
-            <test> bin:to-octets(bin:pack-double(+xs:double(0.0),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(0,0,0,0,0,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-double with -0.0 - big-endian. Note the difference from IEEE regarding
-                no negative zero - in that case the leading octet is 128</description>
-            <test> bin:to-octets(bin:pack-double(-xs:double(0.0),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(128,0,0,0,0,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-double with 1.0 - little-endian</description>
-            <test> bin:to-octets(bin:pack-double(xs:double(1.0),'LE')) </test>
-            <result>
-                <assert-deep-eq>(0,0,0,0,0,0,240,63)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-double with 1.0 - big-endian</description>
-            <test> bin:to-octets(bin:pack-double(xs:double(1.0),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(63,240,0,0,0,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-double with 1.0 - big-endian</description>
-            <test> bin:pack-double(xs:double(1.0),'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:base64Binary</assert-type>
-                    <assert-eq>xs:base64Binary(xs:hexBinary('3ff0000000000000'))</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-double with 2.0 - big-endian</description>
-            <test> bin:to-octets(bin:pack-double(xs:double(2.0),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(64,0,0,0,0,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-double with positive infinity - big-endian</description>
-            <test> bin:to-octets(bin:pack-double(1 div 0e0,'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(127,240,0,0,0,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-double with negative infinity - big-endian</description>
-            <test> bin:to-octets(bin:pack-double(-1 div 0e0,'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(255,240,0,0,0,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-double with NaN - big-endian. Possibilities of other NaN
-                values?</description>
-            <test> bin:to-octets(bin:pack-double(number("NaN"),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(127,248,0,0,0,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-    </expand>
-    <expand name="binary-pack-float">
-        <created by="John Lumley" on="2013-07-19"/>
-        <environment ref="binary.numeric"/>
-        <test-case>
-            <description>pack-float with unknown octet-order</description>
-            <test> bin:pack-float(xs:float(0.0),'MOST-sign-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-float with 0.0 - little endian</description>
-            <test> bin:pack-float(xs:float(0.0)) </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:base64Binary</assert-type>
-                    <assert-eq>xs:base64Binary("AAAAAA==")</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-float with +0.0 - big-endian. Note the difference from IEEE regarding
-                no negative zero - in that case the leading octet is 128</description>
-            <test> bin:to-octets(bin:pack-float(+xs:float(0.0),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(0,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-float with -0.0 - big-endian. Note the difference from IEEE regarding
-                no negative zero - in that case the leading octet is 128</description>
-            <test> bin:to-octets(bin:pack-float(-xs:float(0.0),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(128,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-float with 1.0 - little-endian</description>
-            <test> bin:to-octets(bin:pack-float(xs:float(1.0),'LE')) </test>
-            <result>
-                <assert-deep-eq>(0,0,128,63)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-float with 1.0 - big-endian</description>
-            <test> bin:to-octets(bin:pack-float(xs:float(1.0),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(63,128,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-float with 2.0 - big-endian</description>
-            <test> bin:to-octets(bin:pack-float(xs:float(2.0),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(64,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-float with positive infinity - big-endian</description>
-            <test> bin:to-octets(bin:pack-float(xs:float(1 div 0e0),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(127,128,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-float with negative infinity - big-endian</description>
-            <test> bin:to-octets(bin:pack-float(xs:float(-1 div 0e0),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(255,128,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>pack-float with NaN - big-endian. Possibilities of other NaN
-                values?</description>
-            <test> bin:to-octets(bin:pack-float(xs:float(number("NaN")),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(127,192,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-    </expand>
+  <expand name="EXPath-binary-pack-double">
+    <created by="John Lumley" on="2013-07-19"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
+    <test-case>
+      <description>pack-double with unknown octet-order</description>
+      <test> bin:pack-double(xs:double(0.0),'MOST-sign-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-double with 0.0 - little endian</description>
+      <test> bin:pack-double(xs:double(0.0)) </test>
+      <result>
+        <all-of>
+          <assert-type>xs:base64Binary</assert-type>
+          <assert-eq>xs:base64Binary("AAAAAAAAAAA=")</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-double with +0.0 - big-endian. Note the difference from IEEE regarding no
+        negative zero - in that case the leading octet is 128</description>
+      <test> bin:to-octets(bin:pack-double(+xs:double(0.0),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(0,0,0,0,0,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-double with -0.0 - big-endian. Note the difference from IEEE regarding no
+        negative zero - in that case the leading octet is 128</description>
+      <test> bin:to-octets(bin:pack-double(-xs:double(0.0),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(128,0,0,0,0,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-double with 1.0 - little-endian</description>
+      <test> bin:to-octets(bin:pack-double(xs:double(1.0),'LE')) </test>
+      <result>
+        <assert-deep-eq>(0,0,0,0,0,0,240,63)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-double with 1.0 - big-endian</description>
+      <test> bin:to-octets(bin:pack-double(xs:double(1.0),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(63,240,0,0,0,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-double with 1.0 - big-endian</description>
+      <test> bin:pack-double(xs:double(1.0),'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:base64Binary</assert-type>
+          <assert-eq>xs:base64Binary(xs:hexBinary('3ff0000000000000'))</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-double with 2.0 - big-endian</description>
+      <test> bin:to-octets(bin:pack-double(xs:double(2.0),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(64,0,0,0,0,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-double with positive infinity - big-endian</description>
+      <test> bin:to-octets(bin:pack-double(1 div 0e0,'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(127,240,0,0,0,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-double with negative infinity - big-endian</description>
+      <test> bin:to-octets(bin:pack-double(-1 div 0e0,'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(255,240,0,0,0,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-double with NaN - big-endian. Possibilities of other NaN
+        values?</description>
+      <test> bin:to-octets(bin:pack-double(number("NaN"),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(127,248,0,0,0,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+  </expand>
+  <expand name="EXPath-binary-pack-float">
+    <created by="John Lumley" on="2013-07-19"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
+    <test-case>
+      <description>pack-float with unknown octet-order</description>
+      <test> bin:pack-float(xs:float(0.0),'MOST-sign-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-float with 0.0 - little endian</description>
+      <test> bin:pack-float(xs:float(0.0)) </test>
+      <result>
+        <all-of>
+          <assert-type>xs:base64Binary</assert-type>
+          <assert-eq>xs:base64Binary("AAAAAA==")</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-float with +0.0 - big-endian. Note the difference from IEEE regarding no
+        negative zero - in that case the leading octet is 128</description>
+      <test> bin:to-octets(bin:pack-float(+xs:float(0.0),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(0,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-float with -0.0 - big-endian. Note the difference from IEEE regarding no
+        negative zero - in that case the leading octet is 128</description>
+      <test> bin:to-octets(bin:pack-float(-xs:float(0.0),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(128,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-float with 1.0 - little-endian</description>
+      <test> bin:to-octets(bin:pack-float(xs:float(1.0),'LE')) </test>
+      <result>
+        <assert-deep-eq>(0,0,128,63)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-float with 1.0 - big-endian</description>
+      <test> bin:to-octets(bin:pack-float(xs:float(1.0),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(63,128,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-float with 2.0 - big-endian</description>
+      <test> bin:to-octets(bin:pack-float(xs:float(2.0),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(64,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-float with positive infinity - big-endian</description>
+      <test> bin:to-octets(bin:pack-float(xs:float(1 div 0e0),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(127,128,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-float with negative infinity - big-endian</description>
+      <test> bin:to-octets(bin:pack-float(xs:float(-1 div 0e0),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(255,128,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>pack-float with NaN - big-endian. Possibilities of other NaN
+        values?</description>
+      <test> bin:to-octets(bin:pack-float(xs:float(number("NaN")),'most-significant-first')) </test>
+      <result>
+        <assert-deep-eq>(127,192,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+  </expand>
 
-    <expand name="binary-unpack-double">
-        <created by="John Lumley" on="2013-07-19"/>
-        <environment ref="binary.numeric"/>
-        <test-case>
-            <description>unpack-double with unknown octet-order</description>
-            <test> bin:unpack-double(bin:from-octets($double.1.octets),0,'MOST-sign-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-double with negative offset</description>
-            <test> bin:unpack-double(bin:from-octets($double.1.octets),-1,'most-significant-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-double extending beyond data</description>
-            <test> bin:unpack-double(bin:from-octets($double.1.octets),1,'most-significant-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-double for -0.0 - big-endian</description>
-            <test> bin:unpack-double($double.negative.0,0,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:double</assert-type>
-                    <assert-eq>-0.0</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-double for 1.0 - big-endian</description>
-            <test> bin:unpack-double(bin:from-octets($double.1.octets),0,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:double</assert-type>
-                    <assert-eq>1.0</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-double with NaN - big-endian</description>
-            <test>
+  <expand name="EXPath-binary-unpack-double">
+    <created by="John Lumley" on="2013-07-19"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
+    <test-case>
+      <description>unpack-double with unknown octet-order</description>
+      <test> bin:unpack-double(bin:from-octets($double.1.octets),0,'MOST-sign-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-double with negative offset</description>
+      <test> bin:unpack-double(bin:from-octets($double.1.octets),-1,'most-significant-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-double extending beyond data</description>
+      <test> bin:unpack-double(bin:from-octets($double.1.octets),1,'most-significant-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-double for -0.0 - big-endian</description>
+      <test> bin:unpack-double($double.negative.0,0,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:double</assert-type>
+          <assert-eq>-0.0</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-double for 1.0 - big-endian</description>
+      <test> bin:unpack-double(bin:from-octets($double.1.octets),0,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:double</assert-type>
+          <assert-eq>1.0</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-double with NaN - big-endian</description>
+      <test>
                 bin:unpack-double(bin:from-octets((127,248,0,0,0,0,0,0)),0,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:double</assert-type>
-                    <assert-deep-eq>number("NaN")</assert-deep-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-double with NaN with payload - big-endian</description>
-            <test>
+      <result>
+        <all-of>
+          <assert-type>xs:double</assert-type>
+          <assert-deep-eq>number("NaN")</assert-deep-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-double with NaN with payload - big-endian</description>
+      <test>
                 bin:unpack-double(bin:from-octets((127,248,0,0,0,0,0,1)),0,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:double</assert-type>
-                    <assert-deep-eq>number("NaN")</assert-deep-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-double with quiet NaN with payload - big-endian</description>
-            <test>
+      <result>
+        <all-of>
+          <assert-type>xs:double</assert-type>
+          <assert-deep-eq>number("NaN")</assert-deep-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-double with quiet NaN with payload - big-endian</description>
+      <test>
                 bin:to-octets(bin:pack-double(bin:unpack-double(bin:from-octets((127,248,0,0,0,0,0,1)),0,'most-significant-first'),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(127,248,0,0,0,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-double with signalling NaN with payload - big-endian</description>
-            <test>
+      <result>
+        <assert-deep-eq>(127,248,0,0,0,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-double with signalling NaN with payload - big-endian</description>
+      <test>
                 bin:to-octets(bin:pack-double(bin:unpack-double(bin:from-octets((127,240,0,0,0,0,0,1)),0,'most-significant-first'),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(127,248,0,0,0,0,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-    </expand>
-    <expand name="binary-unpack-float">
-        <created by="John Lumley" on="2013-07-19"/>
-        <environment ref="binary.numeric"/>
-        <test-case>
-            <description>unpack-float with unknown octet-order</description>
-            <test> bin:unpack-float(bin:from-octets($float.1.octets),0,'MOST-sign-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-float with negative offset</description>
-            <test> bin:unpack-float(bin:from-octets($float.1.octets),-1,'most-significant-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-float extending beyond data</description>
-            <test> bin:unpack-float(bin:from-octets($float.1.octets),1,'most-significant-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-float for -0.0 - big-endian</description>
-            <test> bin:unpack-float($float.negative.0,0,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:float</assert-type>
-                    <assert-eq>-0.0</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-float for 1.0 - big-endian</description>
-            <test> bin:unpack-float(bin:from-octets($float.1.octets),0,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:float</assert-type>
-                    <assert-eq>1.0</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-float with NaN - big-endian</description>
-            <test> bin:unpack-float(bin:from-octets((127,192,0,0)),0,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:float</assert-type>
-                    <assert-deep-eq>xs:float(number("NaN"))</assert-deep-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-float with NaN with payload - big-endian</description>
-            <test> bin:unpack-float(bin:from-octets((127,192,0,1)),0,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:float</assert-type>
-                    <assert-deep-eq>number("NaN")</assert-deep-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-float with quiet NaN with payload - big-endian</description>
-            <test>
+      <result>
+        <assert-deep-eq>(127,248,0,0,0,0,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+  </expand>
+  <expand name="EXPath-binary-unpack-float">
+    <created by="John Lumley" on="2013-07-19"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
+    <test-case>
+      <description>unpack-float with unknown octet-order</description>
+      <test> bin:unpack-float(bin:from-octets($float.1.octets),0,'MOST-sign-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-float with negative offset</description>
+      <test> bin:unpack-float(bin:from-octets($float.1.octets),-1,'most-significant-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-float extending beyond data</description>
+      <test> bin:unpack-float(bin:from-octets($float.1.octets),1,'most-significant-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-float for -0.0 - big-endian</description>
+      <test> bin:unpack-float($float.negative.0,0,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:float</assert-type>
+          <assert-eq>-0.0</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-float for 1.0 - big-endian</description>
+      <test> bin:unpack-float(bin:from-octets($float.1.octets),0,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:float</assert-type>
+          <assert-eq>1.0</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-float with NaN - big-endian</description>
+      <test> bin:unpack-float(bin:from-octets((127,192,0,0)),0,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:float</assert-type>
+          <assert-deep-eq>xs:float(number("NaN"))</assert-deep-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-float with NaN with payload - big-endian</description>
+      <test> bin:unpack-float(bin:from-octets((127,192,0,1)),0,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:float</assert-type>
+          <assert-deep-eq>number("NaN")</assert-deep-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-float with quiet NaN with payload - big-endian</description>
+      <test>
                 bin:to-octets(bin:pack-float(bin:unpack-float(bin:from-octets((127,192,0,1)),0,'most-significant-first'),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(127,192,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-float with signalling NaN with payload - big-endian</description>
-            <test>
+      <result>
+        <assert-deep-eq>(127,192,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-float with signalling NaN with payload - big-endian</description>
+      <test>
                 bin:to-octets(bin:pack-float(bin:unpack-float(bin:from-octets((127,248,0,1)),0,'most-significant-first'),'most-significant-first')) </test>
-            <result>
-                <assert-deep-eq>(127,192,0,0)</assert-deep-eq>
-            </result>
-        </test-case>
-    </expand>
+      <result>
+        <assert-deep-eq>(127,192,0,0)</assert-deep-eq>
+      </result>
+    </test-case>
+  </expand>
 
-    <expand name="binary-unpack-unsigned-integer">
-        <created by="John Lumley" on="2013-07-22"/>
-        <environment ref="binary.numeric"/>
-        <test-case>
-            <description>unpack-unsigned-integer with unknown octet-order</description>
-            <test> bin:unpack-unsigned-integer($int.byte.B,0,1,'MOST-sign-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer octet-order comparison - most significant
-                synonyms</description>
-            <test> for $b in bin:unpack-unsigned-integer($int.short.B,0,2,'most-significant-first')
+  <expand name="EXPath-binary-unpack-unsigned-integer">
+    <created by="John Lumley" on="2013-07-22"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
+    <test-case>
+      <description>unpack-unsigned-integer with unknown octet-order</description>
+      <test> bin:unpack-unsigned-integer($int.byte.B,0,1,'MOST-sign-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer octet-order comparison - most significant
+        synonyms</description>
+      <test> for $b in bin:unpack-unsigned-integer($int.short.B,0,2,'most-significant-first')
                 return $b eq bin:unpack-unsigned-integer($int.short.B,0,2,'big-endian') and $b eq
                 bin:unpack-unsigned-integer($int.short.B,0,2,'BE') </test>
-            <result>
-                <assert-true/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer octet-order comparison - least significant
-                synonyms</description>
-            <test> for $b in bin:unpack-unsigned-integer($int.short.B,0,2,'least-significant-first')
+      <result>
+        <assert-true/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer octet-order comparison - least significant
+        synonyms</description>
+      <test> for $b in bin:unpack-unsigned-integer($int.short.B,0,2,'least-significant-first')
                 return $b eq bin:unpack-unsigned-integer($int.short.B,0,2,'little-endian') and $b eq
                 bin:unpack-unsigned-integer($int.short.B,0,2,'LE') </test>
-            <result>
-                <assert-true/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer octet-order comparison - least and most
-                differ</description>
-            <test> bin:unpack-unsigned-integer($int.short.B,0,2,'most-significant-first') eq
+      <result>
+        <assert-true/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer octet-order comparison - least and most
+        differ</description>
+      <test> bin:unpack-unsigned-integer($int.short.B,0,2,'most-significant-first') eq
                 bin:unpack-unsigned-integer($int.short.B,0,2,'least-significant-first') </test>
-            <result>
-                <assert-false/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer with negative offset</description>
-            <test> bin:unpack-unsigned-integer($int.short.B,-1,2,'most-significant-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer with negative length</description>
-            <test> bin:unpack-unsigned-integer($int.short.B,0,-2,'most-significant-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}negative-size"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer extending beyond data</description>
-            <test> bin:unpack-unsigned-integer($int.short.B,1,2,'most-significant-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer with zero length </description>
-            <test> bin:unpack-unsigned-integer($int.byte.B,0,0,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>0</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer on byte </description>
-            <test> bin:unpack-unsigned-integer($int.byte.B,0,1,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>240</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer on short </description>
-            <test> bin:unpack-unsigned-integer($int.short.B,0,2,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>61504</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer on long </description>
-            <test>
+      <result>
+        <assert-false/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer with negative offset</description>
+      <test> bin:unpack-unsigned-integer($int.short.B,-1,2,'most-significant-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer with negative length</description>
+      <test> bin:unpack-unsigned-integer($int.short.B,0,-2,'most-significant-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}negative-size"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer extending beyond data</description>
+      <test> bin:unpack-unsigned-integer($int.short.B,1,2,'most-significant-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer with zero length </description>
+      <test> bin:unpack-unsigned-integer($int.byte.B,0,0,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>0</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer on byte </description>
+      <test> bin:unpack-unsigned-integer($int.byte.B,0,1,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>240</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer on short </description>
+      <test> bin:unpack-unsigned-integer($int.short.B,0,2,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>61504</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer on long </description>
+      <test>
                 bin:unpack-unsigned-integer(xs:base64Binary(xs:hexBinary('0000000000000001')),0,8,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>1</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer on long </description>
-            <test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>1</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer on long </description>
+      <test>
                 bin:unpack-unsigned-integer(xs:base64Binary(xs:hexBinary('ffffffffffffffff')),0,8,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>-1</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer on BIG </description>
-            <test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>-1</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer on BIG </description>
+      <dependency type="limits" value="big_integer" satisfied="true"/>
+      <test>
                 bin:unpack-unsigned-integer(xs:base64Binary(xs:hexBinary('0fffffffffffffffffff')),0,10,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>75557863725914323419135</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-unsigned-integer on BIG </description>
-            <test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>75557863725914323419135</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-unsigned-integer on BIG </description>
+      <dependency type="limits" value="big_integer" satisfied="true"/>
+      <test>
                 bin:unpack-unsigned-integer(xs:base64Binary(xs:hexBinary('ffffffffffffffffffff')),0,10,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>1208925819614629174706175</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-    </expand>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>1208925819614629174706175</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+  </expand>
 
-    <expand name="binary-unpack-integer">
-        <created by="John Lumley" on="2013-07-22"/>
-        <environment ref="binary.numeric"/>
-        <test-case>
-            <description>unpack-integer with unknown octet-order</description>
-            <test> bin:unpack-integer($int.byte.B,0,1,'MOST-sign-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer octet-order comparison - most significant
-                synonyms</description>
-            <test> for $b in bin:unpack-integer($int.short.B,0,2,'most-significant-first')
+  <expand name="EXPath-binary-unpack-integer">
+    <created by="John Lumley" on="2013-07-22"/>
+    <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <environment ref="EXPath-binary.numeric"/>
+    <test-case>
+      <description>unpack-integer with unknown octet-order</description>
+      <test> bin:unpack-integer($int.byte.B,0,1,'MOST-sign-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}unknown-significance-order"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer octet-order comparison - most significant synonyms</description>
+      <test> for $b in bin:unpack-integer($int.short.B,0,2,'most-significant-first')
                 return $b eq bin:unpack-integer($int.short.B,0,2,'big-endian') and $b eq
                 bin:unpack-integer($int.short.B,0,2,'BE') </test>
-            <result>
-                <assert-true/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer octet-order comparison - least significant
-                synonyms</description>
-            <test> for $b in bin:unpack-integer($int.short.B,0,2,'least-significant-first')
+      <result>
+        <assert-true/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer octet-order comparison - least significant synonyms</description>
+      <test> for $b in bin:unpack-integer($int.short.B,0,2,'least-significant-first')
                 return $b eq bin:unpack-integer($int.short.B,0,2,'little-endian') and $b eq
                 bin:unpack-integer($int.short.B,0,2,'LE') </test>
-            <result>
-                <assert-true/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer octet-order comparison - least and most
-                differ</description>
-            <test> bin:unpack-integer($int.short.B,0,2,'most-significant-first') eq
+      <result>
+        <assert-true/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer octet-order comparison - least and most differ</description>
+      <test> bin:unpack-integer($int.short.B,0,2,'most-significant-first') eq
                 bin:unpack-integer($int.short.B,0,2,'least-significant-first') </test>
-            <result>
-                <assert-false/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer with negative offset</description>
-            <test> bin:unpack-integer($int.short.B,-1,2,'most-significant-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}negative-offset"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer with negative length</description>
-            <test> bin:unpack-integer($int.short.B,0,-2,'most-significant-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}negative-size"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer extending beyond data</description>
-            <test> bin:unpack-integer($int.short.B,1,2,'most-significant-first') </test>
-            <result>
-                <error code="Q{http://expath.org/ns/binary}offset-beyond-end"/>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer with zero length </description>
-            <test> bin:unpack-integer($int.byte.B,0,0,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>0</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer on byte </description>
-            <test> bin:unpack-integer($int.byte.B,0,1,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>-16</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer on short </description>
-            <test> bin:unpack-integer($int.short.B-1,0,2,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>-1</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer on short </description>
-            <test>
+      <result>
+        <assert-false/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer with negative offset</description>
+      <test> bin:unpack-integer($int.short.B,-1,2,'most-significant-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer with negative length</description>
+      <test> bin:unpack-integer($int.short.B,0,-2,'most-significant-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}negative-size"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer extending beyond data</description>
+      <test> bin:unpack-integer($int.short.B,1,2,'most-significant-first') </test>
+      <result>
+        <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer with zero length </description>
+      <test> bin:unpack-integer($int.byte.B,0,0,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>0</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer on byte </description>
+      <test> bin:unpack-integer($int.byte.B,0,1,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>-16</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer on short </description>
+      <test> bin:unpack-integer($int.short.B-1,0,2,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>-1</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer on short </description>
+      <test>
                 bin:unpack-integer(xs:base64Binary(xs:hexBinary('0001')),0,2,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>1</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer on short </description>
-            <test> bin:unpack-integer($int.short.B,0,2,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>-4032</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer on short </description>
-            <test> bin:unpack-integer($int.short.B-1,0,2,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>-1</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer on long </description>
-            <test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>1</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer on short </description>
+      <test> bin:unpack-integer($int.short.B,0,2,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>-4032</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer on short </description>
+      <test> bin:unpack-integer($int.short.B-1,0,2,'most-significant-first') </test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>-1</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer on long </description>
+      <test>
                 bin:unpack-integer(xs:base64Binary(xs:hexBinary('0000000000000001')),0,8,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>1</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-        <test-case>
-            <description>unpack-integer on long </description>
-            <test>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>1</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+    <test-case>
+      <description>unpack-integer on long </description>
+      <test>
                 bin:unpack-integer(xs:base64Binary(xs:hexBinary('ffffffffffffffff')),0,8,'most-significant-first') </test>
-            <result>
-                <all-of>
-                    <assert-type>xs:integer</assert-type>
-                    <assert-eq>-1</assert-eq>
-                </all-of>
-            </result>
-        </test-case>
-    </expand>
+      <result>
+        <all-of>
+          <assert-type>xs:integer</assert-type>
+          <assert-eq>-1</assert-eq>
+        </all-of>
+      </result>
+    </test-case>
+  </expand>
 
 </test-set>

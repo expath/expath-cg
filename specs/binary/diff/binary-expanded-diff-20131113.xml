@@ -22,19 +22,18 @@
    <header>
       <title>Binary Module</title>
       <w3c-designation>w3c-designation</w3c-designation>
-      <w3c-doctype>EXPath <phrase diff="del">Candidate</phrase><phrase diff="add">Proposed</phrase>
-         Module</w3c-doctype>
+      <w3c-doctype>EXPath Proposed Module</w3c-doctype>
       <pubdate>
-         <day>3</day>
-         <month>October</month>
+         <day>13</day>
+         <month>November</month>
          <year>2013</year>
       </pubdate>
       <publoc>
-         <loc diff="chg" href="http://expath.org/spec/binary/20131003"/>
+         <loc diff="chg" href="http://expath.org/spec/binary/20131113"/>
       </publoc>
       <altlocs>
          <loc href="http://expath.org/spec/binary/editor.xml">XML</loc>
-         <loc href="http://expath.org/spec/binary/20131003/diff">Revision Markup</loc>
+         <loc href="http://expath.org/spec/binary/20131113/diff">Revision Markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/binary"/>
@@ -132,6 +131,12 @@
                   containing the data, and differ only when being serialized to or parsed from text,
                   such casting in-process should not involve data copying.</p>
             </note>
+           <p diff="add">An item of type <code>xs:base64Binary</code> can be <emph>empty</emph>, i.e. contain no
+             data, (in the same way that items of type <code>xs:string</code> can contain no
+             characters.) Where 'data' arguments to functions that return binary data are optional
+             (i.e. <code><emph>$arg as type</emph>?</code>) and any of those optional arguments is set
+             to the empty sequence, in general an empty sequence is returned, rather than an empty item
+             of type <code>xs:base64Binary</code>. </p>
          </div2>
          <div2 id="testing" diff="add">
             <head diff="add">Test suite</head>
@@ -1531,10 +1536,10 @@
                <gitem>
                   <label>Signature</label>
                   <def>
-                     <p><example role="signature">
-                           <proto name="or" return-type="xs:base64Binary" isOp="no" prefix="bin">
-                              <arg name="a" type="xs:base64Binary"/>
-                              <arg name="b" type="xs:base64Binary"/>
+                     <p diff="chg"><example role="signature">
+                           <proto name="or" return-type="xs:base64Binary?" isOp="no" prefix="bin">
+                              <arg name="a" type="xs:base64Binary?"/>
+                              <arg name="b" type="xs:base64Binary?"/>
                            </proto>
                         </example></p>
                   </def>
@@ -1544,6 +1549,8 @@
                   <def>
                      <p>Returns "bitwise or" applied between <code>$a</code> and
                         <code>$b</code>.</p>
+                     <p diff="add">If either argument is the empty sequence, an empty sequence is
+                        returned.</p>
                   </def>
                </gitem>
                <gitem>
@@ -1567,10 +1574,10 @@
                <gitem>
                   <label>Signature</label>
                   <def>
-                     <p><example role="signature">
-                           <proto name="xor" return-type="xs:base64Binary" isOp="no" prefix="bin">
-                              <arg name="a" type="xs:base64Binary"/>
-                              <arg name="b" type="xs:base64Binary"/>
+                     <p diff="chg"><example role="signature">
+                           <proto name="xor" return-type="xs:base64Binary?" isOp="no" prefix="bin">
+                              <arg name="a" type="xs:base64Binary?"/>
+                              <arg name="b" type="xs:base64Binary?"/>
                            </proto>
                         </example></p>
                   </def>
@@ -1580,6 +1587,8 @@
                   <def>
                      <p>Returns "bitwise exclusive or" applied between <code>$a</code> and
                            <code>$b</code>.</p>
+                    <p diff="add">If either argument is the empty sequence, an empty sequence is
+                      returned.</p>
                   </def>
                </gitem>
                <gitem>
@@ -1603,10 +1612,10 @@
                <gitem>
                   <label>Signature</label>
                   <def>
-                     <p><example role="signature">
-                           <proto name="and" return-type="xs:base64Binary" isOp="no" prefix="bin">
-                              <arg name="a" type="xs:base64Binary"/>
-                              <arg name="b" type="xs:base64Binary"/>
+                     <p diff="chg"><example role="signature">
+                           <proto name="and" return-type="xs:base64Binary?" isOp="no" prefix="bin">
+                              <arg name="a" type="xs:base64Binary?"/>
+                              <arg name="b" type="xs:base64Binary?"/>
                            </proto>
                         </example></p>
                   </def>
@@ -1616,6 +1625,8 @@
                   <def>
                      <p>Returns "bitwise and" applied between <code>$a</code> and
                         <code>$b</code>.</p>
+                    <p diff="add">If either argument is the empty sequence, an empty sequence is
+                      returned.</p>
                   </def>
                </gitem>
                <gitem>
@@ -1639,9 +1650,9 @@
                <gitem>
                   <label>Signature</label>
                   <def>
-                     <p><example role="signature">
-                           <proto name="not" return-type="xs:base64Binary" isOp="no" prefix="bin">
-                              <arg name="in" type="xs:base64Binary"/>
+                     <p diff="chg"><example role="signature">
+                           <proto name="not" return-type="xs:base64Binary?" isOp="no" prefix="bin">
+                              <arg name="in" type="xs:base64Binary?"/>
                            </proto>
                         </example></p>
                   </def>
@@ -1650,6 +1661,8 @@
                   <label>Rules</label>
                   <def>
                      <p>Returns "bitwise not" applied to <code>$in</code>.</p>
+                     <p diff="add">If the argument is the empty sequence, an empty sequence is
+                        returned.</p>
                   </def>
                </gitem>
             </glist>

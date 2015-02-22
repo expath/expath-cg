@@ -7,9 +7,10 @@
     <link type="spec" document="http://expath.org/spec/archive"/>
 
 
-    <expand name="delete">
+    <expand name="EXPath-archive-delete">
         <created by="John Lumley" on="2013-08-28"/>
-        <environment ref="archive"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-archive"/>
         <test-case>
             <description>Delete entry from a one-entry zip</description>
             <test>
@@ -51,9 +52,10 @@
         </test-case>
     </expand>
 
-    <expand name="update">
+    <expand name="EXPath-archive-update">
         <created by="John Lumley" on="2013-08-28"/>
-        <environment ref="archive"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-archive"/>
         <test-case>
             <description>Update entry in a one-entry zip</description>
             <test>
@@ -110,9 +112,10 @@
         </test-case>
     </expand>
 
-    <expand name="create">
+    <expand name="EXPath-archive-create">
         <created by="John Lumley" on="2013-08-28"/>
-        <environment ref="archive"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-archive"/>
         <test-case>
             <description>Create a one-entry ZIP</description>
             <test> 

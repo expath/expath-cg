@@ -7,9 +7,10 @@
     <link type="spec" document="http://expath.org/spec/archive"/>
 
 
-    <expand name="extract-binary">
+    <expand name="EXPath-archive-extract-binary">
         <created by="John Lumley" on="2013-08-28"/>
-        <environment ref="archive"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-archive"/>
         <test-case>
             <description>Unknown entry</description>
             <test>
@@ -45,9 +46,10 @@
         </test-case>
     </expand>
 
-    <expand name="extract-text">
+    <expand name="EXPath-archive-extract-text">
         <created by="John Lumley" on="2013-08-28"/>
-        <environment ref="archive"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-archive"/>
         <test-case>
             <description>Unknown entry</description>
             <test>

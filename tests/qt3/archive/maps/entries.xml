@@ -7,9 +7,10 @@
     <link type="spec" document="http://expath.org/spec/archive"/>
 
 
-    <expand name="entries-map">
+    <expand name="EXPath-archive-entries-map">
         <created by="John Lumley" on="2013-08-28"/>
-        <environment ref="archive-map"/>
+        <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <environment ref="EXPath-archive.map"/>
         <test-case>
             <description>Count entries in a one-entry zip</description>
             <test>
@@ -55,7 +56,7 @@
             <result>
                 <all-of>
                     <assert-type>xs:string*</assert-type>
-                    <assert-permutation>'size','compressed-size','last-modified','compression'</assert-permutation>
+                    <assert-permutation>'position','size','compressed-size','last-modified','compression'</assert-permutation>
                 </all-of>
             </result>
         </test-case>
@@ -67,7 +68,7 @@
             <result>
                 <all-of>
                     <assert-type>xs:string*</assert-type>
-                    <assert-permutation>'content','size','compressed-size','last-modified','compression'</assert-permutation>
+                    <assert-permutation>'position','content','size','compressed-size','last-modified','compression'</assert-permutation>
                 </all-of>
             </result>
         </test-case>

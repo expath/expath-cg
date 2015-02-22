@@ -1,0 +1,1271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?oxygen RNGSchema="http://expath.org/ns/xmlspec/xmlspec.rnc" type="compact"?>
+
+<spec role="editors-copy" xmlns:ex="http://expath.org/ns/xmlspec" ex:w3c="true">
+   <header>
+      <title>Web Applications</title>
+      <w3c-designation>w3c-designation</w3c-designation>
+      <w3c-doctype>EXPath Candidate Module</w3c-doctype>
+      <pubdate>
+         <day>nn</day>
+         <month>Xxx</month>
+         <year>2013</year>
+      </pubdate>
+      <publoc>
+         <loc href="http://expath.org/spec/webapp/editor"/>
+      </publoc>
+      <altlocs>
+         <loc href="http://expath.org/spec/webapp/editor.xml">XML</loc>
+      </altlocs>
+      <latestloc>
+         <loc href="http://expath.org/spec/webapp"/>
+      </latestloc>
+      <prevlocs>
+         <loc href="http://expath.org/spec/webapp/20130401"/>
+      </prevlocs>
+      <authlist>
+         <author role="editor">
+            <name>Florent Georges</name>
+            <affiliation><loc href="http://h2oconsulting.be/">H2O Consulting</loc></affiliation>
+         </author>
+      </authlist>
+      <!--
+          The copyright has to be adapted when this spec passes into "Final Report" status.
+          See http://www.w3.org/community/reports/reqs/.
+      -->
+      <copyright>
+         <p>Copyright © 2011-2013 Florent Georges, published by the <loc
+               href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
+               href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+               License Agreement (CLA)</loc>. A human-readable <loc
+               href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
+            available.</p>
+         <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
+               >EXPath Community Group</loc>. It is not a W3C Standard nor is it on the W3C
+            Standards Track. Please note that under the <loc
+               href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+               License Agreement (CLA)</loc> there is a limited opt-out and other conditions apply.
+            Learn more about <loc href="http://www.w3.org/community/">W3C Community and Business
+               Groups</loc>.</p>
+      </copyright>
+      <abstract>
+         <p>This specification defines how to write web applications on server-side, using XML
+            technologies like XSLT, XQuery and XProc. It also defines their execution context, as
+            well as some functions they can use. Last but not least it defines how to package such
+            webapps, by using the <bibref ref="pkg"/>.</p>
+      </abstract>
+      <status>
+         <p>Must be ignored, but is required by the schema...</p>
+      </status>
+      <langusage>
+         <language>langusage</language>
+      </langusage>
+      <revisiondesc>
+         <p>revisiondesc</p>
+      </revisiondesc>
+   </header>
+   <body>
+      <div1 id="intro">
+         <head>Introduction</head>
+         <div2 id="namespaces">
+            <head>Namespace conventions</head>
+            <p>The webapp descriptor uses the namespace <code>http://expath.org/ns/webapp</code>, as
+               the default namespace. This namespace is also used for the XML representation of the
+               HTTP requests and responses, and to define several functions provided by the webapp
+               container. In this document, the <code>web</code> prefix, when used, is bound to this
+               namespace URI.</p>
+            <p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>. In
+               this document, the <code>err</code> prefix, when used, is bound to this namespace
+               URI.</p>
+         </div2>
+      </div1>
+      <div1 id="containers">
+         <head>Containers and webapps</head>
+         <p>A web application, or webapp, in this specification, is a set of components,
+            implementing an application. The application responds to HTTP requests and runs in a
+            webapp container. The container provides the context of execution for the webapps,
+            provides them with some functions, and is responsible for translating from and to HTTP.
+            When the container receives an HTTP request, it identifies the corresponding component
+            to process it (e.g. based on the request URL), builds an XML representation of the
+            request, and calls the component. The component receives the HTTP request as an XML
+            document, and returns an XML description of the HTTP response to send back to the
+            client. The container then translates this XML document and sends the corresponding HTTP
+            response.</p>
+         <p>A component is a piece of XSLT, XQuery or XProc. Each type of component defines how the
+            request is passed to and the response is returned by such a component. But the XML
+            format of the requests and responses is always the same. The existing types of
+            components are:</p>
+         <ulist>
+            <item><p>an XSLT stylesheet</p></item>
+            <item><p>an XSLT function</p></item>
+            <item><p>an XSLT template</p></item>
+            <item><p>an XQuery query</p></item>
+            <item><p>an XQuery function</p></item>
+            <item><p>an XProc pipeline</p></item>
+            <item><p>an XProc step</p></item>
+         </ulist>
+         <p>A webapp contains a descriptor, which defines how to dispatch a request to a specific
+            component. The dispatching mechanism is based on the request URL, by associating a URL
+            pattern to a component public URI (a component public URI is defined in the <bibref
+               ref="pkg"/>, basically it is the component name, as an absolute URI). The association
+            of a URL pattern to a component is called a servlet. Every servlet has a name.</p>
+         <p>A webapp is installed at a specific context root. The context root is a path prefix, and
+            all the requests received "below" that prefix are served by that webapp. For instance, a
+            webapp installed on <code>example.org</code> at the context root <code>/somewhere</code>
+            will serve all requests with a URL starting with <code>http://example.org/somewhere/</code>.
+            The part after that prefix is the path to the servlet.</p>
+      </div1>
+      <div1 id="req-resp">
+         <head>Requests and responses</head>
+         <p>The HTTP requests and responses are represented as XML documents. The request is built
+            by the container to represent the actual HTTP request received. The component returns a
+            representation of the response, used by the container to actually respond to the client
+            over HTTP. A sample request:</p>
+         <eg>
+&lt;request servlet="some" path="/some/resource" method="get" xmlns="http://expath.org/ns/webapp">
+   &lt;url>http://example.org/myapp/some/resource&lt;/url>
+   &lt;authority>http://example.org&lt;/authority>
+   &lt;context-root>/myapp&lt;/context-root>
+   &lt;path>
+      &lt;part>/some/&lt;/part>
+      &lt;match name="rsrc">resource&lt;/match>
+   &lt;/path>
+   &lt;header name="host" value="example.org"/>
+   &lt;header name="user-agent" value="Firefox/7.0.1"/>
+   &lt;header name="accept" value="text/html,application/xml;q=0.9,*/*;q=0.8"/>
+   &lt;header name="accept-language" value="en-us,en;q=0.5"/>
+&lt;/request>
+</eg>
+         <p>This request can be built by a container listening at <code>http://example.org/</code>,
+            when it receives a request to GET the resource at <code>/myapp/some/resource</code>. We
+            can see the path has been pre-analyzed, and the request contains various HTTP
+            information like the method, the request URL (decomposed in different ways), and the
+            headers.  The request might also contain an entity content, also known as the body of
+            the request (e.g. in case of a PUT request).</p>
+         <p>In response to the above request, the invoked component could return the following
+            response to the container:</p>
+         <eg>
+&lt;response status="200" message="Ok" xmlns="http://expath.org/ns/webapp">
+   &lt;header name="X-My-Header" value="Just an example."/>
+   &lt;body content-type="application/xml">
+      &lt;hello>World!&lt;/hello>
+   &lt;/body>
+&lt;/response>
+</eg>
+         <p>This tells the container to return the XML document
+               <code>&lt;hello>World!&lt;/hello></code> to the client, using the Content-Type
+            "application/xml", with the HTTP status code 200, and an extra header.</p>
+         <div2 id="requests">
+            <head>Requests</head>
+            <p>A HTTP request is represented by a sequence, the <emph>request sequence</emph>. The
+               first item in that sequence is an element <code>web:request</code>, and the remaining
+               items represent the entity content (there might be several of them in case of
+               multipart). The <code>web:request</code> element is defined as the following:</p>
+            <eg>
+&lt;request servlet = NCName
+         path = string
+         method = NCName>
+   url,
+   authority,
+   context-root,
+   path,
+   param*,
+   header*,
+   (body|
+    multipart)?
+&lt;/request>
+</eg>
+            <p>A request contains the name of the matched <code>servlet</code>, the request
+                  <code>path</code>, and its <code>method</code> (also known as the HTTP verb, like
+               GET and POST) in lower case. The text element <code>url</code> contains the original
+               request URL, including its query parameters if any. The URL also appears cut down
+               into several pieces. The element <code>authority</code> is its first part, including
+               the URL scheme and the domain name, <code>context-root</code> is the webapp context
+               root, <code>path</code> is an alternative representation of the requested path (as in
+               the attribute <code>path</code>), where some specific parts have been analyzed, and
+               the elements <code>param</code> represent the query parameters.</p>
+            <p>Then come the HTTP <code>header</code> elements, each with a name and a value. Then
+               the content of the HTTP entity (e.g. for a PUT), as an element <code>body</code> or
+                  <code>multipart</code>, depending on the content type of the request.</p>
+            <eg>
+&lt;header name = string
+        value = string>
+   <emph>empty</emph>
+&lt;header>
+</eg>
+            <p><kw>URL</kw></p>
+            <p>The URL appears at several places in the request element, under different shapes. The
+               element <code>url</code> is the original URL as typed by the user. Or at least it is
+               an educated guess of what it could be, as HTTP does not include the original URL in
+               the request (the port number for instance is not in the HTTP request).</p>
+            <p>The element <code>authority</code> is the first part of the URL, including the URL
+               scheme and the domain name (up to the slash first, but not including it). The scheme
+               can be either "http:" or "https:". It is then followed by two slashes then the domain
+               name.</p>
+            <p>The element <code>context-root</code> is the webapp context root on this server. It
+               is fixed for the webpp, and represents where the webapp has been "installed" on the
+               server (the webapp serves all requests coming to URLs "below" its context root).</p>
+            <p>After the element <code>path</code> (see below), the query parameters, if any, are
+               represented each with an element <code>param</code>, with an attribute
+                  <code>name</code> and an attribute <code>value</code>.</p>
+            <eg>
+&lt;param name = string
+       value = string>
+   <emph>empty</emph>
+&lt;param>
+</eg>
+            <p>Note that the XPath expression "<code>fn:concat(authority, context-root,
+               path)</code>" gives the original URL except the query parameters.</p>
+            <p><kw id="path">Path</kw></p>
+            <p>The path is the part of the request URL that comes after the context root (excluding
+               the query parameters). This is thus the part that can vary for a given webapp (for a
+               given webapp, deployed on a specific server at a specific context root, everything up
+               to and including the context root will be always the same). Servlets use regexes to
+               match URLs, and they can give a name to some sub parts of the path matched by the
+               regex (see the definition of the webapp descriptor for all details).</p>
+            <p>This is represented by having, in the element <code>path</code>, a sequence of
+               elements <code>part</code> and <code>match</code>. The elements <code>part</code> are
+               the non-matched parts of the URL, and the elements <code>match</code> are the matched
+               parts of the URL. They appear in the same order as in the URL.</p>
+            <eg>
+&lt;path>
+   (part|
+    match)+
+&lt;/path>
+
+&lt;part>
+   <emph>string</emph>
+&lt;/part>
+
+&lt;match name = NCName>
+   <emph>string</emph>
+&lt;/part>
+</eg>
+            <p>The entire path is the string value of the element <code>path</code>. Put another
+               way, concatenating all the <code>part</code> and <code>match</code> elements, in
+               order, gives the value of the path. It is also available as the value of the
+               attribute <code>path</code> on the element <code>request</code>. See <specref
+               ref="servlets"/> for an example.</p>
+            <p><kw>Content</kw></p>
+            <p>The body of the request, in HTTP parlance the entity content, is not embedded in the
+               XML element representing the request (that is the <code>web:request</code> element).
+               It is instead represented as a standalone item in the sequence representing the
+               request.  There might be several items in case of multipart. Each item can be of one
+               of the following types:</p>
+            <ulist>
+               <item><p>a document node in case of an XML or HTML media type</p></item>
+               <item><p>an xs:string in case of an textual media type</p></item>
+               <item><p>an xs:base64Binary in case of any other media type</p></item>
+            </ulist>
+            <p>Selecting the media part is done based on the Content-Type header. In case of a
+               multipart type, each part is represented by its own item. Each part's pseudo header
+               Content-Type is used the same way that the header Content-Type is used for the entire
+               content in case of a single part. The content type is used as follows:</p>
+            <ulist>
+               <item>
+                  <p>An XML media type has a MIME type of <code>text/xml</code>,
+                     <code>application/xml</code>, <code>text/xml-external-parsed-entity</code>, or
+                     <code>application/xml-external-parsed-entity</code>, as defined in <bibref
+                     ref="rfc3023"/> (except that <code>application/xml-dtd</code> is considered a
+                     text media type). MIME types ending by <code>+xml</code> are also XML media
+                     types.</p>
+               </item>
+               <item>
+                  <p>An HTML media type has a MIME type of <code>text/html</code>. The precise
+                     algorithm to parse HTML into an XDM document node is
+                     implementation-defined.</p>
+               </item>
+               <item>
+                  <p>Text media types are the remaining types beginning with <code>text/</code>.</p>
+               </item>
+               <item>
+                  <p>Binary types are all the other types. An implementation can treat some of those
+                     binary types as either an XML, HTML or text media type if it is more
+                     appropriate (this is implementation-defined).</p>
+               </item>
+            </ulist>
+            <p>If the content type is <code>text/html</code>, the content is parsed into an XDM
+               document node (using some HTML parsing algorithm that is out of the scope of this
+               specification). If the content type is <code>application/xml</code>, or
+               <code>text/xml</code>, or ends with <code>+xml</code>, the content is parsed into an
+               XDM document node.  If it is a textual content type, it is converted into a text node
+               (at least all other types starting with <code>text/</code>, but an implementation can
+               treat other types as well as being textual).  All other content is converted into a
+               xs:base64Binary item.</p>
+            <p>The content itself is represented as additional items in the request sequence, but
+               for each part, there is a <code>web:body</code> element in the
+               <code>web:request</code> element, describing the part. In case of multipart, the
+               <code>web:body</code> elements are wrapped into a <code>web:multipart</code> element.
+               In case of no mutipart, there is one <code>web:body</code> element, direct child of
+               <code>web:request</code>:</p>
+            <eg>
+&lt;multipart>
+   (header*,
+    body)+
+&lt;/multipart>
+
+&lt;header body = integer
+        name = string
+        value = string>
+   <emph>empty</emph>
+&lt;header>
+
+&lt;body position = integer
+      content-type = string>
+   <emph>empty</emph>
+&lt;body>
+</eg>
+            <p>The attribute <code>position</code> is the position of the body in a multipart (1, 2,
+               3...) If there is only a single part, it is always 1. The pseudo headers for each part in a
+               multipart are before the part they relate to. Their attribute <code>body</code> also
+               contains the corresponding body position. It is therefore possible to use either
+               positional grouping (all the consecutive <code>web:header</code> elements right
+               before a <code>web:body</code> element relates to this one), or value-based grouping
+               (the <code>web:header</code> elements relate to the <code>web:body</code> element
+               with the same position number). The body position number is also the position of the
+               corresponding content in the request sequence (the <code>web:request</code> element
+               is the first item, then comes the body #1, then the body #2, and so on).</p>
+            <p>Note that the <code>web:header</code> elements that are children of a
+               <code>web:multipart</code> have the same structure as when they are children of
+               <code>web:request</code>, except they have the extra attribute <code>body</code>.</p>
+         </div2>
+         <div2 id="responses">
+            <head>Responses</head>
+            <p>When invoked, the top-level component (or group, or filter, if any) must return a
+               sequence, the <emph>response sequence</emph>. The first item must be an element
+               <code>web:response</code>, the remaining items being the content of the response to
+               sent back to the client.</p>
+            <eg>
+&lt;response status = integer
+          message = string>
+   header*,
+   (body|
+    multipart)?
+&lt;/response>
+</eg>
+            <p>The attribute <code>status</code> is the HTTP status code, and the attribute
+               <code>message</code> is the HTTP status message. The elements <code>web:header</code>
+               represent HTTP header to set in the response, and look like the same elements in the
+               request.</p>
+            <eg>
+&lt;multipart>
+   (header*,
+    body)+
+&lt;/multipart>
+
+&lt;body item-position = integer?
+      src = uri?
+      charset = string?
+      content-type = string>
+   <emph>optional content</emph>
+&lt;/body>
+</eg>
+            <p>The elements <code>web:multipart</code> and <code>web:body</code> represent the
+               content to send back to the client, in a similar way as they are represented by the
+               container in the request. The difference is that the pseudo-headers do not have an
+               attribute <code>body</code>, the elements <code>web:body</code> do noy have an
+               attribute <code>position</code>, and they might have an attribute <code>src</code>,
+               an attribute <code>charset</code> and an attribute <code>item-position</code>, and
+               they might have content. The content, <code>src</code> and <code>item-position</code>
+               are mutually exclusive. If none of them is present, the body is empty.
+               <code>charset</code> is the character encoding, for non-binary media types, and is
+               UTF-8 by default. <code>item-position</code> is the position within the response
+               sequence of the item representing the content of the correpsonding part, after the
+               <code>web:response</code> element (that is, the first item after the response
+               element, which is the second item in the sequence, has the position 1, the next one
+               the position 2, and so on). <code>src</code> is the location of a file to return (it
+               is resolved against the base URI of the <code>web:body</code> element).</p>
+            <p>For instance, the following example, when returned as the evaluation of a component
+               (either a servlet, or the top-level filter if there is any), will return a <code>200
+               - Ok</code> to the client, with the header <code>Content-Disposition: file;
+               filename="archive.zip"</code>, and the content is the file <code>archive.zip</code>,
+               resolved next to the stylesheet that generated the response element (let us say it
+               has been generated by an XSLT stylesheet that kept the default base URI of the
+               stylesheet itself, so the file is part of the webapp package itself):</p>
+            <eg>
+&lt;response status="200" message="Ok">
+   &lt;header name="Content-Disposition" value="file; filename=&amp;quot;archive.zip&amp;quot;"/>
+   &lt;body content-type="application/zip" src="archive.zip"/>
+&lt;/response>
+</eg>
+         </div2>
+      </div1>
+      <div1 id="components">
+         <head>Components</head>
+         <p>A component is a piece of code, written in one of the supported languages, that is
+            executed in some specific context. For instance in response to a HTTP request, or as the
+            action associated to a filter. A component must follow a few rules (for instance the
+            number or name of parameters), so the web container can call it. A component is declared
+            in the webapp descriptor. The format of the webapp descriptor is defined in the section
+            <specref ref="descriptor"/>, but the corresponding config for each single type of
+            component is described here in more detail.</p>
+         <p>The webapp itsef is packaged as a standard EXPath package (see <bibref ref="pkg"/>).
+            Each component must be identifiable through the package descriptor (e.g. an XSLT
+            stylesheet must have a public import URI configured in the package, or the namespace of
+            the XQuery library module containing the function used as a component must be declared
+            in the package as well).</p>
+         <div2 id="xproc">
+            <head>XProc</head>
+            <p>An XProc component can be a pipeline, identified by its public import URI:</p>
+            <eg>
+&lt;xproc uri="http://example.org/ns/my-webapp/pipeline.xproc"/>
+</eg>
+            <p>An XProc component can also be a step type, identified by its QName:</p>
+            <eg>
+&lt;xproc uri="http://example.org/ns/my-webapp/step-library.xproc"
+       step="app:my-step"/>
+</eg>
+            <p>The prefix used in the <code>step</code> attribute must be declared in scope (in the
+               example above, the prefix <code>app</code> must be bound to the namespace of the
+               step).</p>
+            <p>Both pipelines and steps must have one input port named <code>source</code>, which
+               accepts a sequence of documents, and one output port named <code>result</code>, which
+               might return a sequence of documents. When used as an error handler, they must have
+               an input port called <code>user-data</code>, which must accepts a sequence of
+               documents (only of the application use the user data feature of error reporting, to
+               pass any data from where the error is thrown to the error handler, see <specref
+               ref="error-handling"/> for details).</p>
+            <p>The following is a simple example of a pipeline, returning the XML representation of
+               the HTTP request as the response itself:</p>
+            <eg>
+&lt;p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:web="http://expath.org/ns/webapp"
+                xmlns:app="http://example.org/ns/my-webapp"
+                xmlns:pkg="http://expath.org/ns/pkg"
+                pkg:import-uri="http://example.org/my-webapp/echo.xproc"
+                name="main"
+                version="1.0">
+
+   &lt;p:input  port="source" primary="true" sequence="true"/>
+   &lt;p:output port="result" primary="true" sequence="true">
+      &lt;p:pipe step="response" port="result"/>
+      &lt;p:pipe step="main"     port="source"/>
+   &lt;/p:output>
+
+   &lt;!--
+      Echoes the web:request element, ignores the bodies if any.
+   -->
+
+   &lt;p:identity name="response">
+      &lt;p:input port="source">
+         &lt;p:inline>
+            &lt;web:response status="200" message="Ok">
+               &lt;web:body content-type="application/xml"/>
+            &lt;/web:response>
+         &lt;/p:inline>
+      &lt;/p:input>
+   &lt;/p:identity>
+
+&lt;/p:declare-step>
+</eg>
+         </div2>
+         <div2 id="xquery">
+            <head>XQuery</head>
+            <p>An XQuery component can be a main module (also called a "query"), identified by its
+               public import URI:</p>
+            <eg>
+&lt;xquery uri="http://example.org/ns/my-webapp/query.xq"/>
+</eg>
+            <p>An XQuery component can also be a function, identified by its QName:</p>
+            <eg>
+&lt;xquery function="app:my-function"/>
+</eg>
+            <p>The prefix used in the <code>function</code> attribute must be declared in scope (in
+               the example above, the prefix <code>app</code> must be bound to the namespace of the
+               function). Because the XQuery library modules are identified by their target
+               namespace in the package descriptor, the name of the function itself is enough to
+               identify uniquely the function.</p>
+            <p>The request sequence (containing the <code>web:request</code> element and the request
+               bodies) is passed to the XQuery function through its only parameter, and to the
+               XQuery module through the external variable named <code>$web:input</code> (the
+               <code>web:request</code> element is also set as the context element for evaluating
+               the query).</p>
+            <p>The following is a simple example of a function, returning the XML representation of
+               the HTTP request as the response itself:</p>
+            <eg>
+xquery version "1.0";
+
+module namespace app = "http://example.org/ns/my-webapp";
+
+(:~
+ : Echoes the web:request element, ignores the bodies if any.
+ :)
+declare function app:echo($input as item()+) as element()+
+{ 
+   &lt;web:response status="200" message="Ok">
+      &lt;web:body content-type="application/xml"/>
+   &lt;/web:response>
+   ,
+   $input[1]
+};
+</eg>
+         </div2>
+         <div2 id="xslt">
+            <head>XSLT</head>
+            <p>An XSLT component can be a stylesheet, identified by its public import URI:</p>
+            <eg>
+&lt;xslt uri="http://example.org/ns/my-webapp/stylesheet.xsl"/>
+</eg>
+            <p>An XSLT component can also be a named template, identified by its QName:</p>
+            <eg>
+&lt;xslt uri="http://example.org/ns/my-webapp/stylesheet.xsl"
+      template="app:my-template"/>
+</eg>
+            <p>An XSLT component can also be a function, identified by its QName:</p>
+            <eg>
+&lt;xslt uri="http://example.org/ns/my-webapp/stylesheet.xsl"
+      function="app:my-function"/>
+</eg>
+            <p>The prefix used in both the <code>function</code> and <code>template</code>
+               attributes must be declared in scope (in both examples above, the prefix
+               <code>app</code> must be bound to the namespace of the template, or of the function
+               resp.)</p>
+            <p>The request sequence (containing the <code>web:request</code> element and the request
+               bodies) is passed to the XSLT function through its only parameter, to the named
+               template through the template parameter named <code>web:input</code>, and to the
+               stylesheet through the global parameter named <code>web:input</code> (the
+               <code>web:request</code> element is also set as the context element for evaluating
+               the stylesheet).</p>
+            <p>The following is a simple example of a stylesheet, returning the XML representation
+               of the HTTP request as the response itself:</p>
+            <eg>
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:pkg="http://expath.org/ns/pkg"
+                xmlns:web="http://expath.org/ns/webapp"
+                exclude-result-prefixes="#all"
+                version="2.0">
+
+   &lt;pkg:import-uri>http://example.org/ns/my-webapp/echo.xsl&lt;/pkg:import-uri>
+
+   &lt;xsl:template match="/">
+      &lt;web:response status="200" message="Ok">
+         &lt;web:body content-type="application/xml"/>
+      &lt;/web:response>
+      &lt;xsl:sequence select="."/>
+   &lt;/xsl:template>
+
+&lt;/xsl:stylesheet>
+</eg>
+         </div2>
+      </div1>
+      <div1 id="webapps">
+         <head>Webapps</head>
+         <p>An application (sometimes refered to as a webapp) is described by the webapp descriptor,
+            and is composed of servlets, resources and filters, which can be grouped together,
+            declares error handlers, and provides access to some configuration. An application is
+            deployed within a web container, and has a dedicated context root.</p>
+         <div2 id="context-root">
+            <head>Context root</head>
+            <p>When deployed into a web container, a webapp is assigned a context root. A context
+               root is an absolute URL, which is the root of all URLs served by the webapp. That is,
+               all URLs served by the webapp start with the same substring: the context root. For
+               instance, if a webapp is deployed at <code>http://example.org/myapp/</code>, that
+               means that all URLs starting with the same string will be dispatched by the container
+               to that webapp, for instance:</p>
+            <ulist>
+               <item><p><code>http://example.org/myapp/</code></p></item>
+               <item><p><code>http://example.org/myapp/index.html</code></p></item>
+               <item><p><code>http://example.org/myapp/catalog/item/XYZ123</code></p></item>
+               <item><p><code>http://example.org/myapp/catalog/item/XYZ123/buy</code></p></item>
+               <item><p><code>http://example.org/myapp/search?q=brussels%20hotels</code></p></item>
+            </ulist>
+            <p>Until deployed, a webapp has no context root. All URLs defined within the webapp are
+               either relative, or absolute (starting with "<code>/</code>"). When absolute, they
+               are relative to the context root. For instance, a webapp handling the above URLs will
+               define how to serve the following URLs:</p>
+            <ulist>
+               <item><p><code>/</code></p></item>
+               <item><p><code>/index.html</code></p></item>
+               <item><p><code>/catalog/item/XYZ123</code></p></item>
+               <item><p><code>/catalog/item/XYZ123/buy</code></p></item>
+               <item><p><code>/search?q=brussels%20hotels</code></p></item>
+            </ulist>
+            <p>If this webapp is deployed at the above context root, it will then serve the defined
+               URLs. But it can also be deployed on localhost, for instance for test or dev
+               purposes. The set of URLs served by the webapp will be different then, but the set of
+               URLs served, when they are relative to the context root, are the same for a same
+               webapp.</p>
+         </div2>
+         <div2 id="servlets">
+            <head>Servlets</head>
+            <p>A servlet is the association of a URL pattern to a component. A servlet can be given
+               a name as well, for documentation and error reporting purposes. A servlet is
+               configured in the webapp descriptor like the following:</p>
+            <eg>
+&lt;servlet name = NCName?
+         filters = NCNames?>
+   <emph>component</emph>,
+   url
+&lt;/servlet>
+
+&lt;url pattern = string>
+   match*
+&lt;/url>
+
+&lt;match group = integer
+       name = NCName>
+   <emph>empty</emph>
+&lt;/match>
+</eg>
+            <p>The attribute <code>name</code> is the optional name of the servlet. The attribute
+               <code>filters</code> is a space-separated list of filters, error handlers and/or
+               chains. See the following sections for more information on those objects. The order
+               of those names is important, as the objects are composed from the left-hand side (the
+               top-most object) to the right-hand side (the bottom-most object, directly around the
+               servlet). The pseudo element <emph><code>component</code></emph> is any of the
+               existing component types defined in <specref ref="components"/>, that is either
+               <code>xproc</code>, <code>xquery</code> or <code>xslt</code> (any of their variants).
+               The attribute <code>pattern</code> must be a valid XML Schema regular expression (see
+               <bibref ref="schema10-2"/>), matching a string starting with "<code>/</code>".</p>
+            <p>When the web container receives an HTTP request, it identifies the webapp to serve the
+               request (depending on their context roots; that mechanism is implementation-defined).
+               Then it tries to match the request URL against all URL patterns in the webapp
+               descriptor, in the document order, and picks the first servlet with a URL pattern
+               matching the request URL. The corresponding component is executed, by passing the
+               request sequence, and the result of the servlet is used to return a response to the
+               client.</p>
+            <p>The elements <code>match</code> of the matching URL are linked to the regex groups in
+               the URL pattern. Because the URL pattern is a regex, matching against it can assign
+               values to groups (by using parenthesis in the regex). The element <code>match</code>
+               assigns a symbolic name to a group number. The corresponding values are put into the
+               <code>web:request</code> element, more precisely in its child element
+               <code>web:path</code>. For example the following servlet definition, associating an
+               XSLT stylesheet component to a URL pattern, and naming some specific parts of the
+               URL:</p>
+            <eg>
+&lt;servlet name="user">
+   &lt;xslt uri="http://example.org/myapp/users.xsl"/>
+   &lt;url pattern="/users/([a-z0-9]+)">
+      &lt;match group="1" name="id"/>
+   &lt;/url>
+&lt;/servlet></eg>
+            <p>will produce the following <code>path</code> element when matching a URL ending with
+               <code>/users/fgeorges</code>:</p>
+            <eg>
+&lt;path>
+   &lt;part>/users/&lt;/part>
+   &lt;match name="id">fgeorges&lt;/match>
+&lt;/path></eg>
+         </div2>
+         <div2 id="resources">
+            <head>Resources</head>
+            <p>A resource is a special type of servlet, defined by the following element:</p>
+            <eg>
+&lt;resource pattern = string
+          rewrite = string?
+          media-type = string>
+   <emph>empty</emph>
+&lt;/resource></eg>
+            <p>The <code>pattern</code> attribute has the same meaning as for <code>servlet</code>.
+               A resource is a servlet, so when the URL dispatcher looks sequentially through the
+               URL patterns for a match, that includes resources as well. If a resource matches the
+               URL and has a <code>rewrite</code> attribute, this one is interpreted as a regex
+               replacement string, and the path used to be resolved is the result of evaluating the
+               following expression, where <code>$url</code> is the actual URL being matched:
+               <code>replace($url,@pattern,@rewrite)</code>.</p>
+            <p>The resulting path (either the resolved URL or the replaced string if their is a
+               <code>rewrite</code> attribute) is then resolved into the application package. If the
+               path starts with a slash, this one removed, then the path is resolved against the
+               webapp package content directory. The resulting file is the body of the response, the
+               value of the <code>media-type</code> attribute is the value of the response header
+               Content-Type, and the response status is "<code>200 - OK</code>". If the file does
+               not exists, the response status is "<code>400 - Not Found</code>" and the content of
+               the response is implementation-defined.</p>
+            <p>For instance, the following definitions set the correct Content-Type for CSS
+               stylesheets and PNG images, which are resolve in the package in the sub-directories
+               <code>style/</code> and <code>images/</code> respectively:</p>
+            <eg>
+&lt;resource pattern="/style/.+\.css"  media-type="text/css"/>
+&lt;resource pattern="/images/.+\.png" media-type="image/png"/></eg>
+            <p>The following example rewrite the URL so <code>/style/print</code> will resolve in
+               the webapp package content dir as <code>css/main-print.css</code>:</p>
+            <eg>
+&lt;resource pattern="/style/(.+)" rewrite="css/main-$1.css" media-type="text/css"/></eg>
+         </div2>
+         <div2 id="filters">
+            <head>Filters</head>
+            <p>A filter has a name and two components, the "<emph>in</emph>" and the
+               "<emph>out</emph>" component. Both components are optional, but at least one is
+               required:</p>
+            <eg>
+&lt;filter name = NCName>
+   in?,
+   out?
+&lt;/filter>
+
+&lt;in>
+   <emph>component</emph>
+&lt;/in>
+
+&lt;out>
+   <emph>component</emph>
+&lt;/out></eg>
+            <p>When a filter is attached to a servlet, the input sequence flowing to the servlet
+               first passes to the filter "<emph>in</emph>" component if any. The input sequence
+               becomes the input sequence of the "<emph>in</emph>" component, and the result of
+               evaluating it becomes the input sequence of the servlet component. The result of
+               evaluating the servlet component passes then through the filter "<emph>out</emph>"
+               component, if any. The result of the servlet becomes the "<emph>out</emph>" component
+               input sequence, and the result of evaluating it becomes the result returned to the
+               container.</p>
+            <p>There are several ways to set a filter around a servlet. Actually, filters can be
+               chained and mixed with error handlers, so a filter can be set around either a
+               component, a filter, or an error handler. The concept remains the same, the
+               <emph>in</emph> and <emph>out</emph> components are executed before and after the
+               wrapped object.</p>
+         </div2>
+         <div2 id="error-handling">
+            <head>Error handling</head>
+            <p>Error handlers are a special sort of filter. The do not have any <emph>in</emph> nor
+               <emph>out</emph> component, so they are like pass-through with regards of the inputs
+               and outputs. However, if an error is thrown in the wrapped object, it offers a way to
+               catch it and so to compute an alternative result sequence. This implementation of an
+               error handler is a user-provided component, which is passed several information about
+               the error (the user has the opportunity to pass all sort of data to
+               <code>fn:error()</code> in XSLT and XQuery, and to <code>p:error</code> in XProc, so
+               a real customized error reporting and handling strategy can be set up). An error
+               handler is defined by using the following element:</p>
+            <eg>
+&lt;error name = NCName
+       catch = CatchErrorList>
+   <emph>component</emph>
+&lt;/error></eg>
+            <p>As any filter, an error handler has a name, which is an NCName. It has also a catch
+               error list, the format of which is defined by the production rule
+               <code>CatchErrorList</code> in <bibref ref="xquery30"/>. The catch error list is a
+               '|'-separated list of QName wildcards, that is where you can substitute either the
+               prefix, the local name or the whole name by a '*' (meaning "any value here"). In
+               addition it allows using EQNames for explicitly setting the namespace URI in the
+               expression, without having to bind it to a prefix. Such a list therefore identifies a
+               set of matching QNames. When an error is thrown by a component and go up the stack
+               through the error handler, it is caught is its code matches the catch error list. In
+               that case the error is caught, the component is executed, and its result becomes the
+               result sequence of the error handler.</p>
+            <p>Some examples of catch error lists, given the corresponding prefixes are bound
+               in-scope:</p>
+            <ulist>
+               <item>
+                  <p>"<code>app:XYZ001</code>": catch a specific error</p>
+               </item>
+               <item>
+                  <p>"<code>*</code>": catch all errors</p>
+               </item>
+               <item>
+                  <p>"<code>app:*</code>": catch all errors in the namespace bound to the prefix
+                     "app"</p>
+               </item>
+               <item>
+                  <p>"<code>app:ABC067|app:XYZ001</code>": catch both errors, explicitly</p>
+               </item>
+               <item>
+                  <p>"<code>app:*|lib:*|err:XYZ001</code>": catch all errors in the namespace bound
+                     to the prefix "app", and all the errors in the namespace bound to the prefix
+                     "lib", and the error with the QName "err:XYZ001"</p>
+               </item>
+               <item>
+                  <p>"<code>'http://example.org/ns/error':XYZ001</code>": catch the error with local
+                     name "XYZ001" in the namespace "http://example.org/ns/error"</p>
+               </item>
+               <item>
+                  <p>"<code>'http://example.org/ns/error':*</code>": catch all errors in the
+                     namespace "http://example.org/ns/error"</p>
+               </item>
+            </ulist>
+         </div2>
+         <div2 id="chains">
+            <head>Chains</head>
+            <p>A chain is a special type of filter, composing other filters. It is defined using the
+               following element:</p>
+            <eg>
+&lt;chain name = NCName
+       filters = NCNames?>
+   (chain
+    |error
+    |filter)*
+&lt;/chain>
+
+&lt;chain ref = NCName>
+   <emph>empty</emph>
+&lt;/chain>
+
+&lt;error ref = NCName>
+   <emph>empty</emph>
+&lt;/error>
+
+&lt;error catch = CatchErrorList>
+   <emph>component</emph>
+&lt;/error>
+
+&lt;filter ref = NCName>
+   <emph>empty</emph>
+&lt;/filter>
+
+&lt;filter>
+   in?,
+   out?
+&lt;/filter></eg>
+            <p>The elements <code>error</code> and <code>filter</code>, when inside a chain, are
+               either empty references to a global named error handler or filter, or are the
+               anoymous equivalent of their global representation (same format, without the
+               attribute <code>name</code>). The element <code>chain</code>, when appearing as a
+               child, must be a reference to a named chain (so one can compose chains). If the
+               attribute <code>filters</code> is not present, there must be at least one child
+               element. If the attribute <code>filters</code> is present, the <code>chain</code>
+               element must be empty. This attribute is a shortcut to set a chain by using only
+               named filters, and is constructed like with the attribute <code>filters</code> on the
+               element <code>servlet</code> (left-hand name is the top-most filter).</p>
+         </div2>
+         <div2 id="groups">
+            <head>Groups</head>
+            <p>Groups are a way to set the same filters to a group of servlets. A group is a lexical
+               wrapper around several servlet definitions:</p>
+            <eg>
+&lt;group filters = NCNames?>
+   (group
+    |servlet)+
+&lt;/group></eg>
+            <p>As we see, groups can be nested. They have a filter chain (using the same attribute
+               <code>filters</code> as the element <code>servlet</code>), and contain servlets and
+               other groups. The only effect is to add their filter chain to each object they
+               contain. Their filters are added right before the object own filters (so after any
+               application filter chain, and after any parent group filter chain).</p>
+            <p>For instance, in the following example:</p>
+            <eg>
+&lt;group filters="first second">
+   &lt;servlet name="un" filters="third fourth">
+      ...
+   &lt;/servlet>
+   &lt;group filters="fifth">
+      &lt;servlet name="deux">
+         ...
+      &lt;/servlet>
+      &lt;servlet name="trois" filters="sixth">
+         ...
+      &lt;/servlet>
+   &lt;/servlet>
+&lt;/group></eg>
+            <p>the servlet "un" is wrapped by the filter chain "first second third fourth" (in that
+               order), "deux" is wrapped by "first second fifth", and "trois" by "first second fifth
+               sixth".</p>
+            <p><kw>TODO</kw>: Introduce a diagram to depict the example.</p>
+         </div2>
+         <div2 id="config">
+            <head>Config</head>
+            <p>The following functions provide access to configuration parameters and documents. The
+               webapp author can define any parameter and document he/she needs, and access them by
+               name.</p>
+            <eg>
+<ex:function>web:config-param</ex:function>($name as <ex:type>xs:string</ex:type>) as <ex:type>xs:string?</ex:type>
+<ex:function>web:config-param</ex:function>($name as <ex:type>xs:string</ex:type>,
+                 $default as <ex:type>xs:string</ex:type>?) as <ex:type>xs:string</ex:type>?
+<ex:function>web:config-doc</ex:function>($name as <ex:type>xs:string</ex:type>) as <ex:type>document-node()?</ex:type>
+</eg>
+            <p>The param <code>$name</code> must be a lexical QName, resolved against the static
+               context. Depending on the webapp specific needs, the easiest way to define
+               configuration information might be using string parameters, or using documents. In
+               either case, the config is accessible in read-only. This mechanism does not replace a
+               database. The way the config parameters and documents are provided is
+               implementation-defined.</p>
+            <p>Configuration parameters and documents can be declared in the webapp descriptor. That
+               is, the name of the parameters and documents the application expect to use at some
+               point can be declared. Declaring their names can help detecting typos in the code. If
+               an application tries to access an undeclared configuration parameter or document, the
+               implementation may throw an error (whether it does or not is implementation-defined).
+               An implementation should provide a way to toggle this error throwing at the server
+               level or on a per-webapp basis. Configuration parameters and documents can be
+               declared using the following element in the webapp descriptor:</p>
+            <eg>
+&lt;config>
+   &lt;param name="my:header-color"/>
+   &lt;param name="my:header-size"/>
+   &lt;doc name="my:footer"/>
+&lt;/config></eg>
+         </div2>
+         <div2 id="applications">
+            <head>Applications</head>
+            <p>The application as a whole is represented using the following element:</p>
+            <eg>
+&lt;application filters = NCNames?>
+   <emph>empty</emph>
+&lt;/application>
+</eg>
+            <p>This element provides a convenient way to set filters to all servlets and resources
+               within the application (like an error-handler, a view layer, or an authentication
+               filter).</p>
+         </div2>
+      </div1>
+      <div1 id="descriptor">
+         <head>Webapp descriptor</head>
+         <p>This section defines the webapp descriptor <code>expath-web.xml</code>. Only the overall
+            structure of the descriptor is given, referencing to elements defined in the previous
+            section, <specref ref="webapps"/>. See the section <specref ref="expath-pkg.xsd"/> for a
+            formal schema of the entire descriptor format.</p>
+         <p>The root element of the descriptor is <code>webapp</code>:</p>
+         <eg>
+&lt;webapp name = uri
+        abbrev = NCName
+        version = string
+        spec = string>
+   title,
+   home?,
+   (application
+    |chain
+    |config
+    |error
+    |filter
+    |group
+    |resource
+    |servlet)+
+&lt;/webapp>
+
+&lt;title>
+   <emph>string</emph>
+&lt;/title>
+
+&lt;home>
+   <emph>uri</emph>
+&lt;/home>
+</eg>
+         <p>A webapp is identified by a name, an abbrev and a version number (all three following
+            the same rules as their corresponding attributes in <bibref ref="pkg"/>). The attribute
+            <code>spec</code> is the version of the packaging specification the package conforms to.
+            The current specification requires the package to use the spec number <code>1.0</code>
+            (no forward compatibility rules are defined, a processor conforming to this
+            specification has to generate an error if the spec number is different than the string
+            <code>1.0</code>). The title is a plain string, and the home is a URL pointing to the
+            webapp's or project's homepage or website. The rest of the webapp element is composed of
+            any combination of the elements <code>application</code>, <code>error</code>,
+            <code>filter</code>, <code>group</code> and <code>servlet</code>.</p>
+         <p>The following is an example of a descriptor, for a simple webapp with 2 components: an
+            XProc pipeline and an XQuery query, respectively bound to the URLs patterns <code>/home</code>
+            and <code>/users/([a-z0-9]+)</code>, as well as a filter on the second one and an error
+            handler for the entire application (it also defines a few resource patterns):</p>
+         <eg>
+&lt;webapp xmlns="http://expath.org/ns/webapp"
+        xmlns:app="http://example.org/ns/someapp"
+        name="http://example.org/someapp"
+        abbrev="someapp"
+        version="2.6.0">
+
+   &lt;title>Example website&lt;/title>
+
+   &lt;resource pattern="/style/.+\.css"  media-type="text/css"/>
+   &lt;resource pattern="/images/.+\.png" media-type="image/png"/>
+
+   &lt;application filters="errors"/>
+
+   &lt;filter name="authenticate">
+      &lt;in>
+         &lt;xslt uri="http://example.org/someapp/authenticate.xsl"/>
+      &lt;/in>
+   &lt;/filter>
+
+   &lt;error name="errors" catch="*">
+      &lt;xproc uri="http://example.org/someapp/errors.xproc"/>
+   &lt;/error>
+
+   &lt;!-- The homepage. -->
+   &lt;servlet name="home">
+      &lt;xproc uri="http://example.org/someapp/home.xproc"/>
+      &lt;url pattern="/home"/>
+   &lt;/servlet>
+
+   &lt;!-- The users. The user ID in the URL is set to the param "user". -->
+   &lt;servlet name="users" filters="authenticate">
+      &lt;xquery uri="http://example.org/someapp/users.xq"/>
+      &lt;url pattern="/users/([a-z0-9]+)">
+         &lt;match group="1" name="user"/>
+      &lt;/url>
+   &lt;/servlet>
+
+&lt;/webapp>
+</eg>
+      </div1>
+      <div1 id="packaging">
+         <head>Packaging</head>
+         <p>A webapp is packaged using <bibref ref="pkg"/>. It is therefore a regular package and
+            can benefit from all the tools supporting this specification. In addition to the
+            standard package format, a webapp contain the webapp descriptor in a file called
+            <code>expath-web.xml</code>, at the root of the package.</p>
+         <p>For instance, the above descriptor example could define a webapp packaged like the
+            following:</p>
+         <eg>
+expath-pkg.xml
+expath-web.xml
+content/
+   filters/
+      auth.xsl
+      errors.xproc
+   images/
+      logo.png
+   servlets/
+      home.xproc
+      users.xq
+   style/
+      style.css
+</eg>
+         <p>Note that there the name of the files for the components do not necessarily match the
+            last part of their public URI. The components (including the servlets and the components
+            used in filters and error handlers) must be declared in the package descriptor, that is
+            <code>expath-pkg.xml</code>.</p>
+      </div1>
+      <div1 id="functions">
+         <head>Webapp functions</head>
+         <p>Those functions are defined in the namespace <code>web</code>.</p>
+         <div2 id="fields">
+            <head>Fields</head>
+            <p>A webapp can access and store values, attached to different contexts: the container,
+               the webapp, the session, and the request. The request is the current HTTP request
+               being served, the session is the session of the request, the webapp is the one
+               containing the component serving the request, and the container represents the webapp
+               container as a whole.</p>
+            <p>A field has a name (a string) and a value (any sequence). The names beginning with
+               "web:" are reserved for this specification. Note that "web:" is not a namespace
+               prefix, and then does not need to be bound by any mean, field names are simple
+               strings.</p>
+            <p>Each set of fields has three corresponding functions: one to get the value of a field
+               given its name, one to set its value, and one to enumerate the names of all existing
+               fields.</p>
+            <p>For the request fields:</p>
+            <eg>
+<ex:function>web:get-request-field</ex:function>($name as <ex:type>xs:string</ex:type>) as <ex:type>item()*</ex:type>
+<ex:function>web:set-request-field</ex:function>($name as <ex:type>xs:string</ex:type>,
+                      $value as <ex:type>item()*</ex:type>) as <ex:type>empty-sequence()</ex:type>
+<ex:function>web:get-request-field-names</ex:function>() as <ex:type>xs:string*</ex:type>
+</eg>
+            <p>For the session fields:</p>
+            <eg>
+<ex:function>web:get-session-field</ex:function>($name as <ex:type>xs:string</ex:type>) as <ex:type>item()*</ex:type>
+<ex:function>web:set-session-field</ex:function>($name as <ex:type>xs:string</ex:type>,
+                      $value as <ex:type>item()*</ex:type>) as <ex:type>empty-sequence()</ex:type>
+<ex:function>web:get-session-field-names</ex:function>() as <ex:type>xs:string*</ex:type>
+</eg>
+            <p>For the webapp fields:</p>
+            <eg>
+<ex:function>web:get-webapp-field</ex:function>($name as <ex:type>xs:string</ex:type>) as <ex:type>item()*</ex:type>
+<ex:function>web:set-webapp-field</ex:function>($name as <ex:type>xs:string</ex:type>,
+                     $value as <ex:type>item()*</ex:type>) as <ex:type>empty-sequence()</ex:type>
+<ex:function>web:get-webapp-field-names</ex:function>() as <ex:type>xs:string*</ex:type>
+</eg>
+            <p>For the container fields:</p>
+            <eg>
+<ex:function>web:get-container-field</ex:function>($name as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type>
+<ex:function>web:set-container-field</ex:function>($name as <ex:type>xs:string</ex:type>,
+                        $value as <ex:type>xs:string*</ex:type>) as <ex:type>empty-sequence()</ex:type>
+<ex:function>web:get-container-field-names</ex:function>() as <ex:type>xs:string*</ex:type>
+</eg>
+            <p>Note that the container field values are sequences of strings, not any sequence.
+               This is due to the fact that those fields can be used to exchange information
+               across several applications, and could either make the implementation unnecessarily
+               complex or impact greatly the performance (like requiring to serialize a whole
+               document if we try to set it as the value of a field, then parse it again every
+               time it is retrieved), because different applictions could be handled by different
+               processors using incompatible data model implementations.</p>
+            <p>The request contains the following field:</p>
+            <ulist>
+               <item>
+                  <p><code>web:request-id</code>: a string identifying uniquely the request being
+                     treated. The string macthes the regex "[-_a-zA-Z0-9]+" and is therefore safe to
+                     use in a file name. The strings are ordered through time, that is comparing two
+                     request IDs using the code point collation must order them occordingly to the
+                     time they were received by the server. The precision is implementation-defined
+                     (that is, an implementation might say that the order between 2 request IDs for
+                     2 requests received within the same second is undefined).</p>
+               </item>
+            </ulist>
+            <p>The container contains the following fields:</p>
+            <ulist>
+               <item>
+                  <p><code>web:product</code>: the implementation (usually a product name and a
+                     version number).</p>
+               </item>
+               <item>
+                  <p><code>web:product-html</code>: a HTML formatted version of the property
+                     <code>web:product</code>. The HTML must be valid HTML to be the content of a
+                     <code>p</code> or a <code>div</code> element (usually it is the same as
+                     <code>web:product</code>, with additional hyperlinks).</p>
+               </item>
+               <item>
+                  <p><code>web:vendor</code>: the vendor of the product (usually a person, a company
+                     or an open-source group).</p>
+               </item>
+               <item>
+                  <p><code>web:vendor-html</code>: a HTML formatted version of the property
+                     <code>web:vendor</code>. The HTML must be valid HTML to be the content of a
+                     <code>p</code> or a <code>div</code> element (usually it is the same as
+                     <code>web:vendor</code>, with additional hyperlinks).</p>
+               </item>
+            </ulist>
+         </div2>
+         <div2 id="parse">
+            <head>Parse HTTP</head>
+            <eg>
+<ex:function>web:parse-header-value</ex:function>($header as <ex:type>xs:string</ex:type>) as <ex:type>element(web:header)</ex:type>
+</eg>
+            <p>This function parses the value of a structured HTTP header. It returns it in the form
+               of the following element:</p>
+            <p>Some HTTP headers have values that can be decomposed into multiple elements. In order
+               to be processed by this function, such headers must be in the following form:</p>
+            <eg>
+ header  = [ element ] *( "," [ element ] )
+ element = name [ "=" [ value ] ] *( ";" [ param ] )
+ param   = name [ "=" [ value ] ]
+
+ name    = token
+ value   = ( token | quoted-string )
+
+ token         = 1*&lt;any char except "=", ",", ";", &lt;"> and
+                       white space>
+ quoted-string = &lt;"> *( text | quoted-char ) &lt;">
+ text          = any char except &lt;">
+ quoted-char   = "\" char
+</eg>
+            <p>Any amount of white space is allowed between any part of the header, element or param
+               and is ignored. The function returns the following format, representing elements and
+               params with an XML format. A missing value in any element or param will be returned
+               as an empty attribute <code>value</code>; if the "=" is also missing, the attribute
+               <code>value</code> is not generated at all.</p>
+            <eg>
+&lt;header>
+   element+
+&lt;/header>
+
+&lt;element name = string>
+   param*
+&lt;/element>
+
+&lt;param name = string
+       value = string>
+   <emph>empty</emph>
+&lt;/param>
+</eg>
+            <p>For example, the following call:</p>
+            <eg>
+web:parse-header-value('text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+</eg>
+            <p>returns the following element:</p>
+            <eg>
+&lt;header>
+   &lt;element name="text/html"/>
+   &lt;element name="application/xhtml+xml"/>
+   &lt;element name="application/xml">
+      &lt;param name="q" value="0.9"/>
+   &lt;/element>
+   &lt;element name="*/*">
+      &lt;param name="q" value="0.8"/>
+   &lt;/element>
+&lt;/header>
+</eg>
+            <p>The user can then easily access the several elements (here the different MIME types),
+               as well as their parameters (here their optional relative quality factors).</p>
+            <eg>
+<ex:function>web:parse-basic-auth</ex:function>($header as <ex:type>xs:string</ex:type>) as <ex:type>element(web:basic-auth)</ex:type>
+</eg>
+            <p>This function parses the value of a Basic Access Authentication header, as defined in
+               <bibref ref="rfc2617"/>. It returns it in the form of the following element:</p>
+            <eg>
+&lt;basic-auth username = string
+            password = string>
+   <emph>empty</emph>
+&lt;/basic-auth>
+</eg>
+            <p>The value of the header is "Basic abc" where <code>abc</code> is "user:password"
+               encoded using base64.</p>
+         </div2>
+         <div2>
+            <head>Webapp management</head>
+            <p>This section documents an optional feature: a set of functions to manage webapps
+               (deploy a new webapp, remove a deployed webapp, configure a webapp, list all the
+               deployed webapps in a web container, etc.)</p>
+            <p>TODO: ...</p>
+         </div2>
+      </div1>
+      <div1>
+         <head>Repository</head>
+         <p>This section documents an optional feature: the format of an on-disk repository. It
+            builds on the repository format from the packaging specification, by adding web-specific
+            features.</p>
+         <p>TODO: ...</p>
+         <eg>
+&lt;webapps>
+   &lt;webapp root="myapp">
+      &lt;package name="http://example.org/my/webapp"/>
+   &lt;/webapp>
+   &lt;webapp root="catalog">
+      &lt;package name="http://example.com/catalog-project/application"/>
+   &lt;/webapp>
+   ...
+&lt;/webapps>
+</eg>
+      </div1>
+   </body>
+   <back>
+      <div1 id="expath-pkg.xsd">
+         <head>Webapp schema</head>
+         <eg><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="schema/webapp.xsd" parse="text"/></eg>
+      </div1>
+      <div1 id="references">
+         <head>References</head>
+         <blist>
+            <bibl id="pkg" key="EXPath Packaging System"><loc href="http://expath.org/spec/pkg"
+               >Packaging System</loc>. Florent Georges, editor. EXPath. 9 May 2012.</bibl>
+            <bibl id="rfc2616" key="RFC 2616"><loc href="http://www.ietf.org/rfc/rfc2616.txt">RFC
+               2616: Hypertext Transfer Protocol -- HTTP/1.1</loc>. R. Fielding, J. Gettys, J.
+               Mogul, H. Frystyk, L. Masinter, P. Leach and T. Berners-Lee, editors. Internet
+               Engineering Task Force. June, 1999.</bibl>
+            <bibl id="rfc2617" key="RFC 2617"><loc href="http://www.ietf.org/rfc/rfc2617.txt">RFC
+               2617: HTTP Authentication: Basic and Digest Access Authentication</loc>. J. Franks,
+               P. Hallam-Baker, J. Hostetler, S. Lawrence, P. Leach, A. Luotonen and L. Stewart,
+               editors. Internet Engineering Task Force. June, 1999.</bibl>
+            <bibl id="rfc3023" key="RFC 3023"><loc href="http://www.ietf.org/rfc/rfc3023.txt">RFC
+               3023: XML Media Types</loc>. M. Murata, S. St. Laurent and D. Kohn, editors.
+               Internet Engineering Task Force. January, 2001.</bibl>
+            <bibl id="schema10-2" key="XML Schema Datatypes"><loc
+               href="http://www.w3.org/TR/xmlschema-2/">XML Schema Part 2: Datatypes Second
+               Edition</loc>. P. Viron and A. Malhotra, editors. W3C. October, 2013.</bibl>
+            <bibl id="xquery30" key="XQuery 3.0"><loc href="http://www.w3.org/TR/xquery-30/">XQuery
+               3.0: An XML Query Language</loc>. J. Robie, D. Chamberlin, M. Dyck and J. Snelson,
+               editors. W3C. XXX, 2013. (<kw>TODO</kw>: Update the publication date once XQuery 3.0
+               has been published)</bibl>
+         </blist>
+      </div1>
+      <div1 id="todo">
+         <head>TODO list</head>
+         <ulist>
+            <item>
+               <p>Definition: define the name <kw>accessor</kw>, to use when I use "URL" as "URL
+                  relatively to the context root", for instance for matching against patterns. And
+                  use it consistently across the spec.</p>
+            </item>
+            <item>
+               <p>Definition: define the format of the several <kw>names</kw> (servlets, url
+                  matches, filters, chains, error handlers, etc.) And use it consistently across the
+                  spec. Or do we just use NCName all the time?</p>
+            </item>
+            <item>
+               <p>The <kw>filters</kw> mechanism is not satisfactory. It does not allow a filter to
+                  decide whether or not (and when) the wrapped component is called. The minimal use
+                  case to accomodate is an authentication filter returning a "401 Unauthorized" when
+                  the user is not connected, without actually calling the wrapped component at all).
+                  An idea could be to shortcut the component if the filter returns a valid response
+                  sequence (starting with an element <code>web:response</code>...)</p>
+            </item>
+            <item>
+               <p>The <kw>config</kw> mechanism is probably under-specified. We should probably
+                  define how a webapp provides default values (where in the package), as well as how
+                  this is represented in an on-disk repository (this is optional, but this is a way
+                  to align several impementations if they choose the same kind of approach).</p>
+            </item>
+            <item>
+               <p>In addition to <code>web:parse-basic-auth()</code>, add a function to support
+                  <kw>Digest</kw> Access Authentication (see <bibref ref="rfc2617"/>).</p>
+            </item>
+            <item>
+               <p>Define some user management machanism (plus identification, authentification,
+                  etc.).</p>
+            </item>
+         </ulist>
+      </div1>
+   </back>
+</spec>
