@@ -105,7 +105,7 @@
                </item>
                <item>
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this
-                  is an error <bibref ref="error.algOrTransf"/>.</p>
+                  is an error <bibref ref="error.unknown-algorithm"/>.</p>
                </item>
                <item>
                   <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default value is "base64". 
@@ -143,7 +143,7 @@
                </item>               
                <item>
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this
-                  is an error <bibref ref="error.algOrTransf"/>.</p>
+                  is an error <bibref ref="error.unknown-algorithm"/>.</p>
                </item>
                <item>
                   <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default value is "base64". 
@@ -166,7 +166,7 @@
             instead. After the function's signature, an example of parameters is given. The syntax for the <code>$references</code> parameter is inspired by <bibref ref="xml-dig-sig-core"/>.</p>
             <eg>
 <spec:function>crypto:generate-signature</spec:function>($data     as <spec:type>node()*</spec:type>,
-    			    $parameters as <spec:type>map(xs:string, item())?</spec:type>) as <spec:type>node()</spec:type> 
+    			    $parameters as <spec:type>map(xs:string, item()+)?</spec:type>) as <spec:type>node()</spec:type> 
 </eg>
             <p>Example of parameters:</p>    
         <eg xml:space="preserve">
@@ -213,19 +213,19 @@ map {
                      Possible values are: "exclusive", "exclusive-with-comments", "inclusive", and
                      "inclusive-with-comments". The default value is "inclusive-with-comments". If
                      the parameter specifies an unsupported algorithm, this is an error <bibref
-                        ref="error.canonAlg"/>.</p>
+                        ref="error.unknown-algorithm"/>.</p>
                </item>
                <item>
                   <p><code>$digest-algorithm</code> is the digest algorithm to be applied to the
                      signed object. Possible values are: "SHA1", "SHA256", and "SHA512". The default
                      value is "SHA1". If the parameter specifies an unsupported algorithm, this is
-                     an error <bibref ref="error.digestAlg"/>.</p>
+                     an error <bibref ref="error.unknown-algorithm"/>.</p>
                </item>
                <item>
                   <p><code>$signature-algorithm</code> is the algorithm used for signature
                      generation and validation. Possible values are: "DSA_SHA1", and "RSA_SHA1". The
                      default value is "RSA_SHA1". If the parameter specifies an unsupported
-                     algorithm, this is an error <bibref ref="error.sigAlg"/>.</p>
+                     algorithm, this is an error <bibref ref="error.unknown-algorithm"/>.</p>
                </item>
                <item>
                   <p><code>$signature-namespace-prefix</code> is the namespace prefix for
@@ -314,7 +314,7 @@ map {
 		               </item>
 		               <item>
 		                  <p><code>algorithm</code> as <spec:type>xs:string</spec:type> is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation name can be used.
-		                  If the parameter specifies an unsupported algorithm or transformation name, this is an error <bibref ref="error.algOrTransf"/>.</p>
+		                  If the parameter specifies an unsupported algorithm or transformation name, this is an error <bibref ref="error.unknown-algorithm"/>.</p>
 		               </item>
 		               <item>
 		                  <p><code>iv</code> as <spec:type>xs:string</spec:type> is the initialization vector for symmetric encryption.</p>
@@ -355,7 +355,7 @@ map {
 		               </item>
 		               <item>
 		                  <p><code>algorithm</code> as <spec:type>xs:string</spec:type> is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation name can be used.
-		                  If the parameter specifies an unsupported algorithm or transformation name, this is an error <bibref ref="error.algOrTransf"/>.
+		                  If the parameter specifies an unsupported algorithm or transformation name, this is an error <bibref ref="error.unknown-algorithm"/>.
 		                  </p>
 		               </item>
 		               <item>
@@ -433,9 +433,7 @@ map {
       <div1>
          <head>Summary of Error Conditions</head>
          <blist id="summary-of-error-conditions">
-            <bibl id="error.canonAlg" key="crypto:canonicalization-algorithm-error">The canonicalization algorithm is not supported.</bibl>
-            <bibl id="error.digestAlg" key="crypto:digest-algorithm-error">The digest algorithm is not supported.</bibl>
-            <bibl id="error.sigAlg" key="crypto:signature-algorithm-error">The signature algorithm is not supported.</bibl>
+            <bibl id="error.unknown-algorithm" key="crypto:unknown-algorithm">The specified algorithm is not supported.</bibl>
             <bibl id="error.readKeystore" key="crypto:error-reading-keystore">I/O error while reading keystore, or the password is incorrect.</bibl>
             <bibl id="error.deniedKeystore" key="crypto:denied-reading-keystore">Permission denied to read keystore.</bibl>
             <bibl id="error.keystoreUrl" key="crypto:invalid-keystore-url">The keystore URL is invalid.</bibl>
@@ -447,7 +445,6 @@ map {
             <bibl id="error.encType" key="crypto:encryption-type-error">The encryption type is not supported.</bibl>
             <bibl id="error.secretKey" key="crypto:invalid-secret-key">The secret key is invalid.</bibl>
             <bibl id="error.blockSize" key="crypto:block-size-error">Illegal block size.</bibl>
-            <bibl id="error.algOrTransf" key="crypto:algorithm-or-transformation-error">The algorithm or transformation is not supported.</bibl>
             <bibl id="error.decryptionType" key="crypto:decryption-type-error">The decryption type is not supported.</bibl>
             <bibl id="error.noProvider" key="crypto:no-provider">The provider is not set.</bibl>
             <bibl id="error.outputFormat" key="crypto.output-format-error">The output format is not supported.</bibl>
