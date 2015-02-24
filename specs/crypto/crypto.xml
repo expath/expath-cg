@@ -434,20 +434,20 @@ map {
          <head>Summary of Error Conditions</head>
          <blist id="summary-of-error-conditions">
             <bibl id="error.unknown-algorithm" key="crypto:unknown-algorithm">The specified algorithm is not supported.</bibl>
-            <bibl id="error.readKeystore" key="crypto:error-reading-keystore">I/O error while reading keystore, or the password is incorrect.</bibl>
+            <bibl id="error.readKeystore" key="crypto:unreadable-keystore">I/O error while reading keystore, or the password is incorrect.</bibl>
             <bibl id="error.deniedKeystore" key="crypto:denied-reading-keystore">Permission denied to read keystore.</bibl>
             <bibl id="error.keystoreUrl" key="crypto:invalid-keystore-url">The keystore URL is invalid.</bibl>
-            <bibl id="error.keystoreType" key="crypto:keystore-type-error">The keystore type is not supported.</bibl>
+            <bibl id="error.keystoreType" key="crypto:keystore-type">The keystore type is not supported.</bibl>
             <bibl id="error.aliasKey" key="crypto:no-key-for-alias">Cannot find key for alias in given keystore.</bibl>
-            <bibl id="error.sigElem" key="crypto:signature-element-error">Cannot find Signature element.</bibl>
-            <bibl id="error.noPadding" key="crypto:padding-error">No such padding.</bibl>
+            <bibl id="error.sigElem" key="crypto:signature-element">Cannot find Signature element.</bibl>
+            <bibl id="error.noPadding" key="crypto:inexistent-padding">No such padding.</bibl>
             <bibl id="error.incorrectPadding" key="crypto:incorrect-padding">Incorrect padding.</bibl>
-            <bibl id="error.encType" key="crypto:encryption-type-error">The encryption type is not supported.</bibl>
+            <bibl id="error.encType" key="crypto:encryption-type">The encryption type is not supported.</bibl>
             <bibl id="error.secretKey" key="crypto:invalid-secret-key">The secret key is invalid.</bibl>
-            <bibl id="error.blockSize" key="crypto:block-size-error">Illegal block size.</bibl>
-            <bibl id="error.decryptionType" key="crypto:decryption-type-error">The decryption type is not supported.</bibl>
+            <bibl id="error.blockSize" key="crypto:block-size">Illegal block size.</bibl>
+            <bibl id="error.decryptionType" key="crypto:decryption-type">The decryption type is not supported.</bibl>
             <bibl id="error.noProvider" key="crypto:no-provider">The provider is not set.</bibl>
-            <bibl id="error.outputFormat" key="crypto.output-format-error">The output format is not supported.</bibl>
+            <bibl id="error.outputFormat" key="crypto.output-format">The output format is not supported.</bibl>
          </blist>
       </div1>
    </back>
