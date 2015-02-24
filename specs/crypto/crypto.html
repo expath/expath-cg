@@ -377,7 +377,7 @@ map {
                         </li>
                         <li>
                            <p><code>key-alias</code> is the alias for the key pair used for signing. If no key pair exists for this alias,
-                              this is an error <a href="#error.aliasKey">[crypto:no-key-for-alias]</a>.
+                              this is an error <a href="#error.aliasKey">[crypto:alias-key]</a>.
                            </p>
                         </li>
                         <li>
@@ -385,8 +385,8 @@ map {
                            </p>
                         </li>
                         <li>
-                           <p><code>keystore-url</code> is the URL of the keystore. If the URL is not correct, this is an error <a href="#error.keystoreUrl">[crypto:invalid-keystore-url]</a>. If the user has no
-                              		                  acces to the keystore, this is an error <a href="#error.deniedKeystore">[crypto:denied-reading-keystore]</a>. 
+                           <p><code>keystore-url</code> is the URL of the keystore. If the URL is not correct, this is an error <a href="#error.keystoreUrl">[crypto:keystore-url]</a>. If the user has no
+                              		                  acces to the keystore, this is an error <a href="#error.deniedKeystore">[crypto:denied-keystore]</a>. 
                               		                  
                            </p>
                         </li>
@@ -459,7 +459,7 @@ map {
                         <li>
                            <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for encryption. This parameter can be of type xs:string,
                               xs:base64Binary, or xs:hexBinary.
-                              		                  If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:ecret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
                               		                  <a href="#error.blockSize">[crypto:block-size]</a>.
                            </p>
                         </li>
@@ -516,7 +516,7 @@ map {
                         <li>
                            <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for decryption. This parameter can be of type xs:string,
                               xs:base64Binary, or xs:hexBinary.
-                              		                  If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:ecret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
                               		                  <a href="#error.blockSize">[crypto:block-size]</a>.
                            </p>
                         </li>
@@ -671,16 +671,16 @@ map {
                <dt class="label"><a name="error.readKeystore" id="error.readKeystore"></a>crypto:unreadable-keystore
                </dt>
                <dd>I/O error while reading keystore, or the password is incorrect.</dd>
-               <dt class="label"><a name="error.deniedKeystore" id="error.deniedKeystore"></a>crypto:denied-reading-keystore
+               <dt class="label"><a name="error.deniedKeystore" id="error.deniedKeystore"></a>crypto:denied-keystore
                </dt>
                <dd>Permission denied to read keystore.</dd>
-               <dt class="label"><a name="error.keystoreUrl" id="error.keystoreUrl"></a>crypto:invalid-keystore-url
+               <dt class="label"><a name="error.keystoreUrl" id="error.keystoreUrl"></a>crypto:keystore-url
                </dt>
                <dd>The keystore URL is invalid.</dd>
                <dt class="label"><a name="error.keystoreType" id="error.keystoreType"></a>crypto:keystore-type
                </dt>
                <dd>The keystore type is not supported.</dd>
-               <dt class="label"><a name="error.aliasKey" id="error.aliasKey"></a>crypto:no-key-for-alias
+               <dt class="label"><a name="error.aliasKey" id="error.aliasKey"></a>crypto:alias-key
                </dt>
                <dd>Cannot find key for alias in given keystore.</dd>
                <dt class="label"><a name="error.sigElem" id="error.sigElem"></a>crypto:signature-element
@@ -695,7 +695,7 @@ map {
                <dt class="label"><a name="error.encType" id="error.encType"></a>crypto:encryption-type
                </dt>
                <dd>The encryption type is not supported.</dd>
-               <dt class="label"><a name="error.secretKey" id="error.secretKey"></a>crypto:invalid-secret-key
+               <dt class="label"><a name="error.cryptoKey" id="error.cryptoKey"></a>crypto:ecret-key
                </dt>
                <dd>The secret key is invalid.</dd>
                <dt class="label"><a name="error.blockSize" id="error.blockSize"></a>crypto:block-size
