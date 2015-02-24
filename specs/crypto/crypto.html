@@ -188,13 +188,13 @@ div.exampleHeader { font-weight: bold;
                   <li>
                      <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm,
                         this
-                        is an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
+                        is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
                      </p>
                   </li>
                   <li>
                      <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default
                         value is "base64". 
-                        If the format is not supprted, this is an error <a href="#error.outputFormat">[crypto.output-format-error]</a>.
+                        If the format is not supprted, this is an error <a href="#error.outputFormat">[crypto.output-format]</a>.
                      </p>
                   </li>
                </ul>
@@ -243,13 +243,13 @@ div.exampleHeader { font-weight: bold;
                   <li>
                      <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm,
                         this
-                        is an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
+                        is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
                      </p>
                   </li>
                   <li>
                      <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default
                         value is "base64". 
-                        If the format is not supprted, this is an error <a href="#error.outputFormat">[crypto.output-format-error]</a>.
+                        If the format is not supprted, this is an error <a href="#error.outputFormat">[crypto.output-format]</a>.
                      </p>
                   </li>
                </ul>
@@ -279,7 +279,7 @@ div.exampleHeader { font-weight: bold;
                </p>
                <div class="exampleInner"><pre>
 <code class="function">crypto:generate-signature</code>($data     as <code class="type">node()*</code>,
-    			    $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">node()</code> 
+    			    $parameters as <code class="type">map(xs:string, item()+)?</code>) as <code class="type">node()</code> 
 </pre></div>
                <p>Example of parameters:</p>
                <div class="exampleInner"><pre>
@@ -326,21 +326,21 @@ map {
                         applied to the SignedInfo element prior to performing signature calculations.
                         Possible values are: "exclusive", "exclusive-with-comments", "inclusive", and
                         "inclusive-with-comments". The default value is "inclusive-with-comments". If
-                        the parameter specifies an unsupported algorithm, this is an error <a href="#error.canonAlg">[crypto:canonicalization-algorithm-error]</a>.
+                        the parameter specifies an unsupported algorithm, this is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
                      </p>
                   </li>
                   <li>
                      <p><code>$digest-algorithm</code> is the digest algorithm to be applied to the
                         signed object. Possible values are: "SHA1", "SHA256", and "SHA512". The default
                         value is "SHA1". If the parameter specifies an unsupported algorithm, this is
-                        an error <a href="#error.digestAlg">[crypto:digest-algorithm-error]</a>.
+                        an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
                      </p>
                   </li>
                   <li>
                      <p><code>$signature-algorithm</code> is the algorithm used for signature
                         generation and validation. Possible values are: "DSA_SHA1", and "RSA_SHA1". The
                         default value is "RSA_SHA1". If the parameter specifies an unsupported
-                        algorithm, this is an error <a href="#error.sigAlg">[crypto:signature-algorithm-error]</a>.
+                        algorithm, this is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
                      </p>
                   </li>
                   <li>
@@ -366,13 +366,13 @@ map {
                      </p>
                      <ul>
                         <li>
-                           <p><code>keystore-type</code> is the keystore type. If the type is not supported, this is an error <a href="#error.keystoreType">[crypto:keystore-type-error]</a>.
+                           <p><code>keystore-type</code> is the keystore type. If the type is not supported, this is an error <a href="#error.keystoreType">[crypto:keystore-type]</a>.
                            </p>
                         </li>
                         <li>
                            <p><code>keystore-password</code> is the keystore's password. If the keystore cannot be loaded or the password is incorrect,
                               this is an error
-                              		                  <a href="#error.readKeystore">[crypto:error-reading-keystore]</a>.
+                              		                  <a href="#error.readKeystore">[crypto:unreadable-keystore]</a>.
                            </p>
                         </li>
                         <li>
@@ -404,7 +404,7 @@ map {
                <ul>
                   <li>
                      <p><code>$data</code> is the enveloped, enveloping, or detached signature. If
-                        the Signature element cannot be found, this is an error <a href="#error.sigElem">[crypto:signature-element-error]</a>.
+                        the Signature element cannot be found, this is an error <a href="#error.sigElem">[crypto:signature-element]</a>.
                      </p>
                   </li>
                </ul>
@@ -440,7 +440,7 @@ map {
                   <li>
                      <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary,
                         or xs:hexBinary. When a particular padding mechanism
-                        is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:padding-error]</a>. Also, when a particular padding mechanism is expected, but the data is not
+                        is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:inexistent-padding]</a>. Also, when a particular padding mechanism is expected, but the data is not
                         padded properly, this is an error <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
                      </p>
                   </li>
@@ -448,7 +448,7 @@ map {
                      <p>
                         <code>$type</code> is the type of encryption. Legal values: "symmetric", and "asymmetric". If the parameter
                         has an illegal value, this is an error
-                        <a href="#error.encType">[crypto:encryption-type-error]</a>.
+                        <a href="#error.encType">[crypto:encryption-type]</a>.
                      </p>
                   </li>
                   <li>
@@ -460,14 +460,14 @@ map {
                            <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for encryption. This parameter can be of type xs:string,
                               xs:base64Binary, or xs:hexBinary.
                               		                  If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
-                              		                  <a href="#error.blockSize">[crypto:block-size-error]</a>.
+                              		                  <a href="#error.blockSize">[crypto:block-size]</a>.
                            </p>
                         </li>
                         <li>
                            <p><code>algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation
                               name can be used.
                               		                  If the parameter specifies an unsupported algorithm or transformation
-                              name, this is an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
+                              name, this is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
                            </p>
                         </li>
                         <li>
@@ -498,14 +498,14 @@ map {
                   <li>
                      <p><code>$data</code> is the data to be decrypted. This parameter can be of type xs:string, xs:base64Binary,
                         or xs:hexBinary. When a particular padding mechanism
-                        is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:padding-error]</a>. Also, when a particular padding mechanism is expected, but the data is not
+                        is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:inexistent-padding]</a>. Also, when a particular padding mechanism is expected, but the data is not
                         padded properly, this is an error <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
                      </p>
                   </li>
                   <li>
                      <p><code>$type</code> is the type of decryption. Legal values: "symmetric", and "asymmetric". If the parameter
                         has an illegal value, this is an error
-                        <a href="#error.decryptionType">[crypto:decryption-type-error]</a>.
+                        <a href="#error.decryptionType">[crypto:decryption-type]</a>.
                      </p>
                   </li>
                   <li>
@@ -517,14 +517,14 @@ map {
                            <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for decryption. This parameter can be of type xs:string,
                               xs:base64Binary, or xs:hexBinary.
                               		                  If the key is invalid, this is an error <a href="#error.secretKey">[crypto:invalid-secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
-                              		                  <a href="#error.blockSize">[crypto:block-size-error]</a>.
+                              		                  <a href="#error.blockSize">[crypto:block-size]</a>.
                            </p>
                         </li>
                         <li>
                            <p><code>algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation
                               name can be used.
                               		                  If the parameter specifies an unsupported algorithm or transformation
-                              name, this is an error <a href="#error.algOrTransf">[crypto:algorithm-or-transformation-error]</a>.
+                              name, this is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
                               		                  
                            </p>
                         </li>
@@ -665,16 +665,10 @@ map {
             <h2><a name="d4e656" id="d4e656"></a>B Summary of Error Conditions
             </h2>
             <dl>
-               <dt class="label"><a name="error.canonAlg" id="error.canonAlg"></a>crypto:canonicalization-algorithm-error
+               <dt class="label"><a name="error.unknown-algorithm" id="error.unknown-algorithm"></a>crypto:unknown-algorithm
                </dt>
-               <dd>The canonicalization algorithm is not supported.</dd>
-               <dt class="label"><a name="error.digestAlg" id="error.digestAlg"></a>crypto:digest-algorithm-error
-               </dt>
-               <dd>The digest algorithm is not supported.</dd>
-               <dt class="label"><a name="error.sigAlg" id="error.sigAlg"></a>crypto:signature-algorithm-error
-               </dt>
-               <dd>The signature algorithm is not supported.</dd>
-               <dt class="label"><a name="error.readKeystore" id="error.readKeystore"></a>crypto:error-reading-keystore
+               <dd>The specified algorithm is not supported.</dd>
+               <dt class="label"><a name="error.readKeystore" id="error.readKeystore"></a>crypto:unreadable-keystore
                </dt>
                <dd>I/O error while reading keystore, or the password is incorrect.</dd>
                <dt class="label"><a name="error.deniedKeystore" id="error.deniedKeystore"></a>crypto:denied-reading-keystore
@@ -683,40 +677,37 @@ map {
                <dt class="label"><a name="error.keystoreUrl" id="error.keystoreUrl"></a>crypto:invalid-keystore-url
                </dt>
                <dd>The keystore URL is invalid.</dd>
-               <dt class="label"><a name="error.keystoreType" id="error.keystoreType"></a>crypto:keystore-type-error
+               <dt class="label"><a name="error.keystoreType" id="error.keystoreType"></a>crypto:keystore-type
                </dt>
                <dd>The keystore type is not supported.</dd>
                <dt class="label"><a name="error.aliasKey" id="error.aliasKey"></a>crypto:no-key-for-alias
                </dt>
                <dd>Cannot find key for alias in given keystore.</dd>
-               <dt class="label"><a name="error.sigElem" id="error.sigElem"></a>crypto:signature-element-error
+               <dt class="label"><a name="error.sigElem" id="error.sigElem"></a>crypto:signature-element
                </dt>
                <dd>Cannot find Signature element.</dd>
-               <dt class="label"><a name="error.noPadding" id="error.noPadding"></a>crypto:padding-error
+               <dt class="label"><a name="error.noPadding" id="error.noPadding"></a>crypto:inexistent-padding
                </dt>
                <dd>No such padding.</dd>
                <dt class="label"><a name="error.incorrectPadding" id="error.incorrectPadding"></a>crypto:incorrect-padding
                </dt>
                <dd>Incorrect padding.</dd>
-               <dt class="label"><a name="error.encType" id="error.encType"></a>crypto:encryption-type-error
+               <dt class="label"><a name="error.encType" id="error.encType"></a>crypto:encryption-type
                </dt>
                <dd>The encryption type is not supported.</dd>
                <dt class="label"><a name="error.secretKey" id="error.secretKey"></a>crypto:invalid-secret-key
                </dt>
                <dd>The secret key is invalid.</dd>
-               <dt class="label"><a name="error.blockSize" id="error.blockSize"></a>crypto:block-size-error
+               <dt class="label"><a name="error.blockSize" id="error.blockSize"></a>crypto:block-size
                </dt>
                <dd>Illegal block size.</dd>
-               <dt class="label"><a name="error.algOrTransf" id="error.algOrTransf"></a>crypto:algorithm-or-transformation-error
-               </dt>
-               <dd>The algorithm or transformation is not supported.</dd>
-               <dt class="label"><a name="error.decryptionType" id="error.decryptionType"></a>crypto:decryption-type-error
+               <dt class="label"><a name="error.decryptionType" id="error.decryptionType"></a>crypto:decryption-type
                </dt>
                <dd>The decryption type is not supported.</dd>
                <dt class="label"><a name="error.noProvider" id="error.noProvider"></a>crypto:no-provider
                </dt>
                <dd>The provider is not set.</dd>
-               <dt class="label"><a name="error.outputFormat" id="error.outputFormat"></a>crypto.output-format-error
+               <dt class="label"><a name="error.outputFormat" id="error.outputFormat"></a>crypto.output-format
                </dt>
                <dd>The output format is not supported.</dd>
             </dl>
