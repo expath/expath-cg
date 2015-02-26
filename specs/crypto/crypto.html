@@ -188,7 +188,7 @@ div.exampleHeader { font-weight: bold;
                   <li>
                      <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm,
                         this
-                        is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
+                        is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
                      </p>
                   </li>
                   <li>
@@ -243,7 +243,7 @@ div.exampleHeader { font-weight: bold;
                   <li>
                      <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm,
                         this
-                        is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
+                        is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
                      </p>
                   </li>
                   <li>
@@ -326,21 +326,21 @@ map {
                         applied to the SignedInfo element prior to performing signature calculations.
                         Possible values are: "exclusive", "exclusive-with-comments", "inclusive", and
                         "inclusive-with-comments". The default value is "inclusive-with-comments". If
-                        the parameter specifies an unsupported algorithm, this is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
+                        the parameter specifies an unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
                      </p>
                   </li>
                   <li>
                      <p><code>$digest-algorithm</code> is the digest algorithm to be applied to the
                         signed object. Possible values are: "SHA1", "SHA256", and "SHA512". The default
                         value is "SHA1". If the parameter specifies an unsupported algorithm, this is
-                        an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
+                        an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
                      </p>
                   </li>
                   <li>
                      <p><code>$signature-algorithm</code> is the algorithm used for signature
                         generation and validation. Possible values are: "DSA_SHA1", and "RSA_SHA1". The
                         default value is "RSA_SHA1". If the parameter specifies an unsupported
-                        algorithm, this is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
+                        algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
                      </p>
                   </li>
                   <li>
@@ -468,7 +468,7 @@ map {
                            <p><code>algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation
                               name can be used.
                               		                  If the parameter specifies an unsupported algorithm or transformation
-                              name, this is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
+                              name, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
                            </p>
                         </li>
                         <li>
@@ -525,7 +525,7 @@ map {
                            <p><code>algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation
                               name can be used.
                               		                  If the parameter specifies an unsupported algorithm or transformation
-                              name, this is an error <a href="#error.unknown-algorithm">[crypto:unknown-algorithm]</a>.
+                              name, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
                               		                  
                            </p>
                         </li>
@@ -666,7 +666,7 @@ map {
             <h2><a name="d4e658" id="d4e658"></a>B Summary of Error Conditions
             </h2>
             <dl>
-               <dt class="label"><a name="error.unknown-algorithm" id="error.unknown-algorithm"></a>crypto:unknown-algorithm
+               <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
                </dt>
                <dd>The specified algorithm is not supported.</dd>
                <dt class="label"><a name="error.signatureType" id="error.signatureType"></a>crypto:signature-type
