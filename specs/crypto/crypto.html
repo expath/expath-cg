@@ -100,17 +100,17 @@ div.exampleHeader { font-weight: bold;
             2.2 <a href="#hmac-function">The crypto:hmac function</a><br />
             3 <a href="#d4e238">Digital Signature</a><br />
             3.1 <a href="#d4e243">The crypto:generate-signature function</a><br />
-            3.2 <a href="#d4e360">The crypto:validate-signature function</a><br />
-            4 <a href="#d4e386">Encryption and Decryption</a><br />
-            4.1 <a href="#d4e395">The crypto:encrypt function</a><br />
-            4.2 <a href="#d4e483">The crypto:decrypt function</a><br />
+            3.2 <a href="#d4e362">The crypto:validate-signature function</a><br />
+            4 <a href="#d4e388">Encryption and Decryption</a><br />
+            4.1 <a href="#d4e397">The crypto:encrypt function</a><br />
+            4.2 <a href="#d4e485">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e571">References</a><br />
-            B <a href="#d4e656">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e573">References</a><br />
+            B <a href="#d4e658">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -279,7 +279,7 @@ div.exampleHeader { font-weight: bold;
                </p>
                <div class="exampleInner"><pre>
 <code class="function">crypto:generate-signature</code>($data     as <code class="type">node()*</code>,
-    			    $parameters as <code class="type">map(xs:string, item()+)?</code>) as <code class="type">node()</code> 
+    			    $parameters as <code class="type">map(xs:string, item()+)?</code>) as <code class="type">node()+</code> 
 </pre></div>
                <p>Example of parameters:</p>
                <div class="exampleInner"><pre>
@@ -349,9 +349,10 @@ map {
                      </p>
                   </li>
                   <li>
-                     <p><code>$signature-type</code> is the method used for signing the content of
-                        signature. Possible values are: 'enveloping', 'enveloped', and 'detached'. The
-                        default value is 'enveloped'.
+                     <p><code>$signature-type</code> is the method used for signing the content of signature. Possible values are: 'enveloping',
+                        'enveloped', and 'detached'. The
+                        default value is 'enveloped'. If the parameter specifies an unsupported signature
+                        type, this is an error <a href="#error.signatureType">[crypto:signature-type]</a>.
                      </p>
                   </li>
                   <li>
@@ -396,7 +397,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e360" id="d4e360"></a>3.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e362" id="d4e362"></a>3.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -412,7 +413,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e386" id="d4e386"></a>4 Encryption and Decryption
+            <h2><a name="d4e388" id="d4e388"></a>4 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -429,7 +430,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e395" id="d4e395"></a>4.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e397" id="d4e397"></a>4.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -487,7 +488,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e483" id="d4e483"></a>4.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e485" id="d4e485"></a>4.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -548,7 +549,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e571" id="d4e571"></a>A References
+            <h2><a name="d4e573" id="d4e573"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -662,12 +663,15 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e656" id="d4e656"></a>B Summary of Error Conditions
+            <h2><a name="d4e658" id="d4e658"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknown-algorithm" id="error.unknown-algorithm"></a>crypto:unknown-algorithm
                </dt>
                <dd>The specified algorithm is not supported.</dd>
+               <dt class="label"><a name="error.signatureType" id="error.signatureType"></a>crypto:signature-type
+               </dt>
+               <dd>The specified signature type is not supported.</dd>
                <dt class="label"><a name="error.readKeystore" id="error.readKeystore"></a>crypto:unreadable-keystore
                </dt>
                <dd>I/O error while reading keystore, or the password is incorrect.</dd>
