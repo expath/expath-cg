@@ -95,22 +95,22 @@ div.exampleHeader { font-weight: bold;
          <p class="toc">1 <a href="#d4e64">Introduction</a><br />
             1.1 <a href="#d4e73">Namespace conventions</a><br />
             1.2 <a href="#d4e92">Error management</a><br />
-            2 <a href="#d4e103">Integrity and Authentication of Data</a><br />
+            2 <a href="#d4e185">Integrity and Authentication of Data</a><br />
             2.1 <a href="#hash-function">The crypto:hash function</a><br />
             2.2 <a href="#hmac-function">The crypto:hmac function</a><br />
-            3 <a href="#d4e238">Digital Signature</a><br />
-            3.1 <a href="#d4e243">The crypto:generate-signature function</a><br />
-            3.2 <a href="#d4e362">The crypto:validate-signature function</a><br />
-            4 <a href="#d4e388">Encryption and Decryption</a><br />
-            4.1 <a href="#d4e397">The crypto:encrypt function</a><br />
-            4.2 <a href="#d4e485">The crypto:decrypt function</a><br />
+            3 <a href="#d4e347">Digital Signature</a><br />
+            3.1 <a href="#d4e355">The crypto:generate-signature function</a><br />
+            3.2 <a href="#d4e474">The crypto:validate-signature function</a><br />
+            4 <a href="#d4e500">Encryption and Decryption</a><br />
+            4.1 <a href="#d4e509">The crypto:encrypt function</a><br />
+            4.2 <a href="#d4e597">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e573">References</a><br />
-            B <a href="#d4e658">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e929">References</a><br />
+            B <a href="#d4e1014">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -161,7 +161,7 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e103" id="d4e103"></a>2 Integrity and Authentication of Data
+            <h2><a name="d4e185" id="d4e185"></a>2 Integrity and Authentication of Data
             </h2>
             <div class="div2">
                
@@ -257,8 +257,18 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e238" id="d4e238"></a>3 Digital Signature
+            <h2><a name="d4e347" id="d4e347"></a>3 Digital Signature
             </h2>
+            <p>A digital signature is basically a way to ensure that an digital document is authentic.
+               Authentic means that you know who created the document and you know that it has not
+               been altered in any way since that person created it.
+            </p>
+            The result of a cryptog
+            raphic transformation of data that, when
+            properly implemented, provide
+            s origin authentication,
+            assurance of data integrity and signatory non-repudiation         
+            
             <p>The XML Signature is a method of associating a key with referenced data (octets);
                it
                does not normatively specify how keys are associated with persons or institutions,
@@ -271,7 +281,7 @@ div.exampleHeader { font-weight: bold;
             </p>
             <div class="div2">
                
-               <h3><a name="d4e243" id="d4e243"></a>3.1 The <code>crypto:generate-signature</code> function
+               <h3><a name="d4e355" id="d4e355"></a>3.1 The <code>crypto:generate-signature</code> function
                </h3>
                <p>The function has its parameters passed as a <code class="type">map(xs:string, item())</code>. If any of these parameters is missing, a default value will be used
                   instead. After the function's signature, an example of parameters is given. The syntax
@@ -397,7 +407,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e362" id="d4e362"></a>3.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e474" id="d4e474"></a>3.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -413,7 +423,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e388" id="d4e388"></a>4 Encryption and Decryption
+            <h2><a name="d4e500" id="d4e500"></a>4 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -430,7 +440,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e397" id="d4e397"></a>4.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e509" id="d4e509"></a>4.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -488,7 +498,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e485" id="d4e485"></a>4.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e597" id="d4e597"></a>4.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -549,7 +559,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e573" id="d4e573"></a>A References
+            <h2><a name="d4e929" id="d4e929"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -663,7 +673,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e658" id="d4e658"></a>B Summary of Error Conditions
+            <h2><a name="d4e1014" id="d4e1014"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm

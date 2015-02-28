@@ -691,6 +691,51 @@ map {
 <!--             <p>This function lists the most-trusted certificate authorities in a secure store.</p> -->
 <!--          </div2>          -->
 <!--       </div1>        -->
+
+<!--       <div1> -->
+<!--          <head>Digital Certificates</head> -->
+<!--          <p>TBD.</p> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-certificate</code> function</head> -->
+<!--             <p>This function generates a digital certificate.</p> -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-self-signed-certificate</code> function</head> -->
+<!--             <p>This function generates, for development purposes, a self signed digital certificate. -->
+<!--                TODO: To be developed, if such function is of any use.</p> -->
+<!--          </div2>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:validate-certificate</code> function</head> -->
+<!--             <p>This function validates a digital certificate.</p> -->
+<!--          </div2>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:parse-certificate</code> function</head> -->
+<!--             <p>This function parses a digital certificate.</p> -->
+<!--          </div2>  -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-certification-path</code> function</head> -->
+<!--             <p>This function validates the certification path for a digital certificate.</p> -->
+<!--          </div2>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:validate-certification-path</code> function</head> -->
+<!--             <p>This function validates the certification path for a digital certificate.</p> -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-certification-request</code> function</head> -->
+<!--             <p>This function generates a certificate signing request, in order to apply for a digital -->
+<!--             identity certificate, which is to be issued by a Certificate Authority .</p> -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:validate-certification-request</code> function</head> -->
+<!--             <p>This function validates a certificate signing request.</p> -->
+<!--          </div2>    -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:validate-certificate-revocation-list</code> function</head> -->
+<!--             <p>This function validates a certificate revocation list.</p> -->
+<!--          </div2>                   -->
+<!--       </div1> -->
+      
+      
    </body>
    <back>
       <div1>
