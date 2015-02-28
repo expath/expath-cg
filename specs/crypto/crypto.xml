@@ -749,7 +749,63 @@ map {
 <!--          </div2>            -->
 <!--       </div1> -->
             
-            
+<!--       <div1> -->
+<!--             <head>The <code>crypto:options</code> element</head> -->
+<!--             <p>The <code>crypto:options</code> element represents the options needed for the functions included in this module. -->
+<!--             Users will specify for a certain functions only the options mentioned in function's description above. In case a needed option -->
+<!--             is not mentioned for a function, its default value will be used.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:options&gt; -->
+<!--     &lt;crypto:option name = xs:string value? = xs:string&gt; -->
+<!--         any* -->
+<!--     &lt;/crypto:option&gt; * -->
+<!-- &lt;/crypto:options&gt; ? -->
+<!-- </eg> -->
+<!--          <div2 id="provider-option"> -->
+<!--             <head>The <code>provider</code> option</head> -->
+<!--             <p>Represents the provider for the current operation. If the provider does not exist, this is an error <bibref ref="error.noProvider"/>.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:option name = "provider" -->
+<!--     value = xs:string/&gt; -->
+<!-- </eg>             -->
+<!--          </div2>   -->
+<!--          <div2 id="canonicalization-algorithm"> -->
+<!--             <head>The <code>canonicalization-algorithm</code> option</head> -->
+<!--             <p>This option represents the canonicalization algorithm applied to the <code>SignedInfo</code> element prior to performing -->
+<!--             signature calculations. The default value is "inclusive-with-comments". If the parameter specifies an unsupported algorithm, -->
+<!--             this is an error <bibref ref="error.unknownAlgorithm"/>.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:option name = "canonicalization-algorithm" -->
+<!--     value = "exclusive" | "exclusive-with-comments" | "inclusive" | "inclusive-with-comments" /&gt; ? -->
+<!-- </eg>             -->
+<!--          </div2>  -->
+<!--          <div2 id="digest-algorithm"> -->
+<!--             <head>The <code>digest-algorithm</code> option</head> -->
+<!--             <p>This option represents the digest algorithm to be applied to the signed object. If the parameter specifies an unsupported -->
+<!--             algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:option name = "digest-algorithm" value = xs:string /&gt; -->
+<!-- </eg>             -->
+<!--          </div2>          -->
+<!--          <div2 id="signature-algorithm"> -->
+<!--             <head>The <code>signature-algorithm</code> option</head> -->
+<!--             <p>This option represents the algorithm used for signature generation and validation. If the parameter specifies an -->
+<!--             unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:option name = "signature-algorithm" value = xs:string /&gt; -->
+<!-- </eg>             -->
+<!--          </div2>          -->
+<!--          <div2 id="signature-namespace-prefix"> -->
+<!--             <head>The <code>signature-namespace-prefix</code> option</head> -->
+<!--             <p>This option represents the namespace prefix for signature.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:option name = "signature-namespace-prefix" value = xs:string /&gt; -->
+<!-- </eg>             -->
+<!--          </div2>                   -->
+
+                                
+<!--       </div1> -->
+      
    </body>
    <back>
       <div1>
