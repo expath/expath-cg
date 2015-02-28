@@ -85,6 +85,88 @@
                   <code>error</code> had been called).</p>
          </div2>
       </div1>
+<!--       <div1> -->
+<!--          <head>Cryptographic Service Providers</head> -->
+<!--          <p>Cryptographic providers provide cryptographic services, involving cryptographic operations (encryption, digital signatures, message digests, message authentication),  -->
+<!--          generators and converters of cryptographic material and cryptographic objects (keystores or certificates) containing the cryptographic data. They can be implemented -->
+<!--          using software, hardware, or both.</p> -->
+<!--           <table border="1" frame="border"> -->
+<!--             <caption>Cryptographic services described by this specification</caption> -->
+<!--             <thead> -->
+<!--               <tr> -->
+<!--                 <th>Cryptographic Service QName</th> -->
+<!--                 <th>Cryptographic Service Description</th> -->
+<!--               </tr> -->
+<!--             </thead> -->
+<!--             <tbody> -->
+<!--               <tr> -->
+<!--                 <td>crypto:hash</td> -->
+<!--                 <td>See <specref ref="hash-function" />.</td> -->
+<!--               </tr> -->
+<!--               <tr> -->
+<!--                 <td>crypto:hmac</td> -->
+<!--                 <td>See <specref ref="hmac-function" />.</td> -->
+<!--               </tr> -->
+<!--             </tbody> -->
+<!--           </table> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:list-providers</code> function</head> -->
+<!--             <p>This function lists the available cryptographic providers.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:list-providers</spec:function>() as <spec:type>element(crypto:provider-list)</spec:type> -->
+<!-- </eg> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:providers-list</code> element</head> -->
+<!--                 <p>The <code>crypto:providers-list</code> element represents the list of the available cryptographic providers:</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:providers-list&gt; -->
+<!--     (crypto:provider*) -->
+<!-- &lt;/crypto:providers-list&gt; -->
+<!--     </eg> -->
+<!--             </div3> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:provider</code> element</head> -->
+<!--                 <p>The <code>crypto:provider</code> element contains the name of an available cryptographic provider:</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:provider name = xs:string -->
+<!--     version = xs:string&gt; -->
+<!-- &lt;/crypto:provider&gt; -->
+<!--                 </eg> -->
+<!--               </div3>             -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:list-services</code> function</head> -->
+<!--             <p>This function lists the cryptographic services a provider provides.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:list-services</spec:function>($provider-name as <spec:type>xs:string</spec:type>) as <spec:type>element(crypto:service-list)</spec:type> -->
+<!-- </eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$provider-name</code> is the provider's name. TBD: case when provider is not registered, etc.</p> -->
+<!--                </item> -->
+<!--             </ulist> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:services-list</code> element</head> -->
+<!--                 <p>The <code>crypto:services-list</code> element represents the list of the available cryptographic services for a provider:</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:services-list&gt; -->
+<!--     (crypto:service*) -->
+<!-- &lt;/crypto:services-list&gt; -->
+<!--     </eg> -->
+<!--             </div3> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:service</code> element</head> -->
+<!--                 <p>The <code>crypto:service</code> element contains details about an available cryptographic service:</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:service qname = xsd:QName -->
+<!--     algorithm? = xs:string -->
+<!--     type? = xs:string -->
+<!--     format? = xs:string?/&gt; -->
+<!--                 </eg> -->
+<!--               </div3>              -->
+<!--          </div2>           -->
+<!--       </div1>         -->
+      
       <div1>
          <head>Integrity and Authentication of Data</head>
          <div2 id="hash-function">
