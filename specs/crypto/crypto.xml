@@ -262,6 +262,13 @@
 <!--       </div1>       -->
       <div1>
          <head>Digital Signature</head>
+         <p>A digital signature is basically a way to ensure that an digital document is authentic.
+         Authentic means that you know who created the document and you know that it has not been altered in any way since that person created it.</p>
+         The result of a cryptog
+raphic transformation of data that, when
+properly implemented, provide
+s origin authentication,
+assurance of data integrity and signatory non-repudiation         
          <p>The XML Signature is a method of associating a key with referenced data (octets); it
             does not normatively specify how keys are associated with persons or institutions, nor
             the meaning of the data being referenced and signed. XML Signatures are applied to
@@ -477,6 +484,213 @@ map {
             </ulist>
          </div2>
       </div1>
+<!--       <div1> -->
+<!--          <head>Secure Storing of Sensitive Keying and Data Material</head> -->
+<!--          <p>A secure storage is a collection of CRLs, cryptographic keys, cryptographic certificates, cryptographic certificate chains, -->
+<!--          various secrets, and extensions. It may have different implementation, according to different cryptographic providers. -->
+<!--          Every entry has a unique alias name and can be protected by its own password.</p>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:create-secure-store</code> function</head> -->
+<!--             <p>This function creates a secure store. It returns the store as xs:base64binary if successfully completed, empty sequence if not.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:create-secure-store</spec:function>($store-format as <spec:type>xs:string</spec:type>, -->
+<!--                $store-password as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64binary</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$store-format</code> is the format of the secure store.</p> -->
+<!--                </item>                -->
+<!--                <item> -->
+<!--                   <p><code>$store-password</code> is the password for the secure store.</p> -->
+<!--                </item> -->
+<!--             </ulist>             -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:load-secure-store</code> function</head> -->
+<!--             <p>This function loads a secure store in order to operate against it. It returns an xs:long representing the secure store handle.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:load-secure-store</spec:function>($secure-store as <spec:type>xs:base64binary</spec:type>, -->
+<!--                $store-password as <spec:type>xs:string</spec:type>) as <spec:type>xs:long</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store</code> is the secure store.</p> -->
+<!--                </item>                -->
+<!--                <item> -->
+<!--                   <p><code>$store-password</code> is the password for the secure store.</p> -->
+<!--                </item> -->
+<!--             </ulist>             -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:convert-secure-store</code> function</head> -->
+<!--             <p>This function converts a secure store from one format to another. It returns the converted store as xs:base64binary -->
+<!--             if successfully completed, empty sequence if not.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:convert-secure-store</spec:function>($input-store as <spec:type>xs:base64binary</spec:type>, -->
+<!--                $input-format as <spec:type>xs:string</spec:type>, -->
+<!--                $output-format as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64binary</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$input-store</code> is the secure store to be converted.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$input-format</code> is the format of the input secure store.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$output-format</code> is the format of the output secure store.</p> -->
+<!--                </item>                -->
+<!--             </ulist>             -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:get-secure-store-metadata</code> function</head> -->
+<!--             <p>This function gets metadata for a secure store. It returns a crypto:metadata element.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:get-secure-store-metadata</spec:function>($secure-store-handle as <spec:type>xs:long</spec:type>) as <spec:type>element(crypto:metadata)</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store-handle</code> is the secure store handle.</p> -->
+<!--                </item> -->
+<!--             </ulist> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:metadata</code> element</head> -->
+<!--                 <p>The <code>crypto:metadata</code> element contains metadata about a resource.</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:metadata&gt; -->
+<!--     &lt;crypto:secure-store-type&gt;xs:string&lt;/crypto:secure-store-type&gt; -->
+<!--     &lt;crypto:provider&gt;xs:string&lt;/crypto:provider&gt; -->
+<!--     &lt;crypto:aliases-list&gt;xs:string&lt;/crypto:aliases-list&gt; -->
+<!--     &lt;crypto:size&gt;xs:integer&lt;/crypto:size&gt; -->
+<!-- &lt;/crypto:metadata&gt; -->
+<!--     </eg> -->
+<!--                 <ulist> -->
+<!--                     <item> -->
+<!--                       <p> -->
+<!--                         <code>secure-store-type</code> is the type of the secure store. -->
+<!--                       </p> -->
+<!--                     </item> -->
+<!--                     <item> -->
+<!--                         <p> -->
+<!--                             <code>provider</code> is the provider that generated the secure store.</p> -->
+<!--                     </item> -->
+<!--                     <item> -->
+<!--                       <p> -->
+<!--                         <code>aliases-list</code> is the list of all the aliases in the secure store. -->
+<!--                       </p> -->
+<!--                    </item> -->
+<!--                     <item> -->
+<!--                       <p> -->
+<!--                         <code>size</code> is the number of entries in the secure store. -->
+<!--                       </p> -->
+<!--                    </item>     -->
+<!--                 </ulist> -->
+<!--             </div3>    -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:add-entry</code> function</head> -->
+<!--             <p>This function adds an entry to a secure store. It returns true if successfully completed, false if not.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:add-entry</spec:function>($secure-store-handle as <spec:type>xs:long</spec:type>, -->
+<!--                $data as <spec:type>xs:base64binary</spec:type>, -->
+<!--                $alias as <spec:type>xs:string</spec:type>, -->
+<!--                $entry-password as <spec:type>xs:string?</spec:type>) as <spec:type>xs:boolean</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store-handle</code> is the secure store handle.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$data</code> is the data to be stored.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$alias</code> is the alias for the data to be stored.</p> -->
+<!--                </item>                -->
+<!--                <item> -->
+<!--                   <p><code>$entry-password</code> is the password for the entry.</p> -->
+<!--                </item> -->
+<!--             </ulist>             -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:get-entry</code> function</head> -->
+<!--             <p>This function gets an entry from a secure store. It returns the entry.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:get-entry</spec:function>($secure-store-handle as <spec:type>xs:long</spec:type>, -->
+<!--                $alias as <spec:type>xs:string</spec:type>, -->
+<!--                $entry-password as <spec:type>xs:string?</spec:type>) as <spec:type>xs:base64binary</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store-handle</code> is the secure store handle.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$alias</code> is the alias for the data to be stored.</p> -->
+<!--                </item>                -->
+<!--                <item> -->
+<!--                   <p><code>$entry-password</code> is the password for the entry.</p> -->
+<!--                </item> -->
+<!--             </ulist>             -->
+<!--          </div2>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:delete-entry</code> function</head> -->
+<!--             <p>This function delets an entry from a secure store. It returns true if successfully completed, false if not.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:delete-entry</spec:function>($secure-store-handle as <spec:type>xs:long</spec:type>, -->
+<!--                $alias as <spec:type>xs:string</spec:type>, -->
+<!--                $entry-password as <spec:type>xs:string?</spec:type>) as <spec:type>xs:boolean</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store-handle</code> is the secure store handle.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$alias</code> is the alias for the data to be stored.</p> -->
+<!--                </item>                -->
+<!--                <item> -->
+<!--                   <p><code>$entry-password</code> is the password for the entry.</p> -->
+<!--                </item> -->
+<!--             </ulist>             -->
+<!--          </div2>  -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:get-entry-metadata</code> function</head> -->
+<!--             <p>This function gets metadata for a secure store entry. It returns a crypto:metadata element if entry exists, empty sequence if -->
+<!--             the entry does not exist.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:get-entry-metadata</spec:function>($secure-store-handle as <spec:type>xs:long</spec:type>, -->
+<!--                $alias as <spec:type>xs:string</spec:type>) as <spec:type>element(crypto:metadata)?</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store-handle</code> is the secure store handle.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$alias</code> is the alias for the data to be stored.</p> -->
+<!--                </item>                -->
+<!--             </ulist> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:metadata</code> element</head> -->
+<!--                 <p>The <code>crypto:metadata</code> element contains metadata about a resource.</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:metadata&gt; -->
+<!--     &lt;crypto:creation-date&gt;xs:dateTime&lt;/crypto:creation-date&gt; -->
+<!--     &lt;crypto:type&gt;("certificate" | "key" | "other")&lt;/crypto:provider&gt; -->
+<!-- &lt;/crypto:metadata&gt; -->
+<!--     </eg> -->
+<!--                 <ulist> -->
+<!--                     <item> -->
+<!--                       <p> -->
+<!--                         <code>creation-date</code> is the entry's creation date. -->
+<!--                       </p> -->
+<!--                     </item> -->
+<!--                     <item> -->
+<!--                         <p> -->
+<!--                             <code>type</code> is the entry's type.</p> -->
+<!--                     </item>    -->
+<!--                 </ulist> -->
+<!--             </div3>    -->
+<!--          </div2>          -->
+                 
+         
+         
+              
+              
+<!--          <div2> -->
+<!--             <head>The <code>crypto:list-trusted-certificate-authorities</code> function</head> -->
+<!--             <p>This function lists the most-trusted certificate authorities in a secure store.</p> -->
+<!--          </div2>          -->
+<!--       </div1>        -->
    </body>
    <back>
       <div1>
