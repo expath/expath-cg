@@ -262,13 +262,8 @@
 <!--       </div1>       -->
       <div1>
          <head>Digital Signature</head>
-         <p>A digital signature is basically a way to ensure that an digital document is authentic.
-         Authentic means that you know who created the document and you know that it has not been altered in any way since that person created it.</p>
-         The result of a cryptog
-raphic transformation of data that, when
-properly implemented, provide
-s origin authentication,
-assurance of data integrity and signatory non-repudiation         
+         <p>A digital signature is a technique to certify that a digital document is authentic. This means that the origin of the document is known and there is the
+         ability to identify if the digital document has been changed since the digital signature was applied to it. This is done by means of a cryptographic transformation.</p>
          <p>The XML Signature is a method of associating a key with referenced data (octets); it
             does not normatively specify how keys are associated with persons or institutions, nor
             the meaning of the data being referenced and signed. XML Signatures are applied to
