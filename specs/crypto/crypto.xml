@@ -740,7 +740,15 @@ map {
 <!--          <p>TBD.</p> -->
 <!--       </div1> -->
       
-      
+<!--       <div1> -->
+<!--          <head>Random Sequences Generation</head> -->
+<!--          <p>TBD.</p> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-random-number</code> function</head> -->
+<!--             <p>This function generates a random number that is cryptographically strong.</p> -->
+<!--          </div2>            -->
+<!--       </div1> -->
+            
             
    </body>
    <back>
