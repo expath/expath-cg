@@ -234,6 +234,32 @@
             </ulist>
          </div2>
       </div1>
+<!--       <div1> -->
+<!--          <head>Key Management</head> -->
+<!--          <p>TBD.</p> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-key-pair</code> function</head> -->
+<!--             <p>This function generates a new pair of public and private cryptographic keys, to be used with a specific cryptographic algorithm.</p> -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-secret-key</code> function</head> -->
+<!--             <p>This function generates a new secret key, to be used with a specific cryptographic algorithm.</p> -->
+<!--          </div2>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:compare-keys</code> function</head> -->
+<!--             <p></p> -->
+<!--          </div2>  -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:key-agrement</code> function</head> -->
+<!--             <p>http://ietf.org/rfc/rfc2631.txt, http://docs.oracle.com/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html#KeyAgreement</p> -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:convert-key-specification-to-key-object, crypto:convert-key-object-to-key-specification</code> function</head> -->
+<!--             <p>http://docs.oracle.com/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html#KeyFactory, -->
+<!--             http://docs.oracle.com/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html#SecretKeyFactory (for secret (symmetric) keys) -->
+<!--             </p> -->
+<!--          </div2>                     -->
+<!--       </div1>       -->
       <div1>
          <head>Digital Signature</head>
          <p>The XML Signature is a method of associating a key with referenced data (octets); it
