@@ -471,7 +471,8 @@ map {
 		                  If the parameter specifies an unsupported algorithm or transformation name, this is an error <bibref ref="error.unknownAlgorithm"/>.</p>
 		               </item>
 		               <item>
-		                  <p><code>iv</code> as <spec:type>xs:string</spec:type> is the initialization vector for symmetric encryption.</p>
+		                  <p><code>iv</code> as <spec:type>xs:string</spec:type> is the initialization vector for symmetric encryption. For assymetric encryption, this parameter
+		                  is not needed.</p>
 		               </item>                
 		               <item>
 		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the
