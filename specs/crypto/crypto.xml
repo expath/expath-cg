@@ -39,11 +39,11 @@
          <p/>
       </copyright>
       <abstract>
-         <p>This proposal defines a set of XPath 3.0 extension functions to perform cryptographic
-            operations. It defines extension functions related to XML Digital Signature, to
-            encryption and decryption, and to hash and digest messages. It has been designed to be
-            compatible with XQuery 3.0 and XSLT 3.0, as well as any other standard based on XPath
-            3.0.</p>
+         <p>This document defines a set of <bibref ref="xpath-30"/> extension functions to perform cryptographic operations. These functions are related to
+         XML Digital Signature, to encryption and decryption, and to hashing and digesting of messages. They have been designed to be compatible with
+         <bibref ref="xquery-30"/> and <bibref ref="xslt-30"/>, as well as any other standard based on <bibref ref="xpath-30"/>.</p>
+         <p>The functions are defined on the datatypes defined in <bibref ref="xml-schema-part-2"/> and <bibref ref="xpath-datamodel-30"/>. Also, the functions are defined on
+         nodes and node sequences as defined in the <bibref ref="xpath-datamodel-30"/> and are following the good practices inferred from <bibref ref="xpath-functions-30"/>.</p>
       </abstract>
       <status>
          <p>Must be ignored, but is required by the schema...</p>
@@ -56,6 +56,10 @@
       </revisiondesc>
    </header>
    <body>
+      <div1>
+         <head>Status of this document</head>
+         <p>This document is in an interim draft stage. Comments are welcomed at <loc href="mailto:public-expath@w3.org">public-expath@w3.org</loc> mailing list (<loc href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
+      </div1>   
       <div1>
          <head>Introduction</head>
          <p>Cryptography is the science of communicating in secret code, by conversion of data with
@@ -197,9 +201,9 @@
          </div2>
          <div2 id="hmac-function">
             <head>The <code>crypto:hmac</code> function</head>
-            <p>HMAC (Keyed-Hashing for Message Authentication) is a mechanism for message authentication using
+            <p>HMAC (Keyed-Hashing for Message Authentication) <bibref ref="rfc2104" /> is a mechanism for message authentication using
             cryptographic hash functions. HMAC can be used with any iterative cryptographic hash function, e.g.
-            MD5 or SHA-1, in combination with a secret shared key. Typically, message authentication codes are
+            MD5 <bibref ref="rfc1321" /> or SHA-1, in combination with a secret shared key. Typically, message authentication codes are
             used between two parties that share a secret key in order to validate information transmitted
             between these parties.</p>            
             <p>This function generates a message authentication code, based on the input message, by using a cryptographic algorithm and a secret key.
@@ -261,10 +265,10 @@
 <!--          </div2>                     -->
 <!--       </div1>       -->
       <div1>
-         <head>Digital Signature</head>
+         <head>XML Digital Signature</head>
          <p>A digital signature is a technique to certify that a digital document is authentic. This means that the origin of the document is known and there is the
          ability to identify if the digital document has been changed since the digital signature was applied to it. This is done by means of a cryptographic transformation.</p>
-         <p>The XML Signature is a method of associating a key with referenced data (octets); it
+         <p>The XML Signature <bibref ref="xml-dig-sig-core" /> is a method of associating a key with referenced data (octets); it
             does not normatively specify how keys are associated with persons or institutions, nor
             the meaning of the data being referenced and signed. XML Signatures are applied to
             arbitrary digital content (data objects) via an indirection. Data objects are digested,
@@ -278,6 +282,76 @@
 <spec:function>crypto:generate-signature</spec:function>($data     as <spec:type>node()*</spec:type>,
     			    $parameters as <spec:type>map(xs:string, item()+)?</spec:type>) as <spec:type>node()+</spec:type> 
 </eg>
+            <ulist>
+               <item>
+                  <p><code>$data</code> is the data to be signed.</p>
+               </item>
+               <item>
+                  <p><code>$parameters</code> represent the parameters used for generating the XML digital signature. For details regarding these parameters, see the table below.</p>
+               </item>
+            </ulist>
+			<table border="1" frame="border">
+			  <caption>Parameters used for generating a XML digital signature</caption>
+			  <thead>
+			    <tr>
+			      <th>Key (as <code>xs:string</code>)</th>
+			      <th>Value</th>
+			      <th>Meaning</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <td><code>canonicalization-algorithm</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>The canonicalization algorithm applied to the SignedInfo element prior to performing signature calculations. Possible values are: "exclusive",
+			      "exclusive-with-comments", "inclusive", and "inclusive-with-comments". The default value is "inclusive-with-comments". If the parameter specifies an
+			      unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
+			    </tr>
+			    <tr>
+			      <td><code>digest-algorithm</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>The digest algorithm to be applied to the signed object. Possible values are: "SHA1", "SHA256", and "SHA512". The default value is "SHA1". If the
+			      parameter specifies an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
+			    </tr>
+			    <tr>
+			      <td><code>Subject</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>The subject of the document. (Optional)</td>
+			    </tr>
+			    <tr>
+			      <td><code>Keywords</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>Keywords associated with the document. (Optional)</td>
+			    </tr>
+			    <tr>
+			      <td><code>Creator</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>If the document was converted to PDF from another format, the name of the application (for example, Adobe FrameMaker®) that created the
+			      original document from which it was converted. (Optional)</td>
+			    </tr>
+			    <tr>
+			      <td><code>Producer</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>If the document was converted to PDF from another format, the name of the application (for example, Acrobat Distiller) that converted it to PDF. (Optional)</td>
+			    </tr>
+			    <tr>
+			      <td><code>CreationDate</code></td>
+			      <td><code>xs:date</code></td>
+			      <td>The date and time the document was created. (Optional)</td>
+			    </tr>
+			    <tr>
+			      <td><code>ModDate</code></td>
+			      <td><code>xs:date</code></td>
+			      <td>The date and time the document was most recently modified. (Required if <code>PieceInfo</code> is present in the document catalog; otherwise optional)</td>
+			    </tr>
+			    <tr>
+			      <td><code>Trapped</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>A string indicating whether the document has been modified to include trapping information (see <bibref ref="pdf-reference-1.7"/>, section 10.10.5,
+			      “Trapping Support”). The legal values are: "True", "False, and "Unknown". The default value is "Unknown". (Optional)</td>
+			    </tr>		              		              
+			  </tbody>
+			</table>	
             <p>Example of parameters:</p>    
         <eg xml:space="preserve">
 map {
@@ -315,23 +389,6 @@ map {
 </eg>
             <ulist>
                <item>
-                  <p><code>$data</code> is the data to be signed.</p>
-               </item>
-               <item>
-                  <p><code>$canonicalization-algorithm</code> is the canonicalization algorithm
-                     applied to the SignedInfo element prior to performing signature calculations.
-                     Possible values are: "exclusive", "exclusive-with-comments", "inclusive", and
-                     "inclusive-with-comments". The default value is "inclusive-with-comments". If
-                     the parameter specifies an unsupported algorithm, this is an error <bibref
-                        ref="error.unknownAlgorithm"/>.</p>
-               </item>
-               <item>
-                  <p><code>$digest-algorithm</code> is the digest algorithm to be applied to the
-                     signed object. Possible values are: "SHA1", "SHA256", and "SHA512". The default
-                     value is "SHA1". If the parameter specifies an unsupported algorithm, this is
-                     an error <bibref ref="error.unknownAlgorithm"/>.</p>
-               </item>
-               <item>
                   <p><code>$signature-algorithm</code> is the algorithm used for signature
                      generation and validation. Possible values are: "DSA_SHA1", and "RSA_SHA1". The
                      default value is "RSA_SHA1". If the parameter specifies an unsupported
@@ -346,7 +403,7 @@ map {
                      default value is 'enveloped'. If the parameter specifies an unsupported signature type, this is an error <bibref ref="error.signatureType"/>.</p>
                </item>
                <item>
-                  <p><code>$references</code> represents the resources to be signed. If this parameter is missing, the whole input document will be signed.</p>
+                  <p><code>$references</code> represents the resources to be signed. If this parameter is missing, the whole input document will be signed. The version of XPath for transforms is 1.0.</p>
                </item>
                <item>
                   <p><code>$digital-certificate</code> is the digital certificate to be used for signing the references. If this parameter is missing, an auto-generated key pair
@@ -821,7 +878,10 @@ map {
            	<bibl id="xpath-datamodel-30" key="XQuery and XPath Data Model 3.0">
               		<loc href="http://w3.org/TR/xpath-datamodel-30/">XQuery and XPath Data Model 3.0</loc>.
               		Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>  
-           	<bibl id="xml-dig-sig-core" key="XML Signature">
+           	<bibl id="xml-schema-part-2" key="XML Schema Part 2: Datatypes Second Edition">
+              		<loc href="http://w3.org/TR/xmlschema-2/">XML Schema Part 2: Datatypes Second Edition</loc>.
+              		Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>              		
+           	<bibl id="xml-dig-sig-core" key="XML Digital Signature">
               		<loc href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
                  	(Second Edition)</loc>. Donald Eastlake, Joseph Reagle, David Solo, Frederick
               		Hirsch, Thomas Roessler, editors. Mark Bartel, John Boyer, Barb Fox, Brian LaMacchia,
@@ -830,35 +890,25 @@ map {
               		<loc href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</loc>.
               		John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
               		November 2002.</bibl>
-           	<bibl id="rfc1321" key="RFC 1321">
+           	<bibl id="rfc1321" key="RFC 1321: The MD5 Message-Digest Algorithm">
               		<loc href="http://ietf.org/rfc/rfc1321.txt">RFC 1321: The MD5 Message-Digest Algorithm</loc>. 
               		Ronald L. Rivest, editor. Network Working Group. April 1992.</bibl>
-           	<bibl id="fips-pub-180-1" key="FIPS PUB 180-1">
-              		<loc href="http://itl.nist.gov/fipspubs/fip180-1.htm">Secure Hash Standard</loc>. 
-              		U.S. Department Of Commerce, National Institute of Standards and Technology. 1995 April 17.</bibl>
-           	<bibl id="fips-pub-186" key="FIPS PUB 186">
-              		<loc href="http://itl.nist.gov/fipspubs/fip186.htm">Digital Signature Standard (DSS)</loc>. 
-              		U.S. Department Of Commerce, National Institute of Standards and Technology. 1994 May 19.</bibl>            
-           	<bibl id="rfc1750" key="RFC 1750">
-              		<loc href="http://ietf.org/rfc/rfc1750.txt">RFC 1750: Randomness Recommendations for Security</loc>. 
-              		D. Eastlake, 3rd, S. Crocker, J. Schiller, editors. Network Working Group. December 1994.</bibl>
-           	<bibl id="rfc3852" key="RFC 3852">
-              		<loc href="http://ietf.org/rfc/rfc3852.txt">RFC 3852: Cryptographic Message Syntax (CMS)</loc>. 
-              		R. Housley, editor. Network Working Group. July 2004.</bibl>
-           	<bibl id="rfc5958" key="RFC 5958">
-              		<loc href="http://tools.ietf.org/html/rfc5958">RFC 5958: Asymmetric Key Packages</loc>. 
-              		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.</bibl>               
-           	<bibl id="rfc5959" key="RFC 5959">
-              		<loc href="http://tools.ietf.org/html/rfc5959">RFC 5959: Algorithms for Asymmetric Key Package Content Type</loc>. 
-              		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.</bibl>                 
-            <bibl id="rfc2104" key="RFC 2104">
+            <bibl id="rfc2104" key="RFC 2104: HMAC: Keyed-Hashing for Message Authentication">
               		<loc href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
                  	Authentication</loc>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
-              		Working Group. February, 1997.</bibl>
-           	<bibl id="rfc2617" key="RFC 2617">
-              		<loc href="http://ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Authentication: Basic and
-                 	Digest Access Authentication</loc>. J. Franks, P. Hallam-Baker, J. Hostetler, S.
-              		Lawrence, P. Leach, A. Luotonen, L. Stewart. June, 1999.</bibl>
+              		Working Group. February, 1997.</bibl>             		
+<!--            	<bibl id="rfc1750" key="RFC 1750"> -->
+<!--               		<loc href="http://ietf.org/rfc/rfc1750.txt">RFC 1750: Randomness Recommendations for Security</loc>.  -->
+<!--               		D. Eastlake, 3rd, S. Crocker, J. Schiller, editors. Network Working Group. December 1994.</bibl>              		 -->
+<!--            	<bibl id="rfc3852" key="RFC 3852"> -->
+<!--               		<loc href="http://ietf.org/rfc/rfc3852.txt">RFC 3852: Cryptographic Message Syntax (CMS)</loc>.  -->
+<!--               		R. Housley, editor. Network Working Group. July 2004.</bibl> -->
+<!--            	<bibl id="rfc5958" key="RFC 5958"> -->
+<!--               		<loc href="http://tools.ietf.org/html/rfc5958">RFC 5958: Asymmetric Key Packages</loc>.  -->
+<!--               		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.</bibl> -->
+<!--            	<bibl id="rfc5959" key="RFC 5959"> -->
+<!--               		<loc href="http://tools.ietf.org/html/rfc5959">RFC 5959: Algorithms for Asymmetric Key Package Content Type</loc>.  -->
+<!--               		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.</bibl> -->
          </blist>
       </div1>
       <div1>
@@ -875,7 +925,7 @@ map {
             <bibl id="error.noPadding" key="crypto:inexistent-padding">No such padding.</bibl>
             <bibl id="error.incorrectPadding" key="crypto:incorrect-padding">Incorrect padding.</bibl>
             <bibl id="error.encType" key="crypto:encryption-type">The encryption type is not supported.</bibl>
-            <bibl id="error.cryptoKey" key="crypto:ecret-key">The secret key is invalid.</bibl>
+            <bibl id="error.cryptoKey" key="crypto:secret-key">The secret key is invalid.</bibl>
             <bibl id="error.blockSize" key="crypto:block-size">Illegal block size.</bibl>
             <bibl id="error.decryptionType" key="crypto:decryption-type">The decryption type is not supported.</bibl>
             <bibl id="error.noProvider" key="crypto:no-provider">The provider is not set.</bibl>
