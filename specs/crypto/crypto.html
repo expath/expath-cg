@@ -80,37 +80,40 @@ div.exampleHeader { font-weight: bold;
          
          <h2><a name="abstract" id="abstract"></a>Abstract
          </h2>
-         <p>This proposal defines a set of XPath 3.0 extension functions to perform cryptographic
-            operations. It defines extension functions related to XML Digital Signature, to
-            encryption and decryption, and to hash and digest messages. It has been designed to
-            be
-            compatible with XQuery 3.0 and XSLT 3.0, as well as any other standard based on XPath
-            3.0.
+         <p>This document defines a set of <a href="#xpath-30">[XPath 3.0]</a> extension functions to perform cryptographic operations. These functions are related
+            to
+            XML Digital Signature, to encryption and decryption, and to hashing and digesting
+            of messages. They have been designed to be compatible with
+            <a href="#xquery-30">[XQuery 3.0]</a> and <a href="#xslt-30">[XSLT 3.0]</a>, as well as any other standard based on <a href="#xpath-30">[XPath 3.0]</a>.
+         </p>
+         <p>The functions are defined on the datatypes defined in <a href="#xml-schema-part-2">[XML Schema Part 2: Datatypes Second Edition]</a> and <a href="#xpath-datamodel-30">[XQuery and XPath Data Model 3.0]</a>. Also, the functions are defined on
+            nodes and node sequences as defined in the <a href="#xpath-datamodel-30">[XQuery and XPath Data Model 3.0]</a> and are following the good practices inferred from <a href="#xpath-functions-30">[XPath and XQuery Functions and Operators 3.0]</a>.
          </p>
       </div>
       <div class="toc">
          
          <h2><a name="contents" id="contents"></a>Table of Contents
          </h2>
-         <p class="toc">1 <a href="#d4e64">Introduction</a><br />
-            1.1 <a href="#d4e73">Namespace conventions</a><br />
-            1.2 <a href="#d4e92">Error management</a><br />
-            2 <a href="#d4e185">Integrity and Authentication of Data</a><br />
-            2.1 <a href="#hash-function">The crypto:hash function</a><br />
-            2.2 <a href="#hmac-function">The crypto:hmac function</a><br />
-            3 <a href="#d4e347">Digital Signature</a><br />
-            3.1 <a href="#d4e355">The crypto:generate-signature function</a><br />
-            3.2 <a href="#d4e474">The crypto:validate-signature function</a><br />
-            4 <a href="#d4e500">Encryption and Decryption</a><br />
-            4.1 <a href="#d4e509">The crypto:encrypt function</a><br />
-            4.2 <a href="#d4e597">The crypto:decrypt function</a><br />
+         <p class="toc">1 <a href="#d4e82">Status of this document</a><br />
+            2 <a href="#d4e93">Introduction</a><br />
+            2.1 <a href="#d4e102">Namespace conventions</a><br />
+            2.2 <a href="#d4e121">Error management</a><br />
+            3 <a href="#d4e214">Integrity and Authentication of Data</a><br />
+            3.1 <a href="#hash-function">The crypto:hash function</a><br />
+            3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
+            4 <a href="#d4e380">XML Digital Signature</a><br />
+            4.1 <a href="#d4e389">The crypto:generate-signature function</a><br />
+            4.2 <a href="#d4e622">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e648">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e657">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e745">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e929">References</a><br />
-            B <a href="#d4e1014">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1143">References</a><br />
+            B <a href="#d4e1209">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -118,7 +121,14 @@ div.exampleHeader { font-weight: bold;
       <div class="body">
          <div class="div1">
             
-            <h2><a name="d4e64" id="d4e64"></a>1 Introduction
+            <h2><a name="d4e82" id="d4e82"></a>1 Status of this document
+            </h2>
+            <p>This document is in an interim draft stage. Comments are welcomed at <a href="mailto:public-expath@w3.org">public-expath@w3.org</a> mailing list (<a href="http://lists.w3.org/Archives/Public/public-expath/">archive</a>).
+            </p>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e93" id="d4e93"></a>2 Introduction
             </h2>
             <p>Cryptography is the science of communicating in secret code, by conversion of data
                with
@@ -138,7 +148,7 @@ div.exampleHeader { font-weight: bold;
             </p>
             <div class="div2">
                
-               <h3><a name="d4e73" id="d4e73"></a>1.1 Namespace conventions
+               <h3><a name="d4e102" id="d4e102"></a>2.1 Namespace conventions
                </h3>
                <p>The module defined by this document defines functions and elements in the namespace
                   <code>http://expath.org/ns/crypto</code>. In this document, the
@@ -150,7 +160,7 @@ div.exampleHeader { font-weight: bold;
             </div>
             <div class="div2">
                
-               <h3><a name="d4e92" id="d4e92"></a>1.2 Error management
+               <h3><a name="d4e121" id="d4e121"></a>2.2 Error management
                </h3>
                <p>Error conditions are identified by a code (a <code>QName</code>). When such an error
                   condition is reached during the execution of the function, a dynamic error is thrown,
@@ -161,11 +171,11 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e185" id="d4e185"></a>2 Integrity and Authentication of Data
+            <h2><a name="d4e214" id="d4e214"></a>3 Integrity and Authentication of Data
             </h2>
             <div class="div2">
                
-               <h3><a name="hash-function" id="hash-function"></a>2.1 The <code>crypto:hash</code> function
+               <h3><a name="hash-function" id="hash-function"></a>3.1 The <code>crypto:hash</code> function
                </h3>
                <p>This function generates a "message digest" of the input data, by using a cryptographic
                   algorithm. It returns the hash value as a string.
@@ -201,13 +211,12 @@ div.exampleHeader { font-weight: bold;
             </div>
             <div class="div2">
                
-               <h3><a name="hmac-function" id="hmac-function"></a>2.2 The <code>crypto:hmac</code> function
+               <h3><a name="hmac-function" id="hmac-function"></a>3.2 The <code>crypto:hmac</code> function
                </h3>
-               <p>HMAC (Keyed-Hashing for Message Authentication) is a mechanism for message authentication
-                  using
+               <p>HMAC (Keyed-Hashing for Message Authentication) <a href="#rfc2104">[RFC 2104: HMAC: Keyed-Hashing for Message Authentication]</a> is a mechanism for message authentication using
                   cryptographic hash functions. HMAC can be used with any iterative cryptographic hash
                   function, e.g.
-                  MD5 or SHA-1, in combination with a secret shared key. Typically, message authentication
+                  MD5 <a href="#rfc1321">[RFC 1321: The MD5 Message-Digest Algorithm]</a> or SHA-1, in combination with a secret shared key. Typically, message authentication
                   codes are
                   used between two parties that share a secret key in order to validate information
                   transmitted
@@ -257,20 +266,14 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e347" id="d4e347"></a>3 Digital Signature
+            <h2><a name="d4e380" id="d4e380"></a>4 XML Digital Signature
             </h2>
-            <p>A digital signature is basically a way to ensure that an digital document is authentic.
-               Authentic means that you know who created the document and you know that it has not
-               been altered in any way since that person created it.
+            <p>A digital signature is a technique to certify that a digital document is authentic.
+               This means that the origin of the document is known and there is the
+               ability to identify if the digital document has been changed since the digital signature
+               was applied to it. This is done by means of a cryptographic transformation.
             </p>
-            The result of a cryptog
-            raphic transformation of data that, when
-            properly implemented, provide
-            s origin authentication,
-            assurance of data integrity and signatory non-repudiation         
-            
-            <p>The XML Signature is a method of associating a key with referenced data (octets);
-               it
+            <p>The XML Signature <a href="#xml-dig-sig-core">[XML Digital Signature]</a> is a method of associating a key with referenced data (octets); it
                does not normatively specify how keys are associated with persons or institutions,
                nor
                the meaning of the data being referenced and signed. XML Signatures are applied to
@@ -281,16 +284,100 @@ div.exampleHeader { font-weight: bold;
             </p>
             <div class="div2">
                
-               <h3><a name="d4e355" id="d4e355"></a>3.1 The <code>crypto:generate-signature</code> function
+               <h3><a name="d4e389" id="d4e389"></a>4.1 The <code>crypto:generate-signature</code> function
                </h3>
                <p>The function has its parameters passed as a <code class="type">map(xs:string, item())</code>. If any of these parameters is missing, a default value will be used
                   instead. After the function's signature, an example of parameters is given. The syntax
-                  for the <code>$references</code> parameter is inspired by <a href="#xml-dig-sig-core">[XML Signature]</a>.
+                  for the <code>$references</code> parameter is inspired by <a href="#xml-dig-sig-core">[XML Digital Signature]</a>.
                </p>
                <div class="exampleInner"><pre>
 <code class="function">crypto:generate-signature</code>($data     as <code class="type">node()*</code>,
     			    $parameters as <code class="type">map(xs:string, item()+)?</code>) as <code class="type">node()+</code> 
 </pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the data to be signed.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$parameters</code> represent the parameters used for generating the XML digital signature. For details
+                        regarding these parameters, see the table below.
+                     </p>
+                  </li>
+               </ul>
+               <table border="1" frame="border">
+                  <caption>Parameters used for generating a XML digital signature</caption>
+                  <thead>
+                     <tr>
+                        <th>Key (as <code>xs:string</code>)
+                        </th>
+                        <th>Value</th>
+                        <th>Meaning</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td><code>canonicalization-algorithm</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>The canonicalization algorithm applied to the SignedInfo element prior to performing
+                           signature calculations. Possible values are: "exclusive",
+                           			      "exclusive-with-comments", "inclusive", and "inclusive-with-comments". The
+                           default value is "inclusive-with-comments". If the parameter specifies an
+                           			      unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><code>Author</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>The name of the person who created the document. (Optional)</td>
+                     </tr>
+                     <tr>
+                        <td><code>Subject</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>The subject of the document. (Optional)</td>
+                     </tr>
+                     <tr>
+                        <td><code>Keywords</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>Keywords associated with the document. (Optional)</td>
+                     </tr>
+                     <tr>
+                        <td><code>Creator</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>If the document was converted to PDF from another format, the name of the application
+                           (for example, Adobe FrameMaker®) that created the
+                           			      original document from which it was converted. (Optional)
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><code>Producer</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>If the document was converted to PDF from another format, the name of the application
+                           (for example, Acrobat Distiller) that converted it to PDF. (Optional)
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><code>CreationDate</code></td>
+                        <td><code>xs:date</code></td>
+                        <td>The date and time the document was created. (Optional)</td>
+                     </tr>
+                     <tr>
+                        <td><code>ModDate</code></td>
+                        <td><code>xs:date</code></td>
+                        <td>The date and time the document was most recently modified. (Required if <code>PieceInfo</code> is present in the document catalog; otherwise optional)
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><code>Trapped</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>A string indicating whether the document has been modified to include trapping information
+                           (see <a href="#">[pdf-reference-1.7]</a>, section 10.10.5,
+                           			      “Trapping Support”). The legal values are: "True", "False, and "Unknown".
+                           The default value is "Unknown". (Optional)
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
                <p>Example of parameters:</p>
                <div class="exampleInner"><pre>
 map {
@@ -407,7 +494,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e474" id="d4e474"></a>3.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e622" id="d4e622"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -423,7 +510,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e500" id="d4e500"></a>4 Encryption and Decryption
+            <h2><a name="d4e648" id="d4e648"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -440,7 +527,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e509" id="d4e509"></a>4.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e657" id="d4e657"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -470,7 +557,7 @@ map {
                         <li>
                            <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for encryption. This parameter can be of type xs:string,
                               xs:base64Binary, or xs:hexBinary.
-                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:ecret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
                               		                  <a href="#error.blockSize">[crypto:block-size]</a>.
                            </p>
                         </li>
@@ -498,7 +585,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e597" id="d4e597"></a>4.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e745" id="d4e745"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -527,7 +614,7 @@ map {
                         <li>
                            <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for decryption. This parameter can be of type xs:string,
                               xs:base64Binary, or xs:hexBinary.
-                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:ecret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:secret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
                               		                  <a href="#error.blockSize">[crypto:block-size]</a>.
                            </p>
                         </li>
@@ -559,7 +646,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e929" id="d4e929"></a>A References
+            <h2><a name="d4e1143" id="d4e1143"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -595,7 +682,14 @@ map {
                   		Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December
                   2011.
                </dd>
-               <dt class="label"><a name="xml-dig-sig-core" id="xml-dig-sig-core"></a>XML Signature
+               <dt class="label"><a name="xml-schema-part-2" id="xml-schema-part-2"></a>XML Schema Part 2: Datatypes Second Edition
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xmlschema-2/">XML Schema Part 2: Datatypes Second Edition</a>.
+                  		Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December
+                  2011.
+               </dd>
+               <dt class="label"><a name="xml-dig-sig-core" id="xml-dig-sig-core"></a>XML Digital Signature
                </dt>
                <dd>
                   		<a href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
@@ -610,70 +704,24 @@ map {
                   		John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
                   		November 2002.
                </dd>
-               <dt class="label"><a name="rfc1321" id="rfc1321"></a>RFC 1321
+               <dt class="label"><a name="rfc1321" id="rfc1321"></a>RFC 1321: The MD5 Message-Digest Algorithm
                </dt>
                <dd>
                   		<a href="http://ietf.org/rfc/rfc1321.txt">RFC 1321: The MD5 Message-Digest Algorithm</a>. 
                   		Ronald L. Rivest, editor. Network Working Group. April 1992.
                </dd>
-               <dt class="label"><a name="fips-pub-180-1" id="fips-pub-180-1"></a>FIPS PUB 180-1
-               </dt>
-               <dd>
-                  		<a href="http://itl.nist.gov/fipspubs/fip180-1.htm">Secure Hash Standard</a>. 
-                  		U.S. Department Of Commerce, National Institute of Standards and Technology. 1995
-                  April 17.
-               </dd>
-               <dt class="label"><a name="fips-pub-186" id="fips-pub-186"></a>FIPS PUB 186
-               </dt>
-               <dd>
-                  		<a href="http://itl.nist.gov/fipspubs/fip186.htm">Digital Signature Standard (DSS)</a>. 
-                  		U.S. Department Of Commerce, National Institute of Standards and Technology. 1994
-                  May 19.
-               </dd>
-               <dt class="label"><a name="rfc1750" id="rfc1750"></a>RFC 1750
-               </dt>
-               <dd>
-                  		<a href="http://ietf.org/rfc/rfc1750.txt">RFC 1750: Randomness Recommendations for Security</a>. 
-                  		D. Eastlake, 3rd, S. Crocker, J. Schiller, editors. Network Working Group. December
-                  1994.
-               </dd>
-               <dt class="label"><a name="rfc3852" id="rfc3852"></a>RFC 3852
-               </dt>
-               <dd>
-                  		<a href="http://ietf.org/rfc/rfc3852.txt">RFC 3852: Cryptographic Message Syntax (CMS)</a>. 
-                  		R. Housley, editor. Network Working Group. July 2004.
-               </dd>
-               <dt class="label"><a name="rfc5958" id="rfc5958"></a>RFC 5958
-               </dt>
-               <dd>
-                  		<a href="http://tools.ietf.org/html/rfc5958">RFC 5958: Asymmetric Key Packages</a>. 
-                  		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.
-               </dd>
-               <dt class="label"><a name="rfc5959" id="rfc5959"></a>RFC 5959
-               </dt>
-               <dd>
-                  		<a href="http://tools.ietf.org/html/rfc5959">RFC 5959: Algorithms for Asymmetric Key Package Content Type</a>. 
-                  		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.
-               </dd>
-               <dt class="label"><a name="rfc2104" id="rfc2104"></a>RFC 2104
+               <dt class="label"><a name="rfc2104" id="rfc2104"></a>RFC 2104: HMAC: Keyed-Hashing for Message Authentication
                </dt>
                <dd>
                   		<a href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
                      	Authentication</a>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
                   		Working Group. February, 1997.
                </dd>
-               <dt class="label"><a name="rfc2617" id="rfc2617"></a>RFC 2617
-               </dt>
-               <dd>
-                  		<a href="http://ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Authentication: Basic and
-                     	Digest Access Authentication</a>. J. Franks, P. Hallam-Baker, J. Hostetler, S.
-                  		Lawrence, P. Leach, A. Luotonen, L. Stewart. June, 1999.
-               </dd>
             </dl>
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1014" id="d4e1014"></a>B Summary of Error Conditions
+            <h2><a name="d4e1209" id="d4e1209"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
@@ -709,7 +757,7 @@ map {
                <dt class="label"><a name="error.encType" id="error.encType"></a>crypto:encryption-type
                </dt>
                <dd>The encryption type is not supported.</dd>
-               <dt class="label"><a name="error.cryptoKey" id="error.cryptoKey"></a>crypto:ecret-key
+               <dt class="label"><a name="error.cryptoKey" id="error.cryptoKey"></a>crypto:secret-key
                </dt>
                <dd>The secret key is invalid.</dd>
                <dt class="label"><a name="error.blockSize" id="error.blockSize"></a>crypto:block-size
