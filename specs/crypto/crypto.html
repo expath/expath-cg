@@ -103,17 +103,17 @@ div.exampleHeader { font-weight: bold;
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
             4 <a href="#d4e380">XML Digital Signature</a><br />
             4.1 <a href="#d4e389">The crypto:generate-signature function</a><br />
-            4.2 <a href="#d4e622">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e648">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e657">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e745">The crypto:decrypt function</a><br />
+            4.2 <a href="#d4e598">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e624">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e633">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e721">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1143">References</a><br />
-            B <a href="#d4e1209">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1119">References</a><br />
+            B <a href="#d4e1185">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -301,11 +301,11 @@ div.exampleHeader { font-weight: bold;
                   </li>
                   <li>
                      <p><code>$parameters</code> represent the parameters used for generating the XML digital signature. For details
-                        regarding these parameters, see the table below.
+                        regarding these parameters, see the table
+                        <a href="#digital-signature-generation-parameters">[digital-signature-generation-parameters]</a> below.
                      </p>
                   </li>
-               </ul>
-               <table border="1" frame="border">
+               </ul><a name="digital-signature-generation-parameters" id="digital-signature-generation-parameters"></a><table border="1" frame="border">
                   <caption>Parameters used for generating a XML digital signature</caption>
                   <thead>
                      <tr>
@@ -327,53 +327,96 @@ div.exampleHeader { font-weight: bold;
                         </td>
                      </tr>
                      <tr>
-                        <td><code>Author</code></td>
+                        <td><code>digest-algorithm</code></td>
                         <td><code>xs:string</code></td>
-                        <td>The name of the person who created the document. (Optional)</td>
-                     </tr>
-                     <tr>
-                        <td><code>Subject</code></td>
-                        <td><code>xs:string</code></td>
-                        <td>The subject of the document. (Optional)</td>
-                     </tr>
-                     <tr>
-                        <td><code>Keywords</code></td>
-                        <td><code>xs:string</code></td>
-                        <td>Keywords associated with the document. (Optional)</td>
-                     </tr>
-                     <tr>
-                        <td><code>Creator</code></td>
-                        <td><code>xs:string</code></td>
-                        <td>If the document was converted to PDF from another format, the name of the application
-                           (for example, Adobe FrameMaker®) that created the
-                           			      original document from which it was converted. (Optional)
+                        <td>The digest algorithm to be applied to the signed object. Possible values are: "SHA1",
+                           "SHA256", and "SHA512". The default value is "SHA1". If the
+                           			      parameter specifies an unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
                         </td>
                      </tr>
                      <tr>
-                        <td><code>Producer</code></td>
+                        <td><code>signature-algorithm</code></td>
                         <td><code>xs:string</code></td>
-                        <td>If the document was converted to PDF from another format, the name of the application
-                           (for example, Acrobat Distiller) that converted it to PDF. (Optional)
+                        <td>The algorithm used for signature generation and validation. Possible values are: "DSA_SHA1",
+                           and "RSA_SHA1". The default value is "RSA_SHA1".
+                           			      If the parameter specifies an unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
                         </td>
                      </tr>
                      <tr>
-                        <td><code>CreationDate</code></td>
-                        <td><code>xs:date</code></td>
-                        <td>The date and time the document was created. (Optional)</td>
-                     </tr>
-                     <tr>
-                        <td><code>ModDate</code></td>
-                        <td><code>xs:date</code></td>
-                        <td>The date and time the document was most recently modified. (Required if <code>PieceInfo</code> is present in the document catalog; otherwise optional)
+                        <td><code>signature-namespace-prefix</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>The namespace prefix for signature. If this parameter is not provided, the default
+                           value of 'dsig' will be used. (Optional)
                         </td>
                      </tr>
                      <tr>
-                        <td><code>Trapped</code></td>
+                        <td><code>signature-type</code></td>
                         <td><code>xs:string</code></td>
-                        <td>A string indicating whether the document has been modified to include trapping information
-                           (see <a href="#">[pdf-reference-1.7]</a>, section 10.10.5,
-                           			      “Trapping Support”). The legal values are: "True", "False, and "Unknown".
-                           The default value is "Unknown". (Optional)
+                        <td>The method used for signing the content of signature. Possible values are: 'enveloping',
+                           'enveloped', and 'detached'. The default value is 'enveloped'.
+                           			      If the parameter specifies an unsupported signature type, this is an error
+                           <a href="#error.signatureType">[crypto:signature-type]</a>. (Optional)
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><code>references</code></td>
+                        <td><code>element(Reference)*</code></td>
+                        <td>The resources to be signed. If this parameter is missing, the whole input document
+                           will be signed. The version of XPath for transforms is 1.0. (Optional)
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><code>digital-certificate</code></td>
+                        <td><code>map(xs:string, xs:string)</code></td>
+                        <td>The digital certificate to be used for signing the references. If this parameter is
+                           missing, an auto-generated key pair will be used. The
+                           			      components of this parameter are given in the table <a href="#digital-certificate-parameter-components">[digital-certificate-parameter-components]</a> below.(Optional)
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+               <p></p><a name="digital-certificate-parameter-components" id="digital-certificate-parameter-components"></a><table border="1" frame="border">
+                  <caption>Components of the <code>digital-certificate</code> parameter
+                  </caption>
+                  <thead>
+                     <tr>
+                        <th>Key (as <code>xs:string</code>)
+                        </th>
+                        <th>Value</th>
+                        <th>Meaning</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td><code>keystore-type</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>The keystore type. If the type is not supported, this is an error <a href="#error.keystoreType">[crypto:keystore-type]</a>.
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><code>keystore-password</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>The keystore's password. If the keystore cannot be loaded or the password is incorrect,
+                           this is an error <a href="#error.readKeystore">[crypto:unreadable-keystore]</a>.
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><code>key-alias</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>The alias for the key pair used for signing. If no key pair exists for this alias,
+                           this is an error <a href="#error.aliasKey">[crypto:alias-key]</a>.
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><code>private-key-password</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>The password for the selected key.</td>
+                     </tr>
+                     <tr>
+                        <td><code>keystore-url</code></td>
+                        <td><code>xs:string</code></td>
+                        <td>The URL of the keystore. If the URL is not correct, this is an error <a href="#error.keystoreUrl">[crypto:keystore-url]</a>. If the user has no acces to the keystore,
+                           			      this is an error <a href="#error.deniedKeystore">[crypto:denied-keystore]</a>.
                         </td>
                      </tr>
                   </tbody>
@@ -413,88 +456,10 @@ map {
  		} 	
 }
 </pre></div>
-               <ul>
-                  <li>
-                     <p><code>$data</code> is the data to be signed.
-                     </p>
-                  </li>
-                  <li>
-                     <p><code>$canonicalization-algorithm</code> is the canonicalization algorithm
-                        applied to the SignedInfo element prior to performing signature calculations.
-                        Possible values are: "exclusive", "exclusive-with-comments", "inclusive", and
-                        "inclusive-with-comments". The default value is "inclusive-with-comments". If
-                        the parameter specifies an unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
-                     </p>
-                  </li>
-                  <li>
-                     <p><code>$digest-algorithm</code> is the digest algorithm to be applied to the
-                        signed object. Possible values are: "SHA1", "SHA256", and "SHA512". The default
-                        value is "SHA1". If the parameter specifies an unsupported algorithm, this is
-                        an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
-                     </p>
-                  </li>
-                  <li>
-                     <p><code>$signature-algorithm</code> is the algorithm used for signature
-                        generation and validation. Possible values are: "DSA_SHA1", and "RSA_SHA1". The
-                        default value is "RSA_SHA1". If the parameter specifies an unsupported
-                        algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
-                     </p>
-                  </li>
-                  <li>
-                     <p><code>$signature-namespace-prefix</code> is the namespace prefix for
-                        signature.
-                     </p>
-                  </li>
-                  <li>
-                     <p><code>$signature-type</code> is the method used for signing the content of signature. Possible values are: 'enveloping',
-                        'enveloped', and 'detached'. The
-                        default value is 'enveloped'. If the parameter specifies an unsupported signature
-                        type, this is an error <a href="#error.signatureType">[crypto:signature-type]</a>.
-                     </p>
-                  </li>
-                  <li>
-                     <p><code>$references</code> represents the resources to be signed. If this parameter is missing, the whole input
-                        document will be signed.
-                     </p>
-                  </li>
-                  <li>
-                     <p><code>$digital-certificate</code> is the digital certificate to be used for signing the references. If this parameter
-                        is missing, an auto-generated key pair
-                        will be used. The components of this parameter are:
-                     </p>
-                     <ul>
-                        <li>
-                           <p><code>keystore-type</code> is the keystore type. If the type is not supported, this is an error <a href="#error.keystoreType">[crypto:keystore-type]</a>.
-                           </p>
-                        </li>
-                        <li>
-                           <p><code>keystore-password</code> is the keystore's password. If the keystore cannot be loaded or the password is incorrect,
-                              this is an error
-                              		                  <a href="#error.readKeystore">[crypto:unreadable-keystore]</a>.
-                           </p>
-                        </li>
-                        <li>
-                           <p><code>key-alias</code> is the alias for the key pair used for signing. If no key pair exists for this alias,
-                              this is an error <a href="#error.aliasKey">[crypto:alias-key]</a>.
-                           </p>
-                        </li>
-                        <li>
-                           <p><code>private-key-password</code> is the password for the selected key.
-                           </p>
-                        </li>
-                        <li>
-                           <p><code>keystore-url</code> is the URL of the keystore. If the URL is not correct, this is an error <a href="#error.keystoreUrl">[crypto:keystore-url]</a>. If the user has no
-                              		                  acces to the keystore, this is an error <a href="#error.deniedKeystore">[crypto:denied-keystore]</a>. 
-                              		                  
-                           </p>
-                        </li>
-                     </ul>
-                  </li>
-               </ul>
             </div>
             <div class="div2">
                
-               <h3><a name="d4e622" id="d4e622"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e598" id="d4e598"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -510,7 +475,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e648" id="d4e648"></a>5 Encryption and Decryption
+            <h2><a name="d4e624" id="d4e624"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -527,7 +492,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e657" id="d4e657"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e633" id="d4e633"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -585,7 +550,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e745" id="d4e745"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e721" id="d4e721"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -646,7 +611,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1143" id="d4e1143"></a>A References
+            <h2><a name="d4e1119" id="d4e1119"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -721,7 +686,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1209" id="d4e1209"></a>B Summary of Error Conditions
+            <h2><a name="d4e1185" id="d4e1185"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm

@@ -287,10 +287,11 @@
                   <p><code>$data</code> is the data to be signed.</p>
                </item>
                <item>
-                  <p><code>$parameters</code> represent the parameters used for generating the XML digital signature. For details regarding these parameters, see the table below.</p>
+                  <p><code>$parameters</code> represent the parameters used for generating the XML digital signature. For details regarding these parameters, see the table
+                  <bibref ref="digital-signature-generation-parameters" /> below.</p>
                </item>
             </ulist>
-			<table border="1" frame="border">
+			<table id="digital-signature-generation-parameters" border="1" frame="border">
 			  <caption>Parameters used for generating a XML digital signature</caption>
 			  <thead>
 			    <tr>
@@ -314,44 +315,74 @@
 			      parameter specifies an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
 			    </tr>
 			    <tr>
-			      <td><code>Subject</code></td>
+			      <td><code>signature-algorithm</code></td>
 			      <td><code>xs:string</code></td>
-			      <td>The subject of the document. (Optional)</td>
+			      <td>The algorithm used for signature generation and validation. Possible values are: "DSA_SHA1", and "RSA_SHA1". The default value is "RSA_SHA1".
+			      If the parameter specifies an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
 			    </tr>
 			    <tr>
-			      <td><code>Keywords</code></td>
+			      <td><code>signature-namespace-prefix</code></td>
 			      <td><code>xs:string</code></td>
-			      <td>Keywords associated with the document. (Optional)</td>
+			      <td>The namespace prefix for signature. If this parameter is not provided, the default value of 'dsig' will be used. (Optional)</td>
 			    </tr>
 			    <tr>
-			      <td><code>Creator</code></td>
+			      <td><code>signature-type</code></td>
 			      <td><code>xs:string</code></td>
-			      <td>If the document was converted to PDF from another format, the name of the application (for example, Adobe FrameMaker®) that created the
-			      original document from which it was converted. (Optional)</td>
+			      <td>The method used for signing the content of signature. Possible values are: 'enveloping', 'enveloped', and 'detached'. The default value is 'enveloped'.
+			      If the parameter specifies an unsupported signature type, this is an error <bibref ref="error.signatureType"/>. (Optional)</td>
 			    </tr>
 			    <tr>
-			      <td><code>Producer</code></td>
-			      <td><code>xs:string</code></td>
-			      <td>If the document was converted to PDF from another format, the name of the application (for example, Acrobat Distiller) that converted it to PDF. (Optional)</td>
+			      <td><code>references</code></td>
+			      <td><code>element(Reference)*</code></td>
+			      <td>The resources to be signed. If this parameter is missing, the whole input document will be signed. The version of XPath for transforms is 1.0. (Optional)</td>
 			    </tr>
 			    <tr>
-			      <td><code>CreationDate</code></td>
-			      <td><code>xs:date</code></td>
-			      <td>The date and time the document was created. (Optional)</td>
-			    </tr>
-			    <tr>
-			      <td><code>ModDate</code></td>
-			      <td><code>xs:date</code></td>
-			      <td>The date and time the document was most recently modified. (Required if <code>PieceInfo</code> is present in the document catalog; otherwise optional)</td>
-			    </tr>
-			    <tr>
-			      <td><code>Trapped</code></td>
-			      <td><code>xs:string</code></td>
-			      <td>A string indicating whether the document has been modified to include trapping information (see <bibref ref="pdf-reference-1.7"/>, section 10.10.5,
-			      “Trapping Support”). The legal values are: "True", "False, and "Unknown". The default value is "Unknown". (Optional)</td>
+			      <td><code>digital-certificate</code></td>
+			      <td><code>map(xs:string, xs:string)</code></td>
+			      <td>The digital certificate to be used for signing the references. If this parameter is missing, an auto-generated key pair will be used. The
+			      components of this parameter are given in the table <bibref ref="digital-certificate-parameter-components" /> below.(Optional)</td>
 			    </tr>		              		              
 			  </tbody>
-			</table>	
+			</table>
+			<p />
+			<table id="digital-certificate-parameter-components" border="1" frame="border">
+			  <caption>Components of the <code>digital-certificate</code> parameter</caption>
+			  <thead>
+			    <tr>
+			      <th>Key (as <code>xs:string</code>)</th>
+			      <th>Value</th>
+			      <th>Meaning</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <td><code>keystore-type</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>The keystore type. If the type is not supported, this is an error <bibref ref="error.keystoreType" />.</td>
+			    </tr>
+			    <tr>
+			      <td><code>keystore-password</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>The keystore's password. If the keystore cannot be loaded or the password is incorrect, this is an error <bibref ref="error.readKeystore" />.</td>
+			    </tr>
+			    <tr>
+			      <td><code>key-alias</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>The alias for the key pair used for signing. If no key pair exists for this alias, this is an error <bibref ref="error.aliasKey"/>.</td>
+			    </tr>
+			    <tr>
+			      <td><code>private-key-password</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>The password for the selected key.</td>
+			    </tr>
+			    <tr>
+			      <td><code>keystore-url</code></td>
+			      <td><code>xs:string</code></td>
+			      <td>The URL of the keystore. If the URL is not correct, this is an error <bibref ref="error.keystoreUrl"/>. If the user has no acces to the keystore,
+			      this is an error <bibref ref="error.deniedKeystore" />.</td>
+			    </tr>		              		              
+			  </tbody>
+			</table>
             <p>Example of parameters:</p>    
         <eg xml:space="preserve">
 map {
@@ -387,49 +418,6 @@ map {
  		} 	
 }
 </eg>
-            <ulist>
-               <item>
-                  <p><code>$signature-algorithm</code> is the algorithm used for signature
-                     generation and validation. Possible values are: "DSA_SHA1", and "RSA_SHA1". The
-                     default value is "RSA_SHA1". If the parameter specifies an unsupported
-                     algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>.</p>
-               </item>
-               <item>
-                  <p><code>$signature-namespace-prefix</code> is the namespace prefix for
-                     signature.</p>
-               </item>               
-               <item>
-                  <p><code>$signature-type</code> is the method used for signing the content of signature. Possible values are: 'enveloping', 'enveloped', and 'detached'. The
-                     default value is 'enveloped'. If the parameter specifies an unsupported signature type, this is an error <bibref ref="error.signatureType"/>.</p>
-               </item>
-               <item>
-                  <p><code>$references</code> represents the resources to be signed. If this parameter is missing, the whole input document will be signed. The version of XPath for transforms is 1.0.</p>
-               </item>
-               <item>
-                  <p><code>$digital-certificate</code> is the digital certificate to be used for signing the references. If this parameter is missing, an auto-generated key pair
-                  will be used. The components of this parameter are:</p>
-		            <ulist>
-		               <item>
-		                  <p><code>keystore-type</code> is the keystore type. If the type is not supported, this is an error <bibref ref="error.keystoreType" />.</p>
-		               </item>
-		               <item>
-		                  <p><code>keystore-password</code> is the keystore's password. If the keystore cannot be loaded or the password is incorrect, this is an error
-		                  <bibref ref="error.readKeystore" />.</p>
-		               </item>
-		               <item>
-		                  <p><code>key-alias</code> is the alias for the key pair used for signing. If no key pair exists for this alias, this is an error <bibref ref="error.aliasKey"/>.</p>
-		               </item>
-		               <item>
-		                  <p><code>private-key-password</code> is the password for the selected key.</p>
-		               </item>               
-		               <item>
-		                  <p><code>keystore-url</code> is the URL of the keystore. If the URL is not correct, this is an error <bibref ref="error.keystoreUrl"/>. If the user has no
-		                  acces to the keystore, this is an error <bibref ref="error.deniedKeystore" />. 
-		                  </p>
-		               </item>
-		            </ulist>
-               </item>
-            </ulist>
          </div2>
          <div2>
             <head>The <code>crypto:validate-signature</code> function</head>
