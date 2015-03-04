@@ -45,14 +45,14 @@ div.exampleHeader { font-weight: bold;
       <a href="http://expath.org/spec/mongodb/20150315">http://expath.org/spec/mongodb/20150315</a><br />
     </dd><dt>Latest version:</dt><dd>
       <a href="http://expath.org/spec/mongodb">http://expath.org/spec/mongodb</a><br />
-    </dd><dt>Editors:</dt><dd>Christian Grün, BaseX GmbH</dd><dd>Dannes Wessels, eXist Solutions</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/mongodb/20150315.xml">XML</a> and <a href="http://expath.org/spec/mongodb/20150315/diff">Revision markup</a>.</p><p class="copyright">Copyright © 2015 Christian Grün and Dannes Wessels, published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+    </dd><dt>Editors:</dt><dd>Christian Grün, BaseX GmbH</dd><dd>Dannes Wessels, eXist Solutions GmbH</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/mongodb/20150315.xml">XML</a> and <a href="http://expath.org/spec/mongodb/20150315/diff">Revision markup</a>.</p><p class="copyright">Copyright © 2015 Christian Grün and Dannes Wessels, published by the <a href="http://w3.org/community/expath/">EXPath Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
            License Agreement (CLA)</a>. A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is
         available.</p><p class="copyright">This specification was published by the <a href="http://www.w3.org/community/expath/">EXPath Community Group</a>. It is not a W3C Standard nor is it on the W3C
         Standards Track. Please note that under the <a href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
            License Agreement (CLA)</a> there is a limited opt-out and other conditions apply.s
         Learn more about <a href="http://www.w3.org/community/">W3C Community and Business
            Groups</a>.</p></div><hr /><div>
-<h2><a name="abstract" id="abstract"></a>Abstract</h2><p>This module provides an API for accessing the document database MongoDO.
+<h2><a name="abstract" id="abstract"></a>Abstract</h2><p>This module provides an API for accessing the document database MongoDB.
         It defines functions to connect to the DBMS, retrieve documents from databases
         and collections, update resources, perform map-reduce queries, and execute
         server-side JavaScript functions and database commsands.</p><p>The module has been designed to be compatible with XQuery 3.1 and XPath 3.1, and
@@ -123,12 +123,20 @@ B <a href="#errors">Summary of Error Conditions</a><br />
           For a list of all errors, see the <a href="#errors">Summary of Error
           Conditions</a> section of this document.
         </p></div><div class="div2">
-<h3><a name="exec" id="exec"></a>2.3 JSON Data</h3><p>Since, Version 3.1, maps and arrays are available in XQuery and XPath.
-          The <code>fn:parse-json</code> function can be used to convert a JSON string to
-          an XQuery representation. JSON objects in this module are specified by XQuery
-          maps.</p><p><em>Open issue:</em> The function signatures of this specification could be
-          generalized to also allow JSON strings as input. The resulting super type would
-          be item(). Feedback is welcome.</p></div><div class="div2">
+<h3><a name="exec" id="exec"></a>2.3 JSON Data</h3><p>Since Version 3.1, maps and arrays are available in XQuery and XPath.
+          This specification makes heavy use of the feature: all JSON objects and arrays
+          are represented in the equivalent XQuery data types.
+        </p><p>If JSON strings are preferred as input and output, the functions 
+          <code>fn:parse-json</code> and <code>fn:serialize</code> of the
+          <a href="#xquery31fo">[XPath and XQuery Functions and Operators 3.1]</a> specification can be used for conversion.
+          The following query parses a JSON string and returns an XQuery map. The "liberal"
+          option accepts deviation from <a href="#rfc7159">[RFC 7159]</a>, such as the omission of
+          quotes on keys:</p><div class="exampleInner"><pre>fn:parse-json('{ info: "Hello Universe" }', map { "liberal": true() })</pre></div><p>The next example shows how XQuery maps can be serialized as JSON:</p><div class="exampleInner"><pre>
+fn:serialize(map { 'info': 'Hello Universe' },
+  &lt;output:serialization-parameters xmlns:output='http://www.w3.org/2010/xslt-xquery-serialization'&gt;
+    &lt;output:method value='json'/&gt;
+  &lt;/output:serialization-parameters&gt;
+)</pre></div></div><div class="div2">
 <h3><a name="exec" id="exec"></a>2.4 Query Execution</h3><p>All functions in this module are ·nondeterministic·. Non-deterministic
           functions may return different results when executed more than once.
           This is illustrated by two examples:
@@ -160,11 +168,11 @@ mongodb:connect("mongodb://localhost:27017")</pre></div>
                 and distributes reads to the secondary:
                 <div class="exampleInner"><pre>mongodb:connect("localhost,localhost:27018/?readPreference=secondary")</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.list-databases" id="fn.list-databases"></a>3.2 <code>mongodb:list-databases</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:list-databases</code>($id as <code class="type">xs:string</code>) as <code class="type">xs:string*</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Returns the names of all databases on the connected server.</p><p>The connection is identified by the supplied <code>$id</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query lists all databases on localhost:</p><p>
+<h3><a name="fn.list-databases" id="fn.list-databases"></a>3.2 <code>mongodb:list-databases</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:list-databases</code>($client-id as <code class="type">xs:string</code>) as <code class="type">xs:string*</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Returns the names of all databases on the connected server.</p><p>The connection is identified by the supplied <code>$client-id</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query lists all databases on localhost:</p><p>
                 <div class="exampleInner"><pre>mongodb:list-databases(mongodb:connect("localhost"))</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.close" id="fn.close"></a>3.3 <code>mongodb:close</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:close</code>($id as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Closes an open database connection. The connection to be closed is
-                identified by the supplied <code>$id</code>. When a database connection
+<h3><a name="fn.close" id="fn.close"></a>3.3 <code>mongodb:close</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:close</code>($client-id as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Closes an open database connection. The connection to be closed is
+                identified by the supplied <code>$client-id</code>. When a database connection
                 is closed, the associated id is discarded and invalidated. As a consequence,
                 each database can be closed once.</p></dd><dt class="label">Implementation Notes</dt><dd><p>A connection must be kept open as long as it has not explicitly been 
                 closed by the user, and as long as the query has not been fully evaluated.
@@ -175,13 +183,13 @@ mongodb:connect("mongodb://localhost:27017")</pre></div>
 <h2><a name="fns.databases" id="fns.databases"></a>4 Database Operations</h2><p>The module provides no function for creating new databases, because non-existing
         databases will automatically be created by MongoDB with the first write
         operation.</p><div class="div2">
-<h3><a name="fn.list-collections" id="fn.list-collections"></a>4.1 <code>mongodb:list-collections</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:list-collections</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>) as <code class="type">xs:string*</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Returns the names of all collections contained in a databases.</p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database is supplied via <code>$db</code>.</p></dd></dl></div><div class="div2">
-<h3><a name="fn.command" id="fn.command"></a>4.2 <code>mongodb:command</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:command</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>,
+<h3><a name="fn.list-collections" id="fn.list-collections"></a>4.1 <code>mongodb:list-collections</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:list-collections</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>) as <code class="type">xs:string*</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Returns the names of all collections contained in a databases.</p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database is supplied via <code>$database</code>.</p></dd></dl></div><div class="div2">
+<h3><a name="fn.command" id="fn.command"></a>4.2 <code>mongodb:command</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:command</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>,
     $command as <code class="type">map(*)</code>) as <code class="type">map(*)</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Executes a <a href="#mongodb-command">[MongoDB Command]</a>, supplied via
                 <code>$command</code>, and returns the result as a map.
-              </p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database is supplied via <code>$db</code>.</p></dd><dt class="label">Implementation Notes</dt><dd><p>
+              </p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database is supplied via <code>$database</code>.</p></dd><dt class="label">Implementation Notes</dt><dd><p>
                 The object returned by MongoDB contains the field <code>ok</code>, which
                 must be parsed by the implementation to decide if command execution was
                 successful (indicated by the integer value <code>1</code>) or not
@@ -194,19 +202,19 @@ mongodb:connect("mongodb://localhost:27017")</pre></div>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
 return try {
-  mongodb:command($id, map { "clone", 1 })
+  mongodb:command($client-id, map { "clone", 1 })
 } catch mongodb:exec {
   "Command execution failed: " || $err:description,
 }</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.eval" id="fn.eval"></a>4.3 <code>mongodb:eval</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:eval</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>,
-    $code as <code class="type">xs:string</code>) as <code class="type">item()*</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:eval</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>,
+<h3><a name="fn.eval" id="fn.eval"></a>4.3 <code>mongodb:eval</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:eval</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>,
+    $code as <code class="type">xs:string</code>) as <code class="type">item()*</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:eval</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>,
     $code as <code class="type">xs:string</code>, $args as <code class="type">item()*</code>) as <code class="type">item()*</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Runs server-server JavaScript script code, supplied via <code>$code</code>.
                 Function arguments can be supplied via <code>$args</code>. Arguments can
                 be booleans, strings, numbers, arrays or maps. An error will be raised if
                 any other type is supplied.
-                Items of type xs:untypedAtomic are converted to strings.</p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database is supplied via <code>$db</code>.</p></dd><dt class="label">Implementation Notes</dt><dd><p>Due to the different type systems of XQuery and JavaScript, it is not
+                Items of type xs:untypedAtomic are converted to strings.</p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database is supplied via <code>$database</code>.</p></dd><dt class="label">Implementation Notes</dt><dd><p>Due to the different type systems of XQuery and JavaScript, it is not
                 possible to losslessly convert all values to one language and back.
                 To ensure compatibility, an implementation must obey the following
                 conversion rules:</p><p>
@@ -215,34 +223,34 @@ return try {
                       string.</p></li><li><p>A value of type xs:numeric is converted to a number (i.e. a
                       double-precision floating-point format value).</p></li><li><p>A value of type map(*) is converted to an object. Its entries must
                       be converted recursively according to the given rules.</p></li><li><p>A value of type array(*) is converted to an array. Its members must
-                      be converted recursively according to the given rules.</p></li><li><p>An error is raised for any other type.</p></li></ul>
+                      be converted recursively according to the given rules.</p></li><li><p>The error <a href="#error.type">[mongodb:type]</a> is raised for any other type.</p></li></ul>
               </p><p>
                 Conversion of JavaScript results to XQuery:
                 <ul><li><p>A boolean is converted to xs:boolean.</p></li><li><p>A string is converted to xs:string.</p></li><li><p>A number is converted to xs:double.</p></li><li><p>An object is converted to map(*). Its entries must be converted
                       recursively according to the given rules.</p></li><li><p>An array is converted to array(*). Its members must be converted
-                      recursively according to the given rules.</p></li><li><p>An error is raised for any other type.</p></li></ul>
+                      recursively according to the given rules.</p></li><li><p>The error <a href="#error.type">[mongodb:type]</a> is raised for any other type.</p></li></ul>
               </p></dd><dt class="label">Error Conditions</dt><dd><ul><li><p><a href="#error.type">[mongodb:type]</a> is raised if an XQuery argument cannot be
                     converted to Javascript, or if a Javascript result cannot be converted
                     to XQuery.</p></li><li><p><a href="#error.exec">[mongodb:exec]</a> is raised if JavaScript execution
                     failed.</p></li></ul></dd><dt class="label">Examples</dt><dd><p>The following query returns the result of an arithmetic expression:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
-return mongodb:eval($id, "db",
+return mongodb:eval($client-id, "db",
   'function ( x, y ) { return x + y; }',
   (2, 5)
 )</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.drop-database" id="fn.drop-database"></a>4.4 <code>mongodb:drop-database</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:drop-database</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Drops a database. No operation will be performed if the database does
-                not exist.</p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database is supplied via <code>$db</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query drops five databases (provided they exist):</p><p>
+<h3><a name="fn.drop-database" id="fn.drop-database"></a>4.4 <code>mongodb:drop-database</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:drop-database</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Drops a database. No operation will be performed if the database does
+                not exist.</p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database is supplied via <code>$database</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query drops five databases (provided they exist):</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
 for $no in 1 to 5
-return mongodb:drop-database($id, "database-" || $no)</pre></div>
+return mongodb:drop-database($client-id, "database-" || $no)</pre></div>
               </p></dd></dl></div></div><div class="div1">
 <h2><a name="fns.collections-read" id="fns.collections-read"></a>5 Collections: Read Operations</h2><div class="div2">
-<h3><a name="fn.find" id="fn.find"></a>5.1 <code>mongodb:find</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:find</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>) as <code class="type">map(*)*</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:find</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
-    $query as <code class="type">map(*)</code>) as <code class="type">map(*)*</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:find</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.find" id="fn.find"></a>5.1 <code>mongodb:find</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:find</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>) as <code class="type">map(*)*</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:find</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
+    $query as <code class="type">map(*)</code>) as <code class="type">map(*)*</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:find</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $query as <code class="type">map(*)</code>, $options as <code class="type">map(*)</code>) as <code class="type">map(*)*</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Returns documents of a collection. If a query is supplied via the
                 <code>$query</code> argument, the documents are filtered by that query.
                 The <code>$options</code> argument can have the following entries:
@@ -250,14 +258,14 @@ return mongodb:drop-database($id, "database-" || $no)</pre></div>
                       The field <code>_id</code> will always be returned.</p></li><li><p><code>"sort": map(*)</code>: Sorts the returned documents.</p></li><li><p><code>"limit": xs:integer</code>: Limits the number of returned
                       documents by the specified integer.</p></li><li><p><code>"skip": xs:integer</code>: Skips the number of specified
                       documents.</p></li></ul>
-              </p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following expression queries an addressbook and selects all persons
+              </p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following expression queries an addressbook and selects all persons
                 living in Tokyo. It sorts results by the names and returns the first
                 50 documents:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
-return mongodb:find($id, 'db', 'addressbook',
+return mongodb:find($client-id, 'db', 'addressbook',
   map { "city": "Tokyo" },
   map {
     "sort": map { "name": 1 },
@@ -265,8 +273,8 @@ return mongodb:find($id, 'db', 'addressbook',
   }
 )</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.find-one" id="fn.find-one"></a>5.2 <code>mongodb:find-one</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:find-one</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>) as <code class="type">map(*)?</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:find-one</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
-    $query as <code class="type">map(*)</code>) as <code class="type">map(*)?</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:find-one</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.find-one" id="fn.find-one"></a>5.2 <code>mongodb:find-one</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:find-one</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>) as <code class="type">map(*)?</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:find-one</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
+    $query as <code class="type">map(*)</code>) as <code class="type">map(*)?</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:find-one</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $query as <code class="type">map(*)</code>, $options as <code class="type">map(*)</code>) as <code class="type">map(*)?</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Returns the first document of a database that optionally matches a
                 supplied <code>$query</code>.
                 The <code>$options</code> argument can have have the following entries:
@@ -274,37 +282,37 @@ return mongodb:find($id, 'db', 'addressbook',
                       The field <code>_id</code> will always be returned.
                     </p></li><li><p><code>"sort": map(*)</code>: Sorts the documents before returning
                       the first result.</p></li></ul>
-              </p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query returns the first document that matches the specified query:</p><p>
+              </p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query returns the first document that matches the specified query:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
-return mongodb:find-one($id, 'db', 'addressbook', map { "name": "John Taylor" })</pre></div>
+return mongodb:find-one($client-id, 'db', 'addressbook', map { "name": "John Taylor" })</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.count" id="fn.count"></a>5.3 <code>mongodb:count</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:count</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>) as <code class="type">xs:integer</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:count</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.count" id="fn.count"></a>5.3 <code>mongodb:count</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:count</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>) as <code class="type">xs:integer</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:count</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $query as <code class="type">map(*)</code>) as <code class="type">xs:integer</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Counts documents in a collection. If a query is supplied via the
-                <code>$query</code> argument, the documents are filtered by that query.</p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following expression counts the number of documents in the
+                <code>$query</code> argument, the documents are filtered by that query.</p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following expression counts the number of documents in the
                 "addressbook" collection:</p><p>
                 <div class="exampleInner"><pre>mongodb:count(mongodb:connect("localhost"), 'db', 'addressbook')</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.aggregate" id="fn.aggregate"></a>5.4 <code>mongodb:aggregate</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:aggregate</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.aggregate" id="fn.aggregate"></a>5.4 <code>mongodb:aggregate</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:aggregate</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $pipeline as <code class="type">map(*)*</code>) as <code class="type">map(*)*</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Calculates aggregate values for the documents in a collection and returns
                 the results. The operations to be performed are supplied via
-                the <code>$pipeline</code> argument.</p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query selects all documents with "Tokyo" as city and
+                the <code>$pipeline</code> argument.</p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query selects all documents with "Tokyo" as city and
                 returns their names:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
-return mongodb:aggregate($id, "db","addressbook",
+return mongodb:aggregate($client-id, "db","addressbook",
   (map { "$match"  : map { "city": "Tokyo" } },
    map { "$project": map { "name": 1 } })
 )</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.group" id="fn.group"></a>5.5 <code>mongodb:group</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:group</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
-    $fields as <code class="type">map(*)</code>, $reduce as <code class="type">xs:string</code>, $initial as <code class="type">map(*)</code>) as <code class="type">map(*)*</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:group</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.group" id="fn.group"></a>5.5 <code>mongodb:group</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:group</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
+    $fields as <code class="type">map(*)</code>, $reduce as <code class="type">xs:string</code>, $initial as <code class="type">map(*)</code>) as <code class="type">map(*)*</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:group</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $fields as <code class="type">map(*)</code>, $reduce as <code class="type">xs:string</code>, $initial as <code class="type">map(*)</code>,
     $options as <code class="type">map(*)</code>) as <code class="type">map(*)*</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Groups documents in a collection by the supplied <code>$fields</code>,
                 aggregates the documents via the <code>$reduce</code> function, and
@@ -314,13 +322,13 @@ return mongodb:aggregate($id, "db","addressbook",
                 <ul><li><p><code>"cond": map(*)</code>: Filters the documents before being
                       processed.</p></li><li><p><code>"finalize": xs:string</code>: Follows the reduce function
                       and modifies the output.</p></li></ul>
-              </p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following groups documents with age &gt; 60 by the city field
+              </p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following groups documents with age &gt; 60 by the city field
                 and returns the summed up orders field:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
-return mongodb:group($id, "db", "addressbook",
+return mongodb:group($client-id, "db", "addressbook",
   map { "city": 1 },
   "function (curr, result) { result.orders += curr.orders; }",
   map { "orders": 0 },
@@ -329,8 +337,8 @@ return mongodb:group($id, "db", "addressbook",
   }
 )</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.map-reduce" id="fn.map-reduce"></a>5.6 <code>mongodb:map-reduce</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:map-reduce</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
-    $map as <code class="type">xs:string</code>, $reduce as <code class="type">xs:string</code>) as <code class="type">map(*)*</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:map-reduce</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.map-reduce" id="fn.map-reduce"></a>5.6 <code>mongodb:map-reduce</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:map-reduce</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
+    $map as <code class="type">xs:string</code>, $reduce as <code class="type">xs:string</code>) as <code class="type">map(*)*</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:map-reduce</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $map as <code class="type">xs:string</code>, $reduce as <code class="type">xs:string</code>, $options as <code class="type">map(*)</code>) as <code class="type">map(*)*</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Runs a map-reduce aggregation operation over the documents of a
                 collection. The map and reduce functions are supplied via the
                 <code>$map</code> and <code>$reduce</code> arguments.
@@ -342,20 +350,20 @@ return mongodb:group($id, "db", "addressbook",
                       <code>MERGE</code> and <code>REDUCE</code>.</p></li><li><p><code>"finalize": xs:string</code>: Follows the reduce function
                       and modifies the output.</p></li><li><p><code>"sort": map(*)</code>: Sorts the returned documents.</p></li><li><p><code>"limit": xs:integer</code>: Limits the number of returned
                       documents by the specified integer.</p></li></ul>
-              </p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query sums up the numbber of orders from all documents
+              </p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query sums up the numbber of orders from all documents
                 of the "addressbook" collection:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
-return mongodb:map-reduce($id, "db", "addressbook",
+return mongodb:map-reduce($client-id, "db", "addressbook",
   'function () { emit(this._id, this.orders) };',
   'function (id, ordersArray) { return Array.sum(ordersArray); };'
 )</pre></div>
               </p></dd></dl></div></div><div class="div1">
 <h2><a name="fns.collections-write" id="fns.collections-write"></a>6 Collections: Update Operations</h2><div class="div2">
-<h3><a name="fn.find-and-modify" id="fn.find-and-modify"></a>6.1 <code>mongodb:find-and-modify</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:find-and-modify</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
-    $query as <code class="type">map(*)</code>, $update as <code class="type">map(*)</code>) as <code class="type">map(*)?</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:find-and-modify</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.find-and-modify" id="fn.find-and-modify"></a>6.1 <code>mongodb:find-and-modify</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:find-and-modify</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
+    $query as <code class="type">map(*)</code>, $update as <code class="type">map(*)</code>) as <code class="type">map(*)?</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:find-and-modify</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $query as <code class="type">map(*)</code>, $update as <code class="type">map(*)</code>, $options as <code class="type">map(*)</code>) as <code class="type">map(*)?</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Finds a document that has been selected via the <code>$query</code>
                 argument, modifies it according to the <code>$update</code> argument, and
                 returns the document as it was before the modifications. An empty sequence
@@ -365,53 +373,53 @@ return mongodb:map-reduce($id, "db", "addressbook",
                     The field <code>_id</code> will always be returned.</p></li><li><p><code>"sort": map(*)</code>: Sorts the documents before choosing the
                     first one as candidate for modification.</p></li><li><p><code>"new": xs:boolean</code>: Returns the modified document
                     rather than the original.</p></li></ul><p>
-                The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query modifies a document with the specified id:</p><p>
+                The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query modifies a document with the specified id:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
-return mongodb:find-and-modify($id, 'db', 'addressbook',
+return mongodb:find-and-modify($client-id, 'db', 'addressbook',
   map { "_id": 123 },
   map { "name": "Naomi Matsuo", "city": "Tokyo", "country": "Japan" }
 )</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.find-and-remove" id="fn.find-and-remove"></a>6.2 <code>mongodb:find-and-remove</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:find-and-remove</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.find-and-remove" id="fn.find-and-remove"></a>6.2 <code>mongodb:find-and-remove</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:find-and-remove</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $query as <code class="type">map(*)</code>) as <code class="type">map(*)?</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Finds a document that has been selected via the <code>$query</code>
                 argument and returns it after removing it from the database. An empty
-                sequence is returned if no document was found.</p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query removes a document with the specified id:</p><p>
+                sequence is returned if no document was found.</p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query removes a document with the specified id:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
-return mongodb:find-and-remove($id, 'db', 'addressbook', map { "_id": 123 })</pre></div>
+return mongodb:find-and-remove($client-id, 'db', 'addressbook', map { "_id": 123 })</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.insert" id="fn.insert"></a>6.3 <code>mongodb:insert</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:insert</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.insert" id="fn.insert"></a>6.3 <code>mongodb:insert</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:insert</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $documents as <code class="type">map(*)*</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Inserts documents into a collection. If the collection does not exists on
                 the server, it will be created. If the new document does not contain an
-                <code>_id</code> field, it will be added.</p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><p><a href="#error.write">[mongodb:write]</a> is raised if a document cannot be
+                <code>_id</code> field, it will be added.</p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><p><a href="#error.write">[mongodb:write]</a> is raised if a document cannot be
                     inserted. This can e.g. happen if document with an identical id
                     already exists.</p></li></ul></dd><dt class="label">Examples</dt><dd><p>The following expression inserts two new documents into a collection:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
 let $docs := (map { 'name': 'John Daniels' }, map { 'name': 'Jack Walker' })
-return mongodb:insert($id, 'db', 'addressbook', $docs)</pre></div>
+return mongodb:insert($client-id, 'db', 'addressbook', $docs)</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.save" id="fn.save"></a>6.4 <code>mongodb:save</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:save</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.save" id="fn.save"></a>6.4 <code>mongodb:save</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:save</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $document as <code class="type">map(*)</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Updates an existing document in a collection or inserts a new document.
                 If the supplied document has no <code>_id</code> field, or if the id does
                 not exist in the collection, the document will be inserted. Otherwise,
-                the existing document will be replaced.</p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following expression updates or inserts a single document:</p><p>
+                the existing document will be replaced.</p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following expression updates or inserts a single document:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
 let $doc := map { '_id': 123, name': 'Hans Schmid' }
-return mongodb:save($id, 'db', 'addressbook', $doc)</pre></div>
+return mongodb:save($client-id, 'db', 'addressbook', $doc)</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.update" id="fn.update"></a>6.5 <code>mongodb:update</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:update</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
-    $query as <code class="type">map(*)</code>, $update as <code class="type">map(*)</code>) as <code class="type">empty-sequence()</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:update</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.update" id="fn.update"></a>6.5 <code>mongodb:update</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:update</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
+    $query as <code class="type">map(*)</code>, $update as <code class="type">map(*)</code>) as <code class="type">empty-sequence()</code></pre></div></p><p><div class="exampleInner"><pre><code class="function">mongodb:update</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $query as <code class="type">map(*)</code>, $update as <code class="type">map(*)</code>, $options as <code class="type">map(*)</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Finds one or more document that have been selected via the
                 <code>$query</code> argument and modifies them according to the
                 <code>$update</code> argument.
@@ -419,36 +427,36 @@ return mongodb:save($id, 'db', 'addressbook', $doc)</pre></div>
               </p><ul><li><p><code>"upsert": xs:boolean</code>: Inserts a new document if no
                     document matches the query criteria.</p></li><li><p><code>"multi": xs:boolean</code>: Updates all documents in the
                     collection that match the update query. Otherwise, updates only
-                    one document.</p></li></ul><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><p><a href="#error.write">[mongodb:write]</a> is raised if a document cannot be
+                    one document.</p></li></ul><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Error Conditions</dt><dd><ul><li><p><a href="#error.write">[mongodb:write]</a> is raised if a document cannot be
                     inserted. This can e.g. happen if a user tries to change the id of the
                     document.</p></li></ul></dd><dt class="label">Examples</dt><dd><p>The following update applies to all documents in the addressed collection.
                 It replaces the value of the <code>info</code> field with <code>null</code>,
                 or adds a new name/value pair if the field does not exist:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
-return mongodb:update($id, 'db', 'addressbook',
+return mongodb:update($client-id, 'db', 'addressbook',
   map { },
   map { '$set': map { 'info': () } },
   map { 'upsert': true(), 'multi': true() }
 )</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.remove" id="fn.remove"></a>6.6 <code>mongodb:remove</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:remove</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>,
+<h3><a name="fn.remove" id="fn.remove"></a>6.6 <code>mongodb:remove</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:remove</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>,
     $query as <code class="type">map(*)</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Removes documents from a collection that are selected by the
-                <code>$query</code> argument.</p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following expression removes all documents from a collection:</p><p>
+                <code>$query</code> argument.</p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following expression removes all documents from a collection:</p><p>
                 <div class="exampleInner"><pre>mongodb:remove(mongodb:connect("localhost"), 'db', 'addressbook', map { })</pre></div>
               </p></dd></dl></div><div class="div2">
-<h3><a name="fn.drop-collection" id="fn.drop-collection"></a>6.7 <code>mongodb:drop-collection</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:drop-collection</code>($id as <code class="type">xs:string</code>, $db as <code class="type">xs:string</code>, $coll as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Drops a collection. No operation will be performed if the collection does
-                not exist.</p><p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query drops five collections in a database:</p><p>
+<h3><a name="fn.drop-collection" id="fn.drop-collection"></a>6.7 <code>mongodb:drop-collection</code></h3><dl><dt class="label">Signatures</dt><dd><p><div class="exampleInner"><pre><code class="function">mongodb:drop-collection</code>($client-id as <code class="type">xs:string</code>, $database as <code class="type">xs:string</code>, $collection as <code class="type">xs:string</code>) as <code class="type">empty-sequence()</code></pre></div></p></dd><dt class="label">Rules</dt><dd><p>Drops a collection. No operation will be performed if the collection does
+                not exist.</p><p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p></dd><dt class="label">Examples</dt><dd><p>The following query drops five collections in a database:</p><p>
                 <div class="exampleInner"><pre>
 let $id := mongodb:connect("localhost")
 for $no in 1 to 5
-return mongodb:drop-collection($id, "database", "collection-" || $no)</pre></div>
+return mongodb:drop-collection($client-id, "database", "collection-" || $no)</pre></div>
               </p></dd></dl></div></div></div><div class="back"><div class="div1">
 <h2><a name="refs" id="refs"></a>A References</h2><dl><dt class="label"><a name="mongodb-command" id="mongodb-command"></a>MongoDB Command</dt><dd>MongoDB Database Commands. URL:
             <a href="http://docs.mongodb.org/manual/reference/command/">http://docs.mongodb.org/manual/reference/command/</a>
@@ -463,10 +471,18 @@ return mongodb:drop-collection($id, "database", "collection-" || $no)</pre></div
             <a href="https://github.com/dizzzz/Mongrel">https://github.com/dizzzz/Mongrel</a>
           </dd><dt class="label"><a name="qt3" id="qt3"></a>XML Query Test Suite</dt><dd>XML Query Test Suite. URL:
             <a href="http://dev.w3.org/2011/QT3-test-suite">http://dev.w3.org/2011/QT3-test-suite</a>
-          </dd><dt class="label"><a name="xquery31" id="xquery31"></a>XQuery 3.1</dt><dd>XQuery 3.1: An XML Query Language,
+          </dd><dt class="label"><a name="xquery31" id="xquery31"></a>XQuery 3.1</dt><dd>XQuery 3.1: An XML Query Language.
             Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, Editors.
             World Wide Web Consortium. URL:
             <a href="http://www.w3.org/TR/xquery-31">http://www.w3.org/TR/xquery-31</a>
+          </dd><dt class="label"><a name="xquery31fo" id="xquery31fo"></a>XPath and XQuery Functions and Operators 3.1</dt><dd>
+            XPath and XQuery Functions and Operators 3.1. Michael Kay, Editor.
+            World Wide Web Consortium. URL:
+            <a href="http://www.w3.org/TR/xpath-functions-31">http://www.w3.org/TR/xpath-functions-31</a>
+          </dd><dt class="label"><a name="rfc7159" id="rfc7159"></a>RFC 7159</dt><dd>
+            RFC 7159 – The JavaScript Object Notation (JSON) Data Interchange Format.
+            Internet Engineering Task Force (IETF). URL:
+            <a href="http://www.rfc-editor.org/rfc/rfc7159.txt">http://www.rfc-editor.org/rfc/rfc7159.txt</a>
           </dd></dl></div><div class="div1">
 <h2><a name="errors" id="errors"></a>B Summary of Error Conditions</h2><dl><dt class="label"><a name="error.connect" id="error.connect"></a>mongodb:connect</dt><dd>
             A new database connection could not be established.

@@ -29,7 +29,7 @@
       </author>
       <author role="editor">
         <name>Dannes Wessels</name>
-        <affiliation>eXist Solutions</affiliation>
+        <affiliation>eXist Solutions GmbH</affiliation>
       </author>
     </authlist>
     <copyright>
@@ -48,7 +48,7 @@
            Groups</loc>.</p>
     </copyright>
     <abstract>
-      <p>This module provides an API for accessing the document database MongoDO.
+      <p>This module provides an API for accessing the document database MongoDB.
         It defines functions to connect to the DBMS, retrieve documents from databases
         and collections, update resources, perform map-reduce queries, and execute
         server-side JavaScript functions and database commsands.</p>
@@ -122,14 +122,6 @@
               name is specified. Collection names must have 1-117 characters, and they
               must not contain the dollar sign ($).</p>
             </item>
-            <!--
-            <item><p><bibref ref="error.arg"/> is raised if a map or string is expected
-              as input, and if the function argument is of different type.</p>
-            </item>
-            <item><p><bibref ref="error.json"/> is raised if a supplied JSON string cannot
-              be converted to valid JSON.</p>
-            </item>
-            -->
           </ulist>
           Remaining error codes are specified along with the functions.
           For a list of all errors, see the <loc href="#errors">Summary of Error
@@ -139,13 +131,24 @@
 
       <div2 id="exec">
         <head>JSON Data</head>
-        <p>Since, Version 3.1, maps and arrays are available in XQuery and XPath.
-          The <code>fn:parse-json</code> function can be used to convert a JSON string to
-          an XQuery representation. JSON objects in this module are specified by XQuery
-          maps.</p>
-        <p><emph>Open issue:</emph> The function signatures of this specification could be
-          generalized to also allow JSON strings as input. The resulting super type would
-          be item(). Feedback is welcome.</p>
+        <p>Since Version 3.1, maps and arrays are available in XQuery and XPath.
+          This specification makes heavy use of the feature: all JSON objects and arrays
+          are represented in the equivalent XQuery data types.
+        </p>
+        <p>If JSON strings are preferred as input and output, the functions 
+          <code>fn:parse-json</code> and <code>fn:serialize</code> of the
+          <bibref ref="xquery31fo"/> specification can be used for conversion.
+          The following query parses a JSON string and returns an XQuery map. The "liberal"
+          option accepts deviation from <bibref ref="rfc7159"/>, such as the omission of
+          quotes on keys:</p>
+        <eg>fn:parse-json('{ info: "Hello Universe" }', map { "liberal": true() })</eg>
+        <p>The next example shows how XQuery maps can be serialized as JSON:</p>
+          <eg><![CDATA[
+fn:serialize(map { 'info': 'Hello Universe' },
+  <output:serialization-parameters xmlns:output='http://www.w3.org/2010/xslt-xquery-serialization'>
+    <output:method value='json'/>
+  </output:serialization-parameters>
+)]]></eg>
       </div2>
 
       <div2 id="exec">
@@ -242,13 +245,13 @@ mongodb:connect("mongodb://localhost:27017")</eg>
         <glist>
           <gitem>
             <label>Signatures</label>
-            <def><p><eg><ex:function>mongodb:list-databases</ex:function>($id as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg></p></def>
+            <def><p><eg><ex:function>mongodb:list-databases</ex:function>($client-id as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg></p></def>
           </gitem>
           <gitem>
             <label>Rules</label>
             <def>
               <p>Returns the names of all databases on the connected server.</p>
-              <p>The connection is identified by the supplied <code>$id</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -268,13 +271,13 @@ mongodb:connect("mongodb://localhost:27017")</eg>
         <glist>
           <gitem>
             <label>Signatures</label>
-            <def><p><eg><ex:function>mongodb:close</ex:function>($id as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p></def>
+            <def><p><eg><ex:function>mongodb:close</ex:function>($client-id as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p></def>
           </gitem>
           <gitem>
             <label>Rules</label>
             <def>
               <p>Closes an open database connection. The connection to be closed is
-                identified by the supplied <code>$id</code>. When a database connection
+                identified by the supplied <code>$client-id</code>. When a database connection
                 is closed, the associated id is discarded and invalidated. As a consequence,
                 each database can be closed once.</p>
             </def>
@@ -313,14 +316,14 @@ mongodb:connect("mongodb://localhost:27017")</eg>
         <glist>
           <gitem>
             <label>Signatures</label>
-            <def><p><eg><ex:function>mongodb:list-collections</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg></p></def>
+            <def><p><eg><ex:function>mongodb:list-collections</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg></p></def>
           </gitem>
           <gitem>
             <label>Rules</label>
             <def>
               <p>Returns the names of all collections contained in a databases.</p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database is supplied via <code>$db</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database is supplied via <code>$database</code>.</p>
             </def>
           </gitem>
         </glist>
@@ -331,7 +334,7 @@ mongodb:connect("mongodb://localhost:27017")</eg>
         <glist>
           <gitem>
             <label>Signatures</label>
-            <def><p><eg><ex:function>mongodb:command</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>,
+            <def><p><eg><ex:function>mongodb:command</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>,
     $command as <ex:type>map(*)</ex:type>) as <ex:type>map(*)</ex:type></eg></p></def>
           </gitem>
           <gitem>
@@ -340,8 +343,8 @@ mongodb:connect("mongodb://localhost:27017")</eg>
               <p>Executes a <bibref ref="mongodb-command"/>, supplied via
                 <code>$command</code>, and returns the result as a map.
               </p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database is supplied via <code>$db</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database is supplied via <code>$database</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -376,7 +379,7 @@ mongodb:connect("mongodb://localhost:27017")</eg>
                 <eg>
 let $id := mongodb:connect("localhost")
 return try {
-  mongodb:command($id, map { "clone", 1 })
+  mongodb:command($client-id, map { "clone", 1 })
 } catch mongodb:exec {
   "Command execution failed: " || $err:description,
 }</eg>
@@ -392,9 +395,9 @@ return try {
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:eval</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:eval</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>,
     $code as <ex:type>xs:string</ex:type>) as <ex:type>item()*</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:eval</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:eval</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>,
     $code as <ex:type>xs:string</ex:type>, $args as <ex:type>item()*</ex:type>) as <ex:type>item()*</ex:type></eg></p>
             </def>
           </gitem>
@@ -406,8 +409,8 @@ return try {
                 be booleans, strings, numbers, arrays or maps. An error will be raised if
                 any other type is supplied.
                 Items of type xs:untypedAtomic are converted to strings.</p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database is supplied via <code>$db</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database is supplied via <code>$database</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -440,7 +443,7 @@ return try {
                       be converted recursively according to the given rules.</p>
                   </item>
                   <item>
-                    <p>An error is raised for any other type.</p>
+                    <p>The error <bibref ref="error.type"/> is raised for any other type.</p>
                   </item>
                 </ulist>
               </p>
@@ -465,7 +468,7 @@ return try {
                       recursively according to the given rules.</p>
                   </item>
                   <item>
-                    <p>An error is raised for any other type.</p>
+                    <p>The error <bibref ref="error.type"/> is raised for any other type.</p>
                   </item>
                 </ulist>
               </p>
@@ -494,7 +497,7 @@ return try {
               <p>
                 <eg>
 let $id := mongodb:connect("localhost")
-return mongodb:eval($id, "db",
+return mongodb:eval($client-id, "db",
   'function ( x, y ) { return x + y; }',
   (2, 5)
 )</eg>
@@ -509,15 +512,15 @@ return mongodb:eval($id, "db",
         <glist>
           <gitem>
             <label>Signatures</label>
-            <def><p><eg><ex:function>mongodb:drop-database</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p></def>
+            <def><p><eg><ex:function>mongodb:drop-database</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p></def>
           </gitem>
           <gitem>
             <label>Rules</label>
             <def>
               <p>Drops a database. No operation will be performed if the database does
                 not exist.</p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database is supplied via <code>$db</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database is supplied via <code>$database</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -528,7 +531,7 @@ return mongodb:eval($id, "db",
                 <eg>
 let $id := mongodb:connect("localhost")
 for $no in 1 to 5
-return mongodb:drop-database($id, "database-" || $no)</eg>
+return mongodb:drop-database($client-id, "database-" || $no)</eg>
               </p>
             </def>
           </gitem>
@@ -545,10 +548,10 @@ return mongodb:drop-database($id, "database-" || $no)</eg>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:find</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:find</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:find</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:find</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:find</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:find</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
             </def>
           </gitem>
@@ -576,9 +579,9 @@ return mongodb:drop-database($id, "database-" || $no)</eg>
                   </item>
                 </ulist>
               </p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -590,7 +593,7 @@ return mongodb:drop-database($id, "database-" || $no)</eg>
               <p>
                 <eg>
 let $id := mongodb:connect("localhost")
-return mongodb:find($id, 'db', 'addressbook',
+return mongodb:find($client-id, 'db', 'addressbook',
   map { "city": "Tokyo" },
   map {
     "sort": map { "name": 1 },
@@ -609,10 +612,10 @@ return mongodb:find($id, 'db', 'addressbook',
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:find-one</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:find-one</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:find-one</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:find-one</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:find-one</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:find-one</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
             </def>
           </gitem>
@@ -634,9 +637,9 @@ return mongodb:find($id, 'db', 'addressbook',
                   </item>
                 </ulist>
               </p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -646,7 +649,7 @@ return mongodb:find($id, 'db', 'addressbook',
               <p>
                 <eg>
 let $id := mongodb:connect("localhost")
-return mongodb:find-one($id, 'db', 'addressbook', map { "name": "John Taylor" })</eg>
+return mongodb:find-one($client-id, 'db', 'addressbook', map { "name": "John Taylor" })</eg>
               </p>
             </def>
           </gitem>
@@ -659,8 +662,8 @@ return mongodb:find-one($id, 'db', 'addressbook', map { "name": "John Taylor" })
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:count</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>) as <ex:type>xs:integer</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:count</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:count</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>xs:integer</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:count</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>) as <ex:type>xs:integer</ex:type></eg></p>
             </def>
           </gitem>
@@ -669,9 +672,9 @@ return mongodb:find-one($id, 'db', 'addressbook', map { "name": "John Taylor" })
             <def>
               <p>Counts documents in a collection. If a query is supplied via the
                 <code>$query</code> argument, the documents are filtered by that query.</p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -693,7 +696,7 @@ return mongodb:find-one($id, 'db', 'addressbook', map { "name": "John Taylor" })
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:aggregate</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:aggregate</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $pipeline as <ex:type>map(*)*</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
             </def>
           </gitem>
@@ -703,9 +706,9 @@ return mongodb:find-one($id, 'db', 'addressbook', map { "name": "John Taylor" })
               <p>Calculates aggregate values for the documents in a collection and returns
                 the results. The operations to be performed are supplied via
                 the <code>$pipeline</code> argument.</p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -716,7 +719,7 @@ return mongodb:find-one($id, 'db', 'addressbook', map { "name": "John Taylor" })
               <p>
                 <eg>
 let $id := mongodb:connect("localhost")
-return mongodb:aggregate($id, "db","addressbook",
+return mongodb:aggregate($client-id, "db","addressbook",
   (map { "$match"  : map { "city": "Tokyo" } },
    map { "$project": map { "name": 1 } })
 )</eg>
@@ -732,9 +735,9 @@ return mongodb:aggregate($id, "db","addressbook",
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:group</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:group</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $fields as <ex:type>map(*)</ex:type>, $reduce as <ex:type>xs:string</ex:type>, $initial as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:group</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:group</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $fields as <ex:type>map(*)</ex:type>, $reduce as <ex:type>xs:string</ex:type>, $initial as <ex:type>map(*)</ex:type>,
     $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
             </def>
@@ -758,9 +761,9 @@ return mongodb:aggregate($id, "db","addressbook",
                   </item>
                 </ulist>
               </p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -771,7 +774,7 @@ return mongodb:aggregate($id, "db","addressbook",
               <p>
                 <eg>
 let $id := mongodb:connect("localhost")
-return mongodb:group($id, "db", "addressbook",
+return mongodb:group($client-id, "db", "addressbook",
   map { "city": 1 },
   "function (curr, result) { result.orders += curr.orders; }",
   map { "orders": 0 },
@@ -791,9 +794,9 @@ return mongodb:group($id, "db", "addressbook",
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:map-reduce</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:map-reduce</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $map as <ex:type>xs:string</ex:type>, $reduce as <ex:type>xs:string</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:map-reduce</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:map-reduce</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $map as <ex:type>xs:string</ex:type>, $reduce as <ex:type>xs:string</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
             </def>
           </gitem>
@@ -831,9 +834,9 @@ return mongodb:group($id, "db", "addressbook",
                   </item>
                 </ulist>
               </p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -844,7 +847,7 @@ return mongodb:group($id, "db", "addressbook",
               <p>
                 <eg>
 let $id := mongodb:connect("localhost")
-return mongodb:map-reduce($id, "db", "addressbook",
+return mongodb:map-reduce($client-id, "db", "addressbook",
   'function () { emit(this._id, this.orders) };',
   'function (id, ordersArray) { return Array.sum(ordersArray); };'
 )</eg>
@@ -864,9 +867,9 @@ return mongodb:map-reduce($id, "db", "addressbook",
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:find-and-modify</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:find-and-modify</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:find-and-modify</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:find-and-modify</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
             </def>
           </gitem>
@@ -894,9 +897,9 @@ return mongodb:map-reduce($id, "db", "addressbook",
                 </item>
               </ulist>
               <p>
-                The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+                The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -906,7 +909,7 @@ return mongodb:map-reduce($id, "db", "addressbook",
               <p>
                 <eg>
 let $id := mongodb:connect("localhost")
-return mongodb:find-and-modify($id, 'db', 'addressbook',
+return mongodb:find-and-modify($client-id, 'db', 'addressbook',
   map { "_id": 123 },
   map { "name": "Naomi Matsuo", "city": "Tokyo", "country": "Japan" }
 )</eg>
@@ -922,7 +925,7 @@ return mongodb:find-and-modify($id, 'db', 'addressbook',
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:find-and-remove</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:find-and-remove</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
             </def>
           </gitem>
@@ -932,9 +935,9 @@ return mongodb:find-and-modify($id, 'db', 'addressbook',
               <p>Finds a document that has been selected via the <code>$query</code>
                 argument and returns it after removing it from the database. An empty
                 sequence is returned if no document was found.</p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -944,7 +947,7 @@ return mongodb:find-and-modify($id, 'db', 'addressbook',
               <p>
                 <eg>
 let $id := mongodb:connect("localhost")
-return mongodb:find-and-remove($id, 'db', 'addressbook', map { "_id": 123 })</eg>
+return mongodb:find-and-remove($client-id, 'db', 'addressbook', map { "_id": 123 })</eg>
               </p>
             </def>
           </gitem>
@@ -957,7 +960,7 @@ return mongodb:find-and-remove($id, 'db', 'addressbook', map { "_id": 123 })</eg
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:insert</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:insert</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $documents as <ex:type>map(*)*</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
             </def>
           </gitem>
@@ -967,9 +970,9 @@ return mongodb:find-and-remove($id, 'db', 'addressbook', map { "_id": 123 })</eg
               <p>Inserts documents into a collection. If the collection does not exists on
                 the server, it will be created. If the new document does not contain an
                 <code>_id</code> field, it will be added.</p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -992,7 +995,7 @@ return mongodb:find-and-remove($id, 'db', 'addressbook', map { "_id": 123 })</eg
                 <eg>
 let $id := mongodb:connect("localhost")
 let $docs := (map { 'name': 'John Daniels' }, map { 'name': 'Jack Walker' })
-return mongodb:insert($id, 'db', 'addressbook', $docs)</eg>
+return mongodb:insert($client-id, 'db', 'addressbook', $docs)</eg>
               </p>
             </def>
           </gitem>
@@ -1005,7 +1008,7 @@ return mongodb:insert($id, 'db', 'addressbook', $docs)</eg>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:save</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:save</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $document as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
             </def>
           </gitem>
@@ -1016,9 +1019,9 @@ return mongodb:insert($id, 'db', 'addressbook', $docs)</eg>
                 If the supplied document has no <code>_id</code> field, or if the id does
                 not exist in the collection, the document will be inserted. Otherwise,
                 the existing document will be replaced.</p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -1029,7 +1032,7 @@ return mongodb:insert($id, 'db', 'addressbook', $docs)</eg>
                 <eg>
 let $id := mongodb:connect("localhost")
 let $doc := map { '_id': 123, name': 'Hans Schmid' }
-return mongodb:save($id, 'db', 'addressbook', $doc)</eg>
+return mongodb:save($client-id, 'db', 'addressbook', $doc)</eg>
               </p>
             </def>
           </gitem>
@@ -1042,9 +1045,9 @@ return mongodb:save($id, 'db', 'addressbook', $doc)</eg>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:update</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:update</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:update</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:update</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
             </def>
           </gitem>
@@ -1067,9 +1070,9 @@ return mongodb:save($id, 'db', 'addressbook', $doc)</eg>
                     one document.</p>
                 </item>
               </ulist>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -1093,7 +1096,7 @@ return mongodb:save($id, 'db', 'addressbook', $doc)</eg>
               <p>
                 <eg>
 let $id := mongodb:connect("localhost")
-return mongodb:update($id, 'db', 'addressbook',
+return mongodb:update($client-id, 'db', 'addressbook',
   map { },
   map { '$set': map { 'info': () } },
   map { 'upsert': true(), 'multi': true() }
@@ -1110,7 +1113,7 @@ return mongodb:update($id, 'db', 'addressbook',
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:remove</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongodb:remove</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
             </def>
           </gitem>
@@ -1119,9 +1122,9 @@ return mongodb:update($id, 'db', 'addressbook',
             <def>
               <p>Removes documents from a collection that are selected by the
                 <code>$query</code> argument.</p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -1142,7 +1145,7 @@ return mongodb:update($id, 'db', 'addressbook',
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:drop-collection</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:drop-collection</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
             </def>
           </gitem>
           <gitem>
@@ -1150,9 +1153,9 @@ return mongodb:update($id, 'db', 'addressbook',
             <def>
               <p>Drops a collection. No operation will be performed if the collection does
                 not exist.</p>
-              <p>The connection is identified by the supplied <code>$id</code>,
-                and the database and collection are supplied via <code>$db</code> and
-                <code>$coll</code>.</p>
+              <p>The connection is identified by the supplied <code>$client-id</code>,
+                and the name of the database and collection are supplied via
+                <code>$database</code> and <code>$collection</code>.</p>
             </def>
           </gitem>
           <gitem>
@@ -1163,7 +1166,7 @@ return mongodb:update($id, 'db', 'addressbook',
                 <eg>
 let $id := mongodb:connect("localhost")
 for $no in 1 to 5
-return mongodb:drop-collection($id, "database", "collection-" || $no)</eg>
+return mongodb:drop-collection($client-id, "database", "collection-" || $no)</eg>
               </p>
             </def>
           </gitem>
@@ -1195,10 +1198,20 @@ return mongodb:drop-collection($id, "database", "collection-" || $no)</eg>
           <bibl id="qt3" key="XML Query Test Suite">XML Query Test Suite. URL:
             <loc href="http://dev.w3.org/2011/QT3-test-suite">http://dev.w3.org/2011/QT3-test-suite</loc>
           </bibl>
-          <bibl id="xquery31" key="XQuery 3.1">XQuery 3.1: An XML Query Language,
+          <bibl id="xquery31" key="XQuery 3.1">XQuery 3.1: An XML Query Language.
             Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, Editors.
             World Wide Web Consortium. URL:
             <loc href="http://www.w3.org/TR/xquery-31">http://www.w3.org/TR/xquery-31</loc>
+          </bibl>
+          <bibl id="xquery31fo" key="XPath and XQuery Functions and Operators 3.1">
+            XPath and XQuery Functions and Operators 3.1. Michael Kay, Editor.
+            World Wide Web Consortium. URL:
+            <loc href="http://www.w3.org/TR/xpath-functions-31">http://www.w3.org/TR/xpath-functions-31</loc>
+          </bibl>
+          <bibl id="rfc7159" key="RFC 7159">
+            RFC 7159 – The JavaScript Object Notation (JSON) Data Interchange Format.
+            Internet Engineering Task Force (IETF). URL:
+            <loc href="http://www.rfc-editor.org/rfc/rfc7159.txt">http://www.rfc-editor.org/rfc/rfc7159.txt</loc>
           </bibl>
        </blist>
     </div1>
