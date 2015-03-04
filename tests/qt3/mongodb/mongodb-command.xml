@@ -1,0 +1,44 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-command-001">
+    <description>Performs a ping command</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:command($id, 'expath', map { 'ping': 1 })
+    </test>
+    <result>
+      <assert>count($result?*) = 1</assert>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-command-002">
+    <description>Performs an invalid command.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:command($id, 'expath', map { 'invalid': 1 })
+    </test>
+    <result>
+      <error code="Q{http://expath.org/ns/mongodb}exec"/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-command-003">
+    <description>Performs an invalid command (empty string).</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:command($id, 'expath', map { '': 1 })
+    </test>
+    <result>
+      <error code="Q{http://expath.org/ns/mongodb}exec"/>
+    </result>
+  </test-case>
+</test-set>

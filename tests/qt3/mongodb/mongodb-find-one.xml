@@ -1,0 +1,150 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-find-one-001">
+    <description>Simple find-one call.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        for $i in (1 to 10) 
+        return (
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': $i, 'z': $i * $i }),
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': (10 - $i), 'z': $i * $i })
+        ),
+
+        mongodb:find-one($id, 'expath', 'coll')
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>1</assert-count>
+        <assert>$result?y = 1</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-find-one-002">
+    <description>Simple find-one call with query.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        for $i in (1 to 10) 
+        return (
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': $i, 'z': $i * $i }),
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': (10 - $i), 'z': $i * $i })
+        ),
+
+        mongodb:find-one($id, 'expath', 'coll', map { 'z': 64 })
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>1</assert-count>
+        <assert>$result?x = 8</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-find-one-003">
+    <description>Simple find-one call with query and field restriction.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        for $i in (1 to 10) 
+        return (
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': $i, 'z': $i * $i }),
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': (10 - $i), 'z': $i * $i })
+        ),
+
+        mongodb:find-one($id, 'expath', 'coll',
+          map { 'x': 6 }, map { 'fields': map { 'y': 1 } })
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>1</assert-count>
+        <assert>count($result?x) = 0</assert>
+        <assert>count($result?y) = 1</assert>
+        <assert>$result?y = 6</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-find-one-004">
+    <description>Simple find-one call with query and sort.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        for $i in (1 to 10) 
+        return (
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': $i, 'z': $i * $i }),
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': (10 - $i), 'z': $i * $i })
+        ),
+
+        mongodb:find-one($id, 'expath', 'coll',
+          map { 'z': 49 }, map { 'fields': map { 'x': 1, 'y': 1 } })
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>1</assert-count>
+        <assert>count($result?x) = 1</assert>
+        <assert>count($result?y) = 1</assert>
+        <assert>$result?x = 7</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-find-one-005">
+    <description>Simple find-one call with query and sort.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        for $i in (1 to 10) 
+        return (
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': $i, 'z': $i * $i }),
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': (10 - $i), 'z': $i * $i })
+        ),
+
+        let $query := map { 'z': 49 }
+        let $fields := map { 'x': 1, 'y': 1 }
+        let $sort := map { 'x': 1 }
+        return mongodb:find-one($id, 'expath', 'coll',
+          $query, map { 'fields': $fields, 'sort': $sort })
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert>$result?x = 7</assert>
+        <assert>$result?y = 7</assert>
+      </all-of>
+    </result>
+  </test-case>
+</test-set>

@@ -1,0 +1,1236 @@
+<?xml-model href="expathspec.rnc" type="application/relax-ng-compact-syntax"?>
+
+<spec role="editors-copy" xmlns:ex="http://expath.org/ns/xmlspec" ex:w3c="true">
+  <header>
+    <title>MongoDB Module</title>
+    <w3c-designation>w3c-designation</w3c-designation>
+    <w3c-doctype>EXPath Working Draft</w3c-doctype>
+    <pubdate>
+      <day>15</day>
+      <month>March</month>
+      <year>2015</year>
+    </pubdate>
+    <publoc>
+      <loc href="http://expath.org/spec/mongodb/20150315"/>
+    </publoc>
+    <altlocs>
+      <loc href="http://expath.org/spec/mongodb/20150315.xml">XML</loc>
+      <loc href="http://expath.org/spec/mongodb/20150315/diff">Revision markup</loc>
+    </altlocs>
+    <latestloc>
+      <loc href="http://expath.org/spec/mongodb"/>
+    </latestloc>
+    <!--<prevlocs>
+    </prevlocs>-->
+    <authlist>
+      <author role="editor">
+        <name>Christian Grün</name>
+        <affiliation>BaseX GmbH</affiliation>
+      </author>
+      <author role="editor">
+        <name>Dannes Wessels</name>
+        <affiliation>eXist Solutions</affiliation>
+      </author>
+    </authlist>
+    <copyright>
+      <p>Copyright © 2015 Christian Grün and Dannes Wessels, published by the <loc
+           href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
+           href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+           License Agreement (CLA)</loc>. A human-readable <loc
+           href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
+        available.</p>
+      <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
+           >EXPath Community Group</loc>. It is not a W3C Standard nor is it on the W3C
+        Standards Track. Please note that under the <loc
+           href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+           License Agreement (CLA)</loc> there is a limited opt-out and other conditions apply.s
+        Learn more about <loc href="http://www.w3.org/community/">W3C Community and Business
+           Groups</loc>.</p>
+    </copyright>
+    <abstract>
+      <p>This module provides an API for accessing the document database MongoDO.
+        It defines functions to connect to the DBMS, retrieve documents from databases
+        and collections, update resources, perform map-reduce queries, and execute
+        server-side JavaScript functions and database commsands.</p>
+      <p>The module has been designed to be compatible with XQuery 3.1 and XPath 3.1, and
+        later versions. It has been inspired by existing <bibref ref="drivers"/> and the
+        <bibref ref="meta-driver"/> recommendations. Its initial version was based on
+        <bibref ref="mongrel"/>.
+      </p>
+    </abstract>
+    <status>
+      <p/>
+    </status>
+    <langusage>
+      <language>en-US</language>
+    </langusage>
+    <revisiondesc>
+      <p>revisiondesc</p>
+    </revisiondesc>
+  </header>
+
+  <body>
+    <div1 id="status">
+      <head>Status of this document</head>
+      <p>This document is in an interim draft stage. Comments are welcomed at <loc
+        href="mailto:public-expath@w3.org">public-expath@w3.org</loc> mailing list (<loc
+        href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
+    </div1>
+
+    <div1 id="intro">
+      <head>Introduction</head>
+
+      <div2 id="namespaces">
+        <head>Namespace conventions</head>
+        <p>The module defined by this document defines functions and errors in the
+          namespace <code>http://expath.org/ns/mongodb</code>. In this document, the
+          <code>mongodb</code> prefix is bound to this namespace URI. Error codes are
+          defined in the same namespace and are displayed with the same prefix.
+        </p>
+        <p>The <code>err</code> prefix denotes the namespace for XPath and XQuery errors,
+          <code>http://www.w3.org/2005/xqt-errors</code>, as defined in the
+          <bibref ref="xquery31"/> specification.</p>
+      </div2>
+
+      <div2>
+        <head>Error management</head>
+        <p>
+          Error conditions are identified by a code (a <code>QName</code>). When such
+          an error condition is reached in the evaluation of an expression, a dynamic
+          error is thrown, with the corresponding error code (as if the standard XPath
+          function <code>error()</code> had been called).
+        </p>
+        <p>The following errors apply to most functions of this specification:
+          <ulist>
+            <item>
+              <p><bibref ref="error.id"/> is raised if no database connection exists
+              for a given client id.</p>
+            </item>
+            <item><p><bibref ref="error.json"/> is raised if a supplied XQuery map
+              cannot be converted to a valid JSON object.</p>
+            </item>
+            <item><p><bibref ref="error.io"/> is raised if an unexpected error (connection
+              failure, timeout) occurs while interacting with the database.</p>
+            </item>
+            <item>
+              <p><bibref ref="error.name"/> is raised if an invalid database name is
+              specified. Database names must have 1-63 characters, and they must not
+              contain any of the following twelve characters:
+              <code>/\. "$*&lt;&gt;:|?</code></p>
+            </item>
+            <item><p><bibref ref="error.name"/> is also raised if an invalid collection
+              name is specified. Collection names must have 1-117 characters, and they
+              must not contain the dollar sign ($).</p>
+            </item>
+            <!--
+            <item><p><bibref ref="error.arg"/> is raised if a map or string is expected
+              as input, and if the function argument is of different type.</p>
+            </item>
+            <item><p><bibref ref="error.json"/> is raised if a supplied JSON string cannot
+              be converted to valid JSON.</p>
+            </item>
+            -->
+          </ulist>
+          Remaining error codes are specified along with the functions.
+          For a list of all errors, see the <loc href="#errors">Summary of Error
+          Conditions</loc> section of this document.
+        </p>
+      </div2>
+
+      <div2 id="exec">
+        <head>JSON Data</head>
+        <p>Since, Version 3.1, maps and arrays are available in XQuery and XPath.
+          The <code>fn:parse-json</code> function can be used to convert a JSON string to
+          an XQuery representation. JSON objects in this module are specified by XQuery
+          maps.</p>
+        <p><emph>Open issue:</emph> The function signatures of this specification could be
+          generalized to also allow JSON strings as input. The resulting super type would
+          be item(). Feedback is welcome.</p>
+      </div2>
+
+      <div2 id="exec">
+        <head>Query Execution</head>
+        <p>All functions in this module are ·nondeterministic·. Non-deterministic
+          functions may return different results when executed more than once.
+          This is illustrated by two examples:
+        </p>
+        <ulist>
+          <item><p>The <loc href="#fn.find">mongodb:find</loc> may return different
+            results when called more than once, as the contents of the MongoDB database
+            instance may have changed between the first and second call.</p></item>
+          <item><p>Calling <loc href="#fn.insert">mongodb:insert</loc> may be successful
+            for the first time, but it may fail when called twice, because the document to
+            be added will already exist.</p>
+          </item>
+        </ulist>
+        <p>A query processor must ensure that non-deterministic functions are not
+          relocated or rewritten in the query, and that its results are not cached at
+          runtime.</p>
+      </div2>
+
+      <div2 id="testing">
+        <head>Test suite</head>
+        <p>A <bibref ref="test-suite"/> will be available soon. It will be provided to
+          ensure compatibility across different implementations of the specification.
+          It will be based on the QT3 format; see <bibref ref="qt3"/> for more details.
+        </p>
+      </div2>
+    </div1>
+
+    <!-- *************************************** File properties **************************** -->
+
+    <div1 id="fns.client">
+      <head>Client Operations</head>
+
+      <div2 id="fn.connect">
+        <head><code>mongodb:connect</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def><eg><ex:function>mongodb:connect</ex:function>($uri as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg></def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Establishes a connection to MongoDB and returns a client id as string
+                that identifies the opened connection.</p>
+              <p>The <code>$uri</code> string follows the MongoDB URI format. It must
+                at least contain one host name, and it may be prefixed with the
+                <code>mongodb</code> scheme and suffixed with a port number.
+                Multiple hosts, e.g. for a replica set, are separated with commas.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Implementation Notes</label>
+            <def>
+              <p>The format of the returned client id string is implementation-defined,
+                but all returned ids must be unique during the evaluation of a query.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Error Conditions</label>
+            <def>
+              <ulist>
+                <item>
+                  <p><bibref ref="error.connect"/> is raised if the connection could not be
+                    established, possibly due to a wrong URL or a connection failure.</p>
+                </item>
+              </ulist>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following expression creates three connections to local MongoDB
+                instances, using the default port, and returns the client ids as result:
+                <eg>
+mongodb:connect("localhost"),
+mongodb:connect("localhost:27017"),
+mongodb:connect("mongodb://localhost:27017")</eg>
+              </p>
+              <p>The following function call connects to a replica set with three members,
+                and distributes reads to the secondary:
+                <eg>mongodb:connect("localhost,localhost:27018/?readPreference=secondary")</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.list-databases">
+        <head><code>mongodb:list-databases</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def><p><eg><ex:function>mongodb:list-databases</ex:function>($id as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg></p></def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Returns the names of all databases on the connected server.</p>
+              <p>The connection is identified by the supplied <code>$id</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following query lists all databases on localhost:</p>
+              <p>
+                <eg>mongodb:list-databases(mongodb:connect("localhost"))</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.close">
+        <head><code>mongodb:close</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def><p><eg><ex:function>mongodb:close</ex:function>($id as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p></def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Closes an open database connection. The connection to be closed is
+                identified by the supplied <code>$id</code>. When a database connection
+                is closed, the associated id is discarded and invalidated. As a consequence,
+                each database can be closed once.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Implementation Notes</label>
+            <def>
+              <p>A connection must be kept open as long as it has not explicitly been 
+                closed by the user, and as long as the query has not been fully evaluated.
+                After query evaluation, an implementation must ensure that
+                all remaining connections are automatically closed.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following expression closes a connection that has just been opened:</p>
+              <p>
+                <eg>mongodb:close(mongodb:connect("localhost"))</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+    </div1>
+
+    <div1 id="fns.databases">
+      <head>Database Operations</head>
+
+      <p>The module provides no function for creating new databases, because non-existing
+        databases will automatically be created by MongoDB with the first write
+        operation.</p>
+
+      <div2 id="fn.list-collections">
+        <head><code>mongodb:list-collections</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def><p><eg><ex:function>mongodb:list-collections</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg></p></def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Returns the names of all collections contained in a databases.</p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database is supplied via <code>$db</code>.</p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.command">
+        <head><code>mongodb:command</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def><p><eg><ex:function>mongodb:command</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>,
+    $command as <ex:type>map(*)</ex:type>) as <ex:type>map(*)</ex:type></eg></p></def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Executes a <bibref ref="mongodb-command"/>, supplied via
+                <code>$command</code>, and returns the result as a map.
+              </p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database is supplied via <code>$db</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Implementation Notes</label>
+            <def>
+              <p>
+                The object returned by MongoDB contains the field <code>ok</code>, which
+                must be parsed by the implementation to decide if command execution was
+                successful (indicated by the integer value <code>1</code>) or not
+                (<code>0</code>). The field must be removed from the object before the
+                result is returned as map. If execution failed, the field
+                <code>errmsg</code> can be parsed to return a proper error message.
+              </p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Error Conditions</label>
+            <def>
+              <ulist>
+                <item>
+                  <p><bibref ref="error.exec"/> is raised if command execution failed.</p>
+                </item>
+              </ulist>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following query clones a database from a remote MongoDB instance to
+                the current host. The result will either be a map, which contains the
+                result of the command execution, or an error:
+                <eg>
+let $id := mongodb:connect("localhost")
+return try {
+  mongodb:command($id, map { "clone", 1 })
+} catch mongodb:exec {
+  "Command execution failed: " || $err:description,
+}</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.eval">
+        <head><code>mongodb:eval</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:eval</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>,
+    $code as <ex:type>xs:string</ex:type>) as <ex:type>item()*</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:eval</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>,
+    $code as <ex:type>xs:string</ex:type>, $args as <ex:type>item()*</ex:type>) as <ex:type>item()*</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Runs server-server JavaScript script code, supplied via <code>$code</code>.
+                Function arguments can be supplied via <code>$args</code>. Arguments can
+                be booleans, strings, numbers, arrays or maps. An error will be raised if
+                any other type is supplied.
+                Items of type xs:untypedAtomic are converted to strings.</p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database is supplied via <code>$db</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Implementation Notes</label>
+            <def>
+              <p>Due to the different type systems of XQuery and JavaScript, it is not
+                possible to losslessly convert all values to one language and back.
+                To ensure compatibility, an implementation must obey the following
+                conversion rules:</p>
+              <p>
+                Conversion of XQuery arguments to JavaScript:
+                <ulist>
+                  <item>
+                    <p>A value of type xs:boolean is converted to a boolean.</p>
+                  </item>
+                  <item>
+                    <p>A value of type xs:string and xs:untypedAtomic are converted to a
+                      string.</p>
+                  </item>
+                  <item>
+                    <p>A value of type xs:numeric is converted to a number (i.e. a
+                      double-precision floating-point format value).</p>
+                  </item>
+                  <item>
+                    <p>A value of type map(*) is converted to an object. Its entries must
+                      be converted recursively according to the given rules.</p>
+                  </item>
+                  <item>
+                    <p>A value of type array(*) is converted to an array. Its members must
+                      be converted recursively according to the given rules.</p>
+                  </item>
+                  <item>
+                    <p>An error is raised for any other type.</p>
+                  </item>
+                </ulist>
+              </p>
+              <p>
+                Conversion of JavaScript results to XQuery:
+                <ulist>
+                  <item>
+                    <p>A boolean is converted to xs:boolean.</p>
+                  </item>
+                  <item>
+                    <p>A string is converted to xs:string.</p>
+                  </item>
+                  <item>
+                    <p>A number is converted to xs:double.</p>
+                  </item>
+                  <item>
+                    <p>An object is converted to map(*). Its entries must be converted
+                      recursively according to the given rules.</p>
+                  </item>
+                  <item>
+                    <p>An array is converted to array(*). Its members must be converted
+                      recursively according to the given rules.</p>
+                  </item>
+                  <item>
+                    <p>An error is raised for any other type.</p>
+                  </item>
+                </ulist>
+              </p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Error Conditions</label>
+            <def>
+              <ulist>
+                <item>
+                  <p><bibref ref="error.type"/> is raised if an XQuery argument cannot be
+                    converted to Javascript, or if a Javascript result cannot be converted
+                    to XQuery.</p>
+                </item>
+                <item>
+                  <p><bibref ref="error.exec"/> is raised if JavaScript execution
+                    failed.</p>
+                </item>
+              </ulist>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following query returns the result of an arithmetic expression:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+return mongodb:eval($id, "db",
+  'function ( x, y ) { return x + y; }',
+  (2, 5)
+)</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.drop-database">
+        <head><code>mongodb:drop-database</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def><p><eg><ex:function>mongodb:drop-database</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p></def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Drops a database. No operation will be performed if the database does
+                not exist.</p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database is supplied via <code>$db</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following query drops five databases (provided they exist):</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+for $no in 1 to 5
+return mongodb:drop-database($id, "database-" || $no)</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+    </div1>
+
+    <div1 id="fns.collections-read">
+      <head>Collections: Read Operations</head>
+
+      <div2 id="fn.find">
+        <head><code>mongodb:find</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:find</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:find</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $query as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:find</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $query as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Returns documents of a collection. If a query is supplied via the
+                <code>$query</code> argument, the documents are filtered by that query.
+                The <code>$options</code> argument can have the following entries:
+                <ulist>
+                  <item>
+                    <p><code>"fields": map(*)</code>: Restricts the returned fields.
+                      The field <code>_id</code> will always be returned.</p>
+                  </item>
+                  <item>
+                    <p><code>"sort": map(*)</code>: Sorts the returned documents.</p>
+                  </item>
+                  <item>
+                    <p><code>"limit": xs:integer</code>: Limits the number of returned
+                      documents by the specified integer.</p>
+                  </item>
+                  <item>
+                    <p><code>"skip": xs:integer</code>: Skips the number of specified
+                      documents.</p>
+                  </item>
+                </ulist>
+              </p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following expression queries an addressbook and selects all persons
+                living in Tokyo. It sorts results by the names and returns the first
+                50 documents:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+return mongodb:find($id, 'db', 'addressbook',
+  map { "city": "Tokyo" },
+  map {
+    "sort": map { "name": 1 },
+    "limit": 50
+  }
+)</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.find-one">
+        <head><code>mongodb:find-one</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:find-one</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:find-one</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $query as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:find-one</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $query as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Returns the first document of a database that optionally matches a
+                supplied <code>$query</code>.
+                The <code>$options</code> argument can have have the following entries:
+                <ulist>
+                  <item>
+                    <p><code>"fields": map(*)</code>: Restricts the returned fields.
+                      The field <code>_id</code> will always be returned.
+                    </p>
+                  </item>
+                  <item>
+                    <p><code>"sort": map(*)</code>: Sorts the documents before returning
+                      the first result.</p>
+                  </item>
+                </ulist>
+              </p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following query returns the first document that matches the specified query:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+return mongodb:find-one($id, 'db', 'addressbook', map { "name": "John Taylor" })</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.count">
+        <head><code>mongodb:count</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:count</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>) as <ex:type>xs:integer</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:count</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $query as <ex:type>map(*)</ex:type>) as <ex:type>xs:integer</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Counts documents in a collection. If a query is supplied via the
+                <code>$query</code> argument, the documents are filtered by that query.</p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following expression counts the number of documents in the
+                "addressbook" collection:</p>
+              <p>
+                <eg>mongodb:count(mongodb:connect("localhost"), 'db', 'addressbook')</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.aggregate">
+        <head><code>mongodb:aggregate</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:aggregate</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $pipeline as <ex:type>map(*)*</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Calculates aggregate values for the documents in a collection and returns
+                the results. The operations to be performed are supplied via
+                the <code>$pipeline</code> argument.</p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following query selects all documents with "Tokyo" as city and
+                returns their names:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+return mongodb:aggregate($id, "db","addressbook",
+  (map { "$match"  : map { "city": "Tokyo" } },
+   map { "$project": map { "name": 1 } })
+)</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.group">
+        <head><code>mongodb:group</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:group</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $fields as <ex:type>map(*)</ex:type>, $reduce as <ex:type>xs:string</ex:type>, $initial as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:group</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $fields as <ex:type>map(*)</ex:type>, $reduce as <ex:type>xs:string</ex:type>, $initial as <ex:type>map(*)</ex:type>,
+    $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Groups documents in a collection by the supplied <code>$fields</code>,
+                aggregates the documents via the <code>$reduce</code> function, and
+                returns the results. <code>$initial</code> provides an initial result
+                document, which will be modified by the reduce function.
+                The <code>$options</code> argument can have the following entries:
+                <ulist>
+                  <item>
+                    <p><code>"cond": map(*)</code>: Filters the documents before being
+                      processed.</p>
+                  </item>
+                  <item>
+                    <p><code>"finalize": xs:string</code>: Follows the reduce function
+                      and modifies the output.</p>
+                  </item>
+                </ulist>
+              </p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following groups documents with age &gt; 60 by the city field
+                and returns the summed up orders field:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+return mongodb:group($id, "db", "addressbook",
+  map { "city": 1 },
+  "function (curr, result) { result.orders += curr.orders; }",
+  map { "orders": 0 },
+  map {
+    "cond": map { "age": map { "$gt": 60 } }
+  }
+)</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.map-reduce">
+        <head><code>mongodb:map-reduce</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:map-reduce</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $map as <ex:type>xs:string</ex:type>, $reduce as <ex:type>xs:string</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:map-reduce</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $map as <ex:type>xs:string</ex:type>, $reduce as <ex:type>xs:string</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Runs a map-reduce aggregation operation over the documents of a
+                collection. The map and reduce functions are supplied via the
+                <code>$map</code> and <code>$reduce</code> arguments.
+                The <code>$options</code> argument can have the following entries:
+                <ulist>
+                  <item>
+                    <p><code>"query": map(*)</code>: Filters the documents before being
+                      processed.</p>
+                  </item>
+                  <item>
+                    <p><code>"output": xs:string</code>: Specifies the output target
+                      of the result.</p>
+                  </item>
+                  <item>
+                    <p><code>"type": xs:string</code>: Specifies the output type. Allowed
+                      values are <code>INLINE</code> (default), <code>REPLACE</code>,
+                      <code>MERGE</code> and <code>REDUCE</code>.</p>
+                  </item>
+                  <item>
+                    <p><code>"finalize": xs:string</code>: Follows the reduce function
+                      and modifies the output.</p>
+                  </item>
+                  <item>
+                    <p><code>"sort": map(*)</code>: Sorts the returned documents.</p>
+                  </item>
+                  <item>
+                    <p><code>"limit": xs:integer</code>: Limits the number of returned
+                      documents by the specified integer.</p>
+                  </item>
+                </ulist>
+              </p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following query sums up the numbber of orders from all documents
+                of the "addressbook" collection:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+return mongodb:map-reduce($id, "db", "addressbook",
+  'function () { emit(this._id, this.orders) };',
+  'function (id, ordersArray) { return Array.sum(ordersArray); };'
+)</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+    </div1>
+
+    <div1 id="fns.collections-write">
+      <head>Collections: Update Operations</head>
+
+      <div2 id="fn.find-and-modify">
+        <head><code>mongodb:find-and-modify</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:find-and-modify</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:find-and-modify</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Finds a document that has been selected via the <code>$query</code>
+                argument, modifies it according to the <code>$update</code> argument, and
+                returns the document as it was before the modifications. An empty sequence
+                is returned if no document was found.
+                The <code>$options</code> argument can have the following entries:
+              </p>
+              <ulist>
+                <item>
+                  <p><code>"fields": map(*)</code>: Restricts the returned fields.
+                    The field <code>_id</code> will always be returned.</p>
+                </item>
+                <item>
+                  <p><code>"sort": map(*)</code>: Sorts the documents before choosing the
+                    first one as candidate for modification.</p>
+                </item>
+                <item>
+                  <p><code>"new": xs:boolean</code>: Returns the modified document
+                    rather than the original.</p>
+                </item>
+              </ulist>
+              <p>
+                The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following query modifies a document with the specified id:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+return mongodb:find-and-modify($id, 'db', 'addressbook',
+  map { "_id": 123 },
+  map { "name": "Naomi Matsuo", "city": "Tokyo", "country": "Japan" }
+)</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.find-and-remove">
+        <head><code>mongodb:find-and-remove</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:find-and-remove</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $query as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Finds a document that has been selected via the <code>$query</code>
+                argument and returns it after removing it from the database. An empty
+                sequence is returned if no document was found.</p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following query removes a document with the specified id:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+return mongodb:find-and-remove($id, 'db', 'addressbook', map { "_id": 123 })</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.insert">
+        <head><code>mongodb:insert</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:insert</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $documents as <ex:type>map(*)*</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Inserts documents into a collection. If the collection does not exists on
+                the server, it will be created. If the new document does not contain an
+                <code>_id</code> field, it will be added.</p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Error Conditions</label>
+            <def>
+              <ulist>
+                <item>
+                  <p><bibref ref="error.write"/> is raised if a document cannot be
+                    inserted. This can e.g. happen if document with an identical id
+                    already exists.</p>
+                </item>
+              </ulist>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following expression inserts two new documents into a collection:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+let $docs := (map { 'name': 'John Daniels' }, map { 'name': 'Jack Walker' })
+return mongodb:insert($id, 'db', 'addressbook', $docs)</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.save">
+        <head><code>mongodb:save</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:save</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $document as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Updates an existing document in a collection or inserts a new document.
+                If the supplied document has no <code>_id</code> field, or if the id does
+                not exist in the collection, the document will be inserted. Otherwise,
+                the existing document will be replaced.</p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following expression updates or inserts a single document:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+let $doc := map { '_id': 123, name': 'Hans Schmid' }
+return mongodb:save($id, 'db', 'addressbook', $doc)</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.update">
+        <head><code>mongodb:update</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:update</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
+              <p><eg><ex:function>mongodb:update</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Finds one or more document that have been selected via the
+                <code>$query</code> argument and modifies them according to the
+                <code>$update</code> argument.
+                The <code>$options</code> argument can have have the following entries:
+              </p>
+              <ulist>
+                <item>
+                  <p><code>"upsert": xs:boolean</code>: Inserts a new document if no
+                    document matches the query criteria.</p>
+                </item>
+                <item>
+                  <p><code>"multi": xs:boolean</code>: Updates all documents in the
+                    collection that match the update query. Otherwise, updates only
+                    one document.</p>
+                </item>
+              </ulist>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Error Conditions</label>
+            <def>
+              <ulist>
+                <item>
+                  <p><bibref ref="error.write"/> is raised if a document cannot be
+                    inserted. This can e.g. happen if a user tries to change the id of the
+                    document.</p>
+                </item>
+              </ulist>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following update applies to all documents in the addressed collection.
+                It replaces the value of the <code>info</code> field with <code>null</code>,
+                or adds a new name/value pair if the field does not exist:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+return mongodb:update($id, 'db', 'addressbook',
+  map { },
+  map { '$set': map { 'info': () } },
+  map { 'upsert': true(), 'multi': true() }
+)</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.remove">
+        <head><code>mongodb:remove</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:remove</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>,
+    $query as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Removes documents from a collection that are selected by the
+                <code>$query</code> argument.</p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following expression removes all documents from a collection:</p>
+              <p>
+                <eg>mongodb:remove(mongodb:connect("localhost"), 'db', 'addressbook', map { })</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+
+      <div2 id="fn.drop-collection">
+        <head><code>mongodb:drop-collection</code></head>
+        <glist>
+          <gitem>
+            <label>Signatures</label>
+            <def>
+              <p><eg><ex:function>mongodb:drop-collection</ex:function>($id as <ex:type>xs:string</ex:type>, $db as <ex:type>xs:string</ex:type>, $coll as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Rules</label>
+            <def>
+              <p>Drops a collection. No operation will be performed if the collection does
+                not exist.</p>
+              <p>The connection is identified by the supplied <code>$id</code>,
+                and the database and collection are supplied via <code>$db</code> and
+                <code>$coll</code>.</p>
+            </def>
+          </gitem>
+          <gitem>
+            <label>Examples</label>
+            <def>
+              <p>The following query drops five collections in a database:</p>
+              <p>
+                <eg>
+let $id := mongodb:connect("localhost")
+for $no in 1 to 5
+return mongodb:drop-collection($id, "database", "collection-" || $no)</eg>
+              </p>
+            </def>
+          </gitem>
+        </glist>
+      </div2>
+    </div1>
+  </body>
+
+  <back>
+    <div1 id="refs">
+       <head>References</head>
+       <blist>
+          <bibl id="mongodb-command" key="MongoDB Command">MongoDB Database Commands. URL:
+            <loc href="http://docs.mongodb.org/manual/reference/command/">http://docs.mongodb.org/manual/reference/command/</loc>
+          </bibl>
+          <bibl id="drivers" key="MongoDB Drivers">MongoDB Drivers. URL:
+            <loc href="http://docs.mongodb.org/ecosystem/drivers">http://docs.mongodb.org/ecosystem/drivers</loc>
+          </bibl>
+          <bibl id="meta-driver" key="MongoDB Meta Driver">MongoDB Meta Driver. URL:
+            <loc href="http://docs.mongodb.org/meta-driver/latest">http://docs.mongodb.org/meta-driver/latest</loc>
+          </bibl>
+          <bibl id="test-suite" key="MongoDB Test Suite">MongoDB Test Suite. URL:
+            <loc href="http://github.com/expath/expath-cg/tree/master/tests/qt3/mongodb">http://github.com/expath/expath-cg</loc>,
+            directory: <emph>tests/qt3/mongodb/</emph>.
+          </bibl>
+          <bibl id="mongrel" key="Mongrel">Mongrel, the eXist-db MongoDB extension. URL:
+            <loc href="https://github.com/dizzzz/Mongrel">https://github.com/dizzzz/Mongrel</loc>
+          </bibl>
+          <bibl id="qt3" key="XML Query Test Suite">XML Query Test Suite. URL:
+            <loc href="http://dev.w3.org/2011/QT3-test-suite">http://dev.w3.org/2011/QT3-test-suite</loc>
+          </bibl>
+          <bibl id="xquery31" key="XQuery 3.1">XQuery 3.1: An XML Query Language,
+            Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, Editors.
+            World Wide Web Consortium. URL:
+            <loc href="http://www.w3.org/TR/xquery-31">http://www.w3.org/TR/xquery-31</loc>
+          </bibl>
+       </blist>
+    </div1>
+    <div1 id="errors">
+       <head>Summary of Error Conditions</head>
+       <blist>
+          <bibl id="error.connect" key="mongodb:connect">
+            A new database connection could not be established.
+          </bibl>
+          <bibl id="error.exec" key="mongodb:exec">
+            Command execution failed.
+          </bibl>
+          <bibl id="error.id" key="mongodb:id">
+            No open database connection exists for the supplied client id.
+          </bibl>
+          <bibl id="error.io" key="mongodb:io">
+            An unexpected error occurred while interacting with the database.
+          </bibl>
+          <bibl id="error.json" key="mongodb:json">
+            A supplied XQuery map could be converted to a JSON object.
+          </bibl>
+          <bibl id="error.name" key="mongodb:name">
+            The name of a database or collection is invalid.
+          </bibl>
+          <bibl id="error.type" key="mongodb:type">
+            An XQuery argument cannot be converted to Javascript, or a Javascript result
+            cannot be converted to XQuery.
+          </bibl>
+          <bibl id="error.write" key="mongodb:write">
+            A write operation failed.
+          </bibl>
+       </blist>
+    </div1>
+  </back>
+</spec>

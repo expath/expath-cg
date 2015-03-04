@@ -1,0 +1,85 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-find-001">
+    <description>Simple find.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        for $i in (1 to 10) 
+        return (
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': $i, 'z': ($i * $i) }),
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': (10 - $i), 'z': ($i * $i) })
+        ),
+
+        mongodb:find($id, 'expath', 'coll')
+      )
+    </test>
+    <result>
+      <assert-count>20</assert-count>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-find-002">
+    <description>Find with query.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        for $i in (1 to 10) 
+        return (
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': $i, 'z': ($i * $i) }),
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': (10 - $i), 'z': ($i * $i) })
+        ),
+
+        mongodb:find($id, 'expath', 'coll', map { 'x': 5 })
+      )
+    </test>
+    <result>
+      <assert-count>2</assert-count>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-find-003">
+    <description>Find with query and field restrictions.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        for $i in (1 to 10) 
+        return (
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': $i, 'z': ($i * $i) }),
+          mongodb:insert($id, 'expath', 'coll', map { 'x': $i, 'y': (10 - $i), 'z': ($i * $i) })
+        ),
+
+        mongodb:find($id, 'expath', 'coll',
+          map { 'x' : 6 },
+          map { 'fields': map { 'y' : 1 } }
+        )
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>2</assert-count>
+        <assert>count($result?x) = 0</assert>
+        <assert>count($result?y) = 2</assert>
+        <assert>deep-equal($result?y, (6, 4))</assert>
+      </all-of>
+    </result>
+  </test-case>
+</test-set>

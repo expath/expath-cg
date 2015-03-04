@@ -1,0 +1,135 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-errors-001">
+    <description>Tries to close a non-existing connection.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      mongodb:close("invalid")
+    </test>
+    <result>
+      <error code="Q{http://expath.org/ns/mongodb}id"/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-errors-002">
+    <description>Tries to pass on an empty database name.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:list-collections($id, "")
+    </test>
+    <result>
+      <error code="Q{http://expath.org/ns/mongodb}name"/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-errors-003">
+    <description>Passes on a long database name.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      let $database := string-join((1 to 63) ! 'x') 
+      return (
+        mongodb:drop-database($id, $database),
+        mongodb:list-collections($id, $database)
+      )
+    </test>
+    <result>
+      <assert-empty/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-errors-004">
+    <description>Tries to pass on a too long database name.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      let $database := string-join((1 to 64) ! 'x') 
+      return mongodb:list-collections($id, $database)
+    </test>
+    <result>
+      <error code="Q{http://expath.org/ns/mongodb}name"/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-errors-005">
+    <description>Tries to pass on an invalid database name.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      for $invalid in string-to-codepoints('/\. "$*&lt;&gt;:|?')
+      return try {
+        let $database := 'x' || codepoints-to-string($invalid) || 'x'
+        return mongodb:list-collections($id, $database)
+      } catch mongodb:name { ((: expected :)) }
+    </test>
+    <result>
+      <assert-empty/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-errors-006">
+    <description>Tries to pass on an empty collection name.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:find($id, 'expath', '')
+    </test>
+    <result>
+      <error code="Q{http://expath.org/ns/mongodb}name"/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-errors-007">
+    <description>Tries to pass on a long collection name.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      let $collection := string-join((1 to 117) ! 'x') 
+      return (
+        mongodb:drop-database($id, 'expath'),
+        mongodb:find($id, 'expath', $collection)
+      )
+    </test>
+    <result>
+      <assert-empty/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-errors-008">
+    <description>Tries to pass on a too long collection name.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      let $collection := string-join((1 to 118) ! 'x') 
+      return mongodb:find($id, 'expath', $collection)
+    </test>
+    <result>
+      <error code="Q{http://expath.org/ns/mongodb}name"/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-errors-009">
+    <description>Tries to pass on an invalid collection name.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:find($id, 'expath', 'x$x')
+    </test>
+    <result>
+      <error code="Q{http://expath.org/ns/mongodb}name"/>
+    </result>
+  </test-case>
+</test-set>

@@ -1,0 +1,37 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-group-001">
+    <description>Simple group call.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', (
+          map { "name": "Jack", "city": "London", "sex": "male", "shoes": 6 },
+          map { "name": "John", "city": "London", "sex": "male", "shoes": 12 },
+          map { "name": "Lisa", "city": "Berlin", "sex": "female", "shoes": 15 }
+        )),
+
+        mongodb:group($id, 'expath', 'coll',
+          map { "city": "London" },
+          "function (curr, result) { result.total += curr.shoes; }",
+          map { "total": 0 },
+          map { "cond": map { "sex": "male" } }
+        )
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>1</assert-count>
+        <assert>$result[1]?total = 18</assert>
+      </all-of>
+    </result>
+  </test-case>
+</test-set>

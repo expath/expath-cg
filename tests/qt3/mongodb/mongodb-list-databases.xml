@@ -1,0 +1,24 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-list-databases-001">
+    <description>Simple list-databases call.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', map { 'A': 'B' }),
+        mongodb:list-databases($id)
+      )
+    </test>
+    <result>
+      <assert>$result = 'expath'</assert>
+    </result>
+  </test-case>
+</test-set>

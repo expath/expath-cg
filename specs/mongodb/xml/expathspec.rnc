@@ -1,0 +1,10 @@
+namespace ex = "http://expath.org/ns/xmlspec"
+
+include "http://w3.org/2002/xmlspec/xmlspec.rnc"
+
+local.spec.att |=
+   attribute ex:w3c { xsd:boolean }
+
+eg.pcd.mix |=
+   element ex:function { text }
+ | element ex:type { text }
