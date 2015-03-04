@@ -6,7 +6,7 @@
     <w3c-designation>w3c-designation</w3c-designation>
     <w3c-doctype>EXPath Working Draft</w3c-doctype>
     <pubdate>
-      <day>15</day>
+      <day>5</day>
       <month>March</month>
       <year>2015</year>
     </pubdate>
@@ -173,9 +173,9 @@ fn:serialize(map { 'info': 'Hello Universe' },
 
       <div2 id="testing">
         <head>Test suite</head>
-        <p>A <bibref ref="test-suite"/> will be available soon. It will be provided to
-          ensure compatibility across different implementations of the specification.
-          It will be based on the QT3 format; see <bibref ref="qt3"/> for more details.
+        <p>A <bibref ref="test-suite"/> is provided to ensure compatibility across
+          different implementations of the specification. It is based on the QT3 format;
+          see <bibref ref="qt3"/> for more details.
         </p>
       </div2>
     </div1>

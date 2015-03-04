@@ -41,7 +41,7 @@ div.exampleHeader { font-weight: bold;
       }
    </style></head><body><p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p><div class="head">
 <h1><a name="title" id="title"></a>MongoDB Module</h1>
-<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Working Draft 15 March 2015</h2><dl><dt>This version:</dt><dd>
+<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Working Draft 5 March 2015</h2><dl><dt>This version:</dt><dd>
       <a href="http://expath.org/spec/mongodb/20150315">http://expath.org/spec/mongodb/20150315</a><br />
     </dd><dt>Latest version:</dt><dd>
       <a href="http://expath.org/spec/mongodb">http://expath.org/spec/mongodb</a><br />
@@ -147,9 +147,9 @@ fn:serialize(map { 'info': 'Hello Universe' },
             be added will already exist.</p></li></ul><p>A query processor must ensure that non-deterministic functions are not
           relocated or rewritten in the query, and that its results are not cached at
           runtime.</p></div><div class="div2">
-<h3><a name="testing" id="testing"></a>2.5 Test suite</h3><p>A <a href="#test-suite">[MongoDB Test Suite]</a> will be available soon. It will be provided to
-          ensure compatibility across different implementations of the specification.
-          It will be based on the QT3 format; see <a href="#qt3">[XML Query Test Suite]</a> for more details.
+<h3><a name="testing" id="testing"></a>2.5 Test suite</h3><p>A <a href="#test-suite">[MongoDB Test Suite]</a> is provided to ensure compatibility across
+          different implementations of the specification. It is based on the QT3 format;
+          see <a href="#qt3">[XML Query Test Suite]</a> for more details.
         </p></div></div><div class="div1">
 <h2><a name="fns.client" id="fns.client"></a>3 Client Operations</h2><div class="div2">
 <h3><a name="fn.connect" id="fn.connect"></a>3.1 <code>mongodb:connect</code></h3><dl><dt class="label">Signatures</dt><dd><div class="exampleInner"><pre><code class="function">mongodb:connect</code>($uri as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div></dd><dt class="label">Rules</dt><dd><p>Establishes a connection to MongoDB and returns a client id as string
