@@ -107,6 +107,12 @@
          <file href="http/http.xml"  format="xml"  diff="false"/>
       </editor>
    </spec>
+   <spec name="mongodb">
+      <editor latest="true">
+         <file href="mongodb/html/mongodb.html" format="html" diff="false"/>
+         <file href="mongodb/xml/mongodb.xml"   format="xml"  diff="false"/>
+      </editor>
+   </spec>
    <spec name="pkg">
       <revision version="20090901">
          <file href="pkg/pkg-20090901.html" format="html" diff="false"/>
