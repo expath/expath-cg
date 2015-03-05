@@ -11,11 +11,11 @@
       <year>2015</year>
     </pubdate>
     <publoc>
-      <loc href="http://expath.org/spec/mongodb/20150315"/>
+      <loc href="http://expath.org/spec/mongodb/20150305"/>
     </publoc>
     <altlocs>
-      <loc href="http://expath.org/spec/mongodb/20150315.xml">XML</loc>
-      <loc href="http://expath.org/spec/mongodb/20150315/diff">Revision markup</loc>
+      <loc href="http://expath.org/spec/mongodb/20150305.xml">XML</loc>
+      <!--loc href="http://expath.org/spec/mongodb/20150305/diff">Revision markup</loc-->
     </altlocs>
     <latestloc>
       <loc href="http://expath.org/spec/mongodb"/>
