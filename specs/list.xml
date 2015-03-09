@@ -107,14 +107,14 @@
          <file href="http/http.xml"  format="xml"  diff="false"/>
       </editor>
    </spec>
-   <spec name="mongodb">
+   <spec name="mongo">
       <revision version="20150305" latest="true">
-         <file href="mongodb/html/mongodb-20150305.html" format="html" diff="false"/>
-         <file href="mongodb/xml/mongodb-20150305.xml"   format="xml"  diff="false"/>
+         <file href="mongo/html/mongo-20150305.html" format="html" diff="false"/>
+         <file href="mongo/xml/mongo-20150305.xml"   format="xml"  diff="false"/>
       </revision>
       <editor>
-         <file href="mongodb/html/mongodb.html" format="html" diff="false"/>
-         <file href="mongodb/xml/mongodb.xml"   format="xml"  diff="false"/>
+         <file href="mongo/html/mongo.html" format="html" diff="false"/>
+         <file href="mongo/xml/mongo.xml"   format="xml"  diff="false"/>
       </editor>
    </spec>
    <spec name="pkg">

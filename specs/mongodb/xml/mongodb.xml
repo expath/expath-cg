@@ -11,14 +11,14 @@
       <year>2015</year>
     </pubdate>
     <publoc>
-      <loc href="http://expath.org/spec/mongodb/20150305"/>
+      <loc href="http://expath.org/spec/mongo/20150305"/>
     </publoc>
     <altlocs>
-      <loc href="http://expath.org/spec/mongodb/20150305.xml">XML</loc>
-      <!--loc href="http://expath.org/spec/mongodb/20150305/diff">Revision markup</loc-->
+      <loc href="http://expath.org/spec/mongo/20150305.xml">XML</loc>
+      <!--loc href="http://expath.org/spec/mongo/20150305/diff">Revision markup</loc-->
     </altlocs>
     <latestloc>
-      <loc href="http://expath.org/spec/mongodb"/>
+      <loc href="http://expath.org/spec/mongo"/>
     </latestloc>
     <!--<prevlocs>
     </prevlocs>-->
@@ -83,8 +83,8 @@
       <div2 id="namespaces">
         <head>Namespace conventions</head>
         <p>The module defined by this document defines functions and errors in the
-          namespace <code>http://expath.org/ns/mongodb</code>. In this document, the
-          <code>mongodb</code> prefix is bound to this namespace URI. Error codes are
+          namespace <code>http://expath.org/ns/mongo</code>. In this document, the
+          <code>mongo</code> prefix is bound to this namespace URI. Error codes are
           defined in the same namespace and are displayed with the same prefix.
         </p>
         <p>The <code>err</code> prefix denotes the namespace for XPath and XQuery errors,
@@ -158,10 +158,10 @@ fn:serialize(map { 'info': 'Hello Universe' },
           This is illustrated by two examples:
         </p>
         <ulist>
-          <item><p>The <loc href="#fn.find">mongodb:find</loc> may return different
+          <item><p>The <loc href="#fn.find">mongo:find</loc> may return different
             results when called more than once, as the contents of the MongoDB database
             instance may have changed between the first and second call.</p></item>
-          <item><p>Calling <loc href="#fn.insert">mongodb:insert</loc> may be successful
+          <item><p>Calling <loc href="#fn.insert">mongo:insert</loc> may be successful
             for the first time, but it may fail when called twice, because the document to
             be added will already exist.</p>
           </item>
@@ -186,11 +186,11 @@ fn:serialize(map { 'info': 'Hello Universe' },
       <head>Client Operations</head>
 
       <div2 id="fn.connect">
-        <head><code>mongodb:connect</code></head>
+        <head><code>mongo:connect</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
-            <def><eg><ex:function>mongodb:connect</ex:function>($uri as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg></def>
+            <def><eg><ex:function>mongo:connect</ex:function>($uri as <ex:type>xs:string</ex:type>) as <ex:type>xs:string</ex:type></eg></def>
           </gitem>
           <gitem>
             <label>Rules</label>
@@ -199,7 +199,7 @@ fn:serialize(map { 'info': 'Hello Universe' },
                 that identifies the opened connection.</p>
               <p>The <code>$uri</code> string follows the MongoDB URI format. It must
                 at least contain one host name, and it may be prefixed with the
-                <code>mongodb</code> scheme and suffixed with a port number.
+                <code>mongo</code> scheme and suffixed with a port number.
                 Multiple hosts, e.g. for a replica set, are separated with commas.</p>
             </def>
           </gitem>
@@ -227,13 +227,13 @@ fn:serialize(map { 'info': 'Hello Universe' },
               <p>The following expression creates three connections to local MongoDB
                 instances, using the default port, and returns the client ids as result:
                 <eg>
-mongodb:connect("localhost"),
-mongodb:connect("localhost:27017"),
-mongodb:connect("mongodb://localhost:27017")</eg>
+mongo:connect("localhost"),
+mongo:connect("localhost:27017"),
+mongo:connect("mongo://localhost:27017")</eg>
               </p>
               <p>The following function call connects to a replica set with three members,
                 and distributes reads to the secondary:
-                <eg>mongodb:connect("localhost,localhost:27018/?readPreference=secondary")</eg>
+                <eg>mongo:connect("localhost,localhost:27018/?readPreference=secondary")</eg>
               </p>
             </def>
           </gitem>
@@ -241,11 +241,11 @@ mongodb:connect("mongodb://localhost:27017")</eg>
       </div2>
 
       <div2 id="fn.list-databases">
-        <head><code>mongodb:list-databases</code></head>
+        <head><code>mongo:list-databases</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
-            <def><p><eg><ex:function>mongodb:list-databases</ex:function>($client-id as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg></p></def>
+            <def><p><eg><ex:function>mongo:list-databases</ex:function>($client-id as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg></p></def>
           </gitem>
           <gitem>
             <label>Rules</label>
@@ -259,7 +259,7 @@ mongodb:connect("mongodb://localhost:27017")</eg>
             <def>
               <p>The following query lists all databases on localhost:</p>
               <p>
-                <eg>mongodb:list-databases(mongodb:connect("localhost"))</eg>
+                <eg>mongo:list-databases(mongo:connect("localhost"))</eg>
               </p>
             </def>
           </gitem>
@@ -267,11 +267,11 @@ mongodb:connect("mongodb://localhost:27017")</eg>
       </div2>
 
       <div2 id="fn.close">
-        <head><code>mongodb:close</code></head>
+        <head><code>mongo:close</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
-            <def><p><eg><ex:function>mongodb:close</ex:function>($client-id as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p></def>
+            <def><p><eg><ex:function>mongo:close</ex:function>($client-id as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p></def>
           </gitem>
           <gitem>
             <label>Rules</label>
@@ -296,7 +296,7 @@ mongodb:connect("mongodb://localhost:27017")</eg>
             <def>
               <p>The following expression closes a connection that has just been opened:</p>
               <p>
-                <eg>mongodb:close(mongodb:connect("localhost"))</eg>
+                <eg>mongo:close(mongo:connect("localhost"))</eg>
               </p>
             </def>
           </gitem>
@@ -312,11 +312,11 @@ mongodb:connect("mongodb://localhost:27017")</eg>
         operation.</p>
 
       <div2 id="fn.list-collections">
-        <head><code>mongodb:list-collections</code></head>
+        <head><code>mongo:list-collections</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
-            <def><p><eg><ex:function>mongodb:list-collections</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg></p></def>
+            <def><p><eg><ex:function>mongo:list-collections</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>) as <ex:type>xs:string*</ex:type></eg></p></def>
           </gitem>
           <gitem>
             <label>Rules</label>
@@ -330,17 +330,17 @@ mongodb:connect("mongodb://localhost:27017")</eg>
       </div2>
 
       <div2 id="fn.command">
-        <head><code>mongodb:command</code></head>
+        <head><code>mongo:command</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
-            <def><p><eg><ex:function>mongodb:command</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>,
+            <def><p><eg><ex:function>mongo:command</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>,
     $command as <ex:type>map(*)</ex:type>) as <ex:type>map(*)</ex:type></eg></p></def>
           </gitem>
           <gitem>
             <label>Rules</label>
             <def>
-              <p>Executes a <bibref ref="mongodb-command"/>, supplied via
+              <p>Executes a <bibref ref="mongo-command"/>, supplied via
                 <code>$command</code>, and returns the result as a map.
               </p>
               <p>The connection is identified by the supplied <code>$client-id</code>,
@@ -377,10 +377,10 @@ mongodb:connect("mongodb://localhost:27017")</eg>
                 the current host. The result will either be a map, which contains the
                 result of the command execution, or an error:
                 <eg>
-let $id := mongodb:connect("localhost")
+let $id := mongo:connect("localhost")
 return try {
-  mongodb:command($client-id, map { "clone", 1 })
-} catch mongodb:exec {
+  mongo:command($client-id, map { "clone", 1 })
+} catch mongo:exec {
   "Command execution failed: " || $err:description,
 }</eg>
               </p>
@@ -390,14 +390,14 @@ return try {
       </div2>
 
       <div2 id="fn.eval">
-        <head><code>mongodb:eval</code></head>
+        <head><code>mongo:eval</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:eval</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:eval</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>,
     $code as <ex:type>xs:string</ex:type>) as <ex:type>item()*</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:eval</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:eval</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>,
     $code as <ex:type>xs:string</ex:type>, $args as <ex:type>item()*</ex:type>) as <ex:type>item()*</ex:type></eg></p>
             </def>
           </gitem>
@@ -496,8 +496,8 @@ return try {
               <p>The following query returns the result of an arithmetic expression:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
-return mongodb:eval($client-id, "db",
+let $id := mongo:connect("localhost")
+return mongo:eval($client-id, "db",
   'function ( x, y ) { return x + y; }',
   (2, 5)
 )</eg>
@@ -508,11 +508,11 @@ return mongodb:eval($client-id, "db",
       </div2>
 
       <div2 id="fn.drop-database">
-        <head><code>mongodb:drop-database</code></head>
+        <head><code>mongo:drop-database</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
-            <def><p><eg><ex:function>mongodb:drop-database</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p></def>
+            <def><p><eg><ex:function>mongo:drop-database</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p></def>
           </gitem>
           <gitem>
             <label>Rules</label>
@@ -529,9 +529,9 @@ return mongodb:eval($client-id, "db",
               <p>The following query drops five databases (provided they exist):</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
+let $id := mongo:connect("localhost")
 for $no in 1 to 5
-return mongodb:drop-database($client-id, "database-" || $no)</eg>
+return mongo:drop-database($client-id, "database-" || $no)</eg>
               </p>
             </def>
           </gitem>
@@ -543,15 +543,15 @@ return mongodb:drop-database($client-id, "database-" || $no)</eg>
       <head>Collections: Read Operations</head>
 
       <div2 id="fn.find">
-        <head><code>mongodb:find</code></head>
+        <head><code>mongo:find</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:find</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:find</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:find</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
+              <p><eg><ex:function>mongo:find</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:find</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:find</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
             </def>
           </gitem>
@@ -592,8 +592,8 @@ return mongodb:drop-database($client-id, "database-" || $no)</eg>
                 50 documents:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
-return mongodb:find($client-id, 'db', 'addressbook',
+let $id := mongo:connect("localhost")
+return mongo:find($client-id, 'db', 'addressbook',
   map { "city": "Tokyo" },
   map {
     "sort": map { "name": 1 },
@@ -607,15 +607,15 @@ return mongodb:find($client-id, 'db', 'addressbook',
       </div2>
 
       <div2 id="fn.find-one">
-        <head><code>mongodb:find-one</code></head>
+        <head><code>mongo:find-one</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:find-one</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:find-one</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:find-one</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
+              <p><eg><ex:function>mongo:find-one</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:find-one</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:find-one</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
             </def>
           </gitem>
@@ -648,8 +648,8 @@ return mongodb:find($client-id, 'db', 'addressbook',
               <p>The following query returns the first document that matches the specified query:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
-return mongodb:find-one($client-id, 'db', 'addressbook', map { "name": "John Taylor" })</eg>
+let $id := mongo:connect("localhost")
+return mongo:find-one($client-id, 'db', 'addressbook', map { "name": "John Taylor" })</eg>
               </p>
             </def>
           </gitem>
@@ -657,13 +657,13 @@ return mongodb:find-one($client-id, 'db', 'addressbook', map { "name": "John Tay
       </div2>
 
       <div2 id="fn.count">
-        <head><code>mongodb:count</code></head>
+        <head><code>mongo:count</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:count</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>xs:integer</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:count</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:count</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>xs:integer</ex:type></eg></p>
+              <p><eg><ex:function>mongo:count</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>) as <ex:type>xs:integer</ex:type></eg></p>
             </def>
           </gitem>
@@ -683,7 +683,7 @@ return mongodb:find-one($client-id, 'db', 'addressbook', map { "name": "John Tay
               <p>The following expression counts the number of documents in the
                 "addressbook" collection:</p>
               <p>
-                <eg>mongodb:count(mongodb:connect("localhost"), 'db', 'addressbook')</eg>
+                <eg>mongo:count(mongo:connect("localhost"), 'db', 'addressbook')</eg>
               </p>
             </def>
           </gitem>
@@ -691,12 +691,12 @@ return mongodb:find-one($client-id, 'db', 'addressbook', map { "name": "John Tay
       </div2>
 
       <div2 id="fn.aggregate">
-        <head><code>mongodb:aggregate</code></head>
+        <head><code>mongo:aggregate</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:aggregate</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:aggregate</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $pipeline as <ex:type>map(*)*</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
             </def>
           </gitem>
@@ -718,8 +718,8 @@ return mongodb:find-one($client-id, 'db', 'addressbook', map { "name": "John Tay
                 returns their names:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
-return mongodb:aggregate($client-id, "db","addressbook",
+let $id := mongo:connect("localhost")
+return mongo:aggregate($client-id, "db","addressbook",
   (map { "$match"  : map { "city": "Tokyo" } },
    map { "$project": map { "name": 1 } })
 )</eg>
@@ -730,14 +730,14 @@ return mongodb:aggregate($client-id, "db","addressbook",
       </div2>
 
       <div2 id="fn.group">
-        <head><code>mongodb:group</code></head>
+        <head><code>mongo:group</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:group</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:group</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $fields as <ex:type>map(*)</ex:type>, $reduce as <ex:type>xs:string</ex:type>, $initial as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:group</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:group</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $fields as <ex:type>map(*)</ex:type>, $reduce as <ex:type>xs:string</ex:type>, $initial as <ex:type>map(*)</ex:type>,
     $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
             </def>
@@ -773,8 +773,8 @@ return mongodb:aggregate($client-id, "db","addressbook",
                 and returns the summed up orders field:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
-return mongodb:group($client-id, "db", "addressbook",
+let $id := mongo:connect("localhost")
+return mongo:group($client-id, "db", "addressbook",
   map { "city": 1 },
   "function (curr, result) { result.orders += curr.orders; }",
   map { "orders": 0 },
@@ -789,14 +789,14 @@ return mongodb:group($client-id, "db", "addressbook",
       </div2>
 
       <div2 id="fn.map-reduce">
-        <head><code>mongodb:map-reduce</code></head>
+        <head><code>mongo:map-reduce</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:map-reduce</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:map-reduce</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $map as <ex:type>xs:string</ex:type>, $reduce as <ex:type>xs:string</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:map-reduce</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:map-reduce</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $map as <ex:type>xs:string</ex:type>, $reduce as <ex:type>xs:string</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)*</ex:type></eg></p>
             </def>
           </gitem>
@@ -846,8 +846,8 @@ return mongodb:group($client-id, "db", "addressbook",
                 of the "addressbook" collection:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
-return mongodb:map-reduce($client-id, "db", "addressbook",
+let $id := mongo:connect("localhost")
+return mongo:map-reduce($client-id, "db", "addressbook",
   'function () { emit(this._id, this.orders) };',
   'function (id, ordersArray) { return Array.sum(ordersArray); };'
 )</eg>
@@ -862,14 +862,14 @@ return mongodb:map-reduce($client-id, "db", "addressbook",
       <head>Collections: Update Operations</head>
 
       <div2 id="fn.find-and-modify">
-        <head><code>mongodb:find-and-modify</code></head>
+        <head><code>mongo:find-and-modify</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:find-and-modify</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:find-and-modify</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:find-and-modify</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:find-and-modify</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
             </def>
           </gitem>
@@ -908,8 +908,8 @@ return mongodb:map-reduce($client-id, "db", "addressbook",
               <p>The following query modifies a document with the specified id:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
-return mongodb:find-and-modify($client-id, 'db', 'addressbook',
+let $id := mongo:connect("localhost")
+return mongo:find-and-modify($client-id, 'db', 'addressbook',
   map { "_id": 123 },
   map { "name": "Naomi Matsuo", "city": "Tokyo", "country": "Japan" }
 )</eg>
@@ -920,12 +920,12 @@ return mongodb:find-and-modify($client-id, 'db', 'addressbook',
       </div2>
 
       <div2 id="fn.find-and-remove">
-        <head><code>mongodb:find-and-remove</code></head>
+        <head><code>mongo:find-and-remove</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:find-and-remove</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:find-and-remove</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>) as <ex:type>map(*)?</ex:type></eg></p>
             </def>
           </gitem>
@@ -946,8 +946,8 @@ return mongodb:find-and-modify($client-id, 'db', 'addressbook',
               <p>The following query removes a document with the specified id:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
-return mongodb:find-and-remove($client-id, 'db', 'addressbook', map { "_id": 123 })</eg>
+let $id := mongo:connect("localhost")
+return mongo:find-and-remove($client-id, 'db', 'addressbook', map { "_id": 123 })</eg>
               </p>
             </def>
           </gitem>
@@ -955,12 +955,12 @@ return mongodb:find-and-remove($client-id, 'db', 'addressbook', map { "_id": 123
       </div2>
 
       <div2 id="fn.insert">
-        <head><code>mongodb:insert</code></head>
+        <head><code>mongo:insert</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:insert</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:insert</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $documents as <ex:type>map(*)*</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
             </def>
           </gitem>
@@ -993,9 +993,9 @@ return mongodb:find-and-remove($client-id, 'db', 'addressbook', map { "_id": 123
               <p>The following expression inserts two new documents into a collection:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
+let $id := mongo:connect("localhost")
 let $docs := (map { 'name': 'John Daniels' }, map { 'name': 'Jack Walker' })
-return mongodb:insert($client-id, 'db', 'addressbook', $docs)</eg>
+return mongo:insert($client-id, 'db', 'addressbook', $docs)</eg>
               </p>
             </def>
           </gitem>
@@ -1003,12 +1003,12 @@ return mongodb:insert($client-id, 'db', 'addressbook', $docs)</eg>
       </div2>
 
       <div2 id="fn.save">
-        <head><code>mongodb:save</code></head>
+        <head><code>mongo:save</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:save</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:save</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $document as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
             </def>
           </gitem>
@@ -1030,9 +1030,9 @@ return mongodb:insert($client-id, 'db', 'addressbook', $docs)</eg>
               <p>The following expression updates or inserts a single document:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
+let $id := mongo:connect("localhost")
 let $doc := map { '_id': 123, name': 'Hans Schmid' }
-return mongodb:save($client-id, 'db', 'addressbook', $doc)</eg>
+return mongo:save($client-id, 'db', 'addressbook', $doc)</eg>
               </p>
             </def>
           </gitem>
@@ -1040,14 +1040,14 @@ return mongodb:save($client-id, 'db', 'addressbook', $doc)</eg>
       </div2>
 
       <div2 id="fn.update">
-        <head><code>mongodb:update</code></head>
+        <head><code>mongo:update</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:update</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:update</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
-              <p><eg><ex:function>mongodb:update</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:update</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>, $update as <ex:type>map(*)</ex:type>, $options as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
             </def>
           </gitem>
@@ -1095,8 +1095,8 @@ return mongodb:save($client-id, 'db', 'addressbook', $doc)</eg>
                 or adds a new name/value pair if the field does not exist:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
-return mongodb:update($client-id, 'db', 'addressbook',
+let $id := mongo:connect("localhost")
+return mongo:update($client-id, 'db', 'addressbook',
   map { },
   map { '$set': map { 'info': () } },
   map { 'upsert': true(), 'multi': true() }
@@ -1108,12 +1108,12 @@ return mongodb:update($client-id, 'db', 'addressbook',
       </div2>
 
       <div2 id="fn.remove">
-        <head><code>mongodb:remove</code></head>
+        <head><code>mongo:remove</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:remove</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
+              <p><eg><ex:function>mongo:remove</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>,
     $query as <ex:type>map(*)</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
             </def>
           </gitem>
@@ -1132,7 +1132,7 @@ return mongodb:update($client-id, 'db', 'addressbook',
             <def>
               <p>The following expression removes all documents from a collection:</p>
               <p>
-                <eg>mongodb:remove(mongodb:connect("localhost"), 'db', 'addressbook', map { })</eg>
+                <eg>mongo:remove(mongo:connect("localhost"), 'db', 'addressbook', map { })</eg>
               </p>
             </def>
           </gitem>
@@ -1140,12 +1140,12 @@ return mongodb:update($client-id, 'db', 'addressbook',
       </div2>
 
       <div2 id="fn.drop-collection">
-        <head><code>mongodb:drop-collection</code></head>
+        <head><code>mongo:drop-collection</code></head>
         <glist>
           <gitem>
             <label>Signatures</label>
             <def>
-              <p><eg><ex:function>mongodb:drop-collection</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
+              <p><eg><ex:function>mongo:drop-collection</ex:function>($client-id as <ex:type>xs:string</ex:type>, $database as <ex:type>xs:string</ex:type>, $collection as <ex:type>xs:string</ex:type>) as <ex:type>empty-sequence()</ex:type></eg></p>
             </def>
           </gitem>
           <gitem>
@@ -1164,9 +1164,9 @@ return mongodb:update($client-id, 'db', 'addressbook',
               <p>The following query drops five collections in a database:</p>
               <p>
                 <eg>
-let $id := mongodb:connect("localhost")
+let $id := mongo:connect("localhost")
 for $no in 1 to 5
-return mongodb:drop-collection($client-id, "database", "collection-" || $no)</eg>
+return mongo:drop-collection($client-id, "database", "collection-" || $no)</eg>
               </p>
             </def>
           </gitem>
@@ -1179,7 +1179,7 @@ return mongodb:drop-collection($client-id, "database", "collection-" || $no)</eg
     <div1 id="refs">
        <head>References</head>
        <blist>
-          <bibl id="mongodb-command" key="MongoDB Command">MongoDB Database Commands. URL:
+          <bibl id="mongo-command" key="MongoDB Command">MongoDB Database Commands. URL:
             <loc href="http://docs.mongodb.org/manual/reference/command/">http://docs.mongodb.org/manual/reference/command/</loc>
           </bibl>
           <bibl id="drivers" key="MongoDB Drivers">MongoDB Drivers. URL:
@@ -1189,8 +1189,8 @@ return mongodb:drop-collection($client-id, "database", "collection-" || $no)</eg
             <loc href="http://docs.mongodb.org/meta-driver/latest">http://docs.mongodb.org/meta-driver/latest</loc>
           </bibl>
           <bibl id="test-suite" key="MongoDB Test Suite">MongoDB Test Suite. URL:
-            <loc href="http://github.com/expath/expath-cg/tree/master/tests/qt3/mongodb">http://github.com/expath/expath-cg</loc>,
-            directory: <emph>tests/qt3/mongodb/</emph>.
+            <loc href="http://github.com/expath/expath-cg/tree/master/tests/qt3/mongo">http://github.com/expath/expath-cg</loc>,
+            directory: <emph>tests/qt3/mongo/</emph>.
           </bibl>
           <bibl id="mongrel" key="Mongrel">Mongrel, the eXist-db MongoDB extension. URL:
             <loc href="https://github.com/dizzzz/Mongrel">https://github.com/dizzzz/Mongrel</loc>
@@ -1218,29 +1218,29 @@ return mongodb:drop-collection($client-id, "database", "collection-" || $no)</eg
     <div1 id="errors">
        <head>Summary of Error Conditions</head>
        <blist>
-          <bibl id="error.connect" key="mongodb:connect">
+          <bibl id="error.connect" key="mongo:connect">
             A new database connection could not be established.
           </bibl>
-          <bibl id="error.exec" key="mongodb:exec">
+          <bibl id="error.exec" key="mongo:exec">
             Command execution failed.
           </bibl>
-          <bibl id="error.id" key="mongodb:id">
+          <bibl id="error.id" key="mongo:id">
             No open database connection exists for the supplied client id.
           </bibl>
-          <bibl id="error.io" key="mongodb:io">
+          <bibl id="error.io" key="mongo:io">
             An unexpected error occurred while interacting with the database.
           </bibl>
-          <bibl id="error.json" key="mongodb:json">
+          <bibl id="error.json" key="mongo:json">
             A supplied XQuery map could be converted to a JSON object.
           </bibl>
-          <bibl id="error.name" key="mongodb:name">
+          <bibl id="error.name" key="mongo:name">
             The name of a database or collection is invalid.
           </bibl>
-          <bibl id="error.type" key="mongodb:type">
+          <bibl id="error.type" key="mongo:type">
             An XQuery argument cannot be converted to Javascript, or a Javascript result
             cannot be converted to XQuery.
           </bibl>
-          <bibl id="error.write" key="mongodb:write">
+          <bibl id="error.write" key="mongo:write">
             A write operation failed.
           </bibl>
        </blist>
