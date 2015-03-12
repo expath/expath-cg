@@ -328,13 +328,13 @@
 			    <tr>
 			      <td><code>signature-type</code></td>
 			      <td><code>xs:string</code></td>
-			      <td>The method used for signing the content of signature. Possible values are: 'enveloping', 'enveloped', and 'detached'. The default value is 'enveloped'.
+			      <td>The method used for signing the content of signature. Possible values are: "enveloping", "enveloped", and "detached". The default value is "enveloped".
 			      If the parameter specifies an unsupported signature type, this is an error <bibref ref="error.signatureType"/>. (Optional)</td>
 			    </tr>
 			    <tr>
 			      <td><code>references</code></td>
 			      <td><code>element(Reference)*</code></td>
-			      <td>The resources to be signed. If this parameter is not provided, the whole input document will be signed. The version of XPath for transforms is 1.0. (Optional)</td>
+			      <td>The references to the objects to be signed. If this parameter is not provided, the whole input document will be signed. The version of XPath for transforms is 1.0. (Optional)</td>
 			    </tr>
 			    <tr>
 			      <td><code>digital-certificate</code></td>
