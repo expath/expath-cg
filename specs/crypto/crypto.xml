@@ -335,51 +335,12 @@
 			      <td><code>references</code></td>
 			      <td><code>element(Reference)*</code></td>
 			      <td>The references to the objects to be signed. If this parameter is not provided, the whole input document will be signed. The version of XPath for transforms is 1.0. (Optional)</td>
-			    </tr>
+			    </tr>$key        as <spec:type>xs:anyAtomicType</spec:type>
 			    <tr>
-			      <td><code>digital-certificate</code></td>
-			      <td><code>map(xs:string, xs:string)</code></td>
-			      <td>The digital certificate to be used for signing the references. If this parameter is missing, an auto-generated key pair will be used. The
-			      components of this parameter are given in the table <bibref ref="digital-certificate-parameter-components" /> below.(Optional)</td>
-			    </tr>		              		              
-			  </tbody>
-			</table>
-			<p />
-			<table id="digital-certificate-parameter-components" border="1" frame="border">
-			  <caption>Components of the <code>digital-certificate</code> parameter</caption>
-			  <thead>
-			    <tr>
-			      <th>Key (as <code>xs:string</code>)</th>
-			      <th>Value</th>
-			      <th>Meaning</th>
-			    </tr>
-			  </thead>
-			  <tbody>
-			    <tr>
-			      <td><code>keystore-type</code></td>
-			      <td><code>xs:string</code></td>
-			      <td>The keystore type. If the type is not supported, this is an error <bibref ref="error.keystoreType" />.</td>
-			    </tr>
-			    <tr>
-			      <td><code>keystore-password</code></td>
-			      <td><code>xs:string</code></td>
-			      <td>The keystore's password. If the keystore cannot be loaded or the password is incorrect, this is an error <bibref ref="error.readKeystore" />.</td>
-			    </tr>
-			    <tr>
-			      <td><code>key-alias</code></td>
-			      <td><code>xs:string</code></td>
-			      <td>The alias for the key pair used for signing. If no key pair exists for this alias, this is an error <bibref ref="error.aliasKey"/>.</td>
-			    </tr>
-			    <tr>
-			      <td><code>private-key-password</code></td>
-			      <td><code>xs:string</code></td>
-			      <td>The password for the selected key.</td>
-			    </tr>
-			    <tr>
-			      <td><code>keystore-url</code></td>
-			      <td><code>xs:string</code></td>
-			      <td>The URL of the keystore. If the URL is not correct, this is an error <bibref ref="error.keystoreUrl"/>. If the user has no acces to the keystore,
-			      this is an error <bibref ref="error.deniedKeystore" />.</td>
+			      <td><code>key</code></td>
+			      <td><code>xs:anyAtomicType</code></td>
+			      <td>The secret key used for signing. This parameter can be of type <code>xs:string</code>, <code>xs:base64Binary</code>,
+			      or <code>xs:hexBinary</code>.(Optional)</td>
 			    </tr>		              		              
 			  </tbody>
 			</table>
@@ -407,15 +368,31 @@ map {
 					&lt;Transform Algorithm="http://www.w3.org/TR/2001/10/xml-exc-c14n" /&gt;
 				&lt;/Transforms&gt;
 			&lt;/Reference&gt;
-		)			
- 	"digital-certificate" :=
- 		map {
- 			"keystore-type" := "JKS",
- 			"keystore-password" := "password",
- 			"key-alias" := "alias",
- 			"private-key-password" := "password",
- 			"keystore-url" := "/db/mykeystore"
- 		} 	
+		)
+	"key" :=
+		    "-----BEGIN RSA PRIVATE KEY-----
+		MIIEowIBAAKCAQEAhPxBGln4YOcOGOxmRYEN8nzYHYvQx+PP8GnbJ+kW4f6HvH8WMAUa2lTB6gib
+		LzJGezhqkMy8NT8ogVz8xbra3AyK/IBDzXpWtPhSxVOCo6hJfTjj7wX3E2AVN9CTUOYrS/3iSu1q
+		/6MoB6MDIj8wV0HO1ujXqEip45UgVl+xRVtU+1wiJQ7Gc8GEEyHVtK/X4joiyCEebJhFsI42Z9e4
+		aETI/XOaLszyEQeipMRlyznpRL2x0chz+yj7KuwiMqBZmPYyeWBsbldW8xREwnHEyko5GWc6wkEi
+		vgFwzKaZWo2ct3pmZ9vwXKecAxbeJbyJQl/PDfSnqcwyhL6pOaSAuQIDAQABAoIBAHo5hnR7wIb/
+		lbteetjitjjqeY8eU/OD9DfYcu6Jkth/Ia4jd/cGmhmU0O0Sn96O7KyPu5H+OfUOaWIMXt400LZy
+		aMON98NA77RAj4KBMI7OO0z2Hrgu2Vlbc+TqtJskESM04ulOsIroIAB02Ip/XSS1fS+UrbEjp9Fd
+		3GzGYp2E6IF/YtTXMiqgdrZVAoDPtxiMR/1KXuETiBkeMxPvXfgePXLi/rYBDcecmfsCEzDX8RZV
+		xLoPKFxuLaIrzdVhGVHwp88fB57OufLytmuvro71FNrFzcIO88NyDpEQVnsBadm9Ir0mb5uhYq9j
+		YV444b2Gra0/onJm7e/zRUSSJGkCgYEA67Q8gBSADrkc0UCypjnFV8WWCQJBPspb9Vnf2MJi5aYM
+		U5Sa/2H+tNoY+fJoa/eDSu1jeAn71TDcXZizihj3IT8gVdoXSncbcTulxEnaOi85Q2uKfSia16rX
+		d+MufjJ4UDC7vR/Ve+zIQOxpzBmcFO5cMnLS3mJdpWSdS7DyQpMCgYEAkG+6udsQ02GEKaJZl2mi
+		XBqe4Rh187sDCwiqSO5ItS4jUg1xF1cn1PuF2nvjztZyEsaKKYdiqekEQv3jA6gRsWFvRi/abFN3
+		zau/5M42v7H1cgU7m+FsDywhN5IRAmGfEyL/2wpKuZ6lD2qqhGkXmxqyEqgmEClyIwxJKHWiAwMC
+		gYBCJK8Bpj8VYp8SnZxEh1u4uMrUtlxG2ZSasmDdvBbyqPk2jzI7zm0ipT1zDrJ88dVXNmy+Z9bS
+		ycZdQZfIfh8DpmpVjUER9YCu8vUeszbZMx1XrRsM6lMhiGC01PzcDx+yKSrV9NP81cKQbYd27gzd
+		1tHqmkxQebwbyLNXZU1mnwKBgDpuiPsBbdgmHkJ9pIMFwCJEvrvPmoBEyuFe2wzwIUfy52UdfP/1
+		SW73ZlpSPoIB7Vo9Kc3NMJQOaaP0dC+Zgbbh9RNO7q1eQxxYfCRDbJC2nNZI2amhU4b70mBZ3jm5
+		ZpJmWV2y1zIqxRnsjBlPLraX4Sx9DBEDw2H8aWhN1oIjAoGBANc0gizRHGfOK2UASXskuO5Ueias
+		6z0V7J/m93E7wK8IQHcZXGloy8S9QSX6uAqe48ZDVCZGPxqq7TppT+P9WsdqkXqxR7M/KLa+7Y6C
+		s1tkDtD9uOJN6CsLuVjfuo4ZT5SwC7pq842aQrqJveKWKdzEorQjWKeN8OM2wzEMs0P1
+		-----END RSA PRIVATE KEY-----"	
 }
 </eg>
          </div2>
@@ -735,6 +712,68 @@ map {
 
 <!--       <div1> -->
 <!--          <head>Digital Certificates</head> -->
+
+<!-- 			    <tr> -->
+<!-- 			      <td><code>digital-certificate</code></td> -->
+<!-- 			      <td><code>map(xs:string, xs:string)</code></td> -->
+<!-- 			      <td>The digital certificate to be used for signing the references. If this parameter is missing, an auto-generated key pair will be used. The -->
+<!-- 			      components of this parameter are given in the table <bibref ref="digital-certificate-parameter-components" /> below.(Optional)</td> -->
+<!-- 			    </tr> -->
+
+<!-- 			<table id="digital-certificate-parameter-components" border="1" frame="border"> -->
+<!-- 			  <caption>Components of the <code>digital-certificate</code> parameter</caption> -->
+<!-- 			  <thead> -->
+<!-- 			    <tr> -->
+<!-- 			      <th>Key (as <code>xs:string</code>)</th> -->
+<!-- 			      <th>Value</th> -->
+<!-- 			      <th>Meaning</th> -->
+<!-- 			    </tr> -->
+<!-- 			  </thead> -->
+<!-- 			  <tbody> -->
+<!-- 			    <tr> -->
+<!-- 			      <td><code>keystore-type</code></td> -->
+<!-- 			      <td><code>xs:string</code></td> -->
+<!-- 			      <td>The keystore type. If the type is not supported, this is an error <bibref ref="error.keystoreType" />.</td> -->
+<!-- 			    </tr> -->
+<!-- 			    <tr> -->
+<!-- 			      <td><code>keystore-password</code></td> -->
+<!-- 			      <td><code>xs:string</code></td> -->
+<!-- 			      <td>The keystore's password. If the keystore cannot be loaded or the password is incorrect, this is an error <bibref ref="error.readKeystore" />.</td> -->
+<!-- 			    </tr> -->
+<!-- 			    <tr> -->
+<!-- 			      <td><code>key-alias</code></td> -->
+<!-- 			      <td><code>xs:string</code></td> -->
+<!-- 			      <td>The alias for the key pair used for signing. If no key pair exists for this alias, this is an error <bibref ref="error.aliasKey"/>.</td> -->
+<!-- 			    </tr> -->
+<!-- 			    <tr> -->
+<!-- 			      <td><code>private-key-password</code></td> -->
+<!-- 			      <td><code>xs:string</code></td> -->
+<!-- 			      <td>The password for the selected key.</td> -->
+<!-- 			    </tr> -->
+<!-- 			    <tr> -->
+<!-- 			      <td><code>keystore-url</code></td> -->
+<!-- 			      <td><code>xs:string</code></td> -->
+<!-- 			      <td>The URL of the keystore. If the URL is not correct, this is an error <bibref ref="error.keystoreUrl"/>. If the user has no acces to the keystore, -->
+<!-- 			      this is an error <bibref ref="error.deniedKeystore" />.</td> -->
+<!-- 			    </tr>		              		               -->
+<!-- 			  </tbody> -->
+<!-- 			</table> -->
+
+
+<!--  	"digital-certificate" := -->
+<!--  		map { -->
+<!--  			"keystore-type" := "JKS", -->
+<!--  			"keystore-password" := "password", -->
+<!--  			"key-alias" := "alias", -->
+<!--  			"private-key-password" := "password", -->
+<!--  			"keystore-url" := "/db/mykeystore" -->
+<!--  		}  -->
+
+
+
+			
+
+
 <!--          <p>TBD.</p> -->
 <!--          <div2> -->
 <!--             <head>The <code>crypto:generate-certificate</code> function</head> -->
