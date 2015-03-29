@@ -102,18 +102,18 @@ div.exampleHeader { font-weight: bold;
             3.1 <a href="#hash-function">The crypto:hash function</a><br />
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
             4 <a href="#d4e380">XML Digital Signature</a><br />
-            4.1 <a href="#d4e391">The crypto:generate-signature function</a><br />
-            4.2 <a href="#d4e524">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e550">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e559">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e647">The crypto:decrypt function</a><br />
+            4.1 <a href="#d4e413">The crypto:generate-signature function</a><br />
+            4.2 <a href="#d4e546">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e572">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e581">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e669">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1097">References</a><br />
-            B <a href="#d4e1163">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1119">References</a><br />
+            B <a href="#d4e1185">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -273,7 +273,13 @@ div.exampleHeader { font-weight: bold;
                ability to identify if the digital document has been changed since the digital signature
                was applied to it. This is done by means of a cryptographic transformation.
             </p>
-            <p>The function can apply an XML digital signature to one or more resources.</p>
+            <p>This function can apply an XML digital signature to one or more resources. There are
+               three types of XML digital signatures, namely <code>enveloped</code>,
+               <code>enveloping</code>, and <code>detached</code> signatures.
+            </p>
+            <p>According to <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, the <code>enveloped</code> and <code>enveloping</code> signatures are applied to the same resource (and XML document),
+               while the <code>detached</code> signatures can be applied to more than one resources.
+            </p>
             <p>The XML Signature <a href="#xml-dig-sig-core">[XML Digital Signature]</a> is a method of associating a key with referenced data (octets); it
                does not normatively specify how keys are associated with persons or institutions,
                nor
@@ -285,7 +291,7 @@ div.exampleHeader { font-weight: bold;
             </p>
             <div class="div2">
                
-               <h3><a name="d4e391" id="d4e391"></a>4.1 The <code>crypto:generate-signature</code> function
+               <h3><a name="d4e413" id="d4e413"></a>4.1 The <code>crypto:generate-signature</code> function
                </h3>
                <p>The function has its parameters passed as a <code class="type">map(xs:string, item())</code>. If any of these parameters is missing, a default value will be used
                   instead. After the function's signature, an example of parameters is given.
@@ -421,7 +427,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e524" id="d4e524"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e546" id="d4e546"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -437,7 +443,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e550" id="d4e550"></a>5 Encryption and Decryption
+            <h2><a name="d4e572" id="d4e572"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -454,7 +460,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e559" id="d4e559"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e581" id="d4e581"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -514,7 +520,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e647" id="d4e647"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e669" id="d4e669"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -575,7 +581,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1097" id="d4e1097"></a>A References
+            <h2><a name="d4e1119" id="d4e1119"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -650,7 +656,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1163" id="d4e1163"></a>B Summary of Error Conditions
+            <h2><a name="d4e1185" id="d4e1185"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm

@@ -268,7 +268,10 @@
          <head>XML Digital Signature</head>
          <p>A digital signature is a technique to certify that a digital document is authentic. This means that the origin of the document is known and there is the
          ability to identify if the digital document has been changed since the digital signature was applied to it. This is done by means of a cryptographic transformation.</p>
-         <p>The function can apply an XML digital signature to one or more resources.</p>
+         <p>This function can apply an XML digital signature to one or more resources. There are three types of XML digital signatures, namely <code>enveloped</code>,
+         <code>enveloping</code>, and <code>detached</code> signatures.</p>
+         <p>According to <bibref ref="xml-dig-sig-core" />, the <code>enveloped</code> and <code>enveloping</code> signatures are applied to the same resource (and XML document),
+         while the <code>detached</code> signatures can be applied to more than one resources.</p>
          <p>The XML Signature <bibref ref="xml-dig-sig-core" /> is a method of associating a key with referenced data (octets); it
             does not normatively specify how keys are associated with persons or institutions, nor
             the meaning of the data being referenced and signed. XML Signatures are applied to
