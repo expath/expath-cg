@@ -102,18 +102,18 @@ div.exampleHeader { font-weight: bold;
             3.1 <a href="#hash-function">The crypto:hash function</a><br />
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
             4 <a href="#d4e380">XML Digital Signature</a><br />
-            4.1 <a href="#d4e413">The crypto:generate-signature function</a><br />
-            4.2 <a href="#d4e546">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e572">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e581">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e669">The crypto:decrypt function</a><br />
+            4.1 <a href="#d4e420">The crypto:generate-signature function</a><br />
+            4.2 <a href="#d4e565">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e591">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e600">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e688">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1119">References</a><br />
-            B <a href="#d4e1185">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1138">References</a><br />
+            B <a href="#d4e1204">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -277,21 +277,19 @@ div.exampleHeader { font-weight: bold;
                three types of XML digital signatures, namely <code>enveloped</code>,
                <code>enveloping</code>, and <code>detached</code> signatures.
             </p>
-            <p>According to <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, the <code>enveloped</code> and <code>enveloping</code> signatures are applied to the same resource (and XML document),
-               while the <code>detached</code> signatures can be applied to more than one resources.
+            <p>According to <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, the <code>enveloped</code> and <code>enveloping</code> signatures are applied to the same digital resource (and XML document),
+               while the <code>detached</code> signatures can be applied to more than one digital resources.
             </p>
-            <p>The XML Signature <a href="#xml-dig-sig-core">[XML Digital Signature]</a> is a method of associating a key with referenced data (octets); it
-               does not normatively specify how keys are associated with persons or institutions,
-               nor
-               the meaning of the data being referenced and signed. XML Signatures are applied to
-               arbitrary digital content (data objects) via an indirection. Data objects are digested,
-               the resulting value is placed in an element (with other information) and that element
-               is
-               then digested and cryptographically signed.
+            <p>The designation of these digital resources is to be made based upon the explanations
+               given in <a href="#xml-dig-sig-core">[XML Digital Signature]</a>.
+            </p>
+            <p>In order to reference these digital resources, this function is using an XML syntax
+               inspired by <a href="#xml-dig-sig-core">[XML Digital Signature]</a>. For details, see below the
+               parameter <code>$resources</code>.
             </p>
             <div class="div2">
                
-               <h3><a name="d4e413" id="d4e413"></a>4.1 The <code>crypto:generate-signature</code> function
+               <h3><a name="d4e420" id="d4e420"></a>4.1 The <code>crypto:generate-signature</code> function
                </h3>
                <p>The function has its parameters passed as a <code class="type">map(xs:string, item())</code>. If any of these parameters is missing, a default value will be used
                   instead. After the function's signature, an example of parameters is given.
@@ -365,6 +363,15 @@ div.exampleHeader { font-weight: bold;
                         </td>
                      </tr>
                      <tr>
+                        <td><code>references</code></td>
+                        <td><code>element(Reference)*</code></td>
+                        <td>The references to the digital resources to be signed. If this parameter is not provided,
+                           the whole input document will be signed. If the signature is of
+                           			      <code>enveloped</code> or <code>enveloping</code> type, and more than one resource is inputted to be signed, this is an error <a href="#error.inputResources">[crypto.input-resources]</a>.
+                           			      (Optional)
+                        </td>
+                     </tr>
+                     <tr>
                         <td><code>key</code></td>
                         <td><code>xs:anyAtomicType</code></td>
                         <td>The secret key used for signing. This parameter can be of type <code>xs:string</code>, <code>xs:base64Binary</code>,
@@ -427,7 +434,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e546" id="d4e546"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e565" id="d4e565"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -443,7 +450,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e572" id="d4e572"></a>5 Encryption and Decryption
+            <h2><a name="d4e591" id="d4e591"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -460,7 +467,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e581" id="d4e581"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e600" id="d4e600"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -520,7 +527,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e669" id="d4e669"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e688" id="d4e688"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -581,7 +588,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1119" id="d4e1119"></a>A References
+            <h2><a name="d4e1138" id="d4e1138"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -656,7 +663,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1185" id="d4e1185"></a>B Summary of Error Conditions
+            <h2><a name="d4e1204" id="d4e1204"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
@@ -707,6 +714,9 @@ map {
                <dt class="label"><a name="error.outputFormat" id="error.outputFormat"></a>crypto.output-format
                </dt>
                <dd>The output format is not supported.</dd>
+               <dt class="label"><a name="error.inputResources" id="error.inputResources"></a>crypto.input-resources
+               </dt>
+               <dd>The 'enveloped' and 'enveloping' signatures have to be applied to only one resource.</dd>
             </dl>
          </div>
       </div><script type="text/javascript">

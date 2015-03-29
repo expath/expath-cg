@@ -270,14 +270,11 @@
          ability to identify if the digital document has been changed since the digital signature was applied to it. This is done by means of a cryptographic transformation.</p>
          <p>This function can apply an XML digital signature to one or more resources. There are three types of XML digital signatures, namely <code>enveloped</code>,
          <code>enveloping</code>, and <code>detached</code> signatures.</p>
-         <p>According to <bibref ref="xml-dig-sig-core" />, the <code>enveloped</code> and <code>enveloping</code> signatures are applied to the same resource (and XML document),
-         while the <code>detached</code> signatures can be applied to more than one resources.</p>
-         <p>The XML Signature <bibref ref="xml-dig-sig-core" /> is a method of associating a key with referenced data (octets); it
-            does not normatively specify how keys are associated with persons or institutions, nor
-            the meaning of the data being referenced and signed. XML Signatures are applied to
-            arbitrary digital content (data objects) via an indirection. Data objects are digested,
-            the resulting value is placed in an element (with other information) and that element is
-            then digested and cryptographically signed.</p>
+         <p>According to <bibref ref="xml-dig-sig-core" />, the <code>enveloped</code> and <code>enveloping</code> signatures are applied to the same digital resource (and XML document),
+         while the <code>detached</code> signatures can be applied to more than one digital resources.</p>
+         <p>The designation of these digital resources is to be made based upon the explanations given in <bibref ref="xml-dig-sig-core" />.</p>
+         <p>In order to reference these digital resources, this function is using an XML syntax inspired by <bibref ref="xml-dig-sig-core" />. For details, see below the
+         parameter <code>$resources</code>.</p>
          <div2>
             <head>The <code>crypto:generate-signature</code> function</head>
             <p>The function has its parameters passed as a <spec:type>map(xs:string, item())</spec:type>. If any of these parameters is missing, a default value will be used
@@ -335,11 +332,13 @@
 			      <td>The method used for signing the content of signature. Possible values are: "enveloping", "enveloped", and "detached". The default value is "enveloped".
 			      If the parameter specifies an unsupported signature type, this is an error <bibref ref="error.signatureType"/>. (Optional)</td>
 			    </tr>
-<!-- 			    <tr> -->
-<!-- 			      <td><code>references</code></td> -->
-<!-- 			      <td><code>element(Reference)*</code></td> -->
-<!-- 			      <td>The references to the objects to be signed. If this parameter is not provided, the whole input document will be signed. The version of XPath for transforms is 1.0. (Optional)</td> -->
-<!-- 			    </tr> -->
+			    <tr>
+			      <td><code>references</code></td>
+			      <td><code>element(Reference)*</code></td>
+			      <td>The references to the digital resources to be signed. If this parameter is not provided, the whole input document will be signed. If the signature is of
+			      <code>enveloped</code> or <code>enveloping</code> type, and more than one resource is inputted to be signed, this is an error <bibref ref="error.inputResources" />.
+			      (Optional)</td>
+			    </tr>
 			    <tr>
 			      <td><code>key</code></td>
 			      <td><code>xs:anyAtomicType</code></td>
@@ -399,6 +398,13 @@ map {
 		-----END RSA PRIVATE KEY-----"	
 }
 </eg>
+			<p>Explanations</p>
+ The version of XPath for transforms is 1.0
+
+
+
+
+
          </div2>
          <div2>
             <head>The <code>crypto:validate-signature</code> function</head>
@@ -962,6 +968,7 @@ map {
             <bibl id="error.decryptionType" key="crypto:decryption-type">The decryption type is not supported.</bibl>
             <bibl id="error.noProvider" key="crypto:no-provider">The provider is not set.</bibl>
             <bibl id="error.outputFormat" key="crypto.output-format">The output format is not supported.</bibl>
+            <bibl id="error.inputResources" key="crypto.input-resources">The 'enveloped' and 'enveloping' signatures have to be applied to only one resource.</bibl>
          </blist>
       </div1>
    </back>
