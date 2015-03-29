@@ -277,7 +277,7 @@
          <div2>
             <head>The <code>crypto:generate-signature</code> function</head>
             <p>The function has its parameters passed as a <spec:type>map(xs:string, item())</spec:type>. If any of these parameters is missing, a default value will be used
-            instead. After the function's signature, an example of parameters is given. The syntax for the <code>$references</code> parameter is inspired by <bibref ref="xml-dig-sig-core"/>.</p>
+            instead. After the function's signature, an example of parameters is given.</p>
             <eg>
 <spec:function>crypto:generate-signature</spec:function>($data     as <spec:type>node()*</spec:type>,
     			    $parameters as <spec:type>map(xs:string, item()+)?</spec:type>) as <spec:type>node()+</spec:type> 
