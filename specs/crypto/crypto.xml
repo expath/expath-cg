@@ -353,7 +353,7 @@ map {
 	"canonicalization-algorithm" := "inclusive-with-comments",
  	"digest-algorithm" := "SHA1",
  	"signature-algorithm" := "RSA_SHA1",
- 	"signature-namespace-prefix" := "dsig",
+ 	"signature-namespace-prefix" := "digsig",
  	"signature-type" := "enveloped",
  	"references" :=
  		( 
@@ -398,8 +398,33 @@ map {
 		-----END RSA PRIVATE KEY-----"	
 }
 </eg>
-			<p>Explanations</p>
- The version of XPath for transforms is 1.0
+			<p>Explanations about <code>$resources</code> parameter</p>
+ 			<table id="resources-parameter-explanations" border="1" frame="border">
+			  <caption>The <code>$resources</code> parameter</caption>
+			  <thead>
+			    <tr>
+			      <th>Key (as <code>xs:string</code>)</th>
+			      <th>Value</th>
+			      <th>Meaning</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <td><code>Reference</code></td>
+			      <td><code>element()</code></td>
+			      <td>This is the parent element for a reference to a resource to be signed. Its namespace is <code>http://www.w3.org/2000/09/xmldsig#</code>. Its
+			      <code>URI</code> attribute</td>
+			    </tr>
+			    
+			    
+			    <tr>
+			      <td><code>XPath</code></td>
+			      <td><code>element()</code></td>
+			      <td>The XPath expression to be applied to the input document, in order to get the resource to be signed. The version of XPath to be used is 1.0. The <code>Filter</code>
+			      attribute is </td>
+			    </tr>			    
+			  </tbody>
+			</table>
 
 
 
