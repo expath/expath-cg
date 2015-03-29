@@ -102,18 +102,18 @@ div.exampleHeader { font-weight: bold;
             3.1 <a href="#hash-function">The crypto:hash function</a><br />
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
             4 <a href="#d4e380">XML Digital Signature</a><br />
-            4.1 <a href="#d4e389">The crypto:generate-signature function</a><br />
-            4.2 <a href="#d4e534">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e560">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e569">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e657">The crypto:decrypt function</a><br />
+            4.1 <a href="#d4e391">The crypto:generate-signature function</a><br />
+            4.2 <a href="#d4e524">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e550">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e559">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e647">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1107">References</a><br />
-            B <a href="#d4e1173">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1097">References</a><br />
+            B <a href="#d4e1163">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -273,6 +273,7 @@ div.exampleHeader { font-weight: bold;
                ability to identify if the digital document has been changed since the digital signature
                was applied to it. This is done by means of a cryptographic transformation.
             </p>
+            <p>The function can apply an XML digital signature to one or more resources.</p>
             <p>The XML Signature <a href="#xml-dig-sig-core">[XML Digital Signature]</a> is a method of associating a key with referenced data (octets); it
                does not normatively specify how keys are associated with persons or institutions,
                nor
@@ -284,14 +285,13 @@ div.exampleHeader { font-weight: bold;
             </p>
             <div class="div2">
                
-               <h3><a name="d4e389" id="d4e389"></a>4.1 The <code>crypto:generate-signature</code> function
+               <h3><a name="d4e391" id="d4e391"></a>4.1 The <code>crypto:generate-signature</code> function
                </h3>
                <p>The function has its parameters passed as a <code class="type">map(xs:string, item())</code>. If any of these parameters is missing, a default value will be used
-                  instead. After the function's signature, an example of parameters is given. The syntax
-                  for the <code>$references</code> parameter is inspired by <a href="#xml-dig-sig-core">[XML Digital Signature]</a>.
+                  instead. After the function's signature, an example of parameters is given.
                </p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:generate-signature</code>($data     as <code class="type">node()*</code>,
+<code class="function">crypto:generate-signature</code>($data     as <code class="type">node()+</code>,
     			    $parameters as <code class="type">map(xs:string, item()+)?</code>) as <code class="type">node()+</code> 
 </pre></div>
                <ul>
@@ -359,12 +359,6 @@ div.exampleHeader { font-weight: bold;
                         </td>
                      </tr>
                      <tr>
-                        <td><code>references</code></td>
-                        <td><code>element(Reference)*</code></td>
-                        <td>The references to the objects to be signed. If this parameter is not provided, the
-                           whole input document will be signed. The version of XPath for transforms is 1.0. (Optional)
-                        </td>
-                     </tr>$key        as <code class="type">xs:anyAtomicType</code><tr>
                         <td><code>key</code></td>
                         <td><code>xs:anyAtomicType</code></td>
                         <td>The secret key used for signing. This parameter can be of type <code>xs:string</code>, <code>xs:base64Binary</code>,
@@ -427,7 +421,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e534" id="d4e534"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e524" id="d4e524"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -443,7 +437,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e560" id="d4e560"></a>5 Encryption and Decryption
+            <h2><a name="d4e550" id="d4e550"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -460,7 +454,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e569" id="d4e569"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e559" id="d4e559"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -520,7 +514,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e657" id="d4e657"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e647" id="d4e647"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -581,7 +575,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1107" id="d4e1107"></a>A References
+            <h2><a name="d4e1097" id="d4e1097"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -656,7 +650,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1173" id="d4e1173"></a>B Summary of Error Conditions
+            <h2><a name="d4e1163" id="d4e1163"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
