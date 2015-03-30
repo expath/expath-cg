@@ -103,17 +103,17 @@ div.exampleHeader { font-weight: bold;
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
             4 <a href="#d4e380">XML Digital Signature</a><br />
             4.1 <a href="#d4e420">The crypto:generate-signature function</a><br />
-            4.2 <a href="#d4e646">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e672">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e681">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e769">The crypto:decrypt function</a><br />
+            4.2 <a href="#d4e653">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e679">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e688">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e776">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1219">References</a><br />
-            B <a href="#d4e1285">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1226">References</a><br />
+            B <a href="#d4e1292">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -472,8 +472,11 @@ map {
                         <td><code>XPath</code></td>
                         <td><code>element()</code></td>
                         <td>The XPath expression to be applied to the input document, in order to get the resource
-                           to be signed. The version of XPath to be used is 1.0. The <code>Filter</code>
-                           			      attribute is 
+                           to be signed. The version of XPath to be used is 1.0, 
+                           			      plus a function named <code>here</code>. The <code>Filter</code> attribute's value provides the name of the operation (intersection, subtraction and
+                           union)
+                           			      used for combining the XPath-selected subtrees. For more details, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.6.3 XPath Filtering, and
+                           			      <a href="#xml-dig-sig-xpath-filer20">[XML-Signature XPath Filter 2.0]</a>.
                         </td>
                      </tr>
                   </tbody>
@@ -481,7 +484,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e646" id="d4e646"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e653" id="d4e653"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -497,7 +500,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e672" id="d4e672"></a>5 Encryption and Decryption
+            <h2><a name="d4e679" id="d4e679"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -514,7 +517,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e681" id="d4e681"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e688" id="d4e688"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -574,7 +577,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e769" id="d4e769"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e776" id="d4e776"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -635,7 +638,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1219" id="d4e1219"></a>A References
+            <h2><a name="d4e1226" id="d4e1226"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -710,7 +713,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1285" id="d4e1285"></a>B Summary of Error Conditions
+            <h2><a name="d4e1292" id="d4e1292"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
