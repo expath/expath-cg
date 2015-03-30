@@ -413,8 +413,17 @@ map {
 			      <td><code>Reference</code></td>
 			      <td><code>element()</code></td>
 			      <td>This is the parent element for a reference to a resource to be signed. Its namespace is <code>http://www.w3.org/2000/09/xmldsig#</code>. Its
+			      <code>URI</code> attribute identifies a resource using a URI-Reference (for details see <bibref ref="xml-dig-sig-core" />, section 4.3.3.1 The URI Attribute).</td>
+			    </tr>
+			    <tr>
+			      <td><code>Transforms</code></td>
+			      <td><code>element()</code></td>
+			      <td>This is the parent element for a reference to a resource to be signed. Its namespace is <code>http://www.w3.org/2000/09/xmldsig#</code>. Its
 			      <code>URI</code> attribute</td>
 			    </tr>
+			    
+			    
+			    			    
 			    
 			    
 			    <tr>

@@ -103,17 +103,17 @@ div.exampleHeader { font-weight: bold;
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
             4 <a href="#d4e380">XML Digital Signature</a><br />
             4.1 <a href="#d4e420">The crypto:generate-signature function</a><br />
-            4.2 <a href="#d4e615">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e641">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e650">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e738">The crypto:decrypt function</a><br />
+            4.2 <a href="#d4e632">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e658">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e667">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e755">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1188">References</a><br />
-            B <a href="#d4e1254">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1205">References</a><br />
+            B <a href="#d4e1271">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -449,6 +449,14 @@ map {
                         <td><code>element()</code></td>
                         <td>This is the parent element for a reference to a resource to be signed. Its namespace
                            is <code>http://www.w3.org/2000/09/xmldsig#</code>. Its
+                           			      <code>URI</code> attribute identifies a resource using a URI-Reference (for details see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 4.3.3.1 The URI Attribute).
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><code>Transforms</code></td>
+                        <td><code>element()</code></td>
+                        <td>This is the parent element for a reference to a resource to be signed. Its namespace
+                           is <code>http://www.w3.org/2000/09/xmldsig#</code>. Its
                            			      <code>URI</code> attribute
                         </td>
                      </tr>
@@ -465,7 +473,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e615" id="d4e615"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e632" id="d4e632"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -481,7 +489,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e641" id="d4e641"></a>5 Encryption and Decryption
+            <h2><a name="d4e658" id="d4e658"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -498,7 +506,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e650" id="d4e650"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e667" id="d4e667"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -558,7 +566,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e738" id="d4e738"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e755" id="d4e755"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -619,7 +627,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1188" id="d4e1188"></a>A References
+            <h2><a name="d4e1205" id="d4e1205"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -694,7 +702,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1254" id="d4e1254"></a>B Summary of Error Conditions
+            <h2><a name="d4e1271" id="d4e1271"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
