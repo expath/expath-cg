@@ -305,8 +305,9 @@
 			    <tr>
 			      <td><code>canonicalization-algorithm</code></td>
 			      <td><code>xs:string</code></td>
-			      <td>The canonicalization algorithm applied to the SignedInfo element prior to performing signature calculations. Possible values are: "exclusive",
-			      "exclusive-with-comments", "inclusive", and "inclusive-with-comments". The default value is "inclusive-with-comments". If the parameter specifies an
+			      <td>The canonicalization algorithm applied to the <code>SignedInfo</code> element prior to performing signature calculations. Possible values are: "exclusive"
+			      (identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#</code>), "exclusive-with-comments" (identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#WithComments</code>),
+			      "inclusive", and "inclusive-with-comments" (see <bibref ref="xml-exc-c14n" /> and , respectively.). The default value is "inclusive-with-comments". If the parameter specifies an
 			      unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
 			    </tr>
 			    <tr>
@@ -960,6 +961,12 @@ map {
               		<loc href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</loc>.
               		John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
               		November 2002.</bibl>
+           	<bibl id="xml-exc-c14n" key="Exclusive XML Canonicalization 1.0">
+              		<loc href="http://w3.org/TR/xml-exc-c14n/">Exclusive XML Canonicalization Version 1.0</loc>.
+              		John Boyer, PureEdge Solutions Inc., Donald E. Eastlake 3rd, Motorola, Joseph Reagle, W3C, authors/editors. W3C Recommendation, 18 July 2002.</bibl>              		
+              		
+              		
+              		
            	<bibl id="rfc1321" key="RFC 1321: The MD5 Message-Digest Algorithm">
               		<loc href="http://ietf.org/rfc/rfc1321.txt">RFC 1321: The MD5 Message-Digest Algorithm</loc>. 
               		Ronald L. Rivest, editor. Network Working Group. April 1992.</bibl>
