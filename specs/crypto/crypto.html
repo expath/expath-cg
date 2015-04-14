@@ -103,17 +103,17 @@ div.exampleHeader { font-weight: bold;
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
             4 <a href="#d4e380">XML Digital Signature</a><br />
             4.1 <a href="#d4e420">The crypto:generate-signature function</a><br />
-            4.2 <a href="#d4e664">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e690">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e699">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e787">The crypto:decrypt function</a><br />
+            4.2 <a href="#d4e667">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e693">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e702">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e790">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1237">References</a><br />
-            B <a href="#d4e1308">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1240">References</a><br />
+            B <a href="#d4e1317">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -325,7 +325,7 @@ div.exampleHeader { font-weight: bold;
                         <td><code>xs:string</code></td>
                         <td>The canonicalization algorithm applied to the <code>SignedInfo</code> element prior to performing signature calculations. Possible values are: "exclusive"
                            			      (identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#</code>), "exclusive-with-comments" (identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#WithComments</code>),
-                           			      "inclusive", and "inclusive-with-comments" (see <a href="#xml-exc-c14n">[Exclusive XML Canonicalization 1.0]</a> and , respectively.). The default value is "inclusive-with-comments". If the parameter
+                           			      "inclusive", and "inclusive-with-comments" (see <a href="#xml-exc-c14n">[Exclusive XML Canonicalization 1.0]</a> and <a href="#canonical-xml-10">[Canonical XML Version 1.0]</a>, respectively.). The default value is "inclusive-with-comments". If the parameter
                            specifies an
                            			      unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
                         </td>
@@ -484,7 +484,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e664" id="d4e664"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e667" id="d4e667"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -500,7 +500,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e690" id="d4e690"></a>5 Encryption and Decryption
+            <h2><a name="d4e693" id="d4e693"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -517,7 +517,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e699" id="d4e699"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e702" id="d4e702"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -577,7 +577,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e787" id="d4e787"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e790" id="d4e790"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -638,7 +638,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1237" id="d4e1237"></a>A References
+            <h2><a name="d4e1240" id="d4e1240"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -696,6 +696,13 @@ map {
                   		John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
                   		November 2002.
                </dd>
+               <dt class="label"><a name="canonical-xml-10" id="canonical-xml-10"></a>Canonical XML Version 1.0
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xml-c14n/">Exclusive XML Canonicalization Version 1.0</a>.
+                  		John Boyer, PureEdge Solutions Inc., author/editor. W3C Recommendation, 15 March
+                  2001.
+               </dd>
                <dt class="label"><a name="xml-exc-c14n" id="xml-exc-c14n"></a>Exclusive XML Canonicalization 1.0
                </dt>
                <dd>
@@ -720,7 +727,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1308" id="d4e1308"></a>B Summary of Error Conditions
+            <h2><a name="d4e1317" id="d4e1317"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm

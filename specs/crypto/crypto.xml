@@ -307,7 +307,7 @@
 			      <td><code>xs:string</code></td>
 			      <td>The canonicalization algorithm applied to the <code>SignedInfo</code> element prior to performing signature calculations. Possible values are: "exclusive"
 			      (identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#</code>), "exclusive-with-comments" (identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#WithComments</code>),
-			      "inclusive", and "inclusive-with-comments" (see <bibref ref="xml-exc-c14n" /> and , respectively.). The default value is "inclusive-with-comments". If the parameter specifies an
+			      "inclusive", and "inclusive-with-comments" (see <bibref ref="xml-exc-c14n" /> and <bibref ref="canonical-xml-10" />, respectively.). The default value is "inclusive-with-comments". If the parameter specifies an
 			      unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
 			    </tr>
 			    <tr>
@@ -961,9 +961,15 @@ map {
               		<loc href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</loc>.
               		John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
               		November 2002.</bibl>
+           	<bibl id="canonical-xml-10" key="Canonical XML Version 1.0">
+              		<loc href="http://w3.org/TR/xml-c14n/">Exclusive XML Canonicalization Version 1.0</loc>.
+              		John Boyer, PureEdge Solutions Inc., author/editor. W3C Recommendation, 15 March 2001.</bibl>              		
            	<bibl id="xml-exc-c14n" key="Exclusive XML Canonicalization 1.0">
               		<loc href="http://w3.org/TR/xml-exc-c14n/">Exclusive XML Canonicalization Version 1.0</loc>.
-              		John Boyer, PureEdge Solutions Inc., Donald E. Eastlake 3rd, Motorola, Joseph Reagle, W3C, authors/editors. W3C Recommendation, 18 July 2002.</bibl>              		
+              		John Boyer, PureEdge Solutions Inc., Donald E. Eastlake 3rd, Motorola, Joseph Reagle, W3C, authors/editors. W3C Recommendation, 18 July 2002.</bibl>
+              		
+              		
+              		              		
               		
               		
               		
