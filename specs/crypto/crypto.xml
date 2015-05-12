@@ -229,7 +229,9 @@
                   xs:string, xs:base64Binary, or xs:hexBinary.</p>
                </item>               
                <item>
-                  <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this
+                  <p><code>$algorithm</code> is the cryptographic hashing algorithm. The default value is "HMAC-SHA1"
+                  (identifier <code>http://www.w3.org/2000/09/xmldsig#hmac-sha1</code>, see <bibref ref="xml-dig-sig-core" />, section 6.1
+                  Algorithm Identifiers and Implementation Requirements). If it is specified an unsupported algorithm, this
                   is an error <bibref ref="error.unknownAlgorithm"/>.</p>
                </item>
                <item>
