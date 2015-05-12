@@ -101,19 +101,19 @@ div.exampleHeader { font-weight: bold;
             3 <a href="#d4e214">Integrity and Authentication of Data</a><br />
             3.1 <a href="#hash-function">The crypto:hash function</a><br />
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
-            4 <a href="#d4e395">XML Digital Signature</a><br />
-            4.1 <a href="#d4e435">The crypto:generate-signature function</a><br />
-            4.2 <a href="#d4e697">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e723">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e732">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e820">The crypto:decrypt function</a><br />
+            4 <a href="#d4e393">XML Digital Signature</a><br />
+            4.1 <a href="#d4e433">The crypto:generate-signature function</a><br />
+            4.2 <a href="#d4e695">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e721">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e730">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e818">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1270">References</a><br />
-            B <a href="#d4e1347">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1268">References</a><br />
+            B <a href="#d4e1339">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -217,11 +217,9 @@ div.exampleHeader { font-weight: bold;
                </h3>
                <p>HMAC (Keyed-Hashing for Message Authentication) <a href="#rfc2104">[RFC 2104: HMAC: Keyed-Hashing for Message Authentication]</a> is a mechanism for message authentication using
                   cryptographic hash functions. HMAC can be used with any iterative cryptographic hash
-                  function, e.g.
-                  MD5 <a href="#rfc1321">[RFC 1321: The MD5 Message-Digest Algorithm]</a> or SHA-1, in combination with a secret shared key. Typically, message authentication
-                  codes are
-                  used between two parties that share a secret key in order to validate information
-                  transmitted
+                  function, e.g. SHA-1, in combination with a
+                  secret shared key. Typically, message authentication codes are used between two parties
+                  that share a secret key in order to validate information transmitted
                   between these parties.
                </p>
                <p>This function generates a message authentication code, based on the input message,
@@ -272,7 +270,7 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e395" id="d4e395"></a>4 XML Digital Signature
+            <h2><a name="d4e393" id="d4e393"></a>4 XML Digital Signature
             </h2>
             <p>A digital signature is a technique to certify that a digital document is authentic.
                This means that the origin of the document is known and there is the
@@ -295,7 +293,7 @@ div.exampleHeader { font-weight: bold;
             </p>
             <div class="div2">
                
-               <h3><a name="d4e435" id="d4e435"></a>4.1 The <code>crypto:generate-signature</code> function
+               <h3><a name="d4e433" id="d4e433"></a>4.1 The <code>crypto:generate-signature</code> function
                </h3>
                <p>The function has its parameters passed as a <code class="type">map(xs:string, item())</code>. If any of these parameters is missing, a default value will be used
                   instead. After the function's signature, an example of parameters is given.
@@ -497,7 +495,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e697" id="d4e697"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e695" id="d4e695"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -513,7 +511,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e723" id="d4e723"></a>5 Encryption and Decryption
+            <h2><a name="d4e721" id="d4e721"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -530,7 +528,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e732" id="d4e732"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e730" id="d4e730"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -590,7 +588,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e820" id="d4e820"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e818" id="d4e818"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -651,7 +649,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1270" id="d4e1270"></a>A References
+            <h2><a name="d4e1268" id="d4e1268"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -723,12 +721,6 @@ map {
                   		John Boyer, PureEdge Solutions Inc., Donald E. Eastlake 3rd, Motorola, Joseph Reagle,
                   W3C, authors/editors. W3C Recommendation, 18 July 2002.
                </dd>
-               <dt class="label"><a name="rfc1321" id="rfc1321"></a>RFC 1321: The MD5 Message-Digest Algorithm
-               </dt>
-               <dd>
-                  		<a href="http://ietf.org/rfc/rfc1321.txt">RFC 1321: The MD5 Message-Digest Algorithm</a>. 
-                  		Ronald L. Rivest, editor. Network Working Group. April 1992.
-               </dd>
                <dt class="label"><a name="rfc2104" id="rfc2104"></a>RFC 2104: HMAC: Keyed-Hashing for Message Authentication
                </dt>
                <dd>
@@ -740,7 +732,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1347" id="d4e1347"></a>B Summary of Error Conditions
+            <h2><a name="d4e1339" id="d4e1339"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm

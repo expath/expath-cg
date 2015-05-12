@@ -203,9 +203,8 @@
          <div2 id="hmac-function">
             <head>The <code>crypto:hmac</code> function</head>
             <p>HMAC (Keyed-Hashing for Message Authentication) <bibref ref="rfc2104" /> is a mechanism for message authentication using
-            cryptographic hash functions. HMAC can be used with any iterative cryptographic hash function, e.g.
-            MD5 <bibref ref="rfc1321" /> or SHA-1, in combination with a secret shared key. Typically, message authentication codes are
-            used between two parties that share a secret key in order to validate information transmitted
+            cryptographic hash functions. HMAC can be used with any iterative cryptographic hash function, e.g. SHA-1, in combination with a
+            secret shared key. Typically, message authentication codes are used between two parties that share a secret key in order to validate information transmitted
             between these parties.</p>            
             <p>This function generates a message authentication code, based on the input message, by using a cryptographic algorithm and a secret key.
             It returns the hash-based message authentication code as base64 string.</p>
@@ -981,9 +980,6 @@ map {
               		
               		
               		
-           	<bibl id="rfc1321" key="RFC 1321: The MD5 Message-Digest Algorithm">
-              		<loc href="http://ietf.org/rfc/rfc1321.txt">RFC 1321: The MD5 Message-Digest Algorithm</loc>. 
-              		Ronald L. Rivest, editor. Network Working Group. April 1992.</bibl>
             <bibl id="rfc2104" key="RFC 2104: HMAC: Keyed-Hashing for Message Authentication">
               		<loc href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
                  	Authentication</loc>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
