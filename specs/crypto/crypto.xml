@@ -313,8 +313,8 @@
 			    <tr>
 			      <td><code>digest-algorithm</code></td>
 			      <td><code>xs:string</code></td>
-			      <td>The digest algorithm to be applied to the signed object. Possible values are: "SHA1", "SHA256", and "SHA512". The default value is "SHA1". If the
-			      parameter specifies an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
+			      <td>The digest algorithm to be applied to the signed object. Possible values are: "SHA1" (identifier <code>http://www.w3.org/2000/09/xmldsig#sha1</code>),
+			      "SHA256", and "SHA512". The default value is "SHA1". If the parameter specifies an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
 			    </tr>
 			    <tr>
 			      <td><code>signature-algorithm</code></td>
