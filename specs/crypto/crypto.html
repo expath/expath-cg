@@ -103,17 +103,17 @@ div.exampleHeader { font-weight: bold;
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
             4 <a href="#d4e395">XML Digital Signature</a><br />
             4.1 <a href="#d4e435">The crypto:generate-signature function</a><br />
-            4.2 <a href="#d4e687">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e713">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e722">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e810">The crypto:decrypt function</a><br />
+            4.2 <a href="#d4e697">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e723">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e732">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e820">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1260">References</a><br />
-            B <a href="#d4e1337">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1270">References</a><br />
+            B <a href="#d4e1347">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -350,9 +350,13 @@ div.exampleHeader { font-weight: bold;
                      <tr>
                         <td><code>signature-algorithm</code></td>
                         <td><code>xs:string</code></td>
-                        <td>The algorithm used for signature generation and validation. Possible values are: "DSA_SHA1",
-                           and "RSA_SHA1". The default value is "RSA_SHA1".
-                           			      If the parameter specifies an unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
+                        <td>The algorithm used for signature generation and validation. The default value is "DSAwithSHA1"
+                           (identifier <code>http://www.w3.org/2000/09/xmldsig#dsa-sha1</code>, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1
+                           Algorithm Identifiers and Implementation Requirements). Another value is "RSAwithSHA1"
+                           (identifier
+                           <code>http://www.w3.org/2000/09/xmldsig#rsa-sha1</code>, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1
+                           Algorithm Identifiers and Implementation Requirements). If the parameter specifies
+                           an unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
                         </td>
                      </tr>
                      <tr>
@@ -493,7 +497,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e687" id="d4e687"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e697" id="d4e697"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -509,7 +513,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e713" id="d4e713"></a>5 Encryption and Decryption
+            <h2><a name="d4e723" id="d4e723"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -526,7 +530,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e722" id="d4e722"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e732" id="d4e732"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -586,7 +590,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e810" id="d4e810"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e820" id="d4e820"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -647,7 +651,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1260" id="d4e1260"></a>A References
+            <h2><a name="d4e1270" id="d4e1270"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -736,7 +740,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1337" id="d4e1337"></a>B Summary of Error Conditions
+            <h2><a name="d4e1347" id="d4e1347"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
