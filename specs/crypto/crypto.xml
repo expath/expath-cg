@@ -194,8 +194,9 @@
                   is an error <bibref ref="error.unknownAlgorithm"/>.</p>
                </item>
                <item>
-                  <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default value is "base64". 
-                  If the format is not supported, this is an error <bibref ref="error.outputFormat"/>.</p>
+                  <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default value is "base64"
+                  (identifier <code>http://www.w3.org/2000/09/xmldsig#base64</code>, see <bibref ref="xml-dig-sig-core" />, section 6.1
+                  Algorithm Identifiers and Implementation Requirements). If the format is not supported, this is an error <bibref ref="error.outputFormat"/>.</p>
                </item>               
             </ulist>
          </div2>
@@ -232,8 +233,9 @@
                   is an error <bibref ref="error.unknownAlgorithm"/>.</p>
                </item>
                <item>
-                  <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default value is "base64". 
-                  If the format is not supported, this is an error <bibref ref="error.outputFormat"/>.</p>
+                  <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default value is "base64"
+                  (identifier <code>http://www.w3.org/2000/09/xmldsig#base64</code>, see <bibref ref="xml-dig-sig-core" />, section 6.1
+                  Algorithm Identifiers and Implementation Requirements). If the format is not supported, this is an error <bibref ref="error.outputFormat"/>.</p>
                </item>              
             </ulist>
          </div2>
