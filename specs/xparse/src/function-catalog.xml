@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Map and JSON functions labelled at="MAP" and commented out -->
+<!-- Current changes labelled at="M": post Jan-2013 candidate rec -->
+<fos:functions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.w3.org/xpath-functions/spec/namespace fos.xsd"
+  xmlns:ex="http://expath.org/ns/xmlspec"
+  xmlns:fos="http://www.w3.org/xpath-functions/spec/namespace">
+  <fos:global-variables>
+    <fos:variable name="x"/>
+  </fos:global-variables>
+
+  <fos:function name="parse" prefix="xp">
+    <fos:signatures>
+      <fos:proto name="parse" return-type="element()">
+        <fos:arg name="in" type="xs:string"/>
+      </fos:proto>
+      <fos:proto name="parse" return-type="element()">
+        <fos:arg name="in" type="xs:string"/>
+        <fos:arg name="options" type="map(*)"/>
+      </fos:proto>
+    </fos:signatures>
+    <fos:summary>
+      <p>The <code>xp:parse</code> function returns a parse tree for an expression.</p>
+    </fos:summary>
+    <fos:rules>
+      <p>Returns a parse-tree for the XPath/XQuery expression given in <code>$in</code>.</p>
+      <p><code>$options</code> is a map of control options as described in <specref ref="options"
+        />.</p>
+      <p>In the absence of any options, the default values are used.</p>
+    </fos:rules>
+    <fos:errors>
+      <p><bibref ref="error.parsingError"/> is raised if <code>$in</code> cannot be parsed
+        successfully against the given grammar. It is implementation (and language) dependent as to
+        what and how further information is made available about this failure.</p>
+      <p><bibref ref="error.invalidOption"/> is raised if one or more of the option values within
+          <code>$options</code> is invalid or unrecognised.</p>
+    </fos:errors>
+    <fos:notes>
+      <p>Some notes</p>
+    </fos:notes>
+    <fos:examples>
+      <fos:example>
+        <p>Parsing a simple range expression, with options to flatten single trees and remove
+          unnecessary tokens:</p>
+        <eg><![CDATA[xp:parse('1 to 8',map{'flatten':true(),'version':2.0})
+==>
+ <RangeExpr>
+   <Literal type="xs:integer" value="1"/>
+   <Literal type="xs:integer" value="8"/>
+ </RangeExpr>]]></eg>
+      </fos:example>
+    </fos:examples>
+  </fos:function>
+
+  <fos:function name="to-expression" prefix="xp">
+    <fos:signatures>
+      <fos:proto name="to-expression" return-type="xs:string">
+        <fos:arg name="in" type="element()"/>
+      </fos:proto>
+      <fos:proto name="to-expression" return-type="xs:string">
+        <fos:arg name="in" type="element()"/>
+        <fos:arg name="options" type="map(*)"/>
+      </fos:proto>
+
+    </fos:signatures>
+    <fos:summary>
+      <p>The <code>xp:to-expression</code> function returns an expression tree corresponding to a
+        given parse tree.</p>
+    </fos:summary>
+    <fos:rules>
+      <p>Returns a string for the XPath/XQuery expression tree given in <code>$in</code>.</p>
+      <p><code>$options</code> is a map of control options as described in <specref ref="options"
+        />.</p>
+      <p>In the absence of any options, the default values are used.</p>
+    </fos:rules>
+    <fos:errors>
+      <p><bibref ref="error.invalidTree"/> is raised if <code>$in</code> is not a valid expression
+        tree, or suitable reduced subtree, for the grammar requested. It is implementation (and
+        language) dependent as to what and how further information is made available about this
+        failure.</p>
+      <p><bibref ref="error.invalidOption"/> is raised if one or more of the option values within
+          <code>$options</code> is invalid or unrecognised.</p>
+    </fos:errors>
+    <fos:notes>
+      <p>Some notes</p>
+    </fos:notes>
+    <fos:examples>
+      <fos:example>
+        <p>Testing whether <code>$data</code> variable starts with binary content consistent with a
+          PDF file:</p>
+        <eg><![CDATA[<xsl:variable name="in">
+  <RangeExpr>
+    <AdditiveExpr op="-">
+      <Literal type="xs:integer" value="4"/>            
+      <Literal type="xs:integer" value="2"/>
+    </AdditiveExpr>
+    <Literal type="xs:integer" value="8"/>
+  </RangeExpr>
+</xsl:variable>
+<xsl:value-of select="xp:to-expression($in)"/>
+ ==> "4 - 2 to 8"]]></eg>
+      </fos:example>
+    </fos:examples>
+  </fos:function>
+</fos:functions>

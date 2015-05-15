@@ -141,6 +141,7 @@
       <assert-false/>
     </result>
   </test-case>
+  
   <test-case name="EXPath-file-exists-012">
     <description>Use file:exists on a URI generated from a filename with spaces</description>
     <created by="John Lumley" on="2015-01-13"/>
@@ -151,6 +152,7 @@
       <assert-true/>
     </result>
   </test-case>
+  
  
 
   <test-case name="EXPath-file-isDir-001">

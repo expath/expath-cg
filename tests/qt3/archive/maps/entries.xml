@@ -10,7 +10,9 @@
     <expand name="EXPath-archive-entries-map">
         <created by="John Lumley" on="2013-08-28"/>
         <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+        <modified by="John Lumley" on="2014-10-02" change="XP30+ XQ30+ dependency"/>
         <environment ref="EXPath-archive.map"/>
+        <dependency type="spec" value="XP30+ XQ30+"/>
         <test-case>
             <description>Count entries in a one-entry zip</description>
             <test>

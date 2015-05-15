@@ -566,7 +566,9 @@
   <test-case name="bin-join5">
     <description>Test for the join function.</description>
     <created by="Christian Grün" on="2013-11-19+01:00"/>
+    <modified by="John Lumley" on="2014-10-02" change="dependent on XP30"/>
     <environment ref="binary"/>
+    <dependency type="spec" value="XP30+ XQ30+"/>
     <test>xs:hexBinary(bin:join((1 to 3) ! xs:base64Binary(xs:hexBinary("11"))))</test>
     <result>
       <assert-eq>xs:hexBinary("111111")</assert-eq>

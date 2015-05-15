@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<spec role="editors-copy" xmlns:ex="http://expath.org/ns/xmlspec" ex:w3c="true">
+  <header>
+    <title>XParse Module</title>
+    <w3c-designation>w3c-designation</w3c-designation>
+    <w3c-doctype>EXPath Candidate Module</w3c-doctype>
+    <pubdate>
+      <day>8</day>
+      <month>December</month>
+      <year>2014</year>
+    </pubdate>
+    <publoc>
+      <loc href="http://expath.org/spec/xparse/201412008"/>
+    </publoc>
+    <altlocs>
+      <loc href="http://expath.org/spec/xparse/201412008.xml">XML</loc>
+      <loc href="http://expath.org/spec/xparse/201412008/diff">Revision Markup</loc>
+    </altlocs>
+    <latestloc>
+      <loc href="http://expath.org/spec/xparse"/>
+    </latestloc>
+
+    <prevlocs> </prevlocs>
+
+    <authlist>
+      <author role="editor">
+        <name>John Lumley</name>
+        <email href="mailto:john@saxonica.com">john@saxonica.com</email>
+      </author>
+    </authlist>
+    <copyright>
+      <p>Copyright © 2014 John Lumley, published by the <loc href="http://w3.org/community/expath/"
+          >EXPath Community Group</loc> under the <loc
+          href="https://www.w3.org/community/about/agreements/final/">W3C Community Final
+          Specification Agreement (FSA)</loc>. A human-readable <loc
+          href="http://www.w3.org/community/about/agreements/fsa-deed/">summary</loc> is
+        available.</p>
+      <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
+          >EXPath Community Group</loc>. It is not a W3C Standard nor is it on the W3C Standards
+        Track. Please note that under the <loc
+          href="http://www.w3.org/community/about/agreements/final/">W3C Community Final
+          Specification Agreement (FSA)</loc> other conditions apply. Learn more about <loc
+          href="http://www.w3.org/community/">W3C Community and Business Groups</loc>.</p>
+    </copyright>
+    <abstract>
+      <p>This proposal provides an API for parsing XPath and XQuery expressions to a standardised
+        parse tree, and the reversal of the process. It has been designed to be compatible with
+        XQuery 3.0+ and XSLT 3.0+, as well as any other XPath 3.0 usage.</p>
+      <p>The module homepage, with more information, is on the EXPath website at <loc
+          href="http://expath.org/modules/xparse/">http://expath.org/modules/xparse/</loc>.</p>
+    </abstract>
+    <status>
+      <p/>
+    </status>
+    <langusage>
+      <language>en-US</language>
+    </langusage>
+    <revisiondesc>
+      <p>revisiondesc</p>
+    </revisiondesc>
+  </header>
+  <body>
+    <div1 id="status">
+      <head>Status of this document</head>
+      <p>This document is in an early draft stage. Comments are welcomed at <loc
+          href="mailto:public-expath@w3.org">public-expath@w3.org</loc> mailing list (<loc
+          href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
+    </div1>
+    <div1 id="introduction">
+      <head>Introduction</head>
+      <p>This module is designed to specify a small library of functions for parsing expressions in
+        XPath (<bibref ref="xpath30"/>) or XQuery (<bibref ref="xquery30"/>) into XML trees, and in
+        the reverse direction serialising these trees into equivalent string expressions.</p>
+      <div2>
+        <head>Supported languages</head>
+        <p>There are two sense of languages supported by this API definition:</p>
+        <ulist>
+          <item>
+            <p>The languages for which <emph>expression data</emph> is supported. In this case it is
+              expected to be defined for various (all?) versions of the following language families:
+              XPath (<bibref ref="xpath10"/>,<bibref ref="xpath20"/>,<bibref ref="xpath30"/>) and
+              XQuery (<bibref ref="xquery10"/>,<bibref ref="xquery30"/>).</p>
+            <p>It is anticipated that implementors will use tools to generate portions of code
+              semi-automatically from EBNF descriptions of the language grammars, and thus the suite
+              of supported languages, especially in terms of succeeding versions, will be
+              extensible. For further details see <specref ref="extensibilty"/>.</p>
+          </item>
+          <item>
+            <p>The languages within which the functions can be executed. At present the model of
+              describing options uses a <code>map</code>, which restricts its use to XPath3.0+,
+              XQuery3.0+ and XSLT3.0+ </p>
+          </item>
+        </ulist>
+
+      </div2>
+      <div2 id="namespaces">
+        <head>Namespace conventions</head>
+        <p>The module defined by this document defines several functions, all contained in the
+          namespace <code>http://expath.org/ns/xparse</code>. In this document, the <code>xp</code>
+          prefix, when used, is bound to this namespace URI.</p>
+        <p>Error codes are defined in the same namespace (<code>http://expath.org/ns/xparse</code>),
+          and in this document are displayed with the same prefix, <code>xp</code>.</p>
+      </div2>
+      <div2 id="error.management">
+        <head>Error management</head>
+        <p>There are two principal types of error: those resulting from erronious arguments or
+          useage and those resulting from invalid primary inputs (e.g. an invalid XPath expression).
+          Both types of failure will generate an error identified by a code (a <code>QName</code>.)
+          When such an error condition is reached in the evaluation of an expression, a dynamic
+          error is thrown, with the corresponding error code (as if the standard XPath function
+            <code>error()</code> had been called.). An implementation may provide additional
+          information about the exact nature of the error, that can for example be processed in an
+          XSLT 3.0 <code>try/catch</code> construct.</p>
+      </div2>
+      <div2 id="type">
+        <head>Parse trees</head>
+        <p>Parse trees within this module are represented as XML trees, with element names
+          corresponding to the EBNF grammar productions for the version of XPath/XQuery being
+          parsed. For example:</p>
+        <eg><![CDATA[<AdditiveExpr>
+   <IntegerLiteral>1</IntegerLiteral>
+   <TOKEN>+</TOKEN>
+   <IntegerLiteral>5</IntegerLiteral>
+</AdditiveExpr>]]></eg>
+        <p>is a subtree corresponding to the string section <code>1 + 5</code>.</p>
+        <p>Currently these trees are in the 'null' namespace, but this might be set
+          parametrically.</p>
+      </div2>
+      <div2 id="testing">
+        <head>Test suite</head>
+        <p>A suite of test-cases for all the functions defined in this module, in <bibref ref="qt3"
+          /> format, is defined at <bibref ref="tests.xparse"/>.</p>
+      </div2>
+    </div1>
+    <div1 id="use-cases">
+      <head>Use cases</head>
+      <p>Development of this specification was driven by requirements which some XML developers
+        encounter in examining, modifying or generating XSLT or XQuery programs, when XPath and
+        XQuery expressions need to be be parsed or generated. Some typical use cases include:</p>
+      <ulist>
+        <item>
+          <p>Refactoring variable names whose references are buried in deep and complex XPath
+            expressions where the use of regular expressions can be hazardous.</p>
+        </item>
+        <item>
+          <p>Analysing complex properties, such as static type or streamability, independently of a
+            specific compiler.</p>
+        </item>
+      </ulist>
+      <div2 id="refactoring.Variable">
+        <head>Example – Refactoring a variable name</head>
+        <p>Within XPath and XQuery variable references are denoted through interpolations of the
+            <code>$</code><emph><code>name</code></emph> form. In simple cases, without local
+          variable definitions or the character <code>$</code> present in string literals, regular
+          expressions can be used to extract and/or modify such variable references relatively
+          cheaply, but in general this must be performed in a suitable parse tree.</p>
+        <p>Suppose an external variable <code>$anyOldName</code> is being renamed to
+            <code>$someNewVariableName</code>. If we assume that this name is not overridden in the
+          XPath, then the following XSLT code should suffice::</p>
+        <eg xml:space="preserve"><![CDATA[
+<xsl:template match="VarRef/@name">
+  <xsl:param name="old" as="xs:string" tunnel="yes"/>
+  <xsl:param name="new" as="xs:string" tunnel="yes"/>
+  <xsl:attribute name="name" select="if(. = $old) then $new else ."/>
+</xsl:template>
+
+<xsl:variable name="expr">$anyOldName to string-length('$anyOldName is a variable')</xsl:variable>
+<xsl:variable name="parse" select="xp:parse.xpath($expr,map{})"/>
+ ==>
+   <RangeExpr>
+      <VarRef name="anyOldName"/>
+      <FunctionCall name="string-length">
+        <StringLiteral>$anyOldName is a variable</StringLiteral>
+      </FunctionCall>
+   </RangeExpr>
+   
+<xsl:variable name="replace">
+  <xsl:apply-templates select="$parse">
+    <xsl:with-param name="old" as="xs:string" tunnel="yes">anyOldName</xsl:with-param>
+    <xsl:with-param name="new" as="xs:string" tunnel="yes">someNewVariableName</xsl:with-param>
+  </xsl:apply-templates> 
+</xsl:variable>
+ ==>
+   <RangeExpr>
+      <VarRef name="someNewVariableName"/>
+      <FunctionCall name="string-length">
+        <StringLiteral>$anyOldName is a variable</StringLiteral>
+      </FunctionCall>
+   </RangeExpr>
+ 
+<xsl:variable name="new.expr" select="xp:to-expression($replace)"/>
+ ==> "$someNewVariableName to string-length('$anyOldName is a variable')"
+]]></eg>
+        <p>If local variable bindings are present (using <code>let</code> or <code>for</code> or
+          quantified expressions) then suitable updating of the replacement parameters within push
+          templates can support correct use of variable reference scoping. </p>
+
+      </div2>
+    </div1>
+    <div1 id="options">
+      <head>Options</head>
+      <p>The functions are controlled by parametric options in a map, with the following permitted
+        entries:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Type</th>
+            <th>Values</th>
+            <th>Default</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>lang</td>
+            <td>xs:string</td>
+            <td>XPath|XQuery</td>
+            <td>XPath</td>
+            <td>The language to be parsed (case insensitive)</td>
+          </tr>
+          <tr>
+            <td>version</td>
+            <td>xs:double</td>
+            <td>2.0|3.0</td>
+            <td>3.0</td>
+            <td>The version of the language to be parsed</td>
+          </tr>
+          <tr>
+            <td>flatten</td>
+            <td>xs:boolean</td>
+            <td/>
+            <td>true()</td>
+            <td>Flatten the parse tree - see <specref ref="flattening"/></td>
+          </tr>
+        </tbody>
+      </table>
+    </div1>
+
+
+    <div1 id="flattening">
+      <head>Flattening the parse tree</head>
+      <p>The full parse trees for even the simplest expressions are VERY deep, consisting of all the
+        nested productions (and the recognised tokens, including whitespace) that have to match to
+        complete the parse. For example the XPath range expression '<code>1 to 8</code>' produces a
+        complete parse tree with 47 elements of the following form:</p>
+      <eg><![CDATA[<Expr>
+  <ExprSingle>
+    <OrExpr>
+      <AndExpr>
+        <ComparisonExpr>
+          <RangeExpr>
+            <AdditiveExpr>
+              <MultiplicativeExpr>
+                <UnionExpr>
+                  <IntersectExceptExpr>
+                    <InstanceofExpr>
+                      <TreatExpr>
+                        <CastableExpr>
+                          <CastExpr>
+                            <UnaryExpr>
+                              <ValueExpr>
+                                <PathExpr>
+                                  <RelativePathExpr>
+                                    <StepExpr>
+                                      <FilterExpr>
+                                        <PrimaryExpr>
+                                          <Literal>
+                                            <NumericLiteral>
+                                              <IntegerLiteral>1</IntegerLiteral>
+                                            </NumericLiteral>
+                                          </Literal>
+                                        </PrimaryExpr>
+                          ..... close tags ....
+               </MultiplicativeExpr>
+             </AdditiveExpr>
+             <TOKEN>to</TOKEN>
+             <AdditiveExpr>
+               <MultiplicativeExpr>
+                          ... similar ...
+                                        <PrimaryExpr>
+                                          <Literal>
+                                            <NumericLiteral>
+                                              <IntegerLiteral>8</IntegerLiteral>
+                                            </NumericLiteral>
+                                          </Literal>
+                                        </PrimaryExpr>
+                          ..... close tags ....
+               </MultiplicativeExpr>
+             </AdditiveExpr>
+           </RangeExpr>
+         </ComparisonExpr>
+       </AndExpr>
+     </OrExpr>
+   </ExprSingle>
+ </Expr>]]></eg>
+      <p>Whilst these full trees contain all the information and can be manipulated perfect well 'as
+        is', they i) contain much effective redundancy and ii) are obviously expensive to copy.
+        Equally well they make human inspection difficult, with the essential components (such as
+        the <code>RangeExpr</code> and its effective arguments) buried deep in long narrow trees. To
+        be useful less verbose forms would help, provided they still retain <emph>all
+          information</emph> that will make the parses of two different expressions distinguishable. </p>
+      <p>There are a number of possibilities of controlling this verbosity without losing
+        information:</p>
+      <ulist>
+        <item>
+          <p>Replacing elements with just a single element child, with that child (or the result of
+            reduction of that child)</p>
+        </item>
+        <item>
+          <p>Removing redundant tokens, i.e. tokens whose presence is implicit in the production</p>
+        </item>
+        <item>
+          <p>Collapsing significant tokens into attributes</p>
+        </item>
+        <item>
+          <p>Specialist treatment of literals</p>
+        </item>
+      </ulist>
+      <p>As an example, using the first action would reduce the parse expression to four
+        elements:</p>
+      <eg><![CDATA[<RangeExpr>
+  <IntegerLiteral>1</IntegerLiteral>
+  <TOKEN>to</TOKEN>
+  <IntegerLiteral>8</IntegerLiteral>
+</RangeExpr>]]></eg>
+      <p>Applying the second action, since the token 'to' is required for <emph>all</emph>
+        <code>RangeExpr</code>, would reduce this to the three irreducible elements:</p>
+      <eg><![CDATA[<RangeExpr>
+  <IntegerLiteral>1</IntegerLiteral>
+  <IntegerLiteral>8</IntegerLiteral>
+</RangeExpr>]]></eg>
+      <p>In both these cases inversion to a text string will yield (subject to
+        whitespace-normalization) the same string as the input.</p>
+      <p>Whilst some tokens are implict within the production, others bear significant information,
+        especially in cases where the productions contain token alternatives. For example a reduced
+        parse of <code>1+5 to 8</code> could be:</p>
+      <eg><![CDATA[<RangeExpr>
+  <AdditiveExpr>
+     <IntegerLiteral>1</IntegerLiteral>
+     <TOKEN>+</TOKEN>
+     <IntegerLiteral>5</IntegerLiteral>
+  </AdditiveExpr>
+  <TOKEN>to</TOKEN>
+  <IntegerLiteral>8</IntegerLiteral>
+</RangeExpr>]]></eg>
+      <p>The token <code>to</code> is redundant (apart from being a required toekn for recognition
+        of a <code>RangeExpr</code>, but the <code>+</code> certainly is not, as it differentiates
+        between addition and subtraction expressions. The third type of reduction can subsume such
+        information-bearing token values into attributes, typically
+            <code>op="</code><emph><code>value</code></emph><code>"</code>. For our example the
+        minimal form would be:</p>
+      <eg><![CDATA[<RangeExpr>
+  <AdditiveExpr op="+">
+     <IntegerLiteral>1</IntegerLiteral>           
+     <IntegerLiteral>5</IntegerLiteral>
+  </AdditiveExpr>          
+  <IntegerLiteral>8</IntegerLiteral>
+</RangeExpr>]]></eg>
+      <p>Within XPath, <code>Literal</code> productions come in several flavours, each of which
+        ultimately end with a string serialisation of the literal value which would be represented
+        as a text node within the XML. An alternative is to collapse the <code>Literal</code>
+        production into a constant form, whose value type is described as an attribute and whose
+        (serialized) value is held inan appropriate attribute value. Hence an double literal can be
+        represented by any of the following three forms: </p>
+      <eg><![CDATA[<Literal>
+  <NumericLiteral>
+    <DoubleLiteral>3.14159</DoubleLiteral>
+  </NumericLiteral>
+</Literal>
+
+<DoubleLiteral>3.14159</DoubleLiteral>
+
+<Literal type="xs:double" value="3.14159"/>]]></eg>
+      <p>The consistent identification of a <code>Literal</code>, as a self-contained single element
+        without children, can make certain forms of manipulation much more concise, avoiding the use
+        of unions.</p>
+    </div1>
+
+    <div1 id="extensibilty">
+      <head>Extensibility &amp; Enquiry</head>
+      <p>The languages being parsed are not static constructs and are being updated and extended,
+        albeit in a highly controlled, rigorous and defined manner. As such we should anticipate
+        support for as-yet-unknown versions of the languages to be required.</p>
+      <p>There will need to be some mechanisms to be able to query what languages and versions can
+        be parsed from a given implementation.</p>
+      <p>Equally well the framework might be capable of supporting parsing for other (user-supplied)
+        languages, whose grammars are defined in the EBNF form used within the XML standards world.
+          <emph>This needs a great deal of thought and probably will require the generation of
+          parsing functions from the grammar for efficiency.</emph></p>
+    </div1>
+
+
+    <div1 id="parsing">
+      <head>Parsing expressions</head>
+      <p>Most use will be made generating parse trees from an expression. The following functions
+        support this:</p>
+      <div2 id="parse">
+        <head><?function xp:parse?></head>
+      </div2>
+
+    </div1>
+    <div1 id="generating">
+      <head>Generating expressions</head>
+      <p>Most use will be made to generate expressions from a (modified) parse tree. The following
+        functions support this:</p>
+      <div2 id="to-expression">
+        <head><?function xp:to-expression?></head>
+      </div2>
+
+    </div1>
+
+  </body>
+
+  <back>
+    <div1 id="references">
+      <head>References</head>
+      <blist>
+        <!--
+        <bibl id="asn1" key="ASN.1"> OSI networking and system aspects – Abstract Syntax Notation
+          One (ASN.1) – see <loc
+            href="http://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf">ASN.1
+            encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding Rules
+            (CER) and Distinguished Encoding Rules (DER) </loc>. ITU-T X.690 (07/2002) </bibl>
+        <bibl id="expathfile" key="EXPath File">
+          <loc href="http://expath.org/spec/file">File Module</loc>. Christian Grün and Matthias
+          Brantner, editors. EXPath Candidate Module. 14 June 2012.</bibl>
+        <bibl id="fo30" key="F&amp;O 3.0">
+          <loc href="http://www.w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and
+            Operators 3.0</loc>. Michael Kay, editor. W3C Candidate Recommendation 21 May
+          2013.</bibl>-->
+        <bibl id="xpath10" key="XPath1.0">
+          <loc href="http://www.w3.org/TR/xpath/">XML Path Language (XPath) Version 1.0</loc>. James
+          Clark, Steve DeRose, Editors. World Wide Web Consortium, 16 November 1999.</bibl>
+        <bibl id="xpath20" key="XPath2.0">
+          <loc href="http://www.w3.org/TR/xpath-20/">XML Path Language (XPath) 2.0 (Second
+            Edition)</loc>. Don Chamberlin, Jonathan Robie, Anders Berglund, Scott Boag, <emph>et.
+            al.</emph>, Editors. World Wide Web Consortium, 14 December 2010.</bibl>
+        <bibl id="xpath30" key="XPath3.0">
+          <loc href="http://www.w3.org/TR/xpath-30/">XML Path Language (XPath) 3.0</loc>. Jonathan
+          Robie, Don Chamberlin, Michael Dyck, John Snelson, Editors. World Wide Web Consortium, 08
+          April 2014.</bibl>
+        <bibl id="xquery10" key="XQuery1.0">
+          <loc href="http://www.w3.org/TR/xquery-30/">XQuery 1.0: An XML Query Language (Second
+            Edition)</loc>. Don Chamberlin, Jonathan Robie, Anders Berglund, Scott Boag, <emph>et.
+            al.</emph>, Editors. World Wide Web Consortium, 14 December 2010.</bibl>
+        <bibl id="xquery30" key="XQuery3.0">
+          <loc href="http://www.w3.org/TR/xquery-30/">XQuery 3.0: An XML Query Language</loc>.
+          Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, Editors. World Wide Web
+          Consortium, 08 April 2014.</bibl>
+        <bibl id="ieee754" key="IEEE 754-1985">IEEE Standard for Binary Floating-Point Arithmetic.
+          See <loc
+            href="http://standards.ieee.org/reading/ieee/std_public/description/busarch/754-1985_desc.html"
+            >http://standards.ieee.org/reading/ieee/std_public/description/busarch/754-1985_desc.html</loc></bibl>
+        <bibl id="qt3" key="QT3">
+          <loc href="http://dev.w3.org/2011/QT3-test-suite/">XML Query Test Suite</loc>. W3C 21 June
+          2013. </bibl>
+        <bibl id="tests.xparse" key="Test-suite">The test suite for this module, using QT3 format,
+          is in the EXPath repository <loc
+            href="http://github.com/expath/expath-cg/tree/master/tests/qt3/xparse"
+            >http://github.com/expath/expath-cg</loc> in the directory tests/qt3/xparse/</bibl>
+        <bibl id="xmlschema1.1" key="XML Schema 1.1 Part 2">
+          <loc href="http://www.w3.org/TR/xmlschema11-2/">W3C XML Schema Definition Language (XSD)
+            1.1 Part 2: Datatypes</loc>. David Peterson et al, editors. W3C Recommendation 5 April
+          2012.</bibl>
+      </blist>
+    </div1>
+    <div1 id="errors">
+      <head>Summary of error conditions</head>
+      <blist>
+        <bibl id="error.invalidOption" key="xp:invalid-option">A value for one of the supplied
+          options is invalid.</bibl>
+        <bibl id="error.invalidTree" key="xp:invalid-tree">The input expression tree is invalid
+          according to the supplied options.</bibl>
+        <bibl id="error.parsingError" key="xp:parsing-error">There was an error in parsing the
+          expression from a string.</bibl>
+      </blist>
+    </div1>
+  </back>
+</spec>
