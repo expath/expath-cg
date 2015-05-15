@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-suite-result xmlns="http://www.w3.org/2012/08/qt-fots-results">
+   <submission anonymous="false">
+      <created by="Michael Kay" email="mike@saxonica.com" organization="Saxonica" on="2015-01-15"/>
+      <test-run test-suite-version="0.1" date-run="2015-01-15"/>
+      <notes/>
+   </submission>
+   <product vendor="Saxonica"
+            name="Saxon-EE"
+            version="9.7.0.1"
+            released="false"
+            open-source="false"
+            language="XP30"
+            bytecode="off"/>
+   <test-set name="expath-file">
+      <test-case name="EXPath-file-exists-001" result="pass"/>
+      <test-case name="EXPath-file-exists-002" result="pass"/>
+      <test-case name="EXPath-file-exists-003" result="pass"/>
+      <test-case name="EXPath-file-exists-004" result="pass"/>
+      <test-case name="EXPath-file-exists-005" result="pass"/>
+      <test-case name="EXPath-file-exists-006" result="pass"/>
+      <test-case name="EXPath-file-exists-007" result="pass"/>
+      <test-case name="EXPath-file-exists-008" result="pass"/>
+      <test-case name="EXPath-file-exists-009" result="pass"/>
+      <test-case name="EXPath-file-exists-010" result="pass"/>
+      <test-case name="EXPath-file-exists-011" result="pass"/>
+      <test-case name="EXPath-file-exists-012" result="pass"/>
+      <test-case name="EXPath-file-isDir-001" result="pass"/>
+      <test-case name="EXPath-file-isDir-002" result="pass"/>
+      <test-case name="EXPath-file-isDir-003" result="pass"/>
+      <test-case name="EXPath-file-isDir-004" result="pass"/>
+      <test-case name="EXPath-file-isDir-005" result="pass"/>
+      <test-case name="EXPath-file-isDir-006" result="pass"/>
+      <test-case name="EXPath-file-isDir-007" result="pass"/>
+      <test-case name="EXPath-file-isFile-001" result="pass"/>
+      <test-case name="EXPath-file-isFile-002" result="pass"/>
+      <test-case name="EXPath-file-isFile-003" result="pass"/>
+      <test-case name="EXPath-file-isFile-004" result="pass"/>
+      <test-case name="EXPath-file-isFile-005" result="pass"/>
+      <test-case name="EXPath-file-isFile-006" result="pass"/>
+      <test-case name="EXPath-file-last-modified-001" result="pass"/>
+      <test-case name="EXPath-file-last-modified-002" result="pass"/>
+      <test-case name="EXPath-file-last-modified-003" result="pass"/>
+      <test-case name="EXPath-file-size-001" result="pass"/>
+      <test-case name="EXPath-file-size-002" result="pass"/>
+      <test-case name="EXPath-file-size-003" result="pass"/>
+      <test-case name="EXPath-file-size-004" result="pass"/>
+      <test-case name="EXPath-file-size-005" result="pass"/>
+      <test-case name="EXPath-file-append2-001" result="pass"/>
+      <test-case name="EXPath-file-append2-002" result="n/a" comment="notXP30"/>
+      <test-case name="EXPath-file-append2-003" result="pass"/>
+      <test-case name="EXPath-file-appendText2-001" result="pass"/>
+      <test-case name="EXPath-file-appendText2-002" result="pass"/>
+      <test-case name="EXPath-file-appendText2-003" result="pass"/>
+      <test-case name="EXPath-file-appendText2-004" result="pass"/>
+      <test-case name="EXPath-file-appendText2-005" result="pass"/>
+      <test-case name="EXPath-file-appendText2-006" result="pass"/>
+      <test-case name="EXPath-file-appendText3-001" result="pass"/>
+      <test-case name="EXPath-file-appendText3-002" result="pass"/>
+      <test-case name="EXPath-file-appendText3-003" result="pass"/>
+      <test-case name="EXPath-file-appendText3-004" result="pass"/>
+      <test-case name="EXPath-file-appendText3-005" result="pass"/>
+      <test-case name="EXPath-file-appendText3-006" result="pass"/>
+      <test-case name="EXPath-file-appendBinary2-001" result="pass"/>
+      <test-case name="EXPath-file-appendBinary2-002" result="pass"/>
+      <test-case name="EXPath-file-appendBinary2-003" result="pass"/>
+      <test-case name="EXPath-file-appendBinary2-004" result="pass"/>
+      <test-case name="EXPath-file-copy-001" result="pass"/>
+      <test-case name="EXPath-file-copy-002" result="pass"/>
+      <test-case name="EXPath-file-copy-003" result="pass"/>
+      <test-case name="EXPath-file-copy-004" result="pass"/>
+      <test-case name="EXPath-file-copy-005" result="pass"/>
+      <test-case name="EXPath-file-createDir-001" result="pass"/>
+      <test-case name="EXPath-file-createDir-002" result="pass"/>
+      <test-case name="EXPath-file-createDir-003" result="pass"/>
+      <test-case name="EXPath-file-createDir-004" result="pass"/>
+      <test-case name="EXPath-file-createDir-005" result="pass"/>
+      <test-case name="EXPath-file-createTempFile-001" result="pass"/>
+      <test-case name="EXPath-file-createTempFile-002" result="pass"/>
+      <test-case name="EXPath-file-createTempDir-001" result="pass"/>
+      <test-case name="EXPath-file-createTempDir-002" result="pass"/>
+      <test-case name="EXPath-file-delete-001" result="pass"/>
+      <test-case name="EXPath-file-delete-002" result="pass"/>
+      <test-case name="EXPath-file-delete-003" result="pass"/>
+      <test-case name="EXPath-file-delete-004" result="pass"/>
+      <test-case name="EXPath-file-delete-005" result="pass"/>
+      <test-case name="EXPath-file-delete-006" result="pass"/>
+      <test-case name="EXPath-file-list-001" result="pass"/>
+      <test-case name="EXPath-file-list-002" result="pass"/>
+      <test-case name="EXPath-file-list-003" result="pass"/>
+      <test-case name="EXPath-file-list-004" result="pass"/>
+      <test-case name="EXPath-file-list-005" result="pass"/>
+      <test-case name="EXPath-file-list-006" result="pass"/>
+      <test-case name="EXPath-file-list-007" result="pass"/>
+      <test-case name="EXPath-file-list-008" result="pass"/>
+      <test-case name="EXPath-file-list-009" result="pass"/>
+      <test-case name="EXPath-file-list-010" result="pass"/>
+      <test-case name="EXPath-file-list-011" result="pass"/>
+      <test-case name="EXPath-file-list-012" result="pass"/>
+      <test-case name="EXPath-file-list-013" result="pass"/>
+      <test-case name="EXPath-file-list-014" result="pass"/>
+      <test-case name="EXPath-file-list-015" result="pass"/>
+      <test-case name="EXPath-file-list-016" result="pass"/>
+      <test-case name="EXPath-file-list-017" result="pass"/>
+      <test-case name="EXPath-file-list-018" result="pass"/>
+      <test-case name="EXPath-file-list-019" result="pass"/>
+      <test-case name="EXPath-file-move-001" result="pass"/>
+      <test-case name="EXPath-file-move-002" result="pass"/>
+      <test-case name="EXPath-file-move-003" result="pass"/>
+      <test-case name="EXPath-file-move-004" result="pass"/>
+      <test-case name="EXPath-file-move-005" result="pass"/>
+      <test-case name="EXPath-file-readBinary-001" result="pass"/>
+      <test-case name="EXPath-file-readBinary-002" result="pass"/>
+      <test-case name="EXPath-file-readBinary-003" result="pass"/>
+      <test-case name="EXPath-file-readBinary-004" result="pass"/>
+      <test-case name="EXPath-file-readBinary2-001" result="pass"/>
+      <test-case name="EXPath-file-readBinary2-002" result="pass"/>
+      <test-case name="EXPath-file-readBinary2-003" result="pass"/>
+      <test-case name="EXPath-file-readBinary3-001" result="pass"/>
+      <test-case name="EXPath-file-readBinary3-002" result="pass"/>
+      <test-case name="EXPath-file-readBinary3-003" result="pass"/>
+      <test-case name="EXPath-file-readBinary3-004" result="pass"/>
+      <test-case name="EXPath-file-readBinary3-005" result="pass"/>
+      <test-case name="EXPath-file-readText1-001" result="pass"/>
+      <test-case name="EXPath-file-readText1-002" result="pass"/>
+      <test-case name="EXPath-file-readText1-003" result="pass"/>
+      <test-case name="EXPath-file-readText2-001" result="pass"/>
+      <test-case name="EXPath-file-readText2-002" result="pass"/>
+      <test-case name="EXPath-file-readText2-003" result="pass"/>
+      <test-case name="EXPath-file-readText2-004" result="pass"/>
+      <test-case name="EXPath-file-readText2-005" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-001" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-002" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-003" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-004" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-005" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-006" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-007" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-008" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-009" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-010" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-011" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-012" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-013" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-014" result="pass"/>
+      <test-case name="EXPath-file-readTextLines1-015" result="pass"/>
+      <test-case name="EXPath-file-writeText2-001" result="pass"/>
+      <test-case name="EXPath-file-writeText2-002" result="pass"/>
+      <test-case name="EXPath-file-writeText2-003" result="pass"/>
+      <test-case name="EXPath-file-writeText2-004" result="pass"/>
+      <test-case name="EXPath-file-writeText2-005" result="pass"/>
+      <test-case name="EXPath-file-writeText2-006" result="pass"/>
+      <test-case name="EXPath-file-writeText3-001" result="pass"/>
+      <test-case name="EXPath-file-writeText3-002" result="pass"/>
+      <test-case name="EXPath-file-writeText3-003"
+                 result="wrongError"
+                 comment="Expected error:Q{http://expath.org/ns/file}unknown-encoding, got file:io-error"/>
+      <test-case name="EXPath-file-writeText3-004" result="pass"/>
+      <test-case name="EXPath-file-writeText3-005" result="pass"/>
+      <test-case name="EXPath-file-writeBinary2-001" result="pass"/>
+      <test-case name="EXPath-file-writeBinary2-002" result="pass"/>
+      <test-case name="EXPath-file-writeBinary2-003" result="pass"/>
+      <test-case name="EXPath-file-writeBinary2-004" result="pass"/>
+      <test-case name="EXPath-file-writeBinary3-001" result="pass"/>
+      <test-case name="EXPath-file-writeBinary3-002" result="pass"/>
+      <test-case name="EXPath-file-writeBinary3-003" result="pass"/>
+      <test-case name="EXPath-file-writeBinary3-004" result="pass"/>
+      <test-case name="EXPath-file-writeBinary3-005" result="pass"/>
+      <test-case name="EXPath-file-writeBinary3-005" result="pass"/>
+      <test-case name="EXPath-file-name1-001" result="pass"/>
+      <test-case name="EXPath-file-name1-002" result="pass"/>
+      <test-case name="EXPath-file-name1-003" result="pass"/>
+      <test-case name="EXPath-file-name1-004" result="pass"/>
+      <test-case name="EXPath-file-name1-005" result="pass"/>
+      <test-case name="EXPath-file-name1-006" result="pass"/>
+      <test-case name="EXPath-file-name1-007" result="pass"/>
+      <test-case name="EXPath-file-parent-001" result="pass"/>
+      <test-case name="EXPath-file-parent-002" result="pass"/>
+      <test-case name="EXPath-file-parent-003" result="pass"/>
+      <test-case name="EXPath-file-parent-004" result="pass"/>
+      <test-case name="EXPath-file-pathToNative-001" result="pass"/>
+      <test-case name="EXPath-file-pathToNative-002" result="pass"/>
+      <test-case name="EXPath-file-pathToNative-003" result="pass"/>
+      <test-case name="EXPath-file-pathToNative-004" result="pass"/>
+      <test-case name="EXPath-file-pathToNative-005" result="pass"/>
+      <test-case name="EXPath-file-pathToUri-001" result="pass"/>
+      <test-case name="EXPath-file-pathToUri-002" result="pass"/>
+      <test-case name="EXPath-file-resolvePath-001" result="pass"/>
+      <test-case name="EXPath-file-dirSeparator-001" result="pass"/>
+      <test-case name="EXPath-file-pathSeparator-001" result="pass"/>
+      <test-case name="EXPath-file-lineSeparator-001" result="pass"/>
+      <test-case name="EXPath-file-lineSeparator-002" result="pass"/>
+      <test-case name="EXPath-file-tempDir-001" result="pass"/>
+   </test-set>
+</test-suite-result>

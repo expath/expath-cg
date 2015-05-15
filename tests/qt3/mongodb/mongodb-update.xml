@@ -1,0 +1,126 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-update-001">
+    <description>Insert and update document.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 1, 'y': 2, 'z': 3 }),
+        mongodb:update($id, 'expath', 'coll', map { 'x': 1 }, map { '$set': map { 'q': 4 } }),
+
+        mongodb:count($id, 'expath', 'coll', map { 'x': 1 }),
+        mongodb:count($id, 'expath', 'coll', map { 'q': 4 })
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>2</assert-count>
+        <assert>$result[1] = 1</assert>
+        <assert>$result[2] = 1</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-update-002">
+    <description>Update non-existing document.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:update($id, 'expath', 'coll', map { 'x': 2 }, map { 'qa': 4 }),
+        mongodb:count($id, 'expath', 'coll', map { 'qa': 4 })
+      )
+    </test>
+    <result>
+      <assert-eq>0</assert-eq>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-update-002">
+    <description>Update non-existing document, with upsert flag.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:update($id, 'expath', 'coll',
+          map { 'x': 3 }, map { 'qb': 4 },
+          map { 'upsert': true() }),
+        mongodb:count($id, 'expath', 'coll', map { 'qa': 4 })
+      )
+    </test>
+    <result>
+      <assert-eq>0</assert-eq>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-update-003">
+    <description>Update two documents with multi flag.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 10, 'y': 1, 'z': 3 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 10, 'y': 2, 'z': 3 }),
+        mongodb:update($id, 'expath', 'coll', map { 'x': 10 },
+          map { '$set': map { 'qc': 4 } }, map { 'multi': true() }),
+
+        mongodb:count($id, 'expath', 'coll', map { 'x': 10 }),
+        mongodb:count($id, 'expath', 'coll', map { 'qc': 4 })
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert>$result[1] = 2</assert>
+        <assert>$result[2] = 2</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-update-004">
+    <description>Update two documents without multi flag.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 20, 'y': 1, 'z': 3 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 20, 'y': 2, 'z': 3 }),
+      
+        mongodb:update($id, 'expath', 'coll',
+          map { 'x': 20 }, map { '$set': map { 'qd': 4 } }),
+
+        mongodb:count($id, 'expath', 'coll', map { 'x': 20 }),
+        mongodb:count($id, 'expath', 'coll', map { 'qd': 4 })
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert>$result[1] = 2</assert>
+        <assert>$result[2] = 1</assert>
+      </all-of>
+    </result>
+  </test-case>
+</test-set>

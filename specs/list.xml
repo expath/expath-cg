@@ -53,6 +53,24 @@
          <file href="binary/diff/binary-expanded-diff.xml" format="xml"  diff="true"/>
       </editor>
    </spec>
+   <spec name="crypto">
+      <revision version="20110810">
+         <file href="crypto/crypto-20110810.html" format="html" diff="false"/>
+         <file href="crypto/crypto-20110810.xml"  format="xml"  diff="false"/>
+      </revision>
+      <revision version="20150214" latest="true">
+         <file href="crypto/crypto-20150214.html"      format="html" diff="false"/>
+         <file href="crypto/crypto-20150214.xml"       format="xml"  diff="false"/>
+         <file href="crypto/crypto-20150214-diff.html" format="html" diff="true"/>
+         <file href="crypto/crypto-20150214-diff.xml"  format="xml"  diff="true"/>
+      </revision>
+      <editor>
+         <file href="crypto/crypto.html"      format="html" diff="false"/>
+         <file href="crypto/crypto.xml"       format="xml"  diff="false"/>
+         <file href="crypto/crypto-diff.html" format="html" diff="true"/>
+         <file href="crypto/crypto-diff.xml"  format="xml"  diff="true"/>
+      </editor>
+   </spec>
    <spec name="file">
       <revision version="20100517">
          <file href="file/file-20100517.html" format="html" diff="false"/>
@@ -64,11 +82,17 @@
          <file href="file/file-20120614-diff.html" format="html" diff="true"/>
          <file href="file/file-20120614-diff.xml"  format="xml"  diff="true"/>
       </revision>
-      <revision version="20131203" latest="true">
+      <revision version="20131203">
          <file href="file/file-20131203.html"      format="html" diff="false"/>
          <file href="file/file-20131203.xml"       format="xml"  diff="false"/>
          <file href="file/file-20131203-diff.html" format="html" diff="true"/>
          <file href="file/file-20131203-diff.xml"  format="xml"  diff="true"/>
+      </revision>
+      <revision version="1.0" latest="true">
+         <file href="file/file-1.0.html"      format="html" diff="false"/>
+         <file href="file/file-1.0.xml"       format="xml"  diff="false"/>
+         <file href="file/file-1.0-diff.html" format="html" diff="true"/>
+         <file href="file/file-1.0-diff.xml"  format="xml"  diff="true"/>
       </revision>
       <editor>
          <file href="file/file.html"      format="html" diff="false"/>
@@ -81,6 +105,16 @@
       <editor latest="true">
          <file href="http/http.html" format="html" diff="false"/>
          <file href="http/http.xml"  format="xml"  diff="false"/>
+      </editor>
+   </spec>
+   <spec name="mongo">
+      <revision version="20150305" latest="true">
+         <file href="mongo/html/mongo-20150305.html" format="html" diff="false"/>
+         <file href="mongo/xml/mongo-20150305.xml"   format="xml"  diff="false"/>
+      </revision>
+      <editor>
+         <file href="mongo/html/mongo.html" format="html" diff="false"/>
+         <file href="mongo/xml/mongo.xml"   format="xml"  diff="false"/>
       </editor>
    </spec>
    <spec name="pkg">

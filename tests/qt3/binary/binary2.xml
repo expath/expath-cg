@@ -661,8 +661,7 @@
     <environment ref="binary"/>
     <test>bin:insert-before(xs:base64Binary(xs:hexBinary("")), -1, ())</test>
     <result>
-      <assert-eq>xs:base64Binary("")</assert-eq>
-      <!--<error code="Q{http://expath.org/ns/binary}index-out-of-range"/>-->
+      <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
     </result>
   </test-case>
   <test-case name="bin-insert-before11">
@@ -671,8 +670,7 @@
     <environment ref="binary"/>
     <test>bin:insert-before(xs:base64Binary(xs:hexBinary("")), 1, ())</test>
     <result>
-      <assert-eq>xs:base64Binary("")</assert-eq>
-      <!--<error code="Q{http://expath.org/ns/binary}index-out-of-range"/>-->
+      <error code="Q{http://expath.org/ns/binary}index-out-of-range"/>
     </result>
   </test-case>
   <test-case name="bin-pad-left1">

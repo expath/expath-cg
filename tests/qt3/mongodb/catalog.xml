@@ -1,0 +1,22 @@
+<catalog xmlns="http://www.w3.org/2010/09/qt-fots-catalog" test-suite="EXPATH" version="0.1">
+  <environment name="empty"/>
+  <test-set name="mongodb-aggregate" file="mongodb-aggregate.xml"/>
+  <test-set name="mongodb-close" file="mongodb-close.xml"/>
+  <test-set name="mongodb-command" file="mongodb-command.xml"/>
+  <test-set name="mongodb-connect" file="mongodb-connect.xml"/>
+  <test-set name="mongodb-count" file="mongodb-count.xml"/>
+  <test-set name="mongodb-drop-database" file="mongodb-drop-database.xml"/>
+  <test-set name="mongodb-eval" file="mongodb-eval.xml"/>
+  <test-set name="mongodb-find" file="mongodb-find.xml"/>
+  <test-set name="mongodb-find-one" file="mongodb-find-one.xml"/>
+  <test-set name="mongodb-find-and-modify" file="mongodb-find-and-modify.xml"/>
+  <test-set name="mongodb-find-and-remove" file="mongodb-find-and-remove.xml"/>
+  <test-set name="mongodb-group" file="mongodb-group.xml"/>
+  <test-set name="mongodb-insert" file="mongodb-insert.xml"/>
+  <test-set name="mongodb-list-collections" file="mongodb-list-collections.xml"/>
+  <test-set name="mongodb-list-databases" file="mongodb-list-databases.xml"/>
+  <test-set name="mongodb-map-reduce" file="mongodb-map-reduce.xml"/>
+  <test-set name="mongodb-save" file="mongodb-save.xml"/>
+  <test-set name="mongodb-update" file="mongodb-update.xml"/>
+  <test-set name="mongodb-errors" file="mongodb-errors.xml"/>
+</catalog>

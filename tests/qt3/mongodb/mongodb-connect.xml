@@ -1,0 +1,60 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-connect-001">
+    <description>Ensure that connection ids are different.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id1 := mongodb:connect("localhost")
+      let $id2 := mongodb:connect("mongodb://localhost")
+      return $id1 ne $id2
+    </test>
+    <result>
+      <assert-true/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-connect-002">
+    <description>Ensures that the id of a closed url will not be assigned again.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id1 := mongodb:connect("localhost")
+      let $id2 := (
+        mongodb:close($id1),
+        mongodb:connect("localhost")
+      )
+      return $id1 ne $id2
+    </test>
+    <result>
+      <assert-true/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-connect-003">
+    <description>Tries to connect to an invalid URL.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      mongodb:connect("localhost:a")
+    </test>
+    <result>
+      <error code="Q{http://expath.org/ns/mongodb}connect"/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-connect-004">
+    <description>Tries to connect to an invalid URL.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      mongodb:connect("http://xxx:888")
+    </test>
+    <result>
+      <error code="Q{http://expath.org/ns/mongodb}connect"/>
+    </result>
+  </test-case>
+</test-set>

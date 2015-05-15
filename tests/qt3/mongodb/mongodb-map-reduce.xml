@@ -1,0 +1,97 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-map-reduce-001">
+    <description>Simple map-reduce call.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', (
+          map { "cust_id": "A123", "amount": 500, "status": "A" },
+          map { "cust_id": "A123", "amount": 250, "status": "A" },
+          map { "cust_id": "B212", "amount": 200, "status": "A" },
+          map { "cust_id": "A123", "amount": 300, "status": "D" }
+        )),
+
+        mongodb:map-reduce($id, 'expath', 'coll',
+          "function() { emit( this.cust_id, this.amount); }",
+          "function(key, values) { return Array.sum( values ) } ",
+          map { 'query': map { "status": "A" } }
+        )
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>2</assert-count>
+        <assert>$result?value = 200</assert>
+        <assert>$result?value = 750</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-map-reduce-002">
+    <description>Simple map-reduce call.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      let $new-collection := 'coll-new'
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', (
+          map { "cust_id": "A123", "amount": 500, "status": "A" },
+          map { "cust_id": "A123", "amount": 250, "status": "A" },
+          map { "cust_id": "B212", "amount": 200, "status": "A" },
+          map { "cust_id": "A123", "amount": 300, "status": "D" }
+        )),
+
+        let $result := mongodb:map-reduce($id, 'expath', 'coll',
+          "function() { emit( this.cust_id, this.amount); }",
+          "function(key, values) { return Array.sum( values ) } ",
+          map {
+            'query': map { "status": "A" },
+            'out': $new-collection,
+            'type': 'REDUCE'
+          }
+        )
+        return $result[1]?value + $result[2]?value,
+      
+        let $result := mongodb:find($id, 'expath', $new-collection)
+        return $result[1]?value + $result[2]?value
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>2</assert-count>
+        <assert>$result[1] = $result[2]</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-map-reduce-003">
+    <description>map-reduce call with erroneous JavaScript code.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return mongodb:map-reduce($id, 'expath', 'coll',
+        "function() { bug }",
+        "function(key, values) { return Array.sum( values ) } ",
+        map { 'query': map { "status": "A" } }
+      )
+    </test>
+    <result>
+      <error code="Q{http://expath.org/ns/mongodb}exec"/>
+    </result>
+  </test-case>
+</test-set>

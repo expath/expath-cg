@@ -1,0 +1,59 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-count-001">
+    <description>Simple count.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        for $i in (1 to 10) 
+        return (
+          mongodb:insert($id, 'expath', 'coll',
+            map { 'x': $i, 'y': $i, 'z': $i * $i }),
+          mongodb:insert($id, 'expath', 'coll',
+            map { 'x': $i, 'y': (10 - $i), 'z': $i * $i })
+        ),
+        mongodb:count($id, 'expath', 'coll'),
+
+        mongodb:drop-database($id, 'expath')
+      )
+    </test>
+    <result>
+      <assert-eq>20</assert-eq>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-count-002">
+    <description>Count with query argument.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        for $i in (1 to 10) 
+        return (
+          mongodb:insert($id, 'expath', 'coll',
+            map { 'x': $i, 'y': $i, 'z': $i * $i }),
+          mongodb:insert($id, 'expath', 'coll',
+            map { 'x': $i, 'y': (10 - $i), 'z': $i * $i })
+        ),
+        mongodb:count($id, 'expath', 'coll', map { 'x': 2 }),
+
+        mongodb:drop-database($id, 'expath')
+      )
+    </test>
+    <result>
+      <assert-eq>2</assert-eq>
+    </result>
+  </test-case>
+</test-set>

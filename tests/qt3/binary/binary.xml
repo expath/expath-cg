@@ -14,6 +14,39 @@
         <param name="man.base" select="xs:base64Binary('TWFu')"/>
         <param name="man.octets" select="77,97,110"/>
     </environment>
+  
+    <environment name="EXPath-binary.numeric">
+      <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
+      <namespace prefix="binJAVA" uri="java:org.expath.ns.binary.EXPathBinary"/>
+      <namespace prefix="err" uri="http://expath.org/ns/binary"/>
+      <param name="int.byte" select="5"/>
+      <param name="int.short" select="256 * 1 + 5"/>
+      <param name="int.3" select="65536 * 1 + 256 * 1 + 5"/>
+      <param name="int.int" select="16777216 * 1 + 65536 * 1 + 256 * 1 + 5"/>
+      <param name="int.long"
+        select="4294967296 * 1 + 16777216 * 1 + 65536 * 1 + 256 * 1 + 5"/>
+      <param name="double.negative.0"
+        select="xs:base64Binary(xs:hexBinary('8000000000000000'))"/>
+      <param name="double.1"
+        select="xs:base64Binary(xs:hexBinary('3ff0000000000000'))"/>
+      <param name="double.1.octets" select="(63,240,0,0,0,0,0,0)"/>
+      <param name="float.negative.0"
+        select="xs:base64Binary(xs:hexBinary('80000000'))"/>
+      <param name="float.1.octets" select="(63,128,0,0)"/>
+      <param name="int.byte.B" select="xs:base64Binary(xs:hexBinary('f0'))"/>
+      <param name="int.short.B" select="xs:base64Binary(xs:hexBinary('f040'))"/>
+      <param name="int.short.B-1" select="xs:base64Binary(xs:hexBinary('ffff'))"/>
+    </environment>
+  
+    <environment name="EXPath-binary-bitwise">
+      <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
+      <namespace prefix="binJAVA" uri="java:org.expath.ns.binary.EXPathBinary"/>
+      <namespace prefix="err" uri="http://expath.org/ns/binary"/>
+      <param name="empty.bin" select="xs:base64Binary('')"/>
+      <param name="a" select="xs:base64Binary(xs:hexBinary('F00F'))"/>
+      <param name="b" select="xs:base64Binary(xs:hexBinary('0FF0'))"/>
+      <param name="c" select="xs:base64Binary(xs:hexBinary('0FABCD'))"/>
+    </environment>
 
     <test-case name="EXPath-binary-length-001">
         <description>Use length on an empty value</description>
@@ -381,10 +414,10 @@
    <test-case name="EXPath-binary-join-003">
       <description>Join with type mismatch sequences</description>
       <created by="John Lumley" on="2013-07-18"/>
-      <environment ref="EXPath-binary"/>
       <modified by="John Lumley"
-                on="2014-08-13"
-                change="Admit static type-check errors"/>
+       on="2014-08-13"
+       change="Admit static type-check errors"/>
+      <environment ref="EXPath-binary"/>
       <test> bin:join(($man.base,123)) </test>
       <result>
         <any-of>
@@ -658,9 +691,9 @@
    <test-case name="EXPath-binary-find-002">
       <description>find with an empty search sequence</description>
       <created by="John Lumley" on="2013-07-18"/>
+      <modified by="John Lumley" on="2013-11-25" change="Empty search supported"/>
       <environment ref="EXPath-binary"/>
       <test> bin:find(xs:base64Binary("TWFuAAAA"),1,xs:base64Binary("")) </test>
-      <modified by="John Lumley" on="2013-11-25" change="Empty search supported"/>
       <result>
         <all-of>
             <assert-type>xs:integer</assert-type>
@@ -750,10 +783,10 @@
    <test-case name="EXPath-binary-encode-string-003">
       <description>encode-string on a non-empty string</description>
       <created by="John Lumley" on="2013-07-18"/>
-      <environment ref="EXPath-binary"/>
       <modified by="John Lumley"
-                on="2014-08-12"
-                change="Replace non-ASCII by encodings"/>
+       on="2014-08-12"
+       change="Replace non-ASCII by encodings"/>
+      <environment ref="EXPath-binary"/>
       <test> bin:encode-string("A&#xea;&#xf1;&#xfc;C","utf-8") </test>
       <result>
                 <all-of>
@@ -765,10 +798,10 @@
    <test-case name="EXPath-binary-encode-string-004">
       <description>encode-string on a non-empty string, converted to octets</description>
       <created by="John Lumley" on="2013-07-18"/>
-      <environment ref="EXPath-binary"/>
       <modified by="John Lumley"
-                on="2014-08-12"
-                change="Replace non-ASCII by encodings"/>
+       on="2014-08-12"
+       change="Replace non-ASCII by encodings"/>
+      <environment ref="EXPath-binary"/>
       <test> bin:to-octets(bin:encode-string("A&#xea;&#xf1;&#xfc;C","utf-8")) </test>
       <result>
                 <assert-deep-eq>(65,195,170,195,177,195,188,67)</assert-deep-eq>
@@ -789,10 +822,10 @@
       <description>encode-string on a non-empty string - UTF-16 - no control over
                 BOM</description>
       <created by="John Lumley" on="2013-07-18"/>
-      <environment ref="EXPath-binary"/>
       <modified by="John Lumley"
-                on="2014-08-12"
-                change="Replace non-ASCII by encodings"/>
+       on="2014-08-12"
+       change="Replace non-ASCII by encodings"/>
+      <environment ref="EXPath-binary"/>
       <test> xs:hexBinary(bin:encode-string("&#x11e;","utf-16")) </test>
       <result>
                 <assert-eq>xs:hexBinary("feff011e")</assert-eq>
@@ -800,11 +833,11 @@
    </test-case>
    <test-case name="EXPath-binary-encode-string-007">
       <description>encode-string on a non-empty string using default encoding</description>
-      <environment ref="EXPath-binary"/>
       <created by="John Lumley" on="2013-11-19"/>
       <modified by="John Lumley"
                 on="2014-08-12"
                 change="Replace non-ASCII by encodings"/>
+      <environment ref="EXPath-binary"/>
       <test> bin:encode-string("A&#xea;&#xf1;&#xfc;C") =
                 bin:encode-string("A&#xea;&#xf1;&#xfc;C","utf-8") </test>
       <result>
@@ -859,10 +892,10 @@
    <test-case name="EXPath-binary-decode-string-004">
       <description>decode-string on non-empty binary data</description>
       <created by="John Lumley" on="2013-07-19"/>
-      <environment ref="EXPath-binary"/>
       <modified by="John Lumley"
                 on="2014-08-12"
                 change="Replace non-ASCII by encodings"/>
+      <environment ref="EXPath-binary"/>
       <test> bin:decode-string(bin:encode-string("Simple &#xa3; text","utf-8"),"utf-8") </test>
       <result>
                 <all-of>
@@ -874,10 +907,10 @@
    <test-case name="EXPath-binary-decode-string-005">
       <description>decode-string on non-empty binary data</description>
       <created by="John Lumley" on="2013-07-19"/>
-      <environment ref="EXPath-binary"/>
       <modified by="John Lumley"
                 on="2014-08-12"
                 change="Replace non-ASCII by encodings"/>
+      <environment ref="EXPath-binary"/>
       <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8") </test>
       <result>
                 <all-of>
@@ -889,10 +922,10 @@
    <test-case name="EXPath-binary-decode-string-006">
       <description>decode-string on non-empty binary data, converted from octets</description>
       <created by="John Lumley" on="2013-07-19"/>
-      <environment ref="EXPath-binary"/>
       <modified by="John Lumley"
                 on="2014-08-12"
                 change="Replace non-ASCII by encodings"/>
+      <environment ref="EXPath-binary"/>
       <test> bin:decode-string(bin:from-octets((65,195,170,195,177,195,188,67)),"utf-8") </test>
       <result>
                 <all-of>
@@ -904,11 +937,11 @@
    <test-case name="EXPath-binary-decode-string-007">
       <description>decode-string with offset</description>
       <created by="John Lumley" on="2013-07-19"/>
+      <modified by="John Lumley"
+       on="2014-08-12"
+       change="Replace non-ASCII by encodings"/>
       <environment ref="EXPath-binary"/>
       <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8",3) </test>
-      <modified by="John Lumley"
-                on="2014-08-12"
-                change="Replace non-ASCII by encodings"/>
       <result>
                 <all-of>
                     <assert-type>xs:string</assert-type>
@@ -919,11 +952,11 @@
    <test-case name="EXPath-binary-decode-string-008">
       <description>decode-string with offset and size</description>
       <created by="John Lumley" on="2013-07-19"/>
+      <modified by="John Lumley"
+       on="2014-08-12"
+       change="Replace non-ASCII by encodings"/>
       <environment ref="EXPath-binary"/>
       <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8",3,4) </test>
-      <modified by="John Lumley"
-                on="2014-08-12"
-                change="Replace non-ASCII by encodings"/>
       <result>
                 <all-of>
                     <assert-type>xs:string</assert-type>
@@ -990,10 +1023,10 @@
       <description>decode-string on non-empty binary data in UTF-16 with big-endian
                 BOM</description>
       <created by="John Lumley" on="2013-07-19"/>
-      <environment ref="EXPath-binary"/>
       <modified by="John Lumley"
                 on="2014-08-12"
                 change="Replace non-ASCII by encodings"/>
+      <environment ref="EXPath-binary"/>
       <test> bin:decode-string(xs:base64Binary(xs:hexBinary("feff011e")),"utf-16") </test>
       <result>
                 <all-of>
@@ -1006,10 +1039,10 @@
       <description>decode-string on non-empty binary data in UTF-16 with little endian
                 BOM</description>
       <created by="John Lumley" on="2013-07-19"/>
-      <environment ref="EXPath-binary"/>
       <modified by="John Lumley"
                 on="2014-08-12"
                 change="Replace non-ASCII by encodings"/>
+      <environment ref="EXPath-binary"/>
       <test> bin:decode-string(xs:base64Binary(xs:hexBinary("fffe1e01")),"utf-16") </test>
       <result>
                 <all-of>
@@ -1021,9 +1054,9 @@
    </test-case>
    <test-case name="EXPath-binary-decode-string-016">
       <description>decode-string on non-empty binary data with default encoding</description>
+      <created by="John Lumley" on="2013-11-19"/>
       <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
       <environment ref="EXPath-binary"/>
-      <created by="John Lumley" on="2013-11-19"/>
       <test> bin:decode-string(xs:base64Binary("QcOqw7HDvEM=")) =
                 bin:decode-string(xs:base64Binary("QcOqw7HDvEM="),"utf-8") </test>
       <result>
@@ -1032,28 +1065,7 @@
                 </all-of>
             </result>
    </test-case>
-    <!--Autogenerated from file:/C:/Users/jwl/Documents/GitHub/expath-cg/tests/qt3/binary/parts/numeric-packing.xml at 2014-08-14T12:09:06.345+01:00--><environment name="EXPath-binary.numeric">
-      <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
-      <namespace prefix="binJAVA" uri="java:org.expath.ns.binary.EXPathBinary"/>
-      <namespace prefix="err" uri="http://expath.org/ns/binary"/>
-      <param name="int.byte" select="5"/>
-      <param name="int.short" select="256 * 1 + 5"/>
-      <param name="int.3" select="65536 * 1 + 256 * 1 + 5"/>
-      <param name="int.int" select="16777216 * 1 + 65536 * 1 + 256 * 1 + 5"/>
-      <param name="int.long"
-             select="4294967296 * 1 + 16777216 * 1 + 65536 * 1 + 256 * 1 + 5"/>
-      <param name="double.negative.0"
-             select="xs:base64Binary(xs:hexBinary('8000000000000000'))"/>
-      <param name="double.1"
-             select="xs:base64Binary(xs:hexBinary('3ff0000000000000'))"/>
-      <param name="double.1.octets" select="(63,240,0,0,0,0,0,0)"/>
-      <param name="float.negative.0"
-             select="xs:base64Binary(xs:hexBinary('80000000'))"/>
-      <param name="float.1.octets" select="(63,128,0,0)"/>
-      <param name="int.byte.B" select="xs:base64Binary(xs:hexBinary('f0'))"/>
-      <param name="int.short.B" select="xs:base64Binary(xs:hexBinary('f040'))"/>
-      <param name="int.short.B-1" select="xs:base64Binary(xs:hexBinary('ffff'))"/>
-  </environment>
+
    <test-case name="EXPath-binary-pack-integer-001">
       <description>pack-integer with unknown octet-order</description>
       <created by="John Lumley" on="2013-07-19"/>
@@ -2077,15 +2089,7 @@
         </all-of>
       </result>
    </test-case>
-    <!--Autogenerated from file:/C:/Users/jwl/Documents/GitHub/expath-cg/tests/qt3/binary/parts/bitwise.xml at 2014-08-14T12:09:06.345+01:00--><environment name="EXPath-binary-bitwise">
-      <namespace prefix="bin" uri="http://expath.org/ns/binary"/>
-      <namespace prefix="binJAVA" uri="java:org.expath.ns.binary.EXPathBinary"/>
-      <namespace prefix="err" uri="http://expath.org/ns/binary"/>
-      <param name="empty.bin" select="xs:base64Binary('')"/>
-      <param name="a" select="xs:base64Binary(xs:hexBinary('F00F'))"/>
-      <param name="b" select="xs:base64Binary(xs:hexBinary('0FF0'))"/>
-      <param name="c" select="xs:base64Binary(xs:hexBinary('0FABCD'))"/>
-  </environment>
+
    <test-case name="EXPath-binary-bitwise-or-001">
       <description>bitwise-or with differing lengths</description>
       <created by="John Lumley" on="2013-07-22"/>
@@ -2109,10 +2113,10 @@
    <test-case name="EXPath-binary-bitwise-or-003">
       <description>bitwise-or with data and empty sequence</description>
       <created by="John Lumley" on="2013-07-22"/>
-      <environment ref="EXPath-binary-bitwise"/>
       <modified by="John Lumley"
                 on="2013-11-13"
                 change="change to empty sequence result"/>
+      <environment ref="EXPath-binary-bitwise"/>
       <test> bin:or($a,()) </test>
       <result>
         <assert-empty/>
@@ -2122,10 +2126,10 @@
    <test-case name="EXPath-binary-bitwise-or-004">
       <description>bitwise-or with empty sequence and data</description>
       <created by="John Lumley" on="2013-07-22"/>
-      <environment ref="EXPath-binary-bitwise"/>
       <modified by="John Lumley"
                 on="2013-11-13"
                 change="change to empty sequence result"/>
+      <environment ref="EXPath-binary-bitwise"/>
       <test> bin:or((),$a) </test>
       <result>
         <assert-empty/>
@@ -2181,10 +2185,10 @@
    <test-case name="EXPath-binary-bitwise-and-003">
       <description>bitwise-and with data and empty sequence</description>
       <created by="John Lumley" on="2013-07-22"/>
-      <environment ref="EXPath-binary-bitwise"/>
       <modified by="John Lumley"
                 on="2013-11-13"
                 change="change to empty sequence result"/>
+      <environment ref="EXPath-binary-bitwise"/>
       <test> bin:and($a,()) </test>
       <result>
         <assert-empty/>
@@ -2194,10 +2198,10 @@
    <test-case name="EXPath-binary-bitwise-and-004">
       <description>bitwise-and with empty sequence and data</description>
       <created by="John Lumley" on="2013-07-22"/>
-      <environment ref="EXPath-binary-bitwise"/>
       <modified by="John Lumley"
                 on="2013-11-13"
                 change="change to empty sequence result"/>
+      <environment ref="EXPath-binary-bitwise"/>
       <test> bin:and((),$a) </test>
       <result>
         <assert-empty/>
@@ -2253,10 +2257,10 @@
    <test-case name="EXPath-binary-bitwise-xor-003">
       <description>bitwise-xor with data and empty sequence</description>
       <created by="John Lumley" on="2013-07-22"/>
-      <environment ref="EXPath-binary-bitwise"/>
       <modified by="John Lumley"
                 on="2013-11-13"
                 change="change to empty sequence result"/>
+      <environment ref="EXPath-binary-bitwise"/>
       <test> bin:xor($a,()) </test>
       <result>
         <assert-empty/>
@@ -2266,10 +2270,10 @@
    <test-case name="EXPath-binary-bitwise-xor-004">
       <description>bitwise-xor with empty sequence and data</description>
       <created by="John Lumley" on="2013-07-22"/>
-      <environment ref="EXPath-binary-bitwise"/>
       <modified by="John Lumley"
                 on="2013-11-13"
                 change="change to empty sequence result"/>
+      <environment ref="EXPath-binary-bitwise"/>
       <test> bin:xor((),$a) </test>
       <result>
         <assert-empty/>

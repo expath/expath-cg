@@ -611,8 +611,8 @@
 
   <test-case name="EXPath-file-appendText3-002">
     <description>Use file:append-text with three arguments: UTF-16 encoding</description>
-    <modified by="Christian Grün" on="2013-11-20" change="Alternative without BOM added"/>
     <created by="Michael Kay" on="2012-06-11"/>
+    <modified by="Christian Grün" on="2013-11-20" change="Alternative without BOM added"/>
     <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
     <environment ref="EXPath-file"/>
     <test>
@@ -676,9 +676,10 @@
     <description>Use file:append-text with three arguments: encoding is an empty sequence</description>
     <created by="Michael Kay" on="2014-04-22"/>
     <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <modified by="Christian Gruen" on="2015-01-29" change="ensure that target is not directory"/>
     <environment ref="EXPath-file"/>
     <test>
-        file:append-text("sandpit", "abc", ())</test>
+        file:append-text("sandpit/test.txt", "abc", ())</test>
     <result>
       <error code="XPTY0004"/>
     </result>
@@ -2628,13 +2629,16 @@
     <description>Use file:name on current directory</description>
     <created by="John Lumley" on="2013-12-02"/>
     <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <modified by="Christian Grün" on="2015-02-20" change="test result fixed"/>
     <environment ref="EXPath-file"/>
     <test>
         file:name(".")
     </test>
     <result>
-      <assert-type>xs:string</assert-type>
-      <assert-eq>'Fred'</assert-eq>
+      <all-of>
+        <assert-type>xs:string</assert-type>
+        <assert-eq>'.'</assert-eq>
+      </all-of>
     </result>
   </test-case>
   <test-case name="EXPath-file-name1-005">
@@ -2736,6 +2740,95 @@
     </result>
   </test-case>
 
+  <test-case name="EXPath-file-children-001">
+    <description>List empty directory</description>
+    <created by="Christian Grün" on="2015-01-29"/>
+    <environment ref="EXPath-file"/>
+    <test>
+        if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+        file:create-dir("sandpit/dir5"),
+        file:children("sandpit/dir5")
+      </test>
+    <result>
+      <all-of>
+        <assert-empty/>
+        <assert>Q{http://expath.org/ns/file}exists("sandpit/dir5")</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-file-children-001">
+    <description>Return children of empty directory</description>
+    <created by="Christian Grün" on="2015-01-29"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+      file:create-dir("sandpit/dir5"),
+      file:children("sandpit/dir5")
+    </test>
+    <result>
+      <all-of>
+        <assert-empty/>
+        <assert>Q{http://expath.org/ns/file}exists("sandpit/dir5")</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-file-children-002">
+    <description>Return children of non-empty directory</description>
+    <created by="Christian Grün" on="2015-01-29"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+      file:create-dir("sandpit/dir5"),
+      file:write-text("sandpit/dir5/roma.txt", ""),
+      file:write-text("sandpit/dir5/napoli.txt", ""),
+      file:children("sandpit/dir5")
+    </test>
+    <result>
+      <all-of>
+        <assert>count($result) = 2</assert>
+        <assert>every $r in $result satisfies contains($r, file:dir-separator())</assert>
+        <assert>some $r in $result satisfies ends-with($r, 'roma.txt')</assert>
+        <assert>some $r in $result satisfies ends-with($r, 'napoli.txt')</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-file-children-003">
+    <description>Return single child (directory) of non-empty directory</description>
+    <created by="Christian Grün" on="2015-01-29"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+      file:create-dir("sandpit/dir5/dir6"),
+      file:children("sandpit/dir5")
+    </test>
+    <result>
+      <all-of>
+        <assert>count($result) = 1</assert>
+        <assert>ends-with($result, file:dir-separator())</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-file-children-004">
+    <description>Child (directory) of non-empty directory</description>
+    <created by="Christian Grün" on="2015-01-29"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      if (file:exists("sandpit/dir5")) then file:delete("sandpit/dir5", true()) else (),
+      file:create-dir("sandpit/dir5"),
+      file:write-text("sandpit/dir5/palermo.txt", ""),
+      file:children("sandpit/dir5/palermo.txt")
+    </test>
+    <result>
+      <all-of>
+        <error code="Q{http://expath.org/ns/file}no-dir"/>
+      </all-of>
+    </result>
+  </test-case>
+
   <test-case name="EXPath-file-pathToNative-001">
     <description>Use file:path-to-native on a text file</description>
     <created by="Michael Kay" on="2012-06-11"/>
@@ -2785,15 +2878,16 @@
   </test-case>
 
   <test-case name="EXPath-file-pathToNative-004">
-    <description>Use file:path-to-native on a text file, removal of file:/// part</description>
+    <description>Use file:path-to-native on a non-existing file</description>
     <created by="Michael Kay" on="2012-06-11"/>
     <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <modified by="Christian Grün" on="2015-01-29" change="Replaced with error"/>
     <environment ref="EXPath-file"/>
     <test>
-         file:path-to-native("file:///test.dir")
-      </test>
+      file:path-to-native("file:///i/do/not.exist")
+    </test>
     <result>
-      <assert>not(starts-with($result, "file:"))</assert>
+      <error code="Q{http://expath.org/ns/file}not-found"/>
     </result>
   </test-case>
 
@@ -2807,6 +2901,18 @@
       </test>
     <result>
       <assert>$result ne "."</assert>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-file-pathToNative-006">
+    <description>Use file:path-to-native, removal of file:/// part</description>
+    <created by="Christian Grün" on="2015-01-29"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      file:path-to-native(concat("file:///", file:resolve-path('.')))
+    </test>
+    <result>
+      <assert>not(starts-with($result, "file:"))</assert>
     </result>
   </test-case>
 
@@ -2939,6 +3045,39 @@
         <assert>matches($result, "/.*/")</assert>
         <assert>matches($result, "[A-Za-z]:\\.*\\")</assert>
       </any-of> 
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-file-baseDir-001">
+    <description>file:base-dir</description>
+    <created by="Christian Grün" on="2015-01-29"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      file:base-dir()
+    </test>
+    <result>
+      <all-of>
+        <assert>ends-with($result, file:dir-separator())</assert>
+        <assert>
+          let $base := static-base-uri()
+          return empty($base) or $result = file:parent($base)
+        </assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-file-currentDir-001">
+    <description>file:current-dir</description>
+    <created by="Christian Grün" on="2015-01-29"/>
+    <environment ref="EXPath-file"/>
+    <test>
+      file:current-dir()
+    </test>
+    <result>
+      <all-of>
+        <assert>ends-with($result, file:dir-separator())</assert>
+        <assert>$result = file:resolve-path('.')</assert>
+      </all-of>
     </result>
   </test-case>
 

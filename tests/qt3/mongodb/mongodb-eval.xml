@@ -1,0 +1,173 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-eval-001">
+    <description>Tests an empty function.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:eval($id, 'expath', '123')
+    </test>
+    <result>
+      <assert-eq>123</assert-eq>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-eval-002">
+    <description>Tests eval with number.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:eval($id, 'expath',
+        'function( x, y ) { return x + y; }',
+        (2, xs:decimal(5)))
+    </test>
+    <result>
+      <all-of>
+        <assert-type>xs:double</assert-type>
+        <assert-eq>7</assert-eq>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-eval-003">
+    <description>Tests eval with boolean.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:eval($id, 'expath',
+        'function( x ) { return x; }',
+        true())
+    </test>
+    <result>
+      <all-of>
+        <assert-type>xs:boolean</assert-type>
+        <assert-true/>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-eval-004">
+    <description>Tests eval with string.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:eval($id, 'expath',
+        'function( value ) { return value; }',
+        "test")
+    </test>
+    <result>
+      <all-of>
+        <assert-type>xs:string</assert-type>
+        <assert-eq>'test'</assert-eq>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-eval-005">
+    <description>Tests eval with node.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:eval($id, 'expath',
+        'function( value ) { return value; }',
+        element e { 'X' })
+    </test>
+    <result>
+      <all-of>
+        <assert-type>xs:string</assert-type>
+        <assert-eq>'X'</assert-eq>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-eval-006">
+    <description>Tests eval with object as parameter and return value.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:eval($id, 'expath',
+        'function($map) { return $map }',
+        map { 'a': 'b' }
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-type>map(*)</assert-type>
+        <assert>deep-equal($result, map { 'a': 'b' })</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-eval-007">
+    <description>Tests eval() with array as parameter and return value.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:eval($id, 'expath',
+        'function($map) { return $map }',
+        array { 'x' }
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-type>array(*)</assert-type>
+        <assert-eq>array { 'x' }</assert-eq>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-eval-008">
+    <description>Tests eval() with function item as parameter.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:eval($id, 'expath',
+        'function($map) { return $map }',
+        true#0
+      )
+    </test>
+    <result>
+      <error code='Q{http://expath.org/ns/mongodb}type'/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-eval-009">
+    <description>Tests eval() with QName as parameter.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:eval($id, 'expath',
+        'function($map) { return $map }',
+        xs:QName('a')
+      )
+    </test>
+    <result>
+      <error code='Q{http://expath.org/ns/mongodb}type'/>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-eval-010">
+    <description>Tests eval() with erroneous JavaScript function.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+      let $id := mongodb:connect("localhost")
+      return mongodb:eval($id, 'expath', 'function() { 1+ }')
+    </test>
+    <result>
+      <error code='Q{http://expath.org/ns/mongodb}exec'/>
+    </result>
+  </test-case>
+</test-set>

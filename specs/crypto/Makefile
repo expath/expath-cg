@@ -10,17 +10,20 @@
 XMLSPEC=../../tools/expathspec/src/xmlspec.xsl
 DIFFSPEC=../../tools/expathspec/src/diffspec.xsl
 
-#editorial: http.html http-diff.html
-editorial: http.html
+#editorial: crypto.html crypto-diff.html
+editorial: crypto.html
 
-http.html: http.xml
+crypto.html: crypto.xml
 	saxon -s:$< -xsl:$(XMLSPEC) > $@
 
-http-diff.html: http-diff.xml
+crypto-diff.html: crypto-diff.xml
 	saxon -s:$< -xsl:$(DIFFSPEC) > $@
 
-http-20140228.html: http-20140228.xml
+crypto-20150214.html: crypto-20150214.xml
 	saxon -s:$< -xsl:$(XMLSPEC) > $@
 
-http-20140228-diff.html: http-20140228-diff.xml
+crypto-20150214-diff.html: crypto-20150214-diff.xml
 	saxon -s:$< -xsl:$(DIFFSPEC) > $@
+
+# crypto-20110810.html: crypto-20110810.xml
+# 	saxon -s:$< -xsl:$(XMLSPEC) > $@

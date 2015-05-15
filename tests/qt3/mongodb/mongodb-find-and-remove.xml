@@ -1,0 +1,66 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-find-and-remove-001">
+    <description>Simple find-and-remove call.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', (
+          map { 'x': 1, 'y': 10, 'z': 100 },
+          map { 'x': 2, 'y': 20, 'z': 200 },
+          map { 'x': 3, 'y': 20, 'z': 300 },
+          map { 'x': 4, 'y': 40, 'z': 300 },
+          map { 'x': 5, 'y': 50, 'z': 500 }
+        )),
+
+        mongodb:find-and-remove($id, 'expath', 'coll', map { 'x': 2 }),
+        mongodb:find-and-remove($id, 'expath', 'coll', map { 'x': 2 })
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>1</assert-count>
+        <assert>$result[1]?y = 20</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-find-and-remove-002">
+    <description>Find-and-remove call.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', (
+          map { 'x': 1, 'y': 10, 'z': 100 },
+          map { 'x': 2, 'y': 20, 'z': 200 },
+          map { 'x': 3, 'y': 20, 'z': 300 },
+          map { 'x': 4, 'y': 40, 'z': 300 },
+          map { 'x': 5, 'y': 50, 'z': 500 }
+        )),
+
+        mongodb:find-and-remove($id, 'expath', 'coll', map { 'y': 20, 'z': 300 }),
+        mongodb:find-and-remove($id, 'expath', 'coll', map { 'y': 20, 'z': 300 })
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>1</assert-count>
+        <assert>$result[1]?x = 3</assert>
+      </all-of>
+    </result>
+  </test-case>
+</test-set>
+

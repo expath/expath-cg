@@ -1,0 +1,104 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-find-and-modify-001">
+    <description>Simple find-and-modify call.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 1, 'y': 10, 'z': 100 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 2, 'y': 10, 'z': 200 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 3, 'y': 30, 'z': 300 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 4, 'y': 40, 'z': 300 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 5, 'y': 50, 'z': 300 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 6, 'y': 60, 'z': 3000 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 7, 'y': 70, 'z': 3000 }),
+
+        mongodb:find-and-modify($id, 'expath', 'coll',
+          map { 'x': 2 }, map { 'x': 2 , 'y': 20 , 'z': 200 }),
+        mongodb:find-and-modify($id, 'expath', 'coll',
+          map { 'x': 2 }, map { 'x': 2 , 'y': 30 , 'z': 200 })
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert>$result[1]?y = 10</assert>
+        <assert>$result[2]?y = 20</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-find-and-modify-002">
+    <description>find-and-modify call with sort.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 1, 'y': 10, 'z': 100 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 2, 'y': 10, 'z': 200 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 3, 'y': 30, 'z': 300 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 4, 'y': 40, 'z': 300 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 5, 'y': 50, 'z': 300 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 6, 'y': 60, 'z': 3000 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 7, 'y': 70, 'z': 3000 }),
+
+        mongodb:find-and-modify($id, 'expath', 'coll',
+          map { 'z': 300 },
+          map { 'x': 2 , 'y': 20 , 'z': 400 },
+          map { 'sort': map { 'y': -1 } }
+        ),
+        mongodb:find-and-modify($id, 'expath', 'coll',
+          map { 'z': 300 },
+          map { 'x': 2 , 'y': 30 , 'z': 400 },
+          map { 'sort': map { 'y': 1 } }
+        )
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert>$result[1]?x = 5</assert>
+        <assert>$result[2]?x = 3</assert>
+      </all-of>
+    </result>
+  </test-case>
+
+  <test-case name="EXPath-mongodb-find-and-modify-003">
+    <description>find-and-modify non-existing document.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 1, 'y': 10, 'z': 100 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 2, 'y': 10, 'z': 200 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 3, 'y': 30, 'z': 300 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 4, 'y': 40, 'z': 300 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 5, 'y': 50, 'z': 300 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 6, 'y': 60, 'z': 3000 }),
+        mongodb:insert($id, 'expath', 'coll', map { 'x': 7, 'y': 70, 'z': 3000 }),
+
+        mongodb:find-and-modify($id, 'expath', 'coll',
+          map { 'unknown': 0 },
+          map { 'unknown': 2 }
+        )
+      )
+    </test>
+    <result>
+      <assert-empty/>
+    </result>
+  </test-case>
+</test-set>

@@ -1,0 +1,38 @@
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="expath-mongodb">
+  <description>Tests for the extension functions in the EXPath "mongodb" package.
+  </description>
+  <link type="spec" document="http://expath.org/spec/mongodb"/>
+
+  <test-case name="EXPath-mongodb-aggregate-001">
+    <description>Tests a simple aggregation.</description>
+    <created by="Christian Gruen" on="2015-03-04"/>
+    <test>
+      import module namespace mongodb = 'http://expath.org/ns/mongodb';
+
+      let $id := mongodb:connect("localhost")
+      return (
+        mongodb:drop-database($id, 'expath'),
+
+        mongodb:insert($id, 'expath', 'coll', map { "dep": "A", "sum": 71, "type": "a" }),
+        mongodb:insert($id, 'expath', 'coll', map { "dep": "B", "sum": 15, "type": "a" }),
+        mongodb:insert($id, 'expath', 'coll', map { "dep": "C", "sum": 5, "type": "a" }),
+        mongodb:insert($id, 'expath', 'coll', map { "dep": "A", "sum": 77, "type": "a" }),
+
+        mongodb:aggregate($id, 'expath', 'coll', (
+          map { "$match"  : map { "type": "a" } },
+          map { "$project": map { "dep": 1, "sum": 1, "_id": 0 } },
+          map { "$group"  : map { "_id": "$dep", "avg": map { "$avg": "$sum" } } },
+          map { "$sort"   : map { "sum" : -1 } })
+        ),
+
+        mongodb:drop-database($id, 'expath')
+      )
+    </test>
+    <result>
+      <all-of>
+        <assert-count>3</assert-count>
+        <assert>every $avg in $result?avg satisfies $avg = (5, 15, 74)</assert>
+      </all-of>
+    </result>
+  </test-case>
+</test-set>
