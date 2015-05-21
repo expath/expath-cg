@@ -308,10 +308,34 @@
 			    <tr>
 			      <td><code>canonicalization-algorithm</code></td>
 			      <td><code>xs:string</code></td>
-			      <td>The canonicalization algorithm applied to the <code>SignedInfo</code> element prior to performing signature calculations. Possible values are: "exclusive"
-			      (identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#</code>), "exclusive-with-comments" (identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#WithComments</code>),
-			      "inclusive", and "inclusive-with-comments" (see <bibref ref="xml-exc-c14n" /> and <bibref ref="canonical-xml-10" />, respectively.). The default value is "inclusive-with-comments". If the parameter specifies an
-			      unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
+			      <td>The canonicalization algorithm applied to the <code>SignedInfo</code> element prior to performing signature calculations. Possible values are given in the list
+			      below. The default value is "inclusive-with-comments-1.1". If the parameter specifies an unsupported algorithm, this is an error
+			      <bibref ref="error.unknownAlgorithm"/>. (Optional)
+					<ulist>
+					   <item>
+					      <p><code>inclusive-1.1</code>, identifier <code>http://www.w3.org/2006/12/xml-c14n11</code>, for XML 1.1 documents, see
+					      <bibref ref="xml-dig-sig-core" />, section 6.5.2 Canonical XML 1.1.</p>
+					   </item>
+					   <item>
+					      <p><code>inclusive-with-comments-1.1</code>, identifier <code>http://www.w3.org/2006/12/xml-c14n11#WithComments</code>, for XML 1.1 documents, see
+					      <bibref ref="xml-dig-sig-core" />, section 6.5.2 Canonical XML 1.1.</p>
+					   </item>
+					   <item>
+					      <p><code>inclusive-1.0</code>, identifier <code>http://www.w3.org/TR/2001/REC-xml-c14n-20010315</code>, for XML 1.0 documents, see
+					      <bibref ref="xml-dig-sig-core" />, section 6.5.1 Canonical XML 1.0.</p>
+					   </item>
+					   <item>
+					      <p><code>inclusive-with-comments-1.0</code>, identifier <code>http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments</code>, for XML 1.0 documents, see
+					      <bibref ref="xml-dig-sig-core" />, section 6.5.1 Canonical XML 1.0.</p>
+					   </item>
+					   <item>
+					      <p><code>exclusive</code>, identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#</code>, see <bibref ref="xml-exc-c14n" />, section 4. Use in XML Security.</p>
+					   </item>
+					   <item>
+					      <p><code>exclusive-with-comments</code>, identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#WithComments</code>, see <bibref ref="xml-exc-c14n" />, section 4. Use in XML Security.</p>
+					   </item>					   
+					</ulist>     
+			      </td>
 			    </tr>
 			    <tr>
 			      <td><code>digest-algorithm</code></td>
