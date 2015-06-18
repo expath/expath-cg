@@ -429,45 +429,47 @@ map {
 		-----END RSA PRIVATE KEY-----"	
 }
 </eg>
-			<p>Explanations about <code>$resources</code> parameter</p>
- 			<table id="resources-parameter-explanations" border="1" frame="border">
-			  <caption>The <code>$resources</code> parameter</caption>
-			  <thead>
-			    <tr>
-			      <th>Key (as <code>xs:string</code>)</th>
-			      <th>Value</th>
-			      <th>Meaning</th>
-			    </tr>
-			  </thead>
-			  <tbody>
-			    <tr>
-			      <td><code>Reference</code></td>
-			      <td><code>element()</code></td>
-			      <td>This is the parent element for a reference to a resource to be signed. Its namespace is <code>http://www.w3.org/2000/09/xmldsig#</code>. Its
-			      <code>URI</code> attribute identifies a resource using a URI-Reference (for details see <bibref ref="xml-dig-sig-core" />, section 4.3.3.1 The URI Attribute).</td>
-			    </tr>
-			    <tr>
-			      <td><code>Transforms</code></td>
-			      <td><code>element()</code></td>
-			      <td>This element contains an ordered list of <code>Transform</code> elements.</td>
-			    </tr>
-			    <tr>
-			      <td><code>Transform</code></td>
-			      <td><code>element()</code></td>
-			      <td>This element describes how the signer obtained the data object that is to be digested. The <code>Algorithm</code> attribute's value specifies the name of the
-			      algorithm to be applied, and the <code>Transform</code> element's text content provides additional data for processing using that algorithm. For more details and
-			      schema of this element, see <bibref ref="xml-dig-sig-core" />, section 4.3.3.4 The Transforms Element.</td>
-			    </tr>
-			    <tr>
-			      <td><code>XPath</code></td>
-			      <td><code>element()</code></td>
-			      <td>The XPath expression to be applied to the input document, in order to get the resource to be signed. The version of XPath to be used is 1.0, 
-			      plus a function named <code>here</code>. The <code>Filter</code> attribute's value provides the name of the operation (intersection, subtraction and union)
-			      used for combining the XPath-selected subtrees. For more details, see <bibref ref="xml-dig-sig-core" />, section 6.6.3 XPath Filtering, and
-			      <bibref ref="xml-dig-sig-xpath-filer20" />.</td>
-			    </tr>			    
-			  </tbody>
-			</table>
+			<div3>
+				<head>Explanations about <code>$resources</code> parameter</head>
+	 			<table id="resources-parameter-explanations" border="1" frame="border">
+				  <caption>The <code>$resources</code> parameter</caption>
+				  <thead>
+				    <tr>
+				      <th>Key (as <code>xs:string</code>)</th>
+				      <th>Value</th>
+				      <th>Meaning</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <td><code>Reference</code></td>
+				      <td><code>element()</code></td>
+				      <td>This is the parent element for a reference to a resource to be signed. Its namespace is <code>http://www.w3.org/2000/09/xmldsig#</code>. Its
+				      <code>URI</code> attribute identifies a resource using a URI-Reference (for details see <bibref ref="xml-dig-sig-core" />, section 4.3.3.1 The URI Attribute).</td>
+				    </tr>
+				    <tr>
+				      <td><code>Transforms</code></td>
+				      <td><code>element()</code></td>
+				      <td>This element contains an ordered list of <code>Transform</code> elements.</td>
+				    </tr>
+				    <tr>
+				      <td><code>Transform</code></td>
+				      <td><code>element()</code></td>
+				      <td>This element describes how the signer obtained the data object that is to be digested. The <code>Algorithm</code> attribute's value specifies the name of the
+				      algorithm to be applied, and the <code>Transform</code> element's text content provides additional data for processing using that algorithm. For more details and
+				      schema of this element, see <bibref ref="xml-dig-sig-core" />, section 4.3.3.4 The Transforms Element.</td>
+				    </tr>
+				    <tr>
+				      <td><code>XPath</code></td>
+				      <td><code>element()</code></td>
+				      <td>The XPath expression to be applied to the input document, in order to get the resource to be signed. The version of XPath to be used is 1.0, 
+				      plus a function named <code>here</code>. The <code>Filter</code> attribute's value provides the name of the operation (intersection, subtraction and union)
+				      used for combining the XPath-selected subtrees. For more details, see <bibref ref="xml-dig-sig-core" />, section 6.6.3 XPath Filtering, and
+				      <bibref ref="xml-dig-sig-xpath-filer20" />.</td>
+				    </tr>			    
+				  </tbody>
+				</table>			
+			</div3>
          </div2>
          <div2>
             <head>The <code>crypto:validate-signature</code> function</head>

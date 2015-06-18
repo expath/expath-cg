@@ -103,17 +103,18 @@ div.exampleHeader { font-weight: bold;
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
             4 <a href="#d4e393">XML Digital Signature</a><br />
             4.1 <a href="#d4e433">The crypto:generate-signature function</a><br />
-            4.2 <a href="#d4e746">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e772">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e781">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e869">The crypto:decrypt function</a><br />
+            4.1.1 <a href="#d4e658">Explanations about $resources parameter</a><br />
+            4.2 <a href="#d4e747">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e773">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e782">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e870">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1319">References</a><br />
-            B <a href="#d4e1390">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1320">References</a><br />
+            B <a href="#d4e1391">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -473,60 +474,63 @@ map {
 		-----END RSA PRIVATE KEY-----"	
 }
 </pre></div>
-               <p>Explanations about <code>$resources</code> parameter
-               </p><a name="resources-parameter-explanations" id="resources-parameter-explanations"></a><table border="1" frame="border">
-                  <caption>The <code>$resources</code> parameter
-                  </caption>
-                  <thead>
-                     <tr>
-                        <th>Key (as <code>xs:string</code>)
-                        </th>
-                        <th>Value</th>
-                        <th>Meaning</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     <tr>
-                        <td><code>Reference</code></td>
-                        <td><code>element()</code></td>
-                        <td>This is the parent element for a reference to a resource to be signed. Its namespace
-                           is <code>http://www.w3.org/2000/09/xmldsig#</code>. Its
-                           			      <code>URI</code> attribute identifies a resource using a URI-Reference (for details see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 4.3.3.1 The URI Attribute).
-                        </td>
-                     </tr>
-                     <tr>
-                        <td><code>Transforms</code></td>
-                        <td><code>element()</code></td>
-                        <td>This element contains an ordered list of <code>Transform</code> elements.
-                        </td>
-                     </tr>
-                     <tr>
-                        <td><code>Transform</code></td>
-                        <td><code>element()</code></td>
-                        <td>This element describes how the signer obtained the data object that is to be digested.
-                           The <code>Algorithm</code> attribute's value specifies the name of the
-                           			      algorithm to be applied, and the <code>Transform</code> element's text content provides additional data for processing using that algorithm.
-                           For more details and
-                           			      schema of this element, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 4.3.3.4 The Transforms Element.
-                        </td>
-                     </tr>
-                     <tr>
-                        <td><code>XPath</code></td>
-                        <td><code>element()</code></td>
-                        <td>The XPath expression to be applied to the input document, in order to get the resource
-                           to be signed. The version of XPath to be used is 1.0, 
-                           			      plus a function named <code>here</code>. The <code>Filter</code> attribute's value provides the name of the operation (intersection, subtraction and
-                           union)
-                           			      used for combining the XPath-selected subtrees. For more details, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.6.3 XPath Filtering, and
-                           			      <a href="#xml-dig-sig-xpath-filer20">[XML-Signature XPath Filter 2.0]</a>.
-                        </td>
-                     </tr>
-                  </tbody>
-               </table>
+               <div class="div3">
+                  
+                  <h4><a name="d4e658" id="d4e658"></a>4.1.1 Explanations about <code>$resources</code> parameter
+                  </h4><a name="resources-parameter-explanations" id="resources-parameter-explanations"></a><table border="1" frame="border">
+                     <caption>The <code>$resources</code> parameter
+                     </caption>
+                     <thead>
+                        <tr>
+                           <th>Key (as <code>xs:string</code>)
+                           </th>
+                           <th>Value</th>
+                           <th>Meaning</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td><code>Reference</code></td>
+                           <td><code>element()</code></td>
+                           <td>This is the parent element for a reference to a resource to be signed. Its namespace
+                              is <code>http://www.w3.org/2000/09/xmldsig#</code>. Its
+                              				      <code>URI</code> attribute identifies a resource using a URI-Reference (for details see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 4.3.3.1 The URI Attribute).
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>Transforms</code></td>
+                           <td><code>element()</code></td>
+                           <td>This element contains an ordered list of <code>Transform</code> elements.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>Transform</code></td>
+                           <td><code>element()</code></td>
+                           <td>This element describes how the signer obtained the data object that is to be digested.
+                              The <code>Algorithm</code> attribute's value specifies the name of the
+                              				      algorithm to be applied, and the <code>Transform</code> element's text content provides additional data for processing using that algorithm.
+                              For more details and
+                              				      schema of this element, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 4.3.3.4 The Transforms Element.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>XPath</code></td>
+                           <td><code>element()</code></td>
+                           <td>The XPath expression to be applied to the input document, in order to get the resource
+                              to be signed. The version of XPath to be used is 1.0, 
+                              				      plus a function named <code>here</code>. The <code>Filter</code> attribute's value provides the name of the operation (intersection, subtraction and
+                              union)
+                              				      used for combining the XPath-selected subtrees. For more details, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.6.3 XPath Filtering, and
+                              				      <a href="#xml-dig-sig-xpath-filer20">[XML-Signature XPath Filter 2.0]</a>.
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
             </div>
             <div class="div2">
                
-               <h3><a name="d4e746" id="d4e746"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e747" id="d4e747"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -542,7 +546,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e772" id="d4e772"></a>5 Encryption and Decryption
+            <h2><a name="d4e773" id="d4e773"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -559,7 +563,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e781" id="d4e781"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e782" id="d4e782"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -619,7 +623,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e869" id="d4e869"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e870" id="d4e870"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -680,7 +684,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1319" id="d4e1319"></a>A References
+            <h2><a name="d4e1320" id="d4e1320"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -763,7 +767,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1390" id="d4e1390"></a>B Summary of Error Conditions
+            <h2><a name="d4e1391" id="d4e1391"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
