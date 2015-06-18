@@ -1,0 +1,8 @@
+#! bash
+sSrc="C:/Users/jwl/Desktop/SaxonicaWS/Saxon95"
+java="java -classpath $sSrc/lib/*;$sSrc/*" 
+echo $java
+saxon="$java  -Xms64m -Xmx512m net.sf.saxon.Transform"
+$saxon -xsl:style/xmlspecDIFF2html.xsl -s:diff/archive-expanded-diff.xml -o:html/archive-diff.html
+echo FINISHED
+read PAUSE
