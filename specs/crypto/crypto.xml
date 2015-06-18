@@ -292,7 +292,7 @@
                </item>
                <item>
                   <p><code>$parameters</code> represent the parameters used for generating the XML digital signature. For details regarding these parameters, see the table
-                  <bibref ref="digital-signature-generation-parameters" /> below.</p>
+                  <specref ref="digital-signature-generation-parameters" /> below.</p>
                </item>
             </ulist>
 			<table id="digital-signature-generation-parameters" border="1" frame="border">
@@ -368,7 +368,7 @@
 			      <td><code>element(Reference)*</code></td>
 			      <td>The references to the digital resources to be signed. If this parameter is not provided, the whole input document will be signed. If the signature is of
 			      <code>enveloped</code> or <code>enveloping</code> type, and more than one resource is inputted to be signed, this is an error <bibref ref="error.inputResources" />.
-			      More details about this parameter can be found at <bibref ref="explanations-about-resources-parameter" />. (Optional)</td>
+			      More details about this parameter can be found at <specref ref="explanations-about-resources-parameter"/>. (Optional)</td>
 			    </tr>
 			    <tr>
 			      <td><code>key</code></td>
