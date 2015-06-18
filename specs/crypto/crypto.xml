@@ -368,7 +368,7 @@
 			      <td><code>element(Reference)*</code></td>
 			      <td>The references to the digital resources to be signed. If this parameter is not provided, the whole input document will be signed. If the signature is of
 			      <code>enveloped</code> or <code>enveloping</code> type, and more than one resource is inputted to be signed, this is an error <bibref ref="error.inputResources" />.
-			      (Optional)</td>
+			      More details about this parameter can be found at <bibref ref="explanations-about-resources-parameter" />. (Optional)</td>
 			    </tr>
 			    <tr>
 			      <td><code>key</code></td>
@@ -429,7 +429,7 @@ map {
 		-----END RSA PRIVATE KEY-----"	
 }
 </eg>
-			<div3>
+			<div3 id="explanations-about-resources-parameter">
 				<head>Explanations about <code>$resources</code> parameter</head>
 	 			<table id="resources-parameter-explanations" border="1" frame="border">
 				  <caption>The <code>$resources</code> parameter</caption>

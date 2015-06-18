@@ -103,18 +103,18 @@ div.exampleHeader { font-weight: bold;
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
             4 <a href="#d4e393">XML Digital Signature</a><br />
             4.1 <a href="#d4e433">The crypto:generate-signature function</a><br />
-            4.1.1 <a href="#d4e658">Explanations about $resources parameter</a><br />
-            4.2 <a href="#d4e747">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e773">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e782">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e870">The crypto:decrypt function</a><br />
+            4.1.1 <a href="#explanations-about-resources-parameter">Explanations about $resources parameter</a><br />
+            4.2 <a href="#d4e749">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e775">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e784">The crypto:encrypt function</a><br />
+            5.2 <a href="#d4e872">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1320">References</a><br />
-            B <a href="#d4e1391">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1322">References</a><br />
+            B <a href="#d4e1393">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -411,7 +411,7 @@ div.exampleHeader { font-weight: bold;
                         <td>The references to the digital resources to be signed. If this parameter is not provided,
                            the whole input document will be signed. If the signature is of
                            			      <code>enveloped</code> or <code>enveloping</code> type, and more than one resource is inputted to be signed, this is an error <a href="#error.inputResources">[crypto.input-resources]</a>.
-                           			      (Optional)
+                           			      More details about this parameter can be found at <a href="#explanations-about-resources-parameter">[explanations-about-resources-parameter]</a>. (Optional)
                         </td>
                      </tr>
                      <tr>
@@ -476,7 +476,7 @@ map {
 </pre></div>
                <div class="div3">
                   
-                  <h4><a name="d4e658" id="d4e658"></a>4.1.1 Explanations about <code>$resources</code> parameter
+                  <h4><a name="explanations-about-resources-parameter" id="explanations-about-resources-parameter"></a>4.1.1 Explanations about <code>$resources</code> parameter
                   </h4><a name="resources-parameter-explanations" id="resources-parameter-explanations"></a><table border="1" frame="border">
                      <caption>The <code>$resources</code> parameter
                      </caption>
@@ -530,7 +530,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e747" id="d4e747"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e749" id="d4e749"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -546,7 +546,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e773" id="d4e773"></a>5 Encryption and Decryption
+            <h2><a name="d4e775" id="d4e775"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -563,7 +563,7 @@ map {
             </p>
             <div class="div2">
                
-               <h3><a name="d4e782" id="d4e782"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e784" id="d4e784"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -623,7 +623,7 @@ map {
             </div>
             <div class="div2">
                
-               <h3><a name="d4e870" id="d4e870"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e872" id="d4e872"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -684,7 +684,7 @@ map {
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1320" id="d4e1320"></a>A References
+            <h2><a name="d4e1322" id="d4e1322"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -767,7 +767,7 @@ map {
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1391" id="d4e1391"></a>B Summary of Error Conditions
+            <h2><a name="d4e1393" id="d4e1393"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
