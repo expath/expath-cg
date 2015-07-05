@@ -109,14 +109,14 @@ div.exampleHeader { font-weight: bold;
             4.2 <a href="#d4e728">The crypto:validate-signature function</a><br />
             5 <a href="#d4e754">Encryption and Decryption</a><br />
             5.1 <a href="#d4e763">The crypto:encrypt function</a><br />
-            5.2 <a href="#d4e851">The crypto:decrypt function</a><br />
+            5.2 <a href="#d4e846">The crypto:decrypt function</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1301">References</a><br />
-            B <a href="#d4e1372">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1296">References</a><br />
+            B <a href="#d4e1367">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -605,15 +605,8 @@ div.exampleHeader { font-weight: bold;
                         <li>
                            <p><code>iv</code> as <code class="type">xs:string</code> is the initialization vector for symmetric encryption. For asymmetric encryption,
                               this parameter
-                              		                  is not needed.
-                           </p>
-                        </li>
-                        <li>
-                           <p><code>provider</code> as <code class="type">xs:string</code> is the cryptographic provider for the current operation. If the provider is not specified,
-                              the implementation will use the
-                              		                  default provider. If the provider does not exist, this is an error
-                              <a href="#error.noProvider">[crypto:no-provider]</a>.
-                           </p>
+                              		                  is not needed. If the initialization vector is null or it is not
+                              as it is requested by the encryption algorithm, this is an error <a href="#error.incorrectIV">[crypto:incorrect-initialization-vector]</a></p>
                         </li>
                      </ul>
                   </li>
@@ -621,7 +614,7 @@ div.exampleHeader { font-weight: bold;
             </div>
             <div class="div2">
                
-               <h3><a name="d4e851" id="d4e851"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e846" id="d4e846"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -682,7 +675,7 @@ div.exampleHeader { font-weight: bold;
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1301" id="d4e1301"></a>A References
+            <h2><a name="d4e1296" id="d4e1296"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -765,7 +758,7 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1372" id="d4e1372"></a>B Summary of Error Conditions
+            <h2><a name="d4e1367" id="d4e1367"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
@@ -819,6 +812,9 @@ div.exampleHeader { font-weight: bold;
                <dt class="label"><a name="error.inputResources" id="error.inputResources"></a>crypto.input-resources
                </dt>
                <dd>The 'enveloped' and 'enveloping' signatures have to be applied to only one resource.</dd>
+               <dt class="label"><a name="error.incorrectIV" id="error.incorrectIV"></a>crypto:incorrect-initialization-vector
+               </dt>
+               <dd>The initialization vector is not correct.</dd>
             </dl>
          </div>
       </div><script type="text/javascript">

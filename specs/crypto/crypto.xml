@@ -517,12 +517,12 @@
 		               </item>
 		               <item>
 		                  <p><code>iv</code> as <spec:type>xs:string</spec:type> is the initialization vector for symmetric encryption. For asymmetric encryption, this parameter
-		                  is not needed.</p>
+		                  is not needed. If the initialization vector is null or it is not as it is requested by the encryption algorithm, this is an error <bibref ref="error.incorrectIV"/></p>
 		               </item>                
-		               <item>
-		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the
-		                  default provider. If the provider does not exist, this is an error <bibref ref="error.noProvider"/>.</p>
-		               </item>                
+<!-- 		               <item> -->
+<!-- 		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the -->
+<!-- 		                  default provider. If the provider does not exist, this is an error <bibref ref="error.noProvider"/>.</p> -->
+<!-- 		               </item>                 -->
 		            </ulist>                  
                   
                </item>
@@ -561,10 +561,10 @@
 		               <item>
 		                  <p><code>iv</code> as <spec:type>xs:string?</spec:type> is the initialization vector for symmetric encryption.</p>
 		               </item>                
-		               <item>
-		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the
-		                  default provider. If the provider does not exist, this is an error <bibref ref="error.noProvider"/>.</p>
-		               </item>               
+<!-- 		               <item> -->
+<!-- 		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the -->
+<!-- 		                  default provider. If the provider does not exist, this is an error <bibref ref="error.noProvider"/>.</p> -->
+<!-- 		               </item>                -->
 		            </ulist>                  
                </item>
             </ulist>
@@ -1036,6 +1036,7 @@
             <bibl id="error.noProvider" key="crypto:no-provider">The provider is not set.</bibl>
             <bibl id="error.outputFormat" key="crypto.output-format">The output format is not supported.</bibl>
             <bibl id="error.inputResources" key="crypto.input-resources">The 'enveloped' and 'enveloping' signatures have to be applied to only one resource.</bibl>
+            <bibl id="error.incorrectIV" key="crypto:incorrect-initialization-vector">The initialization vector is not correct.</bibl>
          </blist>
       </div1>
    </back>
