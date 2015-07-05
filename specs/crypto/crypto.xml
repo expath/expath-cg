@@ -424,7 +424,7 @@
 			</div3>
 			<div3 id="explanations-about-resources-parameter">
 				<head>Explanations about <code>$resources</code> parameter</head>
-	 			<table id="resources-parameter-explanations" border="1" frame="border">
+	 			<table border="1" frame="border">
 				  <caption>The <code>$resources</code> parameter</caption>
 				  <thead>
 				    <tr>
@@ -504,7 +504,8 @@
                      <bibref ref="error.encType"/>.</p>
                </item>
                <item>
-                  <p><code>$parameters</code> represents the parameters needed for the current operation. The parameters are the following:</p>
+                  <p><code>$parameters</code> represents the parameters needed for the current operation. More details about this parameter can be found at
+                  <specref ref="explanations-about-parameters-parameter-of-crypto:encrypt"/>.</p>
 		            <ulist>
 		               <item>
 		                  <p><code>key</code> as <spec:type>xs:anyAtomicType</spec:type> is the cryptographic key used for encryption. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary.
@@ -527,6 +528,43 @@
                   
                </item>
             </ulist>
+			<div3 id="explanations-about-parameters-parameter-of-crypto:encrypt">
+				<head>Explanations about <code>$parameters</code> parameter</head>
+	 			<table border="1" frame="border">
+				  <caption>The <code>$parameters</code> parameter of <code>crypto:encrypt</code></caption>
+				  <thead>
+				    <tr>
+				      <th>Key (as <code>xs:string</code>)</th>
+				      <th>Value</th>
+				      <th>Meaning</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <td><code>key</code></td>
+				      <td><code>xs:anyAtomicType</code></td>
+				      <td>This is the cryptographic key used for encryption. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. If the key is invalid,
+				      this is an error <bibref ref="error.cryptoKey"/>. If the length of data provided to the block cipher is incorrect, this is an error <bibref ref="error.blockSize"/>.</td>
+				    </tr>
+				    <tr>
+				      <td><code>algorithm</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>This is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation name can be used.
+		                  If the parameter specifies an unsupported algorithm or transformation name, this is an error <bibref ref="error.unknownAlgorithm"/>.</td>
+				    </tr>
+				    <tr>
+				      <td><code>iv</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>This is the initialization vector for symmetric encryption. For asymmetric encryption, this parameter is not needed. If the initialization vector is null
+				      or it is not as it is requested by the encryption algorithm, this is an error <bibref ref="error.incorrectIV"/>.</td>
+				    </tr>
+<!-- 		               <item> -->
+<!-- 		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the -->
+<!-- 		                  default provider. If the provider does not exist, this is an error <bibref ref="error.noProvider"/>.</p> -->
+<!-- 		               </item>                 -->				    
+				  </tbody>
+				</table>			
+			</div3>            
          </div2>
          <div2>
             <head>The <code>crypto:decrypt</code> function</head>
@@ -546,28 +584,48 @@
                   <bibref ref="error.decryptionType"/>.</p>
                </item>
                <item>
-                  <p><code>$parameters</code> represents the parameters needed for the current operation. The parameters are the following:</p>
-		            <ulist>
-		               <item>
-		                  <p><code>key</code> as <spec:type>xs:anyAtomicType</spec:type> is the cryptographic key used for decryption. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary.
+                  <p><code>$parameters</code> represents the parameters needed for the current operation. More details about this parameter can be found at
+                  <specref ref="explanations-about-parameters-parameter-of-crypto:decrypt"/>.</p>                  
+               </item>
+            </ulist>
+			<div3 id="explanations-about-parameters-parameter-of-crypto:decrypt">
+				<head>Explanations about <code>$parameters</code> parameter</head>
+	 			<table border="1" frame="border">
+				  <caption>The <code>$parameters</code> parameter of <code>crypto:decrypt</code></caption>
+				  <thead>
+				    <tr>
+				      <th>Key (as <code>xs:string</code>)</th>
+				      <th>Value</th>
+				      <th>Meaning</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <td><code>key</code></td>
+				      <td><code>xs:anyAtomicType</code></td>
+				      <td>This is the cryptographic key used for decryption. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary.
 		                  If the key is invalid, this is an error <bibref ref="error.cryptoKey"/>. If the length of data provided to the block cipher is incorrect, this is an error
-		                  <bibref ref="error.blockSize"/>.</p>
-		               </item>
-		               <item>
-		                  <p><code>algorithm</code> as <spec:type>xs:string</spec:type> is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation name can be used.
-		                  If the parameter specifies an unsupported algorithm or transformation name, this is an error <bibref ref="error.unknownAlgorithm"/>.
-		                  </p>
-		               </item>
-		               <item>
-		                  <p><code>iv</code> as <spec:type>xs:string?</spec:type> is the initialization vector for symmetric encryption.</p>
-		               </item>                
+		                  <bibref ref="error.blockSize"/>.</td>
+				    </tr>
+				    <tr>
+				      <td><code>algorithm</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>This is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation name can be used.
+		                  If the parameter specifies an unsupported algorithm or transformation name, this is an error <bibref ref="error.unknownAlgorithm"/>.</td>
+				    </tr>
+				    <tr>
+				      <td><code>iv</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>This is the initialization vector for symmetric encryption. For asymmetric encryption, this parameter
+		                  is not needed. If the initialization vector is null or it is not as it is requested by the encryption algorithm, this is an error <bibref ref="error.incorrectIV"/>.</td>
+				    </tr>
 <!-- 		               <item> -->
 <!-- 		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the -->
 <!-- 		                  default provider. If the provider does not exist, this is an error <bibref ref="error.noProvider"/>.</p> -->
-<!-- 		               </item>                -->
-		            </ulist>                  
-               </item>
-            </ulist>
+<!-- 		               </item>                 -->				    
+				  </tbody>
+				</table>			
+			</div3>            
          </div2>
       </div1>
 <!--       <div1> -->
