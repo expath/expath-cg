@@ -1059,7 +1059,10 @@
             <bibl id="rfc2104" key="RFC 2104: HMAC: Keyed-Hashing for Message Authentication">
               		<loc href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
                  	Authentication</loc>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
-              		Working Group. February, 1997.</bibl>             		
+              		Working Group. February, 1997.</bibl>
+            <bibl id="xml-signatures-scenarios-faq" key="XML Signatures Scenarios FAQ">
+              		<loc href="http://w3.org/Signature/Drafts/PROP-xmldsig-faq-20000218/Overview.html">XML Signatures Scenarios FAQ</loc>.
+              		John Boyer, PureEdge, (tweaks) Joseph Reagle, W3C, editors. WG Proposal, 18 February 2000 .</bibl>
 <!--            	<bibl id="rfc1750" key="RFC 1750"> -->
 <!--               		<loc href="http://ietf.org/rfc/rfc1750.txt">RFC 1750: Randomness Recommendations for Security</loc>.  -->
 <!--               		D. Eastlake, 3rd, S. Crocker, J. Schiller, editors. Network Working Group. December 1994.</bibl>              		 -->
