@@ -271,8 +271,8 @@
             <p>The function has its parameters passed as a <spec:type>map(xs:string, item())</spec:type>. If any of these parameters is missing, a default value will be used
             instead. After the function's signature, an example of parameters is given.</p>
             <eg>
-<spec:function>crypto:generate-signature</spec:function>($data     as <spec:type>node()+</spec:type>,
-    			    $parameters as <spec:type>map(xs:string, item()+)?</spec:type>) as <spec:type>node()+</spec:type> 
+<spec:function>crypto:generate-signature</spec:function>($data     as <spec:type>document()?</spec:type>,
+    			    $parameters as <spec:type>map(xs:string, item()+)?</spec:type>) as <spec:type>document()*</spec:type> 
 </eg>
             <ulist>
                <item>
@@ -468,7 +468,7 @@
             <head>The <code>crypto:validate-signature</code> function</head>
             <p>This function validates an XML Digital Signature.</p>
             <eg>
-<spec:function>crypto:validate-signature</spec:function>($data as <spec:type>node()</spec:type>) as <spec:type>xs:boolean</spec:type></eg>
+<spec:function>crypto:validate-signature</spec:function>($data as <spec:type>document()</spec:type>) as <spec:type>xs:boolean</spec:type></eg>
             <ulist>
                <item>
                   <p><code>$data</code> is the enveloped, enveloping, or detached signature. If

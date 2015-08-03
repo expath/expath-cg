@@ -289,8 +289,8 @@ div.exampleHeader { font-weight: bold;
                   instead. After the function's signature, an example of parameters is given.
                </p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:generate-signature</code>($data     as <code class="type">node()+</code>,
-    			    $parameters as <code class="type">map(xs:string, item()+)?</code>) as <code class="type">node()+</code> 
+<code class="function">crypto:generate-signature</code>($data     as <code class="type">document()?</code>,
+    			    $parameters as <code class="type">map(xs:string, item()+)?</code>) as <code class="type">document()*</code> 
 </pre></div>
                <ul>
                   <li>
@@ -535,7 +535,7 @@ div.exampleHeader { font-weight: bold;
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:validate-signature</code>($data as <code class="type">node()</code>) as <code class="type">xs:boolean</code></pre></div>
+<code class="function">crypto:validate-signature</code>($data as <code class="type">document()</code>) as <code class="type">xs:boolean</code></pre></div>
                <ul>
                   <li>
                      <p><code>$data</code> is the enveloped, enveloping, or detached signature. If
