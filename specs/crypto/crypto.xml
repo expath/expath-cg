@@ -1062,7 +1062,10 @@
               		Working Group. February, 1997.</bibl>
             <bibl id="xml-signatures-scenarios-faq" key="XML Signatures Scenarios FAQ">
               		<loc href="http://w3.org/Signature/Drafts/PROP-xmldsig-faq-20000218/Overview.html">XML Signatures Scenarios FAQ</loc>.
-              		John Boyer, PureEdge, (tweaks) Joseph Reagle, W3C, editors. WG Proposal, 18 February 2000 .</bibl>
+              		John Boyer, PureEdge, (tweaks) Joseph Reagle, W3C, editors. WG Proposal, 18 February 2000.</bibl>              		
+            <bibl id="xmldsig-scenarios-990818" key="XML-Signature Scenarios">
+              		<loc href="http://w3.org/Signature/Drafts/xmldsig-scenarios-990818.html">XML-Signature Scenarios</loc>.
+              		John M. Boyer, UWI.Com, Richard Brown, Globeset, Brian LaMacchia, Microsoft, editors. Draft W3C Note/IETF Informational RFC, 18 August 1999.</bibl>              		
 <!--            	<bibl id="rfc1750" key="RFC 1750"> -->
 <!--               		<loc href="http://ietf.org/rfc/rfc1750.txt">RFC 1750: Randomness Recommendations for Security</loc>.  -->
 <!--               		D. Eastlake, 3rd, S. Crocker, J. Schiller, editors. Network Working Group. December 1994.</bibl>              		 -->
