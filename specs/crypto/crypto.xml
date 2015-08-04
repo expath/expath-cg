@@ -177,17 +177,17 @@
             <head>The <code>crypto:hash</code> function</head>
             <p>This function generates a "message digest" of the input data, by using a cryptographic algorithm. It returns the hash value as a string.</p>
             <eg>
-<spec:function>crypto:hash</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
+<spec:function>crypto:hash</spec:function>($data     as <spec:type>xs:string</spec:type>,
 	     $algorithm as <spec:type>xs:string</spec:type>) as <spec:type>xs:string</spec:type>
 </eg>
             <eg>
-<spec:function>crypto:hash</spec:function>($data    as <spec:type>xs:anyAtomicType</spec:type>,
+<spec:function>crypto:hash</spec:function>($data    as <spec:type>xs:string</spec:type>,
             $algorithm as <spec:type>xs:string</spec:type>,
             $format    as <spec:type>xs:string</spec:type>?) as <spec:type>xs:string</spec:type>
 </eg>
             <ulist>
                <item>
-                  <p><code>$data</code> is the data to be hashed. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary.</p>
+                  <p><code>$data</code> is the data to be hashed.</p>
                </item>
                <item>
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this
@@ -208,7 +208,7 @@
             between these parties.</p>            
             <p>This function generates a message authentication code, based on the input message, by using a cryptographic algorithm and a secret key.</p>
             <eg>
-<spec:function>crypto:hmac</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
+<spec:function>crypto:hmac</spec:function>($data     as <spec:type>xs:string</spec:type>,
             $key        as <spec:type>xs:anyAtomicType</spec:type>,
             $algorithm  as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64Binary</spec:type>
 </eg>
@@ -570,9 +570,9 @@
             <head>The <code>crypto:decrypt</code> function</head>
             <p>This function decrypts data.</p>
             <eg>
-<spec:function>crypto:decrypt</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
+<spec:function>crypto:decrypt</spec:function>($data     as <spec:type>xs:string</spec:type>,
                $type       as <spec:type>xs:string</spec:type>,
-               $parameters as <spec:type>map(xs:string, item())?</spec:type>) as <spec:type>xs:anyAtomicType</spec:type></eg>
+               $parameters as <spec:type>map(xs:string, item())?</spec:type>) as <spec:type>xs:string</spec:type></eg>
             <ulist>
                <item>
                   <p><code>$data</code> is the data to be decrypted. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. When a particular padding mechanism

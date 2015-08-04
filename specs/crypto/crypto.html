@@ -186,18 +186,17 @@ div.exampleHeader { font-weight: bold;
                   algorithm. It returns the hash value as a string.
                </p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:hash</code>($data     as <code class="type">xs:anyAtomicType</code>,
+<code class="function">crypto:hash</code>($data     as <code class="type">item()</code>,
 	     $algorithm as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
 </pre></div>
                <div class="exampleInner"><pre>
-<code class="function">crypto:hash</code>($data    as <code class="type">xs:anyAtomicType</code>,
+<code class="function">crypto:hash</code>($data    as <code class="type">item()</code>,
             $algorithm as <code class="type">xs:string</code>,
             $format    as <code class="type">xs:string</code>?) as <code class="type">xs:string</code>
 </pre></div>
                <ul>
                   <li>
-                     <p><code>$data</code> is the data to be hashed. This parameter can be of type xs:string, xs:base64Binary,
-                        or xs:hexBinary.
+                     <p><code>$data</code> is the data to be hashed.
                      </p>
                   </li>
                   <li>
@@ -231,7 +230,7 @@ div.exampleHeader { font-weight: bold;
                   by using a cryptographic algorithm and a secret key.
                </p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:hmac</code>($data     as <code class="type">xs:anyAtomicType</code>,
+<code class="function">crypto:hmac</code>($data     as <code class="type">xs:string</code>,
             $key        as <code class="type">xs:anyAtomicType</code>,
             $algorithm  as <code class="type">xs:string</code>) as <code class="type">xs:base64Binary</code>
 </pre></div>
@@ -667,9 +666,9 @@ div.exampleHeader { font-weight: bold;
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:decrypt</code>($data     as <code class="type">xs:anyAtomicType</code>,
+<code class="function">crypto:decrypt</code>($data     as <code class="type">xs:string</code>,
                $type       as <code class="type">xs:string</code>,
-               $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">xs:anyAtomicType</code></pre></div>
+               $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">xs:string</code></pre></div>
                <ul>
                   <li>
                      <p><code>$data</code> is the data to be decrypted. This parameter can be of type xs:string, xs:base64Binary,
