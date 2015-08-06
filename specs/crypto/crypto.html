@@ -187,18 +187,18 @@ div.exampleHeader { font-weight: bold;
                   (identifier <code>http://www.w3.org/2000/09/xmldsig#base64</code>, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements).
                </p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:hash</code>($data     as <code class="type">xs:string</code>,
+<code class="function">crypto:hash</code>($data     as <code class="type">xs:anyAtomicType</code>,
 	     $algorithm as <code class="type">xs:string</code>) as <code class="type">xs:base64Binary</code>
 </pre></div>
                <ul>
                   <li>
-                     <p><code>$data</code> is the data to be hashed.
+                     <p><code>$data</code> is the data to be hashed. This parameter can be of type xs:string, xs:base64Binary,
+                        or xs:hexBinary.
                      </p>
                   </li>
                   <li>
                      <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm,
-                        this
-                        is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                        this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
                      </p>
                   </li>
                </ul>
@@ -209,16 +209,15 @@ div.exampleHeader { font-weight: bold;
                </h3>
                <p>HMAC (Keyed-Hashing for Message Authentication) <a href="#rfc2104">[RFC 2104: HMAC: Keyed-Hashing for Message Authentication]</a> is a mechanism for message authentication using
                   cryptographic hash functions. HMAC can be used with any iterative cryptographic hash
-                  function, e.g. SHA-1, in combination with a
-                  secret shared key. Typically, message authentication codes are used between two parties
-                  that share a secret key in order to validate information transmitted
-                  between these parties.
+                  function in combination with a secret shared key. Typically, message authentication
+                  codes are used between two parties that share a secret key in order to validate information
+                  transmitted between these parties.
                </p>
                <p>This function generates a message authentication code, based on the input message,
                   by using a cryptographic algorithm and a secret key.
                </p>
                <div class="exampleInner"><pre>
-<code class="function">crypto:hmac</code>($data     as <code class="type">xs:string</code>,
+<code class="function">crypto:hmac</code>($data     as <code class="type">xs:anyAtomicType</code>,
             $key        as <code class="type">xs:anyAtomicType</code>,
             $algorithm  as <code class="type">xs:string</code>) as <code class="type">xs:base64Binary</code>
 </pre></div>
@@ -874,9 +873,6 @@ div.exampleHeader { font-weight: bold;
                <dt class="label"><a name="error.noProvider" id="error.noProvider"></a>crypto:no-provider
                </dt>
                <dd>The provider is not set.</dd>
-               <dt class="label"><a name="error.outputFormat" id="error.outputFormat"></a>crypto.output-format
-               </dt>
-               <dd>The output format is not supported.</dd>
                <dt class="label"><a name="error.inputResources" id="error.inputResources"></a>crypto.input-resources
                </dt>
                <dd>The 'enveloped' and 'enveloping' signatures have to be applied to only one resource.</dd>

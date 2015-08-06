@@ -178,12 +178,12 @@
             <p>This function generates a "message digest" of the input data, by using a cryptographic algorithm. It returns the hash value as <spec:type>xs:base64Binary</spec:type>,
             (identifier <code>http://www.w3.org/2000/09/xmldsig#base64</code>, see <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements).</p>
             <eg>
-<spec:function>crypto:hash</spec:function>($data     as <spec:type>xs:string</spec:type>,
+<spec:function>crypto:hash</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
 	     $algorithm as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64Binary</spec:type>
 </eg>
             <ulist>
                <item>
-                  <p><code>$data</code> is the data to be hashed.</p>
+                  <p><code>$data</code> is the data to be hashed. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary.</p>
                </item>
                <item>
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>.</p>
@@ -193,12 +193,11 @@
          <div2 id="hmac-function">
             <head>The <code>crypto:hmac</code> function</head>
             <p>HMAC (Keyed-Hashing for Message Authentication) <bibref ref="rfc2104" /> is a mechanism for message authentication using
-            cryptographic hash functions. HMAC can be used with any iterative cryptographic hash function, e.g. SHA-1, in combination with a
-            secret shared key. Typically, message authentication codes are used between two parties that share a secret key in order to validate information transmitted
-            between these parties.</p>            
+            cryptographic hash functions. HMAC can be used with any iterative cryptographic hash function in combination with a secret shared key. Typically, message authentication
+            codes are used between two parties that share a secret key in order to validate information transmitted between these parties.</p>            
             <p>This function generates a message authentication code, based on the input message, by using a cryptographic algorithm and a secret key.</p>
             <eg>
-<spec:function>crypto:hmac</spec:function>($data     as <spec:type>xs:string</spec:type>,
+<spec:function>crypto:hmac</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
             $key        as <spec:type>xs:anyAtomicType</spec:type>,
             $algorithm  as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64Binary</spec:type>
 </eg>
