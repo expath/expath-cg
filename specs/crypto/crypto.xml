@@ -186,8 +186,7 @@
                   <p><code>$data</code> is the data to be hashed.</p>
                </item>
                <item>
-                  <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this
-                  is an error <bibref ref="error.unknownAlgorithm"/>.</p>
+                  <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>.</p>
                </item>               
             </ulist>
          </div2>
@@ -1089,7 +1088,6 @@
             <bibl id="error.blockSize" key="crypto:block-size">Illegal block size.</bibl>
             <bibl id="error.decryptionType" key="crypto:decryption-type">The decryption type is not supported.</bibl>
             <bibl id="error.noProvider" key="crypto:no-provider">The provider is not set.</bibl>
-            <bibl id="error.outputFormat" key="crypto.output-format">The output format is not supported.</bibl>
             <bibl id="error.inputResources" key="crypto.input-resources">The 'enveloped' and 'enveloping' signatures have to be applied to only one resource.</bibl>
             <bibl id="error.incorrectIV" key="crypto:incorrect-initialization-vector">The initialization vector is not correct.</bibl>
          </blist>
