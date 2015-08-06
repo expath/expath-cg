@@ -175,15 +175,11 @@
          <head>Integrity and Authentication of Data</head>
          <div2 id="hash-function">
             <head>The <code>crypto:hash</code> function</head>
-            <p>This function generates a "message digest" of the input data, by using a cryptographic algorithm. It returns the hash value as a string.</p>
+            <p>This function generates a "message digest" of the input data, by using a cryptographic algorithm. It returns the hash value as <spec:type>xs:base64Binary</spec:type>,
+            (identifier <code>http://www.w3.org/2000/09/xmldsig#base64</code>, see <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements).</p>
             <eg>
 <spec:function>crypto:hash</spec:function>($data     as <spec:type>xs:string</spec:type>,
-	     $algorithm as <spec:type>xs:string</spec:type>) as <spec:type>xs:string</spec:type>
-</eg>
-            <eg>
-<spec:function>crypto:hash</spec:function>($data    as <spec:type>xs:string</spec:type>,
-            $algorithm as <spec:type>xs:string</spec:type>,
-            $format    as <spec:type>xs:string</spec:type>?) as <spec:type>xs:string</spec:type>
+	     $algorithm as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64Binary</spec:type>
 </eg>
             <ulist>
                <item>
@@ -192,11 +188,6 @@
                <item>
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this
                   is an error <bibref ref="error.unknownAlgorithm"/>.</p>
-               </item>
-               <item>
-                  <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default value is "base64"
-                  (identifier <code>http://www.w3.org/2000/09/xmldsig#base64</code>, see <bibref ref="xml-dig-sig-core" />, section 6.1
-                  Algorithm Identifiers and Implementation Requirements). If the format is not supported, this is an error <bibref ref="error.outputFormat"/>.</p>
                </item>               
             </ulist>
          </div2>
