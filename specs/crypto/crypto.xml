@@ -559,7 +559,7 @@
             <head>The <code>crypto:decrypt</code> function</head>
             <p>This function decrypts data.</p>
             <eg>
-<spec:function>crypto:decrypt</spec:function>($data     as <spec:type>xs:string</spec:type>,
+<spec:function>crypto:decrypt</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
                $type       as <spec:type>xs:string</spec:type>,
                $parameters as <spec:type>map(xs:string, item())?</spec:type>) as <spec:type>xs:string</spec:type></eg>
             <ulist>
