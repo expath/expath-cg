@@ -581,7 +581,7 @@ div.exampleHeader { font-weight: bold;
                         <li>
                            <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for encryption. This parameter can be of type xs:string,
                               xs:base64Binary, or xs:hexBinary.
-                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:invalid-crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
                               		                  <a href="#error.blockSize">[crypto:block-size]</a>.
                            </p>
                         </li>
@@ -621,7 +621,7 @@ div.exampleHeader { font-weight: bold;
                            <td><code>xs:anyAtomicType</code></td>
                            <td>This is the cryptographic key used for encryption. This parameter can be of type xs:string,
                               xs:base64Binary, or xs:hexBinary. If the key is invalid,
-                              				      this is an error <a href="#error.cryptoKey">[crypto:crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              				      this is an error <a href="#error.cryptoKey">[crypto:invalid-crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
                               <a href="#error.blockSize">[crypto:block-size]</a>.
                            </td>
                         </tr>
@@ -697,7 +697,7 @@ div.exampleHeader { font-weight: bold;
                            <td><code>xs:anyAtomicType</code></td>
                            <td>This is the cryptographic key used for decryption. This parameter can be of type xs:string,
                               xs:base64Binary, or xs:hexBinary.
-                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:invalid-crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
                               		                  <a href="#error.blockSize">[crypto:block-size]</a>.
                            </td>
                         </tr>
@@ -861,7 +861,7 @@ div.exampleHeader { font-weight: bold;
                <dt class="label"><a name="error.encType" id="error.encType"></a>crypto:encryption-type
                </dt>
                <dd>The encryption type is not supported.</dd>
-               <dt class="label"><a name="error.cryptoKey" id="error.cryptoKey"></a>crypto:crypto-key
+               <dt class="label"><a name="error.cryptoKey" id="error.cryptoKey"></a>crypto:invalid-crypto-key
                </dt>
                <dd>The cryptographic key is invalid.</dd>
                <dt class="label"><a name="error.blockSize" id="error.blockSize"></a>crypto:block-size

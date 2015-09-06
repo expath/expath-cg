@@ -1083,7 +1083,7 @@
             <bibl id="error.noPadding" key="crypto:inexistent-padding">No such padding.</bibl>
             <bibl id="error.incorrectPadding" key="crypto:incorrect-padding">Incorrect padding.</bibl>
             <bibl id="error.encType" key="crypto:encryption-type">The encryption type is not supported.</bibl>
-            <bibl id="error.cryptoKey" key="crypto:crypto-key">The cryptographic key is invalid.</bibl>
+            <bibl id="error.cryptoKey" key="crypto:invalid-crypto-key">The cryptographic key is invalid.</bibl>
             <bibl id="error.blockSize" key="crypto:block-size">Illegal block size.</bibl>
             <bibl id="error.decryptionType" key="crypto:decryption-type">The decryption type is not supported.</bibl>
             <bibl id="error.noProvider" key="crypto:no-provider">The provider is not set.</bibl>
