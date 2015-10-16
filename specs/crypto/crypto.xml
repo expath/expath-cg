@@ -484,8 +484,9 @@
             <ulist>
                <item>
                   <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. When a particular padding mechanism
-                  is requested, but is not available, this is an error <bibref ref="error.noPadding"/>. Also, when a particular padding mechanism is expected, but the data is not
-                  padded properly, this is an error <bibref ref="error.incorrectPadding"/>.</p>
+                  is requested to be used for the input data, but this mechanism is not made available by the implementation, this is an error <bibref ref="error.noPadding"/>.
+                  Also, when the input data is expected to have a particular padding mechanism, but the data is not padded accordingly to this mechanism, this is an error
+                  <bibref ref="error.incorrectPadding"/>.</p>
                </item>
                <item>
                   <p>
@@ -564,9 +565,10 @@
                $parameters as <spec:type>map(xs:string, item())?</spec:type>) as <spec:type>xs:string</spec:type></eg>
             <ulist>
                <item>
-                  <p><code>$data</code> is the data to be decrypted. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. When a particular padding mechanism
-                  is requested, but is not available, this is an error <bibref ref="error.noPadding"/>. Also, when a particular padding mechanism is expected, but the data is not
-                  padded properly, this is an error <bibref ref="error.incorrectPadding"/>.</p>
+                  <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. When a particular padding mechanism
+                  is requested to be used for the input data, but this mechanism is not made available by the implementation, this is an error <bibref ref="error.noPadding"/>.
+                  Also, when the input data is expected to have a particular padding mechanism, but the data is not padded accordingly to this mechanism, this is an error
+                  <bibref ref="error.incorrectPadding"/>.</p>
                </item>
                <item>
                   <p><code>$type</code> is the type of decryption. Legal values: "symmetric", and "asymmetric". If the parameter has an illegal value, this is an error

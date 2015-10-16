@@ -561,8 +561,11 @@ div.exampleHeader { font-weight: bold;
                   <li>
                      <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary,
                         or xs:hexBinary. When a particular padding mechanism
-                        is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:inexistent-padding]</a>. Also, when a particular padding mechanism is expected, but the data is not
-                        padded properly, this is an error <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
+                        is requested to be used for the input data, but this mechanism is not made available
+                        by the implementation, this is an error <a href="#error.noPadding">[crypto:inexistent-padding]</a>.
+                        Also, when the input data is expected to have a particular padding mechanism, but
+                        the data is not padded accordingly to this mechanism, this is an error
+                        <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
                      </p>
                   </li>
                   <li>
@@ -658,10 +661,13 @@ div.exampleHeader { font-weight: bold;
                $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">xs:string</code></pre></div>
                <ul>
                   <li>
-                     <p><code>$data</code> is the data to be decrypted. This parameter can be of type xs:string, xs:base64Binary,
+                     <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary,
                         or xs:hexBinary. When a particular padding mechanism
-                        is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:inexistent-padding]</a>. Also, when a particular padding mechanism is expected, but the data is not
-                        padded properly, this is an error <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
+                        is requested to be used for the input data, but this mechanism is not made available
+                        by the implementation, this is an error <a href="#error.noPadding">[crypto:inexistent-padding]</a>.
+                        Also, when the input data is expected to have a particular padding mechanism, but
+                        the data is not padded accordingly to this mechanism, this is an error
+                        <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
                      </p>
                   </li>
                   <li>
