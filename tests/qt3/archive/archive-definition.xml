@@ -34,8 +34,8 @@
         <param name="test3.ZIP" select="file:read-binary('sandpit/test3.zip')"/>
 
         <param name="textA" select="'textA.txt'"/>
-        <param name="known.test1" select="map:new(map:entry('textA.txt',()))"/>
-        <param name="unknown.test1" select="map:new(map:entry('foo',()))"/>
+        <param name="known.test1" select="map:merge(map:entry('textA.txt',()))"/>
+        <param name="unknown.test1" select="map:merge(map:entry('foo',()))"/>
         <!--<param name="map" select="map{'foo' : 1}"/>-->
         <param name="simple.Text.string" select="'A simple string'"/>
         <!-- <param name="simple.Text.map"
@@ -43,7 +43,7 @@
             'simple.Text' : map{'content' :bin:encode-string('A simple string','UTF-8')}
             }"/>-->
         <param name="simple.Text.map"
-            select="map:new(map:entry('simple.Text',map:new(map:entry('content',bin:encode-string('A simple string','UTF-8'))
+            select="map:merge(map:entry('simple.Text',map:merge(map:entry('content',bin:encode-string('A simple string','UTF-8'))
             )))"/>
         <param name="empty.bin" select="xs:base64Binary('')"/>
     </environment>

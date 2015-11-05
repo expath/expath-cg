@@ -71,7 +71,7 @@
             <xsl:attribute name="name" select="concat(../@name,format-number(position(),'-000'))"/>
             <xsl:apply-templates select="@*" mode="#current"/>
             <xsl:apply-templates select="description" mode="#current"/>
-            <xsl:sequence select="$common[not(name() = current()/*/name())]"/>
+            <xsl:sequence select="$common[not(name() = current()/*/name())] | $common[self::modified]"/>
             <xsl:apply-templates select="* except description" mode="#current"/>
         </xsl:copy>
     </xsl:template>

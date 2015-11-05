@@ -27,9 +27,10 @@
         </test-case>
         <test-case>
             <description>Deletion with empty deletion request</description>
+            <modified by="John Lumley" on="2015-11-05" change="map:new() -> map:merge()"/>
             <test>
                 let $a := arch:create-map($simple.Text.map)
-                 return arch:delete-map($a,map:new(())) = $a
+                 return arch:delete-map($a,map:merge(())) = $a
             </test>
             <result>
                 <assert-true/>
