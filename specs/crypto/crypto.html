@@ -106,19 +106,19 @@ div.exampleHeader { font-weight: bold;
             4.1.1 <a href="#explanations-about-parameters-parameter">Explanations about $parameters parameter</a><br />
             4.1.2 <a href="#example-of-parameters-parameter">Example of $parameters parameter</a><br />
             4.1.3 <a href="#explanations-about-resources-parameter">Explanations about $resources parameter</a><br />
-            4.2 <a href="#d4e707">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e733">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e742">The crypto:encrypt function</a><br />
+            4.2 <a href="#d4e709">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e735">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e744">The crypto:encrypt function</a><br />
             5.1.1 <a href="#explanations-about-parameters-parameter-of-crypto:encrypt">Explanations about $parameters parameter</a><br />
-            5.2 <a href="#d4e892">The crypto:decrypt function</a><br />
+            5.2 <a href="#d4e858">The crypto:decrypt function</a><br />
             5.2.1 <a href="#explanations-about-parameters-parameter-of-crypto:decrypt">Explanations about $parameters parameter</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1368">References</a><br />
-            B <a href="#d4e1450">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1334">References</a><br />
+            B <a href="#d4e1416">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -271,8 +271,7 @@ div.exampleHeader { font-weight: bold;
                
                <h3><a name="d4e379" id="d4e379"></a>4.1 The <code>crypto:generate-signature</code> function
                </h3>
-               <p>The function has its parameters passed as a <code class="type">map(xs:string, item())</code>. If any of these parameters is missing, a default value will be used
-                  instead. After the function's signature, an example of parameters is given.
+               <p>The function has its parameters passed as a <code class="type">map(xs:string, item())</code>. After the function's signature, an example of parameters is given.
                </p>
                <div class="exampleInner"><pre>
 <code class="function">crypto:generate-signature</code>($data     as <code class="type">document()?</code>,
@@ -352,22 +351,21 @@ div.exampleHeader { font-weight: bold;
                            <td><code>xs:string</code></td>
                            <td>The digest algorithm to be applied to the signed object. Possible values are: "SHA1"
                               (identifier <code>http://www.w3.org/2000/09/xmldsig#sha1</code>, see
-                              				      <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements), which is the
-                              default value.
-                              				      Other recommended values are: "SHA256", and "SHA512". If the parameter specifies
-                              an unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
+                              				      <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements), "SHA256", and
+                              "SHA512". The default value is "SHA1". If the parameter specifies an
+                              				      unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
                            </td>
                         </tr>
                         <tr>
                            <td><code>signature-algorithm</code></td>
                            <td><code>xs:string</code></td>
-                           <td>The algorithm used for signature generation and validation. The default value is "DSAwithSHA1"
+                           <td>The algorithm used for signature generation and validation. Possible values are: "DSAwithSHA1"
                               (identifier <code>http://www.w3.org/2000/09/xmldsig#dsa-sha1</code>,
-                              				      see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements). Another value
-                              is "RSAwithSHA1" (identifier
-                              	                  <code>http://www.w3.org/2000/09/xmldsig#rsa-sha1</code>, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements).
-                              	                  If the parameter specifies an unsupported algorithm, this is an
-                              error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
+                              				      see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements), and "RSAwithSHA1"
+                              (identifier <code>http://www.w3.org/2000/09/xmldsig#rsa-sha1</code>,
+                              				      see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements). The default
+                              value is "DSAwithSHA1". If the parameter specifies an unsupported algorithm,
+                              				      this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
                            </td>
                         </tr>
                         <tr>
@@ -399,7 +397,7 @@ div.exampleHeader { font-weight: bold;
                            <td><code>key</code></td>
                            <td><code>xs:anyAtomicType</code></td>
                            <td>The secret key used for signing. This parameter can be of type <code>xs:string</code>, <code>xs:base64Binary</code>,
-                              				      or <code>xs:hexBinary</code>.(Optional)
+                              				      or <code>xs:hexBinary</code>. If the key is invalid or missing, this is an error <a href="#error.cryptoKey">[crypto:invalid-crypto-key]</a>.
                            </td>
                         </tr>
                      </tbody>
@@ -517,7 +515,7 @@ div.exampleHeader { font-weight: bold;
             </div>
             <div class="div2">
                
-               <h3><a name="d4e707" id="d4e707"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e709" id="d4e709"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -533,7 +531,7 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e733" id="d4e733"></a>5 Encryption and Decryption
+            <h2><a name="d4e735" id="d4e735"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -550,7 +548,7 @@ div.exampleHeader { font-weight: bold;
             </p>
             <div class="div2">
                
-               <h3><a name="d4e742" id="d4e742"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e744" id="d4e744"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -580,28 +578,6 @@ div.exampleHeader { font-weight: bold;
                         parameter can be found at
                         <a href="#explanations-about-parameters-parameter-of-crypto:encrypt"><b>5.1.1 Explanations about $parameters parameter</b></a>.
                      </p>
-                     <ul>
-                        <li>
-                           <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for encryption. This parameter can be of type xs:string,
-                              xs:base64Binary, or xs:hexBinary.
-                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:invalid-crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
-                              		                  <a href="#error.blockSize">[crypto:block-size]</a>.
-                           </p>
-                        </li>
-                        <li>
-                           <p><code>algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation
-                              name can be used.
-                              		                  If the parameter specifies an unsupported algorithm or transformation
-                              name, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
-                           </p>
-                        </li>
-                        <li>
-                           <p><code>iv</code> as <code class="type">xs:string</code> is the initialization vector for symmetric encryption. For asymmetric encryption,
-                              this parameter
-                              		                  is not needed. If the initialization vector is null or it is not
-                              as it is requested by the encryption algorithm, this is an error <a href="#error.incorrectIV">[crypto:incorrect-initialization-vector]</a></p>
-                        </li>
-                     </ul>
                   </li>
                </ul>
                <div class="div3">
@@ -623,7 +599,7 @@ div.exampleHeader { font-weight: bold;
                            <td><code>key</code></td>
                            <td><code>xs:anyAtomicType</code></td>
                            <td>This is the cryptographic key used for encryption. This parameter can be of type xs:string,
-                              xs:base64Binary, or xs:hexBinary. If the key is invalid,
+                              xs:base64Binary, or xs:hexBinary. If the key is invalid or missing,
                               				      this is an error <a href="#error.cryptoKey">[crypto:invalid-crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
                               <a href="#error.blockSize">[crypto:block-size]</a>.
                            </td>
@@ -634,16 +610,15 @@ div.exampleHeader { font-weight: bold;
                            <td>This is the cryptographic algorithm used for encryption. For symmetric encryption,
                               a transformation name can be used.
                               		                  If the parameter specifies an unsupported algorithm or transformation
-                              name, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                              name or the parameter is missing, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
                            </td>
                         </tr>
                         <tr>
                            <td><code>iv</code></td>
                            <td><code>xs:string</code></td>
-                           <td>This is the initialization vector for symmetric encryption. For asymmetric encryption,
-                              this parameter is not needed. If the initialization vector is null
-                              				      or it is not as it is requested by the encryption algorithm, this is an
-                              error <a href="#error.incorrectIV">[crypto:incorrect-initialization-vector]</a>.
+                           <td>This is the initialization vector for symmetric encryption. If the initialization
+                              vector is missing or it is not as it is requested by the
+                              		                  encryption algorithm, this is an error <a href="#error.incorrectIV">[crypto:incorrect-initialization-vector]</a>. For asymmetric encryption, this parameter is not needed.
                            </td>
                         </tr>
                      </tbody>
@@ -652,7 +627,7 @@ div.exampleHeader { font-weight: bold;
             </div>
             <div class="div2">
                
-               <h3><a name="d4e892" id="d4e892"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e858" id="d4e858"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -702,9 +677,9 @@ div.exampleHeader { font-weight: bold;
                            <td><code>key</code></td>
                            <td><code>xs:anyAtomicType</code></td>
                            <td>This is the cryptographic key used for decryption. This parameter can be of type xs:string,
-                              xs:base64Binary, or xs:hexBinary.
-                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:invalid-crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
-                              		                  <a href="#error.blockSize">[crypto:block-size]</a>.
+                              xs:base64Binary, or xs:hexBinary. If the key is invalid or missing,
+                              				      this is an error <a href="#error.cryptoKey">[crypto:invalid-crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              <a href="#error.blockSize">[crypto:block-size]</a>.
                            </td>
                         </tr>
                         <tr>
@@ -713,16 +688,15 @@ div.exampleHeader { font-weight: bold;
                            <td>This is the cryptographic algorithm used for decryption. For symmetric decryption,
                               a transformation name can be used.
                               		                  If the parameter specifies an unsupported algorithm or transformation
-                              name, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                              name or the parameter is missing, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
                            </td>
                         </tr>
                         <tr>
                            <td><code>iv</code></td>
                            <td><code>xs:string</code></td>
-                           <td>This is the initialization vector for symmetric encryption. For asymmetric encryption,
-                              this parameter
-                              		                  is not needed. If the initialization vector is null or it is not
-                              as it is requested by the encryption algorithm, this is an error <a href="#error.incorrectIV">[crypto:incorrect-initialization-vector]</a>.
+                           <td>This is the initialization vector for symmetric decryption. If the initialization
+                              vector is missing or it is not as it is requested by the
+                              		                  decryption algorithm, this is an error <a href="#error.incorrectIV">[crypto:incorrect-initialization-vector]</a>. For asymmetric decryption, this parameter is not needed.
                            </td>
                         </tr>
                      </tbody>
@@ -734,7 +708,7 @@ div.exampleHeader { font-weight: bold;
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1368" id="d4e1368"></a>A References
+            <h2><a name="d4e1334" id="d4e1334"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -831,7 +805,7 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1450" id="d4e1450"></a>B Summary of Error Conditions
+            <h2><a name="d4e1416" id="d4e1416"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm

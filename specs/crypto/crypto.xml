@@ -186,7 +186,8 @@
                   <p><code>$data</code> is the data to be hashed. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary.</p>
                </item>
                <item>
-                  <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>.</p>
+                  <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>.
+                  The supported algorithms are implementation dependent.</p>
                </item>               
             </ulist>
          </div2>
@@ -213,7 +214,7 @@
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. The default value is "HMAC-SHA1"
                   (identifier <code>http://www.w3.org/2000/09/xmldsig#hmac-sha1</code>, see <bibref ref="xml-dig-sig-core" />, section 6.1
                   Algorithm Identifiers and Implementation Requirements). If it is specified an unsupported algorithm, this
-                  is an error <bibref ref="error.unknownAlgorithm"/>.</p>
+                  is an error <bibref ref="error.unknownAlgorithm"/>. The supported algorithms are implementation dependent.</p>
                </item>             
             </ulist>
          </div2>
@@ -257,8 +258,7 @@
          parameter <code>$resources</code>.</p>
          <div2>
             <head>The <code>crypto:generate-signature</code> function</head>
-            <p>The function has its parameters passed as a <spec:type>map(xs:string, item())</spec:type>. If any of these parameters is missing, a default value will be used
-            instead. After the function's signature, an example of parameters is given.</p>
+            <p>The function has its parameters passed as a <spec:type>map(xs:string, item())</spec:type>. After the function's signature, an example of parameters is given.</p>
             <eg>
 <spec:function>crypto:generate-signature</spec:function>($data     as <spec:type>document()?</spec:type>,
     			    $parameters as <spec:type>map(xs:string, item()+)?</spec:type>) as <spec:type>document()*</spec:type> 
@@ -320,16 +320,16 @@
 				      <td><code>digest-algorithm</code></td>
 				      <td><code>xs:string</code></td>
 				      <td>The digest algorithm to be applied to the signed object. Possible values are: "SHA1" (identifier <code>http://www.w3.org/2000/09/xmldsig#sha1</code>, see
-				      <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements), which is the default value.
-				      Other recommended values are: "SHA256", and "SHA512". If the parameter specifies an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
+				      <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements), "SHA256", and "SHA512". The default value is "SHA1". If the parameter specifies an
+				      unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
 				    </tr>
 				    <tr>
 				      <td><code>signature-algorithm</code></td>
 				      <td><code>xs:string</code></td>
-				      <td>The algorithm used for signature generation and validation. The default value is "DSAwithSHA1" (identifier <code>http://www.w3.org/2000/09/xmldsig#dsa-sha1</code>,
-				      see <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements). Another value is "RSAwithSHA1" (identifier
-	                  <code>http://www.w3.org/2000/09/xmldsig#rsa-sha1</code>, see <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements).
-	                  If the parameter specifies an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
+				      <td>The algorithm used for signature generation and validation. Possible values are: "DSAwithSHA1" (identifier <code>http://www.w3.org/2000/09/xmldsig#dsa-sha1</code>,
+				      see <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements), and "RSAwithSHA1" (identifier <code>http://www.w3.org/2000/09/xmldsig#rsa-sha1</code>,
+				      see <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements). The default value is "DSAwithSHA1". If the parameter specifies an unsupported algorithm,
+				      this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
 				    </tr>
 				    <tr>
 				      <td><code>signature-namespace-prefix</code></td>
@@ -353,7 +353,7 @@
 				      <td><code>key</code></td>
 				      <td><code>xs:anyAtomicType</code></td>
 				      <td>The secret key used for signing. This parameter can be of type <code>xs:string</code>, <code>xs:base64Binary</code>,
-				      or <code>xs:hexBinary</code>.(Optional)</td>
+				      or <code>xs:hexBinary</code>. If the key is invalid or missing, this is an error <bibref ref="error.cryptoKey"/>.</td>
 				    </tr>		              		              
 				  </tbody>
 				</table>	            
@@ -496,26 +496,6 @@
                <item>
                   <p><code>$parameters</code> represents the parameters needed for the current operation. More details about this parameter can be found at
                   <specref ref="explanations-about-parameters-parameter-of-crypto:encrypt"/>.</p>
-		            <ulist>
-		               <item>
-		                  <p><code>key</code> as <spec:type>xs:anyAtomicType</spec:type> is the cryptographic key used for encryption. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary.
-		                  If the key is invalid, this is an error <bibref ref="error.cryptoKey"/>. If the length of data provided to the block cipher is incorrect, this is an error
-		                  <bibref ref="error.blockSize"/>.</p>
-		               </item>
-		               <item>
-		                  <p><code>algorithm</code> as <spec:type>xs:string</spec:type> is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation name can be used.
-		                  If the parameter specifies an unsupported algorithm or transformation name, this is an error <bibref ref="error.unknownAlgorithm"/>.</p>
-		               </item>
-		               <item>
-		                  <p><code>iv</code> as <spec:type>xs:string</spec:type> is the initialization vector for symmetric encryption. For asymmetric encryption, this parameter
-		                  is not needed. If the initialization vector is null or it is not as it is requested by the encryption algorithm, this is an error <bibref ref="error.incorrectIV"/></p>
-		               </item>                
-<!-- 		               <item> -->
-<!-- 		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the -->
-<!-- 		                  default provider. If the provider does not exist, this is an error <bibref ref="error.noProvider"/>.</p> -->
-<!-- 		               </item>                 -->
-		            </ulist>                  
-                  
                </item>
             </ulist>
 			<div3 id="explanations-about-parameters-parameter-of-crypto:encrypt">
@@ -533,20 +513,21 @@
 				    <tr>
 				      <td><code>key</code></td>
 				      <td><code>xs:anyAtomicType</code></td>
-				      <td>This is the cryptographic key used for encryption. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. If the key is invalid,
+				      <td>This is the cryptographic key used for encryption. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. If the key is invalid or missing,
 				      this is an error <bibref ref="error.cryptoKey"/>. If the length of data provided to the block cipher is incorrect, this is an error <bibref ref="error.blockSize"/>.</td>
 				    </tr>
 				    <tr>
 				      <td><code>algorithm</code></td>
 				      <td><code>xs:string</code></td>
 				      <td>This is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation name can be used.
-		                  If the parameter specifies an unsupported algorithm or transformation name, this is an error <bibref ref="error.unknownAlgorithm"/>.</td>
+		                  If the parameter specifies an unsupported algorithm or transformation name or the parameter is missing, this is an error <bibref ref="error.unknownAlgorithm"/>.
+		                  The supported algorithms are implementation dependent.</td>
 				    </tr>
 				    <tr>
 				      <td><code>iv</code></td>
 				      <td><code>xs:string</code></td>
-				      <td>This is the initialization vector for symmetric encryption. For asymmetric encryption, this parameter is not needed. If the initialization vector is null
-				      or it is not as it is requested by the encryption algorithm, this is an error <bibref ref="error.incorrectIV"/>.</td>
+				      <td>This is the initialization vector for symmetric encryption. If the initialization vector is missing or it is not as it is requested by the
+		                  encryption algorithm, this is an error <bibref ref="error.incorrectIV"/>. For asymmetric encryption, this parameter is not needed.</td>
 				    </tr>
 <!-- 		               <item> -->
 <!-- 		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the -->
@@ -594,21 +575,21 @@
 				    <tr>
 				      <td><code>key</code></td>
 				      <td><code>xs:anyAtomicType</code></td>
-				      <td>This is the cryptographic key used for decryption. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary.
-		                  If the key is invalid, this is an error <bibref ref="error.cryptoKey"/>. If the length of data provided to the block cipher is incorrect, this is an error
-		                  <bibref ref="error.blockSize"/>.</td>
+				      <td>This is the cryptographic key used for decryption. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. If the key is invalid or missing,
+				      this is an error <bibref ref="error.cryptoKey"/>. If the length of data provided to the block cipher is incorrect, this is an error <bibref ref="error.blockSize"/>.</td>		                  
 				    </tr>
 				    <tr>
 				      <td><code>algorithm</code></td>
 				      <td><code>xs:string</code></td>
 				      <td>This is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation name can be used.
-		                  If the parameter specifies an unsupported algorithm or transformation name, this is an error <bibref ref="error.unknownAlgorithm"/>.</td>
+		                  If the parameter specifies an unsupported algorithm or transformation name or the parameter is missing, this is an error <bibref ref="error.unknownAlgorithm"/>.
+		                  The supported algorithms are implementation dependent.</td>		                  
 				    </tr>
 				    <tr>
 				      <td><code>iv</code></td>
 				      <td><code>xs:string</code></td>
-				      <td>This is the initialization vector for symmetric encryption. For asymmetric encryption, this parameter
-		                  is not needed. If the initialization vector is null or it is not as it is requested by the encryption algorithm, this is an error <bibref ref="error.incorrectIV"/>.</td>
+				      <td>This is the initialization vector for symmetric decryption. If the initialization vector is missing or it is not as it is requested by the
+		                  decryption algorithm, this is an error <bibref ref="error.incorrectIV"/>. For asymmetric decryption, this parameter is not needed.</td>		                  
 				    </tr>
 <!-- 		               <item> -->
 <!-- 		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the -->
