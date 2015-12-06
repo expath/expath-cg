@@ -983,7 +983,89 @@
 
                                 
 <!--       </div1> -->
-      
+      <div1>
+         <head>Scenarios of usage</head>
+			<div2>
+				<head>Generation of OAuth signature</head>
+				<p></p>
+				<eg>
+let $signature-base-string :=
+	"GET&amp;http%3A%2F%2Fexample.org%2Fresource%26oauth_consumer_key%3Dabcd%26
+	oauth_nonce%3DXxFM1VSdB6N%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1449422427%26
+	oauth_token%3Dijkl%26oauth_version%3D1.0"
+let $key := "dpf43f3p2l4k3l03"
+let $signature := return crypto:hmac($signature-base-string, $key, "HMAC-SHA-1")
+
+return $signature				
+				</eg>
+			</div2>
+			<div2>
+				<head>Generation of AWS Signature Version 4 signature</head>
+				<p></p>
+				<eg>
+let $region := "us-east-1"
+let $service := 'iam'
+let $date-YYYYMMDD := '20120215'
+let $s3-secret-key := 'wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY'
+let $kSecret := concat("AWS4", $s3-secret-key)
+
+let $dateKey := crypto:hmac($date-YYYYMMDD, $kSecret, "HMAC-SHA-256")
+let $dateRegionKey := crypto:hmac($region, $dateKey, "HMAC-SHA-256")
+let $dateRegionServiceKey := crypto:hmac($service, $dateRegionKey, "HMAC-SHA-256")
+let $signingKey := crypto:hmac("aws4_request", $dateRegionServiceKey, "HMAC-SHA-256”)
+
+return $signingKey				
+				</eg>
+			</div2>	
+			<div2>
+				<head>Generation of enveloped digital XML signature of a document</head>
+				<p></p>
+				<eg>
+let $doc :=
+  &lt;data&gt;
+    &lt;a&gt;1&lt;/a&gt;
+    &lt;b&gt;7&lt;/b&gt;
+    &lt;c /&gt;
+    &lt;c /&gt;
+  &lt;/data&gt;
+let $signature := crypto:generate-signature($doc,
+  map {
+    "canonicalization-algorithm" := "inclusive-with-comments",
+    "digest-algorithm" := "SHA1",
+    "signature-algorithm" := "RSA_SHA1",
+    "signature-namespace-prefix" := "digsig",
+    "signature-type" := "enveloped",
+    "key" :=
+      "-----BEGIN RSA PRIVATE KEY-----
+      MIIEowIBAAKCAQEAhPxBGln4YOcOGOxmRYEN8nzYHYvQx+PP8GnbJ+kW4f6HvH8WMAUa2lTB6gib
+      LzJGezhqkMy8NT8ogVz8xbra3AyK/IBDzXpWtPhSxVOCo6hJfTjj7wX3E2AVN9CTUOYrS/3iSu1q
+      /6MoB6MDIj8wV0HO1ujXqEip45UgVl+xRVtU+1wiJQ7Gc8GEEyHVtK/X4joiyCEebJhFsI42Z9e4
+      aETI/XOaLszyEQeipMRlyznpRL2x0chz+yj7KuwiMqBZmPYyeWBsbldW8xREwnHEyko5GWc6wkEi
+      vgFwzKaZWo2ct3pmZ9vwXKecAxbeJbyJQl/PDfSnqcwyhL6pOaSAuQIDAQABAoIBAHo5hnR7wIb/
+      lbteetjitjjqeY8eU/OD9DfYcu6Jkth/Ia4jd/cGmhmU0O0Sn96O7KyPu5H+OfUOaWIMXt400LZy
+      aMON98NA77RAj4KBMI7OO0z2Hrgu2Vlbc+TqtJskESM04ulOsIroIAB02Ip/XSS1fS+UrbEjp9Fd
+      3GzGYp2E6IF/YtTXMiqgdrZVAoDPtxiMR/1KXuETiBkeMxPvXfgePXLi/rYBDcecmfsCEzDX8RZV
+      xLoPKFxuLaIrzdVhGVHwp88fB57OufLytmuvro71FNrFzcIO88NyDpEQVnsBadm9Ir0mb5uhYq9j
+      YV444b2Gra0/onJm7e/zRUSSJGkCgYEA67Q8gBSADrkc0UCypjnFV8WWCQJBPspb9Vnf2MJi5aYM
+      U5Sa/2H+tNoY+fJoa/eDSu1jeAn71TDcXZizihj3IT8gVdoXSncbcTulxEnaOi85Q2uKfSia16rX
+      d+MufjJ4UDC7vR/Ve+zIQOxpzBmcFO5cMnLS3mJdpWSdS7DyQpMCgYEAkG+6udsQ02GEKaJZl2mi
+      XBqe4Rh187sDCwiqSO5ItS4jUg1xF1cn1PuF2nvjztZyEsaKKYdiqekEQv3jA6gRsWFvRi/abFN3
+      zau/5M42v7H1cgU7m+FsDywhN5IRAmGfEyL/2wpKuZ6lD2qqhGkXmxqyEqgmEClyIwxJKHWiAwMC
+      gYBCJK8Bpj8VYp8SnZxEh1u4uMrUtlxG2ZSasmDdvBbyqPk2jzI7zm0ipT1zDrJ88dVXNmy+Z9bS
+      ycZdQZfIfh8DpmpVjUER9YCu8vUeszbZMx1XrRsM6lMhiGC01PzcDx+yKSrV9NP81cKQbYd27gzd
+      1tHqmkxQebwbyLNXZU1mnwKBgDpuiPsBbdgmHkJ9pIMFwCJEvrvPmoBEyuFe2wzwIUfy52UdfP/1
+      SW73ZlpSPoIB7Vo9Kc3NMJQOaaP0dC+Zgbbh9RNO7q1eQxxYfCRDbJC2nNZI2amhU4b70mBZ3jm5
+      ZpJmWV2y1zIqxRnsjBlPLraX4Sx9DBEDw2H8aWhN1oIjAoGBANc0gizRHGfOK2UASXskuO5Ueias
+      6z0V7J/m93E7wK8IQHcZXGloy8S9QSX6uAqe48ZDVCZGPxqq7TppT+P9WsdqkXqxR7M/KLa+7Y6C
+      s1tkDtD9uOJN6CsLuVjfuo4ZT5SwC7pq842aQrqJveKWKdzEorQjWKeN8OM2wzEMs0P1
+      -----END RSA PRIVATE KEY-----"	
+  }
+)
+
+return $signature				
+				</eg>
+			</div2>	
+      </div1>      
    </body>
    <back>
       <div1>
