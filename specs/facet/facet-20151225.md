@@ -11,8 +11,6 @@
   <publoc>
      <loc href="http://expath.org/spec/facet/20151225"/>
   </publoc>
-  <prevlocs>
-  </prevlocs>
   <authlist>
      <author role="editor">
         <name>Zed Zhou</name>
