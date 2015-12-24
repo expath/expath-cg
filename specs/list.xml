@@ -72,9 +72,15 @@
       </editor>
    </spec>
    <spec name="facet">
-      <editor latest="true">
+      <revision version="20151225" latest="true">
+         <file href="facet/facet-20151225.html" format="html" diff="false"/>
+         <file href="facet/facet-20151225.xml"  format="xml"  diff="false"/>
+         <file href="facet/facet-20151225.md"   format="md"   diff="false"/>
+      </revision>
+      <editor>
          <file href="facet/facet.html" format="html" diff="false"/>
          <file href="facet/facet.xml"  format="xml"  diff="false"/>
+         <file href="facet/facet.md"   format="md"   diff="false"/>
       </editor>
    </spec>
    <spec name="file">
