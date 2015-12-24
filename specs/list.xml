@@ -71,6 +71,12 @@
          <file href="crypto/crypto-diff.xml"  format="xml"  diff="true"/>
       </editor>
    </spec>
+   <spec name="facet">
+      <editor latest="true">
+         <file href="facet/facet.html" format="html" diff="false"/>
+         <file href="facet/facet.xml"  format="xml"  diff="false"/>
+      </editor>
+   </spec>
    <spec name="file">
       <revision version="20100517">
          <file href="file/file-20100517.html" format="html" diff="false"/>
