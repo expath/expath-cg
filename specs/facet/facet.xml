@@ -1,0 +1,883 @@
+<spec><header>
+  <title>Facet Module</title>
+  <w3c-designation>w3c-designation</w3c-designation>
+  <w3c-doctype>EXPath Proposed Module</w3c-doctype>
+  <pubdate>
+     <day>20</day>
+     <month>December</month>
+     <year>2015</year>
+  </pubdate>
+  <publoc>
+     <!--<loc href="http://expath.org/spec/file/20131203"/>-->
+  </publoc>
+  <prevlocs>
+  </prevlocs>
+  <authlist>
+     <author role="editor">
+        <name>Zed Zhou</name>
+        <affiliation>EMC</affiliation>
+     </author>
+     <author role="editor">
+        <name>Carla Spruit</name>
+        <affiliation>EMC</affiliation>
+     </author>
+     <author role="contrib">
+        <name>Jonathan Robie</name>
+        <affiliation>EMC</affiliation>
+     </author>
+     <author role="contrib">
+        <name>Bruno Marquie</name>
+        <affiliation>EMC</affiliation>
+     </author>
+  </authlist>
+  <copyright>
+     <p>Published by the <loc
+           href="http://w3.org/community/expath/">EXPath Community Group</loc> under the <loc
+           href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+           License Agreement (CLA)</loc>. A human-readable <loc
+           href="http://www.w3.org/community/about/agreements/cla-deed/">summary</loc> is
+        available.</p>
+     <p>This specification was published by the <loc href="http://www.w3.org/community/expath/"
+           >EXPath Community Group</loc>. It is not a W3C Standard nor is it on the W3C
+        Standards Track. Please note that under the <loc
+           href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+           License Agreement (CLA)</loc> there is a limited opt-out and other conditions apply.s
+        Learn more about <loc href="http://www.w3.org/community/">W3C Community and Business
+           Groups</loc>.</p>
+  </copyright>
+  <abstract>
+     <p>This proposal defines extension functions and data models to enable Faceted navigation/search
+        support in XQuery.</p>
+  </abstract>
+  <status>
+     <p/>
+  </status>
+  <langusage>
+     <language>en-US</language>
+  </langusage>
+  <revisiondesc>
+     <p>revisiondesc</p>
+  </revisiondesc>
+</header>
+
+<body><div1 id='status-of-this-document'>
+<head>Status of this document</head>
+<p>This document is in an initial submission stage. Comments are welcomed at <loc href="mailto:zed.zhou@emc.com">here</loc>. </p>
+</div1>
+<div1 id='introduction'>
+<head>Introduction</head>
+<p>Faceted search has proven to be enormously popular in the real world applications.  Faceted search allows user to navigate
+ and access information via a structured facet classification system.  Combined with full text search, it provides user
+ with enormous power and flexibility to discover information.</p>
+<p>This proposal defines a standardized approach to support the Faceted search in XQuery.  It has been designed to be
+compatible with XQuery 3.0, and is intended to be used in conjunction with XQuery and XPath Full Text 3.0.</p>
+<div2 id='namespace-conventions'>
+<head>Namespace conventions</head>
+<p>The module defined by this document defines functions and elements in the
+namespace <code><loc href="http://expath.org/ns/facet">http://expath.org/ns/facet</loc></code>. In this document, the
+<code>facet</code> prefix is bound to this namespace URI.</p>
+</div2>
+<div2 id='facet-terminologies'>
+<head>Facet terminologies</head>
+<ulist><item><p>Facet:  refers to an object attribute (in a generic sense, not to be confused with xml attribute) that will be 
+aggregated.  For example,  &quot;color&quot; is a facet of &quot;car&quot; object.</p>
+</item><item><p>Facet-value: refers to a value of the facet.  For example, &quot;blue&quot; is a facet-value of the facet &quot;color&quot; for &quot;car&quot; object.</p>
+</item><item><p>The facet aggregation: counting the occurrence of each facet-value in the results.</p>
+</item><item><p>The facet drills:</p>
+<olist><item><p>drill-down: filter the search results by matching a selected facet value. Once a facet-value is drilled down,
+the facet is no longer available for selection by the user, thus only one facet-value in the same facet can be
+drilled-down at a time.  Example:</p>
+<eg>
+- Color                                  - Color
+  - blue(10)    -&gt; User select blue  -&gt;    x blue(10)
+  - red(6)
+  - yellow(2)
+
+* In UI, Color:blue is now shown as selected, the other values of facet &quot;Color&quot; are no longer
+available for further selection
+</eg></item><item><p>drill-sideway:  also known as multi-select facets. Filter the search results by matching against multiple facet
+values of the same facet.  Example:</p>
+<eg>
+- Color                         - Color                     - Color
+  - blue(10)  -&gt; select blue -&gt;   x blue(10)  -&gt; then red -&gt;  x blue(10)
+  - red(6)                        - red(6)                    x red(6)
+  - yellow(2)                     - yellow(2)                 - yellow(2)
+</eg></item></olist>
+</item><item><p>Hierarchical facets.  Organizing multiple facets in a hierarchical structure.  When
+a facet is a part of hierarchy, it must be aggregated in relation to its parent facet.  This concept
+is also sometimes referred to as pivot facet.</p>
+<p>For example:</p>
+<eg>
+ Flat facets                Hierarchical facets, &quot;Color&quot; is child of &quot;Make&quot;
+ - Make                     - Make
+   - Audi(10)                 - Audi(10)
+                    ----&gt;        - Color
+ - Color                          - Blue(5)
+   - Blue(10)
+
+ * There are 10 blue cars in total, but only 5 blue Audi.
+</eg></item></ulist>
+</div2>
+<div2 id='the-xquery-extension'>
+<head>The XQuery Extension</head>
+<p>The faceted search support consists of the definitions of the facet data models, and the XQuery functions
+that manipulate the data models to perform facet aggregation and drills.  The following sections contain
+the detailed specification of the data models and the XQuery functions.  The <loc href="#use-cases">Use Cases</loc> section contains
+the examples demonstrating the application of this facet proposal with some sample data. </p>
+</div2>
+</div1>
+<div1 id='schema'>
+<head>Schema</head>
+<p>Below is the RelaxNG Compact grammar for the facet data models:</p>
+<eg>
+default namespace facet = &quot;http://expath.org/ns/facet&quot;
+datatypes xs = &quot;http://www.w3.org/2001/XMLSchema-datatypes&quot;
+
+start = Facet
+
+Facet = element facet {
+  attribute name { xs:string },
+  element key {
+      attribute value { xs:string },
+      attribute count { xs:integer },
+      attribute type  { xs:QName }?,
+      AnyElement*,
+      Facet*
+  }*,
+  AnyElement*
+}
+
+Facets = element facets {
+    Facet*,
+    AnyElement*
+}
+
+FacetDef = element facet-definition {
+    attribute name { xs:string },
+    element group-by {
+        attribute function { xs:QName }?,
+        attribute collation { xs:string }?,
+        attribute type { xs:string }?,
+        element sub-path { text } +,
+        AnyElement*
+    },
+    element max-values { xs:integer }?,
+    element order-by {
+        attribute direction { &quot;ascending&quot; | &quot;descending&quot; },
+        attribute empty { &quot;greatest&quot; | &quot;least&quot; }?,
+        &quot;value&quot; | &quot;count&quot;
+    }?,
+
+    AnyElement*,
+    FacetDef*,
+}
+
+# Denotes any element that does not belong to facet namespace
+AnyElement = element * - facet:* {
+    ( attribute * - facet:* { text }
+    | text 
+    | AnyElement )*
+}
+</eg><p>Example:</p>
+<eg>
+&lt;facet-definition xmlns=&quot;http://expath.org/ns/facet&quot; name=&quot;Country&quot;&gt;
+    &lt;group-by&gt;
+        &lt;sub-path&gt;location/country&lt;/sub-path&gt;
+    &lt;/group-by&gt;
+    &lt;max-values&gt;100&lt;/max-values&gt;
+    &lt;order-by direction=&quot;ascending&quot;&gt;value&lt;/order-by&gt;
+&lt;/facet-definition&gt;
+
+&lt;facets xmlns=&quot;http://expath.org/ns/facet&quot;&gt;
+    &lt;facet name=&quot;country&quot;&gt;
+        &lt;key count=&quot;2&quot; value=&quot;US&quot;/&gt;
+    &lt;/facet&gt;
+&lt;/facets&gt;
+</eg><div2 id='element-facet'>
+<head>element facet</head>
+<ulist><item><p>attribute name : The facet name</p></item><item><p>element key  : Contains all information pertaining to a facet grouping key. See the <loc href="#element-key">element key</loc>.</p></item><item><p>AnyElement*  : For customization.</p></item></ulist>
+<div3 id='element-key'>
+<head>element key</head>
+<ulist><item><p>attribute value : The facet value</p></item><item><p>attribute count : Number of occurrences counted for this facet value in the results</p></item><item><p>attribute type  : Facet value data type,  always one of xs:anyAtomicType.  Optional attribute: when not specified, the default value is &quot;xs:string&quot;.</p></item><item><p>AnyElement*     : Any elements that do not belong to the facet namespace, for customization.</p></item><item><p>element facet* :  Optional nested facets, for supporting hierarchical facets.</p></item></ulist>
+</div3>
+</div2>
+<div2 id='element-facets'>
+<head>element facets</head>
+<ulist><item><p>element facet* : Zero or more facet elements.</p></item><item><p>AnyElement*    : For customization.</p></item></ulist>
+</div2>
+<div2 id='element-facet-definition'>
+<head>element facet-definition</head>
+<ulist><item><p>attribute name : Defines the facet name.</p></item><item><p>element group-by : Parameters for obtaining facet values from a sequence of items.  Facet value is similar to the
+concept of grouping key defined in the <loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#id-group-by">group-by-clause</loc>.
+The key difference is that there is one and only one grouping key per result item, but there could be zero 
+or more facet value(s) per result item.  See this <loc href="#element-group-by">section</loc> for more details.</p></item><item><p>element max-values : Optional limit for maximum number of facet values to be returned, after ordering is applied.</p></item><item><p>element order-by   : Optional ordering parameters to specify the order of returned facet values.  See this <loc href="#element-order-by">section</loc>.</p></item><item><p>AnyElement*    : For customization.</p></item><item><p>element facet-definition* : Optional nested facet definitions for supporting hierarchical facets.</p></item></ulist>
+<div3 id='element-order-by'>
+<head>element order-by</head>
+<ulist><item><p>attribute direction : One of &quot;ascending&quot; or &quot;descending&quot;.  See <loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#prod-xquery31-OrderModifier">OrderModifier</loc></p></item><item><p>attribute empty     : One of &quot;greatest&quot; or &quot;least&quot;.  See <loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#prod-xquery31-OrderModifier">OrderModifier</loc></p></item><item><p>content is one of<ulist><item><p>&quot;value&quot; : Order by /facet/key/@value</p></item><item><p>&quot;count&quot; : Order by /facet/key/@count, as xs:integer</p></item></ulist>
+</p></item><item><p>When ordering by &quot;value&quot;, where the facet values are of xs:string type, and attribute collation is specified in
+the group-by element, implementation must order the string values using the specified collation.</p></item><item><p>If order-by is not specified, then implementation must by default order by &quot;count&quot;, with direction &quot;descending&quot;.</p></item></ulist>
+</div3>
+<div3 id='element-group-by'>
+<head>element group-by</head>
+<ulist><item><p>attribute function : An optional string containing the QName of a function that returns customized facet values</p></item><item><p>attribute collation : An optional string defined as <loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#doc-xquery31-URILiteral">URILiteral</loc>.
+Collation is used to determine the equality of facet values of xs:string type.  See
+<loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#id-group-by">group-by-clause</loc> for the
+detailed semantics of this attribute.  If not specified, the default collation is used.</p></item><item><p>attribute type : An optional string containing a xs:QName plus an optional <loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#prod-xquery31-OccurrenceIndicator">OccurrenceIndicator</loc>.
+xs:QName must refer to a xs:anyAtomicType.
+When specified, strict type and cardinality checks are enforced on the facet values before
+they are counted.  See <loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#id-group-by">group-by-clause</loc>
+for the detailed semantics of this attribute.</p></item><item><p>element sub-path<ulist><item><p>As defined by <loc href="http://www.w3.org/TR/xmlschema11-1/#c-selector-xpath">selector-XPath</loc>, the sub-path is relative to
+each item in the results sequence passed to the function &quot;facet:count&quot;.</p></item><item><p>If attribute function is provided, then more than 1 sub-path may be specified , otherwise only 1 sub-path is
+allowed</p></item></ulist>
+</p></item><item><p>AnyElement*  : For customization.</p></item></ulist>
+<p>The facet value grouping rules to obtain and count the facet values are mostly identical to the rules specified by <loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#id-group-by">group-by-clause</loc>.
+More specifically:</p>
+<olist><item><p>For every item of the results sequence, the sub-path expressions are evaluated with the item as the context item.</p></item><item><p>The results are then atomized to a sequence of zero or more atomic values.</p></item><item><p>Apply the group-by function if specified.<ulist><item><p>If no group-by function exists, the atomized results from step 2 are the facet values.</p></item><item><p>If group-by function exists, the results from step 2 are passed to the group-by function.  The returned result
+from the group-by function are the facet values.</p></item></ulist>
+</p></item><item><p>If attribute type is specified, strong type and cardinality checks are performed on the facet values.  Error
+<loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#ERRXPTY0004">err:XPTY0004</loc> should be raised if check fails.</p></item><item><p>Facet values are then counted using the same equality rule as defined by <loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#id-group-by">group-by-clause</loc>,
+using the collation attribute when specified.</p></item></olist>
+<p>There exists a key difference between the grouping-key defined in <loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#id-group-by">group-by-clause</loc>
+and the facet value.  The following rule for &quot;grouping-key&quot; does not apply to facet-value:</p>
+<eg>
+If the value of any grouping variable consists of more than one item, a type error is raised [err:XPTY0004].
+</eg><p>For facet, it&#39;s perfectly logical to have a result item to be counted towards multiple facet values or none at all, 
+thus there may exist zero or more facet values per result item.</p>
+<p>For conciseness, the following examples show the equivalent group-by clauses for some group-by elements, assuming
+there is exactly one facet value (grouping key) per result item.</p>
+<p>Example 1:</p>
+<eg>
+group by $d := $item//sub-path
+order by count($item) descending
+
+&lt;group-by&gt;
+    &lt;sub-path&gt;//sub-path&lt;/sub-path&gt;
+&lt;/group-by&gt;
+</eg><p>Example 2:</p>
+<eg>
+group by $d := local:group-function($item//sub-path)
+order by count($item) descending
+
+&lt;group-by function=&quot;local:group-function&quot;&gt;
+    &lt;sub-path&gt;//sub-path&lt;/sub-path&gt;
+&lt;/group-by&gt;
+</eg><p>Example 3:</p>
+<eg>
+group by $d := local:group-function($item//sub-path) collation &quot;Spanish&quot;
+order by count($item) descending
+
+&lt;group-by function=&quot;local:group-function&quot; collation=&quot;Spanish&quot;&gt;
+    &lt;sub-path&gt;//sub-path&lt;/sub-path&gt;
+&lt;/group-by&gt;
+</eg><p>Example 4:</p>
+<eg>
+group by $d as xs:string := local:group-function($item//sub-path) collation &quot;Spanish&quot;
+order by count($item) descending
+
+&lt;group-by function=&quot;local:group-function&quot; collation=&quot;Spanish&quot; type=&quot;xs:string&quot;&gt;
+    &lt;sub-path&gt;//sub-path&lt;/sub-path&gt;
+&lt;/group-by&gt;
+</eg></div3>
+</div2>
+</div1>
+<div1 id='the-function-definitions'>
+<head>The function definitions</head>
+<div2 id='facet-count'>
+<head>facet:count</head>
+<p><rfc2119>Signature</rfc2119></p>
+<eg>
+<rfc2119>facet:count</rfc2119>($results as <emph>item()*</emph>,
+    $facet-definitions as <emph>element(facet:facet-definition)*</emph>) as <emph>element(facet:facets)</emph>
+</eg><p><rfc2119>Properties</rfc2119></p>
+<p>This function is: deterministic, context-independent, focus-independent</p>
+<p><rfc2119>Rules</rfc2119></p>
+<p>Given a result sequence, and a sequence of facet definitions, count the facet-values for each facet defined
+by the facet definition(s).</p>
+</div2>
+<div2 id='facet-drill'>
+<head>facet:drill</head>
+<p><rfc2119>Signature</rfc2119></p>
+<eg>
+<rfc2119>facet:drill</rfc2119>($results as <emph>item()*</emph>,
+    $facet-definition as <emph>element(facet:facet-definition)</emph>,
+    $selected-facet as <emph>element(facet:facet)</emph>) as <emph>item()*</emph>
+</eg><p><rfc2119>Properties</rfc2119></p>
+<p>This function is: deterministic, context-independent, focus-independent</p>
+<p><rfc2119>Rules</rfc2119></p>
+<p>Given a result sequence, a facet definition, and a selected facet value contained in the facet element, return the
+results that match the selected facet value.  This function can be used by both drill-down and drill-sideway queries.</p>
+<p>In the case of hierarchical facets, the $selected-facet must have compatible hierarchical structure as $facet-definition.
+This should be true by default if an application constructed $selected_facet from the facets element returned by facet:count
+function using the same $facet-definition).  See use cases for more details.</p>
+</div2>
+<div2 id='group-by-function'>
+<head>group-by function</head>
+<p><rfc2119>Signature</rfc2119></p>
+<eg>
+<rfc2119>facet:group-by-function</rfc2119>($facet-definition as <emph>element(facet:facet-definition)</emph>,
+    $sub-path-values as <emph>xs:anyAtomicType*</emph>,
+    ...) as <emph>xs:anyAtomicType*</emph>;
+</eg><p><rfc2119>Properties</rfc2119></p>
+<p>This function is: deterministic, context-independent, focus-independent</p>
+<p><rfc2119>Rules</rfc2119></p>
+<p>The group-by function is supplied by the application, called by both facet:count and facet:drill.</p>
+<p>The group-by function is a function that generates facet values from the original values.  Each item in the returned
+sequence is a facet value that must be counted by facet:count, or compared against by facet:drill.  An empty
+return sequence is also allowed.</p>
+<p>As facet-definition&#39;s group-by element may define multiple sub-path child elements, the group-by function has arity
+ranging from 2 to infinity.  The atomized sub-path values are passed to the group-by function in the same order as
+defined in the group-by element.</p>
+<p>Element facet-definition is also passed to the group-by function to allow an application to pass customized parameters
+to the group-by function.</p>
+<p>In the case of hierarchical facet definition, facet:count and facet:drill must pass in the matching
+facet-definition element in the hierarchical structure to the group-by function.  For example:</p>
+<eg>
+&lt;facet-definition xmlns=&quot;http://expath.org/ns/facet&quot; name=&quot;Country&quot;&gt;
+    &lt;group-by&gt;
+      &lt;sub-path&gt;//country&lt;/sub-path&gt;
+    &lt;/group-by&gt;
+    &lt;facet-definition name=&quot;region&quot;&gt;    &lt;!--  this is the facet-definition passed to local:group-by-region, instead
+                                              of the &#39;Country&#39; facet-definition above--&gt;
+      &lt;group-by function=&quot;local:group-by-region&quot;&gt;
+        &lt;sub-path&gt;//gps-coordinates&lt;/sub-path&gt;
+      &lt;/group-by&gt;
+    &lt;/facet-definition&gt;
+&lt;/facet-definition&gt;
+</eg></div2>
+</div1>
+<div1 id='use-cases'>
+<head>Use cases</head>
+<p>For the use cases, we use the sample &quot;employee&quot; data in Appendix B.  Here is what one employee element looks like:</p>
+<eg>
+&lt;employee&gt;
+    &lt;name&gt;John Doe&lt;/name&gt;
+    &lt;sex&gt;Male&lt;/sex&gt;
+    &lt;organization&gt;HR&lt;/organization&gt;
+    &lt;location&gt;
+      &lt;country&gt;USA&lt;/country&gt;
+      &lt;state&gt;CA&lt;/state&gt;
+      &lt;city&gt;Pleasanton&lt;/city&gt;
+    &lt;/location&gt;
+    &lt;age&gt;21&lt;/age&gt;
+    &lt;employDate&gt;2010-02-01&lt;/employDate&gt;
+    &lt;skills&gt;
+      &lt;skill&gt;word&lt;/skill&gt;
+      &lt;skill&gt;excel&lt;/skill&gt;
+      &lt;skill&gt;windows&lt;/skill&gt;
+    &lt;/skills&gt;
+&lt;/employee&gt;
+</eg><div2 id='case-1-simple-facet-based-on-existing-attribute'>
+<head>Case 1: Simple facet based on existing attribute</head>
+<p>The XQuery using this facet proposal:</p>
+<eg>
+declare namespace facet = &quot;http://expath.org/ns/facet&quot;;
+let $facetDefinition :=
+  &lt;facet:facet-definition name=&quot;Org&quot;&gt;
+    &lt;facet:group-by&gt;
+      &lt;facet:sub-path&gt;organization&lt;/facet:sub-path&gt;
+    &lt;/facet:group-by&gt;
+  &lt;/facet:facet-definition&gt;
+return facet:count( $employees, $facetDefinition )
+</eg><p>The equivalent XQuery using group-by-clause, since employee belongs to one and only one organization:</p>
+<eg>
+declare namespace facet = &quot;http://expath.org/ns/facet&quot;;
+return
+  &lt;facet:facets&gt;
+    &lt;facet:facet name=&#39;Org&#39;&gt;
+      {
+      for $e in $employees
+      group by $org := $e/organization
+      order by count($e) descending
+      return &lt;facet:key value=&quot;{ $org }&quot; count=&quot;{ count($e) }&quot;/&gt;
+      }
+    &lt;/facet:facet&gt;
+  &lt;/facet:facets&gt;
+</eg><p>Expected result:</p>
+<eg>
+&lt;facets xmlns=&quot;http://expath.org/ns/facet&quot;&gt;
+  &lt;facet name=&quot;Org&quot;&gt;
+    &lt;key value=&quot;Sales&quot; count=&quot;3&quot;/&gt;
+    &lt;key value=&quot;HR&quot; count=&quot;2&quot;/&gt;
+    &lt;key value=&quot;Finance&quot; count=&quot;1&quot;/&gt;
+  &lt;/facet&gt;
+&lt;/facets&gt;
+</eg></div2>
+<div2 id='case-2-simple-customized-facet-based-on-group-by-function'>
+<head>Case 2: Simple customized facet based on group-by function</head>
+<p>The XQuery using this facet proposal:</p>
+<eg>
+declare namespace facet = &quot;http://expath.org/ns/facet&quot;;
+declare function local:group-by-org($facetDef, $orgs) {
+  if ($orgs = (&#39;Sales&#39;, &#39;Finance&#39;))
+  then &#39;Sales and Finance&#39;
+  else &#39;Other departments&#39;
+};
+
+let $facetDefinition :=
+&lt;facet:facet-definition name=&quot;Org&quot;&gt;
+  &lt;facet:group-by function=&quot;local:group-by-org&quot;&gt;
+    &lt;facet:sub-path&gt;organization&lt;/facet:sub-path&gt;
+  &lt;/facet:group-by&gt;
+&lt;/facet:facet-definition&gt;
+return facet:count($employees, $facetDefinition)
+</eg><p>The equivalent XQuery using group-by-clause:</p>
+<eg>
+declare namespace facet = &quot;http://expath.org/ns/facet&quot;;
+declare function local:group-by-org ($facetVals) {
+  if ($facetVals = (&#39;Sales&#39;, &#39;Finance&#39;))
+  then &#39;Sales and Finance&#39;
+  else &#39;Other departments&#39;
+};
+return
+  &lt;facet:facets&gt;
+    &lt;facet:facet name=&quot;Org&quot;&gt;
+      {
+      for $e in $employees
+      group by $org := local:group-by-org($e/organization)
+      order by count($e) descending
+      return &lt;facet:key value=&quot;{ $org }&quot; count=&quot;{ count($e) }&quot;/&gt;
+      }
+    &lt;/facet:facet&gt;
+  &lt;/facet:facets&gt;
+</eg><p>Expected result:</p>
+<eg>
+&lt;facets xmlns=&quot;http://expath.org/ns/facet&quot;&gt;
+  &lt;facet name=&quot;Org&quot;&gt;
+    &lt;key value=&quot;Sales and Finance&quot; count=&quot;4&quot;/&gt;
+    &lt;key value=&quot;Other departments&quot; count=&quot;2&quot;/&gt;
+  &lt;/facet&gt;
+&lt;/facets&gt;
+</eg></div2>
+<div2 id='case-3-counting-facets-when-the-grouping-key-consists-of-more-than-1-value'>
+<head>Case 3: Counting facets when the grouping key consists of more than 1 value</head>
+<p>The XQuery using this facet proposal:</p>
+<eg>
+declare namespace facet = &quot;http://expath.org/ns/facet&quot;;
+let $facetDefinition :=
+  &lt;facet:facet-definition name=&quot;Skill&quot;&gt;
+    &lt;facet:group-by&gt;
+      &lt;facet:sub-path&gt;skills/skill&lt;/facet:sub-path&gt;
+    &lt;/facet:group-by&gt;
+  &lt;/facet:facet-definition&gt;
+return facet:count( $employees, $facetDefinition)
+</eg><p>There is no equivalent XQuery using group-by-clause, because skill is a repeatable element.
+Following XQuery will throw <loc href="http://www.w3.org/TR/2014/WD-xquery-31-20140424/#ERRXPTY0004">err:XPTY0004</loc>.</p>
+<eg>
+declare namespace facet = &quot;http://expath.org/ns/facet&quot;;
+&lt;facet:facets&gt;
+  &lt;facet:facet name=&quot;Skill&quot;&gt;
+    {
+    for $e in $employees
+    let $skill := $e/skills/skill
+    group by $skill
+    return &lt;facet:key value=&quot;{ $skill }&quot; count=&quot;{ count($e) }&quot;/&gt;
+    }
+  &lt;/facet:facet&gt;
+&lt;/facet:facets&gt;
+</eg><p>Expected result:</p>
+<eg>
+ &lt;facets xmlns=&quot;http://expath.org/ns/facet&quot;&gt;
+  &lt;facet name=&quot;Skill&quot;&gt;
+    &lt;key value=&quot;Word&quot; count=&quot;4&quot;/&gt;
+    &lt;key value=&quot;PowerPoint&quot; count=&quot;4&quot;/&gt;
+    &lt;key value=&quot;Excel&quot; count=&quot;2&quot;/&gt;
+    &lt;key value=&quot;Windows&quot; count=&quot;1&quot;/&gt;
+    &lt;key value=&quot;Linux&quot; count=&quot;1&quot;/&gt;
+    &lt;key value=&quot;OpenOffice&quot; count=&quot;1&quot;/&gt;
+    &lt;key value=&quot;PhotoShop&quot; count=&quot;1&quot;/&gt;
+    &lt;key value=&quot;Negotiation&quot; count=&quot;1&quot;/&gt;
+  &lt;/facet&gt;
+&lt;/facets&gt;
+</eg></div2>
+<div2 id='case-4-counting-facets-with-group-by-function-strict-type-checking-and-order-by-value-with-a-collation'>
+<head>Case 4: Counting facets with group-by function strict type checking, and order by value with a collation</head>
+<p>The XQuery using this facet proposal:</p>
+<eg>
+declare namespace facet = &quot;http://www.emc.com/facets&quot;;
+declare function local:group-by-org($facetVals, $facetDef) {
+  if ($facetVals = (&#39;Sales&#39;, &#39;Finance&#39;))
+  then &#39;Sales and Finance&#39;
+  else &#39;Other departments&#39;
+};
+
+let $facetDefinition :=
+&lt;facet:facet-definition name=&quot;Org&quot;&gt;
+  &lt;facet:group-by function=&quot;local:group-by-org&quot; type=&#39;xs:string&#39; collation=&#39;fr_FR&#39;&gt;
+    &lt;facet:sub-path&gt;organization&lt;/facet:sub-path&gt;
+  &lt;/facet:group-by&gt;
+  &lt;facet:order-by direction=&quot;ascending&quot; empty=&#39;least&#39;&gt;value&lt;/facet:order-by&gt;
+&lt;/facet:facet-definition&gt;
+return facet:count(/employees/employee, $facetDefinition)
+</eg><p>The equivalent XQuery using group-by-clause:</p>
+<eg>
+declare namespace facet = &quot;http://www.emc.com/facets&quot;;
+declare function local:group-by-org($facetVals) {
+  if ($facetVals = (&#39;Sales&#39;, &#39;Finance&#39;))
+  then &#39;Sales and Finance&#39;
+  else &#39;Other departments&#39;
+};
+&lt;facet:facets&gt;
+  &lt;facet:facet name=&#39;Org&#39;&gt;
+    {
+    for $e in /employees/employee
+    group by $org as xs:string := local:group-by-org($e/organization) collation &#39;fr_FR&#39;
+    order by $org ascending empty least collation &#39;fr_FR&#39;
+    return &lt;facet:key value=&quot;{ $org }&quot; count=&quot;{ count($e) }&quot;/&gt;
+    }
+  &lt;/facet:facet&gt;
+&lt;/facet:facets&gt;
+</eg><p>Expected result:</p>
+<eg>
+&lt;facets xmlns=&quot;http://www.emc.com/facets&quot;&gt;
+  &lt;facet name=&quot;Org&quot;&gt;
+    &lt;key value=&quot;Other departments&quot; count=&quot;2&quot;/&gt;
+    &lt;key value=&quot;Sales and Finance&quot; count=&quot;4&quot;/&gt;
+ &lt;/facet&gt;
+&lt;/facets&gt;
+</eg></div2>
+<div2 id='case-5-hierarchical-facet'>
+<head>Case 5: Hierarchical facet</head>
+<p>The XQuery using this facet proposal:</p>
+<eg>
+declare namespace facet = &quot;http://expath.org/ns/facet&quot;;
+let $facetDefinition :=
+    &lt;facet-definition xmlns=&quot;http://expath.org/ns/facet&quot;&gt;
+        &lt;name&gt;State&lt;/name&gt;
+        &lt;group-by&gt;
+            &lt;sub-path&gt;//state&lt;/sub-path&gt;
+        &lt;/group-by&gt;
+        &lt;facet-definition&gt;
+            &lt;name&gt;Skill&lt;/name&gt;
+            &lt;group-by&gt;
+                &lt;sub-path&gt;//skill&lt;/sub-path&gt;
+            &lt;/group-by&gt;
+        &lt;/facet-definition&gt;
+    &lt;/facet-definition&gt;
+return facet:count( $employees, $facetDefinition)
+</eg><p>Expected result:</p>
+<eg>
+&lt;facets xmlns=&quot;http://expath.org/ns/facet&quot;&gt;
+  &lt;facet name=&quot;State&quot;&gt;
+    &lt;key count=&quot;3&quot; value=&quot;WA&quot;&gt;
+        &lt;facet name=&quot;Skill&quot;&gt;
+            &lt;key count=&quot;2&quot; value=&quot;Word&quot;/&gt;
+            &lt;key count=&quot;2&quot; value=&quot;PowerPoint&quot;/&gt;
+            &lt;key count=&quot;1&quot; value=&quot;OpenOffice&quot;/&gt;
+            &lt;key count=&quot;1&quot; value=&quot;PhotoShop&quot;/&gt;
+        &lt;/facet&gt;
+    &lt;/value
+    &lt;key count=&quot;2&quot; value=&quot;CA&quot;&gt;
+        &lt;facet name=&quot;Skill&quot;&gt;
+            &lt;key count=&quot;2&quot; value=&quot;Word&quot;/&gt;
+            &lt;key count=&quot;2&quot; value=&quot;Excel&quot;/&gt;
+            &lt;key count=&quot;1&quot; value=&quot;PowerPoint&quot;/&gt;
+            &lt;key count=&quot;1&quot; value=&quot;Linux&quot;/&gt;
+            &lt;key count=&quot;1&quot; value=&quot;Windows&quot;/&gt;
+        &lt;/facet&gt;
+    &lt;/value
+    &lt;key count=&quot;1&quot; value=&quot;OR&quot;&gt;
+        &lt;facet name=&quot;Skill&quot;&gt;
+            &lt;key count=&quot;1&quot; value=&quot;PowerPoint&quot;/&gt;
+            &lt;key count=&quot;1&quot; value=&quot;Negotiation&quot;/&gt;
+        &lt;/facet&gt;
+    &lt;/value&gt;
+  &lt;/facet&gt;
+&lt;/facets&gt;
+</eg><p>The application displays:</p>
+<eg>
+State
+- WA (3)
+  Skill
+  x Word (2)     &lt;=  User select this facet value
+  - PowerPoint (2)
+  - OpenOffice (1)
+  - PhotoShop (1)
+- CA (2)
+  Skill
+  - Word (2)
+  - Excel (2)
+  - PowerPoint (1)
+  - Linux (1)
+  - Windows (1)
+- OR (1)
+  Skill
+  - PowerPoint (1)
+  - Negotiation (1)
+</eg><p>The application then constructs following facet element, based on user&#39;s selection:</p>
+<eg>
+&lt;facet xmlns=&quot;http://expath.org/ns/facet&quot; name=&quot;State&quot;&gt;
+    &lt;key count=&quot;2&quot; value=&quot;WA&quot;&gt;
+        &lt;facet name=&quot;Skill&quot;&gt;
+            &lt;key count=&quot;2&quot; value=&quot;Word&quot;/&gt;
+        &lt;/facet&gt;
+    &lt;/value
+&lt;/facet&gt;
+</eg><p>The application then calls facet:drill, which is able to map the selected facet element to the facet-definition, 
+and effectively applies following XQuery filter expression to the result set:</p>
+<eg>
+$employee//state = &quot;WA&quot; and $employee//skill = &quot;Word&quot;
+</eg></div2>
+<div2 id='case-6-hierarchical-facet-and-drill-sideway'>
+<head>Case 6: Hierarchical facet and drill sideway</head>
+<p>Continuing from previous case, if the application allows user to simultaneously select multiple skills:</p>
+<eg>
+State
+- WA (3)
+  Skill
+  - Word (2)
+  - PowerPoint (2)
+  - OpenOffice (1)
+  - PhotoShop (1)
+- CA (2)
+  Skill
+  x Word (2)          &lt;=  User select this facet value
+  x Excel (2)         &lt;=  and this facet value
+  - PowerPoint (1)
+  - Linux (1)
+  - Windows (1)
+- OR (1)
+  Skill
+  - PowerPoint (1)
+  - Negotiation (1)
+</eg><p>The application then constructs following two facet elements, based on user&#39;s selection:</p>
+<eg>
+let $selected-facet1 :=
+&lt;facet xmlns=&quot;http://expath.org/ns/facet&quot; name=&quot;State&quot;&gt;
+    &lt;key count=&quot;2&quot; value=&quot;CA&quot;&gt;
+        &lt;facet name=&quot;Skill&quot;&gt;
+            &lt;key count=&quot;2&quot; value=&quot;Word&quot;/&gt;
+        &lt;/facet&gt;
+    &lt;/value
+&lt;/facet&gt;
+
+let $selected-facet2 :=
+&lt;facet xmlns=&quot;http://expath.org/ns/facet&quot; name=&quot;State&quot;&gt;
+    &lt;key count=&quot;2&quot; value=&quot;CA&quot;&gt;
+        &lt;facet name=&quot;Skill&quot;&gt;
+            &lt;key count=&quot;1&quot; value=&quot;Excel&quot;/&gt;
+        &lt;/facet&gt;
+    &lt;/value
+&lt;/facet&gt;
+</eg><p>And constructs the following XQuery:</p>
+<eg>
+for $e in $employees[
+    facet:drill(., $facet-definition, $selected-facet1) or
+    facet:drill(., $facet-definition, $selected-facet2)
+] return $e
+</eg><p>Which is effectively the same as:</p>
+<eg>
+for $e in $employees[
+    (//state = &#39;CA&#39; and //skill = &#39;Word&#39;) or
+    (//state = &#39;CA&#39; and //skill = &#39;Excel&#39;)
+] return $e
+</eg></div2>
+</div1>
+</body><back><div1 id='issues-list'>
+<head>Issues list</head>
+<div2 id='issue-1-use-annotations-to-associate-a-grouping-function-to-a-facet-definition'>
+<head>Issue 1. Use annotations to associate a grouping function to a facet-definition</head>
+<p>As an alternative to specifying a function QName in /facet-definition/group-by/@function, annotation
+may be used to associate a grouping function to a facet-definition.</p>
+<p>Example:</p>
+<eg>
+&lt;facet-definition xmlns=&quot;http://expath.org/ns/facet&quot; name=&quot;age&quot;&gt;
+    &lt;group-by function=&quot;age-range&quot;&gt;
+        &lt;sub-path&gt;//age&lt;/sub-path&gt;
+    &lt;/group-by&gt;
+&lt;/facet-definition&gt;
+
+declare function %facet:group-by(&quot;age-range&quot;)local:age-range(
+  $facet-definition as element(facet:facet-definition)
+  $ages as xs:anyAtomicType*,
+) as xs:anyAtomicType* {
+    (: .... :)
+}
+</eg><p>In the example above, annotation &quot;age-range&quot; is used to associated the facet-definition to the function local:age-range.</p>
+<p>Annotation introduces an additional level of indirection to link a facet-definition to a group-by function.  The 
+indirection does not appear to improve or simplify the API.  Thus currently we chose the straight forward function 
+QName association via attribute.</p>
+</div2>
+<div2 id='issue-2-facet-drill-optimization-and-customizations'>
+<head>Issue 2. Facet drill optimization and customizations</head>
+<p>When facet:drill encounters a facet-definition that defines a group-by function, it&#39;s effectively filtering results
+using the following XQuery expression:</p>
+<eg>
+$selected-facet-value = group-by-function($facet-def, $result)
+</eg><p>One main draw back of the above filtering implementation is that it voids any indexing optimization.  To illustrate
+this, lets use a common numeric range facet as an example.</p>
+<p>Suppose we&#39;ve customized the following age range facet based on the same <emph>employee</emph> data in the use-cases above:</p>
+<eg>
+&lt;facet-definition xmlns=&quot;http://expath.org/ns/facet&quot; name=&quot;Age Range&quot;&gt;
+    &lt;group-by function=&quot;local:group-by-range&quot;&gt;
+        &lt;sub-path&gt;//age&lt;/sub-path&gt;
+    &lt;/group-by&gt;
+&lt;/facet-definition&gt;
+
+declare function local:group-by-range(
+  $facet-definition as element(facet:facet-definition)
+  $ages as xs:anyAtomicType*,
+) as xs:anyAtomicType* {
+  for $age in $ages return 
+    if (xs:integer($age) &lt;20 ) then &quot;&lt;20&quot;;
+    else if (xs:integer($age) &lt;30 ) then &quot;20-30&quot;;
+    else &quot;30+&quot;
+}
+</eg><p>Default facet:filter implementation translates to the following equivalent XQuery expression:</p>
+<eg>
+(: ... other constraints ... :) and $selected-age-range = local:group-by-range($employee//age)
+</eg><p>Application may choose to perform facet drill by directly constructing following XQuery expression:</p>
+<eg>
+(: ... other constraints ... :) and $employee//age &lt; 20   (: if $selected-age-range is &quot;&lt;20&quot; :)
+</eg><p>The above XQuery constraint expression can be optimized by the engine to use the index, 
+which is clearly faster than using the default facet:drill implementation.</p>
+<p>Another example is the &#39;dynamic-age-range&#39; facet, where the age range is determined by the minimum and
+the maximum age values in the result set.  In this case the result set must be pre-scanned before facet:count in order 
+to determine the dynamic range, and the range information must be persisted into <emph>facet</emph> element to make facet drill query
+possible later on.  These types of dynamic facets will require an application to implement customization, in addition
+to just using the standard methods/approaches described in this proposal.</p>
+<p>To completely support all possible real world facet requirements may be too complex for this proposal.  For this
+reason we&#39;ve decided to make <emph>facet</emph> and <emph>facet-definition</emph> elements extensible by allowing the inclusion of non
+facet namespace elements.  The implementation will then be able to choose to offer full support for above mentioned
+optimization and customizations via extensions.</p>
+</div2>
+</div1>
+<div1 id='sample-data-for-the-use-cases'>
+<head>Sample data for the use cases</head>
+<p>The complete sample data used by the use cases, presented as an XQuery.</p>
+<eg>
+let $sample :=
+&lt;sample&gt;
+  &lt;employee&gt;
+    &lt;name&gt;John Doe&lt;/name&gt;
+    &lt;sex&gt;Male&lt;/sex&gt;
+    &lt;organization&gt;HR&lt;/organization&gt;
+    &lt;location&gt;
+      &lt;country&gt;US&lt;/country&gt;
+      &lt;state&gt;CA&lt;/state&gt;
+      &lt;city&gt;Pleasanton&lt;/city&gt;
+      &lt;gps&gt;
+        &lt;longitude&gt;-95.677068&lt;/longitude&gt;
+        &lt;latitude&gt;37.0625&lt;/latitude&gt;
+      &lt;/gps&gt;
+    &lt;/location&gt;
+    &lt;age&gt;21&lt;/age&gt;
+    &lt;employDate&gt;2010-02-01&lt;/employDate&gt;
+    &lt;skills&gt;
+      &lt;skill&gt;Word&lt;/skill&gt;
+      &lt;skill&gt;Excel&lt;/skill&gt;
+      &lt;skill&gt;Windows&lt;/skill&gt;
+    &lt;/skills&gt;
+  &lt;/employee&gt;
+
+  &lt;employee&gt;
+    &lt;name&gt;Jane Joe&lt;/name&gt;
+    &lt;sex&gt;Female&lt;/sex&gt;
+    &lt;organization&gt;Finance&lt;/organization&gt;
+    &lt;location&gt;
+      &lt;country&gt;US&lt;/country&gt;
+      &lt;state&gt;CA&lt;/state&gt;
+      &lt;city&gt;San Francisco&lt;/city&gt;
+      &lt;gps&gt;
+        &lt;longitude&gt;-122.419416&lt;/longitude&gt;
+        &lt;latitude&gt;37.77493&lt;/latitude&gt;
+      &lt;/gps&gt;
+    &lt;/location&gt;
+    &lt;age&gt;18&lt;/age&gt;
+    &lt;employDate&gt;2003-02-01&lt;/employDate&gt;
+    &lt;skills&gt;
+      &lt;skill&gt;Word&lt;/skill&gt;
+      &lt;skill&gt;Excel&lt;/skill&gt;
+      &lt;skill&gt;PowerPoint&lt;/skill&gt;
+      &lt;skill&gt;Linux&lt;/skill&gt;
+    &lt;/skills&gt;
+  &lt;/employee&gt;
+
+  &lt;employee&gt;
+    &lt;name&gt;Steve&lt;/name&gt;
+    &lt;sex&gt;Male&lt;/sex&gt;
+    &lt;organization&gt;HR&lt;/organization&gt;
+    &lt;location&gt;
+      &lt;country&gt;US&lt;/country&gt;
+      &lt;state&gt;WA&lt;/state&gt;
+      &lt;city&gt;Seattle&lt;/city&gt;
+      &lt;gps&gt;
+        &lt;longitude&gt;-122.332071&lt;/longitude&gt;
+        &lt;latitude&gt;47.60621&lt;/latitude&gt;
+      &lt;/gps&gt;
+    &lt;/location&gt;
+    &lt;age&gt;31&lt;/age&gt;
+    &lt;employDate&gt;2010-04-01&lt;/employDate&gt;
+    &lt;skills&gt;
+      &lt;skill&gt;OpenOffice&lt;/skill&gt;
+      &lt;skill&gt;Word&lt;/skill&gt;
+    &lt;/skills&gt;
+  &lt;/employee&gt;
+
+  &lt;employee&gt;
+    &lt;name&gt;Kylie&lt;/name&gt;
+    &lt;sex&gt;Female&lt;/sex&gt;
+    &lt;organization&gt;Sales&lt;/organization&gt;
+    &lt;location&gt;
+      &lt;country&gt;US&lt;/country&gt;
+      &lt;state&gt;WA&lt;/state&gt;
+      &lt;city&gt;Bellingham&lt;/city&gt;
+      &lt;gps&gt;
+        &lt;longitude&gt;-122.488225&lt;/longitude&gt;
+        &lt;latitude&gt;48.759553&lt;/latitude&gt;
+      &lt;/gps&gt;
+    &lt;/location&gt;
+    &lt;age&gt;23&lt;/age&gt;
+    &lt;employDate&gt;2010-06-01&lt;/employDate&gt;
+    &lt;skills&gt;
+      &lt;skill&gt;Word&lt;/skill&gt;
+      &lt;skill&gt;PowerPoint&lt;/skill&gt;
+    &lt;/skills&gt;
+  &lt;/employee&gt;
+
+  &lt;employee&gt;
+    &lt;name&gt;Kyle&lt;/name&gt;
+    &lt;sex&gt;Male&lt;/sex&gt;
+    &lt;organization&gt;Sales&lt;/organization&gt;
+    &lt;location&gt;
+      &lt;country&gt;US&lt;/country&gt;
+      &lt;state&gt;WA&lt;/state&gt;
+      &lt;city&gt;Bellingham&lt;/city&gt;
+      &lt;gps&gt;
+        &lt;longitude&gt;-122.499225&lt;/longitude&gt;
+        &lt;latitude&gt;48.759553&lt;/latitude&gt;
+      &lt;/gps&gt;
+    &lt;/location&gt;
+    &lt;age&gt;45&lt;/age&gt;
+    &lt;employDate&gt;2009-06-01&lt;/employDate&gt;
+    &lt;skills&gt;
+      &lt;skill&gt;PowerPoint&lt;/skill&gt;
+      &lt;skill&gt;PhotoShop&lt;/skill&gt;
+    &lt;/skills&gt;
+  &lt;/employee&gt;
+
+  &lt;employee&gt;
+    &lt;name&gt;Mike&lt;/name&gt;
+    &lt;sex&gt;Male&lt;/sex&gt;
+    &lt;organization&gt;Sales&lt;/organization&gt;
+    &lt;location&gt;
+      &lt;country&gt;US&lt;/country&gt;
+      &lt;state&gt;OR&lt;/state&gt;
+      &lt;city&gt;Eugene&lt;/city&gt;
+      &lt;gps&gt;
+        &lt;longitude&gt;-123.086754&lt;/longitude&gt;
+        &lt;latitude&gt;44.052069&lt;/latitude&gt;
+      &lt;/gps&gt;
+    &lt;/location&gt;
+    &lt;age&gt;55&lt;/age&gt;
+    &lt;employDate&gt;1999-06-01&lt;/employDate&gt;
+    &lt;skills&gt;
+      &lt;skill&gt;PowerPoint&lt;/skill&gt;
+      &lt;skill&gt;Negotiation&lt;/skill&gt;
+    &lt;/skills&gt;
+  &lt;/employee&gt;
+
+&lt;/sample&gt;
+
+let $employees := $sample/employee
+</eg></div1>
+</back></spec>
