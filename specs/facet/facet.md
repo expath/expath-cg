@@ -61,7 +61,8 @@
 
 ## Status of this document
 
-This document is in an initial submission stage. Comments are welcomed at <loc href="mailto:zed.zhou@emc.com">here</loc>. 
+This document is in an initial submission stage.  Comments are welcomed at <loc href="mailto:public-expath@w3.org">public-expath@w3.org</loc> 
+mailing list (<loc href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).
 
 ## Introduction
 
