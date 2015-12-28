@@ -410,7 +410,7 @@ declare namespace facet = "http://expath.org/ns/facet";
 &lt;/facets&gt;
 </pre></div></div><div class="div2">
 <h3><a name="case-4-counting-facets-with-group-by-function-strict-type-checking-and-order-by-value-with-a-collation" id="case-4-counting-facets-with-group-by-function-strict-type-checking-and-order-by-value-with-a-collation"></a>5.4 Case 4: Counting facets with group-by function strict type checking, and order by value with a collation</h3><p>The XQuery using this facet proposal:</p><div class="exampleInner"><pre>
-declare namespace facet = "http://www.emc.com/facets";
+declare namespace facet = "http://expath.org/ns/facet";
 declare function local:group-by-org($facetVals, $facetDef) {
   if ($facetVals = ('Sales', 'Finance'))
   then 'Sales and Finance'
@@ -426,7 +426,7 @@ let $facetDefinition :=
 &lt;/facet:facet-definition&gt;
 return facet:count(/employees/employee, $facetDefinition)
 </pre></div><p>The equivalent XQuery using group-by-clause:</p><div class="exampleInner"><pre>
-declare namespace facet = "http://www.emc.com/facets";
+declare namespace facet = "http://expath.org/ns/facet";
 declare function local:group-by-org($facetVals) {
   if ($facetVals = ('Sales', 'Finance'))
   then 'Sales and Finance'
@@ -443,7 +443,7 @@ declare function local:group-by-org($facetVals) {
   &lt;/facet:facet&gt;
 &lt;/facet:facets&gt;
 </pre></div><p>Expected result:</p><div class="exampleInner"><pre>
-&lt;facets xmlns="http://www.emc.com/facets"&gt;
+&lt;facets xmlns="http://expath.org/ns/facet"&gt;
   &lt;facet name="Org"&gt;
     &lt;key value="Other departments" count="2"/&gt;
     &lt;key value="Sales and Finance" count="4"/&gt;

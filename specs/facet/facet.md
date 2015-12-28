@@ -572,7 +572,7 @@ Expected result:
 
 The XQuery using this facet proposal:
 
-    declare namespace facet = "http://www.emc.com/facets";
+    declare namespace facet = "http://expath.org/ns/facet";
     declare function local:group-by-org($facetVals, $facetDef) {
       if ($facetVals = ('Sales', 'Finance'))
       then 'Sales and Finance'
@@ -590,7 +590,7 @@ The XQuery using this facet proposal:
 
 The equivalent XQuery using group-by-clause:
 
-    declare namespace facet = "http://www.emc.com/facets";
+    declare namespace facet = "http://expath.org/ns/facet";
     declare function local:group-by-org($facetVals) {
       if ($facetVals = ('Sales', 'Finance'))
       then 'Sales and Finance'
@@ -609,7 +609,7 @@ The equivalent XQuery using group-by-clause:
 
 Expected result:
 
-    <facets xmlns="http://www.emc.com/facets">
+    <facets xmlns="http://expath.org/ns/facet">
       <facet name="Org">
         <key value="Other departments" count="2"/>
         <key value="Sales and Finance" count="4"/>
