@@ -69,7 +69,7 @@ mailing list (<loc href="http://lists.w3.org/Archives/Public/public-expath/">arc
  and access information via a structured facet classification system.  Combined with full text search, it provides user
  with enormous power and flexibility to discover information.</p>
 <p>This proposal defines a standardized approach to support the Faceted search in XQuery.  It has been designed to be
-compatible with XQuery 3.0, and is intended to be used in conjunction with XQuery and XPath Full Text 3.0.</p>
+compatible with XPath 3.0, and is intended to be used in conjunction with XQuery and XPath Full Text 3.0.</p>
 <div2 id='namespace-conventions'>
 <head>Namespace conventions</head>
 <p>The module defined by this document defines functions and elements in the

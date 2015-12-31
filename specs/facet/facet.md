@@ -71,7 +71,7 @@ Faceted search has proven to be enormously popular in the real world application
  with enormous power and flexibility to discover information.
  
 This proposal defines a standardized approach to support the Faceted search in XQuery.  It has been designed to be
-compatible with XQuery 3.0, and is intended to be used in conjunction with XQuery and XPath Full Text 3.0.
+compatible with XPath 3.0, and is intended to be used in conjunction with XQuery and XPath Full Text 3.0.
 
 ### Namespace conventions
 
