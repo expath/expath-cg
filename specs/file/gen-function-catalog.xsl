@@ -45,15 +45,17 @@
   </xsl:template>
 
   <xsl:template match="eg">
-    <xsl:for-each-group select="*|text()" group-starting-with="ex:function" bind-group="g">
+    <xsl:for-each-group select="*|text()" group-starting-with="ex:function">
+      <xsl:variable name="g" select="current-group()"/>
       <xsl:if test="matches(string-join($g,''),'\S')">
         <fos:proto name="{replace($g/self::ex:function,'\i\c*:','')}">
           <xsl:variable name="types" as="element()*">
-            <xsl:for-each-group select="$g[not(self::ex:function)]" group-ending-with="ex:type"
-              bind-group="t">
+            <xsl:for-each-group select="$g[not(self::ex:function)]" group-ending-with="ex:type">
+              <xsl:variable name="t" select="current-group()"/>
               <xsl:if test="matches(string-join($t,''),'\S')">
                 <fos:arg>
-                  <xsl:attribute name="type" select="$t/self::ex:type" on-empty="()"/>
+                  <xsl:if test="$t/self::ex:type">
+                  <xsl:attribute name="type" select="$t/self::ex:type"/></xsl:if>
                   <xsl:analyze-string select="string-join($t,'')" regex="\$(\i\c*)">
                     <xsl:matching-substring>
                       <xsl:attribute name="name" select="regex-group(1)"/>
