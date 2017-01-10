@@ -23,7 +23,7 @@
 			<plugin>
 				<groupId>ro.kuberam.maven.plugins</groupId>
 				<artifactId>kuberam-expath-plugin</artifactId>
-				<version>0.4.2</version>
+				<version>0.4.6</version>
 				<executions>
 					<execution>
 						<id>generate-first-spec</id>

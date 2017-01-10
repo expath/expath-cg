@@ -200,13 +200,13 @@
             <eg>
 <spec:function>crypto:hmac</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
             $key        as <spec:type>xs:anyAtomicType</spec:type>,
-            $algorithm  as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64Binary</spec:type>
+            $algorithm  as <spec:type>xs:string</spec:type>) as <spec:type>xs:byte*</spec:type>
 </eg>
             <eg>
 <spec:function>crypto:hmac</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
             $key        as <spec:type>xs:anyAtomicType</spec:type>,
             $algorithm  as <spec:type>xs:string</spec:type>,
-            $encoding  as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64Binary</spec:type>
+            $encoding  as <spec:type>xs:string</spec:type>) as <spec:type>xs:string</spec:type>
 </eg>
             <ulist>
                <item>
@@ -219,7 +219,7 @@
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. The supported algorithms are implementation dependent.</p>
                </item>
                <item>
-                  <p><code>$encoding</code> is the encoding of the output. The legal values are "hex" and "base64".</p>
+                  <p><code>$encoding</code> is the encoding of the output. The legal values are "hex" and "base64". The result is generated accordingly as xs:base64Binary string or xs:hexBinary string.</p>
                </item>
             </ulist>
          </div2>
