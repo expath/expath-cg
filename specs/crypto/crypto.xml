@@ -202,20 +202,25 @@
             $key        as <spec:type>xs:anyAtomicType</spec:type>,
             $algorithm  as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64Binary</spec:type>
 </eg>
+            <eg>
+<spec:function>crypto:hmac</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
+            $key        as <spec:type>xs:anyAtomicType</spec:type>,
+            $algorithm  as <spec:type>xs:string</spec:type>,
+            $encoding  as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64Binary</spec:type>
+</eg>
             <ulist>
                <item>
-                  <p><code>$data</code> is the data to be authenticated. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary.</p>
+                  <p><code>$data</code> is the data to be authenticated. This parameter can be of type xs:string, xs:byte*, xs:base64Binary, or xs:hexBinary.</p>
                </item>
                <item>
-                  <p><code>$key</code> is the secret key used for calculating the authentication code. This parameter can be of type
-                  xs:string, xs:base64Binary, or xs:hexBinary.</p>
+                  <p><code>$key</code> is the secret key used for calculating the authentication code. This parameter can be of type xs:string, xs:byte*, xs:base64Binary, or xs:hexBinary.</p>
                </item>               
                <item>
-                  <p><code>$algorithm</code> is the cryptographic hashing algorithm. The default value is "HMAC-SHA1"
-                  (identifier <code>http://www.w3.org/2000/09/xmldsig#hmac-sha1</code>, see <bibref ref="xml-dig-sig-core" />, section 6.1
-                  Algorithm Identifiers and Implementation Requirements). If it is specified an unsupported algorithm, this
-                  is an error <bibref ref="error.unknownAlgorithm"/>. The supported algorithms are implementation dependent.</p>
-               </item>             
+                  <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. The supported algorithms are implementation dependent.</p>
+               </item>
+               <item>
+                  <p><code>$encoding</code> is the encoding of the output. The legal values are "hex" and "base64".</p>
+               </item>
             </ulist>
          </div2>
       </div1>
