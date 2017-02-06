@@ -315,7 +315,8 @@
     <description>Use file:last-modified on a file</description>
     <created by="Michael Kay" on="2012-06-11"/>
     <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
-    <environment ref="EXPath-file"/>
+    <modified by="Christian Grün" on="2017-02-06" change="Adapted to FAT, GH71"/>
+  <environment ref="EXPath-file"/>
     <test>
         file:append-text("sandpit/test.txt", "a"),
         file:last-modified("sandpit/test.txt")</test>
@@ -323,7 +324,7 @@
       <all-of>
         <assert-type>xs:dateTime</assert-type>
         <assert>exists(timezone-from-dateTime($result))</assert>
-        <assert>(current-dateTime() - $result) div xs:dayTimeDuration("PT1S") ge 0</assert>
+        <assert>(current-dateTime() - $result) div xs:dayTimeDuration("PT1S") ge -2</assert>
         <assert>(current-dateTime() - $result) div xs:dayTimeDuration("PT1S") lt 10</assert>
       </all-of>
     </result>
@@ -333,6 +334,7 @@
     <description>Use file:last-modified on a directory</description>
     <created by="Michael Kay" on="2012-06-11"/>
     <modified by="John Lumley" on="2014-08-11" change="consistent EXPath naming"/>
+    <modified by="Christian Grün" on="2017-02-06" change="Adapted to FAT, GH71"/>
     <environment ref="EXPath-file"/>
     <test>
         (if (file:exists("sandpit/testdir")) 
@@ -344,7 +346,7 @@
       <all-of>
         <assert-type>xs:dateTime</assert-type>
         <assert>exists(timezone-from-dateTime($result))</assert>
-        <assert>(current-dateTime() - $result) div xs:dayTimeDuration("PT1S") ge 0</assert>
+        <assert>(current-dateTime() - $result) div xs:dayTimeDuration("PT1S") ge -2</assert>
         <assert>(current-dateTime() - $result) div xs:dayTimeDuration("PT1S") lt 10</assert>
       </all-of>
     </result>
