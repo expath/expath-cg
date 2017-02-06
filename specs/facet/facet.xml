@@ -60,7 +60,8 @@
 
 <body><div1 id='status-of-this-document'>
 <head>Status of this document</head>
-<p>This document is in an initial submission stage. Comments are welcomed at <loc href="mailto:zed.zhou@emc.com">here</loc>. </p>
+<p>This document is in an initial submission stage.  Comments are welcomed at <loc href="mailto:public-expath@w3.org">public-expath@w3.org</loc> 
+mailing list (<loc href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
 </div1>
 <div1 id='introduction'>
 <head>Introduction</head>
@@ -68,7 +69,7 @@
  and access information via a structured facet classification system.  Combined with full text search, it provides user
  with enormous power and flexibility to discover information.</p>
 <p>This proposal defines a standardized approach to support the Faceted search in XQuery.  It has been designed to be
-compatible with XQuery 3.0, and is intended to be used in conjunction with XQuery and XPath Full Text 3.0.</p>
+compatible with XPath 3.0, and is intended to be used in conjunction with XQuery and XPath Full Text 3.0.</p>
 <div2 id='namespace-conventions'>
 <head>Namespace conventions</head>
 <p>The module defined by this document defines functions and elements in the
@@ -491,7 +492,7 @@ declare namespace facet = &quot;http://expath.org/ns/facet&quot;;
 <head>Case 4: Counting facets with group-by function strict type checking, and order by value with a collation</head>
 <p>The XQuery using this facet proposal:</p>
 <eg>
-declare namespace facet = &quot;http://www.emc.com/facets&quot;;
+declare namespace facet = &quot;http://expath.org/ns/facet&quot;;
 declare function local:group-by-org($facetVals, $facetDef) {
   if ($facetVals = (&#39;Sales&#39;, &#39;Finance&#39;))
   then &#39;Sales and Finance&#39;
@@ -508,7 +509,7 @@ let $facetDefinition :=
 return facet:count(/employees/employee, $facetDefinition)
 </eg><p>The equivalent XQuery using group-by-clause:</p>
 <eg>
-declare namespace facet = &quot;http://www.emc.com/facets&quot;;
+declare namespace facet = &quot;http://expath.org/ns/facet&quot;;
 declare function local:group-by-org($facetVals) {
   if ($facetVals = (&#39;Sales&#39;, &#39;Finance&#39;))
   then &#39;Sales and Finance&#39;
@@ -526,7 +527,7 @@ declare function local:group-by-org($facetVals) {
 &lt;/facet:facets&gt;
 </eg><p>Expected result:</p>
 <eg>
-&lt;facets xmlns=&quot;http://www.emc.com/facets&quot;&gt;
+&lt;facets xmlns=&quot;http://expath.org/ns/facet&quot;&gt;
   &lt;facet name=&quot;Org&quot;&gt;
     &lt;key value=&quot;Other departments&quot; count=&quot;2&quot;/&gt;
     &lt;key value=&quot;Sales and Finance&quot; count=&quot;4&quot;/&gt;

@@ -81,11 +81,12 @@ div.exampleHeader { font-weight: bold;
     A.2 <a href="#issue-2-facet-drill-optimization-and-customizations">Issue 2. Facet drill optimization and customizations</a><br />
 B <a href="#sample-data-for-the-use-cases">Sample data for the use cases</a><br />
 </p></div><hr /><div class="body"><div class="div1">
-<h2><a name="status-of-this-document" id="status-of-this-document"></a>1 Status of this document</h2><p>This document is in an initial submission stage. Comments are welcomed at <a href="mailto:zed.zhou@emc.com">here</a>. </p></div><div class="div1">
+<h2><a name="status-of-this-document" id="status-of-this-document"></a>1 Status of this document</h2><p>This document is in an initial submission stage.  Comments are welcomed at <a href="mailto:public-expath@w3.org">public-expath@w3.org</a> 
+mailing list (<a href="http://lists.w3.org/Archives/Public/public-expath/">archive</a>).</p></div><div class="div1">
 <h2><a name="introduction" id="introduction"></a>2 Introduction</h2><p>Faceted search has proven to be enormously popular in the real world applications.  Faceted search allows user to navigate
  and access information via a structured facet classification system.  Combined with full text search, it provides user
  with enormous power and flexibility to discover information.</p><p>This proposal defines a standardized approach to support the Faceted search in XQuery.  It has been designed to be
-compatible with XQuery 3.0, and is intended to be used in conjunction with XQuery and XPath Full Text 3.0.</p><div class="div2">
+compatible with XPath 3.0, and is intended to be used in conjunction with XQuery and XPath Full Text 3.0.</p><div class="div2">
 <h3><a name="namespace-conventions" id="namespace-conventions"></a>2.1 Namespace conventions</h3><p>The module defined by this document defines functions and elements in the
 namespace <code><a href="http://expath.org/ns/facet">http://expath.org/ns/facet</a></code>. In this document, the
 <code>facet</code> prefix is bound to this namespace URI.</p></div><div class="div2">
@@ -410,7 +411,7 @@ declare namespace facet = "http://expath.org/ns/facet";
 &lt;/facets&gt;
 </pre></div></div><div class="div2">
 <h3><a name="case-4-counting-facets-with-group-by-function-strict-type-checking-and-order-by-value-with-a-collation" id="case-4-counting-facets-with-group-by-function-strict-type-checking-and-order-by-value-with-a-collation"></a>5.4 Case 4: Counting facets with group-by function strict type checking, and order by value with a collation</h3><p>The XQuery using this facet proposal:</p><div class="exampleInner"><pre>
-declare namespace facet = "http://www.emc.com/facets";
+declare namespace facet = "http://expath.org/ns/facet";
 declare function local:group-by-org($facetVals, $facetDef) {
   if ($facetVals = ('Sales', 'Finance'))
   then 'Sales and Finance'
@@ -426,7 +427,7 @@ let $facetDefinition :=
 &lt;/facet:facet-definition&gt;
 return facet:count(/employees/employee, $facetDefinition)
 </pre></div><p>The equivalent XQuery using group-by-clause:</p><div class="exampleInner"><pre>
-declare namespace facet = "http://www.emc.com/facets";
+declare namespace facet = "http://expath.org/ns/facet";
 declare function local:group-by-org($facetVals) {
   if ($facetVals = ('Sales', 'Finance'))
   then 'Sales and Finance'
@@ -443,7 +444,7 @@ declare function local:group-by-org($facetVals) {
   &lt;/facet:facet&gt;
 &lt;/facet:facets&gt;
 </pre></div><p>Expected result:</p><div class="exampleInner"><pre>
-&lt;facets xmlns="http://www.emc.com/facets"&gt;
+&lt;facets xmlns="http://expath.org/ns/facet"&gt;
   &lt;facet name="Org"&gt;
     &lt;key value="Other departments" count="2"/&gt;
     &lt;key value="Sales and Finance" count="4"/&gt;

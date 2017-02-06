@@ -61,7 +61,8 @@
 
 ## Status of this document
 
-This document is in an initial submission stage. Comments are welcomed at <loc href="mailto:zed.zhou@emc.com">here</loc>. 
+This document is in an initial submission stage.  Comments are welcomed at <loc href="mailto:public-expath@w3.org">public-expath@w3.org</loc> 
+mailing list (<loc href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).
 
 ## Introduction
 
@@ -70,7 +71,7 @@ Faceted search has proven to be enormously popular in the real world application
  with enormous power and flexibility to discover information.
  
 This proposal defines a standardized approach to support the Faceted search in XQuery.  It has been designed to be
-compatible with XQuery 3.0, and is intended to be used in conjunction with XQuery and XPath Full Text 3.0.
+compatible with XPath 3.0, and is intended to be used in conjunction with XQuery and XPath Full Text 3.0.
 
 ### Namespace conventions
 
@@ -572,7 +573,7 @@ Expected result:
 
 The XQuery using this facet proposal:
 
-    declare namespace facet = "http://www.emc.com/facets";
+    declare namespace facet = "http://expath.org/ns/facet";
     declare function local:group-by-org($facetVals, $facetDef) {
       if ($facetVals = ('Sales', 'Finance'))
       then 'Sales and Finance'
@@ -590,7 +591,7 @@ The XQuery using this facet proposal:
 
 The equivalent XQuery using group-by-clause:
 
-    declare namespace facet = "http://www.emc.com/facets";
+    declare namespace facet = "http://expath.org/ns/facet";
     declare function local:group-by-org($facetVals) {
       if ($facetVals = ('Sales', 'Finance'))
       then 'Sales and Finance'
@@ -609,7 +610,7 @@ The equivalent XQuery using group-by-clause:
 
 Expected result:
 
-    <facets xmlns="http://www.emc.com/facets">
+    <facets xmlns="http://expath.org/ns/facet">
       <facet name="Org">
         <key value="Other departments" count="2"/>
         <key value="Sales and Finance" count="4"/>
