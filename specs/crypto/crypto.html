@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Cryptographic Module</title><link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/TR/base.css" /><style type="text/css">
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <title>Cryptographic Module</title>
+      <link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/TR/base.css" /><style type="text/css">
 code           { font-family: monospace; }
 
 div.constraint,
@@ -39,214 +40,945 @@ div.exampleHeader { font-weight: bold;
       body {
         background-image: url(http://expath.org/images/logo-candidate.png);
       }
-   </style></head><body><p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p><div class="head">
-<h1><a name="title" id="title"></a>Cryptographic Module</h1>
-<h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 14 February 2015</h2><dl><dt>This version:</dt><dd>
-         <a href="http://expath.org/spec/crypto/20150214">http://expath.org/spec/crypto/20150214</a><br />
-      </dd><dt>Latest version:</dt><dd>
-         <a href="http://expath.org/spec/crypto">http://expath.org/spec/crypto</a><br />
-      </dd><dt>Previous version:</dt><dd>
-         <a href="http://expath.org/spec/crypto/20110810">http://expath.org/spec/crypto/20110810</a><br />
-      </dd><dt>Editor:</dt><dd>Claudius Teodorescu, XML Consultant</dd><dt>Contributor:</dt><dd>Joe Wicentowski, U.S. Department Of State, Historian Office</dd></dl><p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/crypto/20150214.xml">XML</a> and <a href="http://expath.org/spec/crypto/20150214/diff">Revision markup</a>.</p><p class="copyright"></p></div><hr /><div>
-<h2><a name="abstract" id="abstract"></a>Abstract</h2><p>This proposal defines a set of XPath 2.0 extension functions to perform cryptographic
-            operations. It defines extension functions related to XML Digital Signature, to
-            encryption and decryption, and to hash and digest messages. It has been designed to be
-            compatible with XQuery 1.0 and XSLT 2.0, as well as any other standard based on XPath
-            2.0.</p></div><div class="toc">
-<h2><a name="contents" id="contents"></a>Table of Contents</h2><p class="toc">1 <a href="#d3e64">Introduction</a><br />
-    1.1 <a href="#d3e75">Namespace conventions</a><br />
-    1.2 <a href="#d3e94">Error management</a><br />
-2 <a href="#d3e105">HMAC: Keyed-Hashing for Message Authentication</a><br />
-    2.1 <a href="#d3e110">The crypto:hmac function</a><br />
-3 <a href="#d3e178">XML Digital Signature</a><br />
-    3.1 <a href="#d3e183">The crypto:generate-signature function</a><br />
-    3.2 <a href="#d3e384">The crypto:validate-signature function</a><br />
-4 <a href="#d3e410">Encryption and decryption</a><br />
-    4.1 <a href="#d3e419">The crypto:encrypt function</a><br />
-    4.2 <a href="#d3e481">The crypto:decrypt function</a><br />
-</p>
-<h3><a name="appendices" id="appendices"></a>Appendices</h3><p class="toc">A <a href="#d3e543">References</a><br />
-B <a href="#d3e577">Summary of Error Conditions</a><br />
-</p></div><hr /><div class="body"><div class="div1">
-<h2><a name="d3e64" id="d3e64"></a>1 Introduction</h2><p>Cryptography is the science of communicating in secret code, by conversion of data with
-            the help of a key. In modern times, cryptography is necessary when communicating over
-            any untrusted medium, particularly the Internet.</p><p>Encryption of data can be of two types: symmetric and asymmetric. Symmetric encryption
-            means that the same key is used for encryption and decryption. Asymmetric encryption
-            means that a message can be encrypted by using a key that is public, but the decryption
-            can be made only by using a private key, which form a pair with the respective public
-            key.</p><p>A related technique of cryptography is to apply a one-way hash or digest function to
-            data; replicating the operation with the same data and function can ensure the integrity
-            of the data.</p><p>This proposal defines a set of XPath 2.0 extension functions to perform these
-            cryptographic operations. It defines extension functions related to XML Digital
-            Signature, to encryption and decryption, and to hash and digest messages. It has been
-            designed to be compatible with XQuery 1.0 and XSLT 2.0, as well as any other standard
-            based on XPath 2.0.</p><div class="div2">
-<h3><a name="d3e75" id="d3e75"></a>1.1 Namespace conventions</h3><p>The module defined by this document defines functions and elements in the namespace
+   </style></head>
+   <body>
+      <p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p>
+      <div class="head">
+         
+         <h1><a name="title" id="title"></a>Cryptographic Module
+         </h1>
+         
+         <h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 14 February 2015
+         </h2>
+         <dl>
+            <dt>This version:</dt>
+            <dd>
+               <a href="http://expath.org/spec/crypto/20150214">http://expath.org/spec/crypto/20150214</a>
+               
+            </dd>
+            <dt>Latest version:</dt>
+            <dd>
+               <a href="http://expath.org/spec/crypto">http://expath.org/spec/crypto</a>
+               
+            </dd>
+            <dt>Previous version:</dt>
+            <dd>
+               <a href="http://expath.org/spec/crypto/20110810">http://expath.org/spec/crypto/20110810</a><br />
+               
+            </dd>
+            <dt>Editor:</dt>
+            <dd>Claudius Teodorescu, XML Consultant</dd>
+            <dt>Contributor:</dt>
+            <dd>Joe Wicentowski, U.S. Department Of State, Historian Office</dd>
+         </dl>
+         <p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/crypto/20150214.xml">XML</a> and <a href="http://expath.org/spec/crypto/20150214/diff">Revision markup</a>.
+         </p>
+         <p class="copyright"></p>
+      </div>
+      <hr />
+      <div>
+         
+         <h2><a name="abstract" id="abstract"></a>Abstract
+         </h2>
+         <p>This document defines a set of <a href="#xpath-30">[XPath 3.0]</a> extension functions to perform cryptographic operations. These functions are related
+            to
+            XML Digital Signature, to encryption and decryption, and to hashing and digesting
+            of messages. They have been designed to be compatible with
+            <a href="#xquery-30">[XQuery 3.0]</a> and <a href="#xslt-30">[XSLT 3.0]</a>, as well as any other standard based on <a href="#xpath-30">[XPath 3.0]</a>.
+         </p>
+         <p>The functions are defined on the datatypes defined in <a href="#xml-schema-part-2">[XML Schema Part 2: Datatypes Second Edition]</a> and <a href="#xpath-datamodel-30">[XQuery and XPath Data Model 3.0]</a>. Also, the functions are defined on
+            nodes and node sequences as defined in the <a href="#xpath-datamodel-30">[XQuery and XPath Data Model 3.0]</a> and are following the good practices inferred from <a href="#xpath-functions-30">[XPath and XQuery Functions and Operators 3.0]</a>.
+         </p>
+      </div>
+      <div class="toc">
+         
+         <h2><a name="contents" id="contents"></a>Table of Contents
+         </h2>
+         <p class="toc">1 <a href="#d4e82">Status of this document</a><br />
+            2 <a href="#d4e93">Introduction</a><br />
+            2.1 <a href="#d4e102">Namespace conventions</a><br />
+            2.2 <a href="#d4e121">Error management</a><br />
+            3 <a href="#d4e214">Integrity and Authentication of Data</a><br />
+            3.1 <a href="#hash-function">The crypto:hash function</a><br />
+            3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
+            4 <a href="#d4e360">XML Digital Signature</a><br />
+            4.1 <a href="#d4e400">The crypto:generate-signature function</a><br />
+            4.1.1 <a href="#explanations-about-parameters-parameter">Explanations about $parameters parameter</a><br />
+            4.1.2 <a href="#example-of-parameters-parameter">Example of $parameters parameter</a><br />
+            4.1.3 <a href="#explanations-about-resources-parameter">Explanations about $resources parameter</a><br />
+            4.2 <a href="#d4e730">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e756">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e765">The crypto:encrypt function</a><br />
+            5.1.1 <a href="#explanations-about-parameters-parameter-of-crypto:encrypt">Explanations about $parameters parameter</a><br />
+            5.2 <a href="#d4e879">The crypto:decrypt function</a><br />
+            5.2.1 <a href="#explanations-about-parameters-parameter-of-crypto:decrypt">Explanations about $parameters parameter</a><br />
+            6 <a href="#d4e1355">Scenarios of usage</a><br />
+            6.1 <a href="#d4e1358">Generation of OAuth signature</a><br />
+            6.2 <a href="#d4e1364">Generation of AWS Signature Version 4 signature</a><br />
+            6.3 <a href="#d4e1370">Generation of enveloped digital XML signature of a document</a><br />
+            
+         </p>
+         
+         <h3><a name="appendices" id="appendices"></a>Appendices
+         </h3>
+         <p class="toc">A <a href="#d4e1377">References</a><br />
+            B <a href="#d4e1459">Summary of Error Conditions</a><br />
+            
+         </p>
+      </div>
+      <hr />
+      <div class="body">
+         <div class="div1">
+            
+            <h2><a name="d4e82" id="d4e82"></a>1 Status of this document
+            </h2>
+            <p>This document is in an interim draft stage. Comments are welcomed at <a href="mailto:public-expath@w3.org">public-expath@w3.org</a> mailing list (<a href="http://lists.w3.org/Archives/Public/public-expath/">archive</a>).
+            </p>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e93" id="d4e93"></a>2 Introduction
+            </h2>
+            <p>Cryptography is the science of communicating in secret code, by conversion of data
+               with
+               the help of a key. In modern times, cryptography is necessary when communicating over
+               any untrusted medium, particularly the Internet.
+            </p>
+            <p>Encryption of data can be of two types: symmetric and asymmetric. Symmetric encryption
+               means that the same key is used for encryption and decryption. Asymmetric encryption
+               means that a message can be encrypted by using a key that is public, but the decryption
+               can be made only by using a private key, which form a pair with the respective public
+               key.
+            </p>
+            <p>A related technique of cryptography is to apply a one-way hash or digest function
+               to
+               data; replicating the operation with the same data and function can ensure the integrity
+               of the data.
+            </p>
+            <div class="div2">
+               
+               <h3><a name="d4e102" id="d4e102"></a>2.1 Namespace conventions
+               </h3>
+               <p>The module defined by this document defines functions and elements in the namespace
                   <code>http://expath.org/ns/crypto</code>. In this document, the
-                  <code>crypto</code> prefix, when used, is bound to this namespace URI.</p><p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>. In
-               this document, the <code>err</code> prefix, when used, is bound to this namespace
-               URI.</p></div><div class="div2">
-<h3><a name="d3e94" id="d3e94"></a>1.2 Error management</h3><p>Error conditions are identified by a code (a <code>QName</code>). When such an error
-               condition is reached during the execution of the function, a dynamic error is thrown,
-               with the corresponding error code (as if the standard XPath function
-                  <code>error</code> had been called).</p></div></div><div class="div1">
-<h2><a name="d3e105" id="d3e105"></a>2 HMAC: Keyed-Hashing for Message Authentication</h2><p>HMAC is a mechanism for message authentication using cryptographic hash functions. HMAC
-            can be used with any iterative cryptographic hash function, e.g. MD5 or SHA-1, in
-            combination with a secret shared key. Typically, message authentication codes are used
-            between two parties that share a secret key in order to validate information transmitted
-            between these parties.</p><div class="div2">
-<h3><a name="d3e110" id="d3e110"></a>2.1 The <code>crypto:hmac</code> function</h3><p>This function generates a message authentication code, based on the input message, by
-               using a cryptographic algorithm and a secret key.</p><div class="exampleInner"><pre>
-<code class="function">crypto:hmac</code>($message as <code class="type">xs:string</code>,
-            $secret-key as <code class="type">xs:string</code>,
-            $algorithm as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
+                  <code>crypto</code> prefix, when used, is bound to this namespace URI.
+               </p>
+               <p>Error codes are defined in the same namespace (<code>http://expath.org/ns/crypto</code>),
+                  and in this document are displayed with the same prefix, <code>crypto</code>.
+               </p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e121" id="d4e121"></a>2.2 Error management
+               </h3>
+               <p>Error conditions are identified by a code (a <code>QName</code>). When such an error
+                  condition is reached during the execution of the function, a dynamic error is thrown,
+                  with the corresponding error code (as if the standard XPath function
+                  <code>error</code> had been called).
+               </p>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e214" id="d4e214"></a>3 Integrity and Authentication of Data
+            </h2>
+            <div class="div2">
+               
+               <h3><a name="hash-function" id="hash-function"></a>3.1 The <code>crypto:hash</code> function
+               </h3>
+               <p>This function generates a "message digest" of the input data, by using a cryptographic
+                  algorithm. It returns the hash value as <code class="type">xs:base64Binary</code>,
+                  (identifier <code>http://www.w3.org/2000/09/xmldsig#base64</code>, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements).
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:hash</code>($data     as <code class="type">xs:anyAtomicType</code>,
+	     $algorithm as <code class="type">xs:string</code>) as <code class="type">xs:base64Binary</code>
+</pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the data to be hashed. This parameter can be of type xs:string, xs:base64Binary,
+                        or xs:hexBinary.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm,
+                        this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                        The supported algorithms are implementation dependent.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="hmac-function" id="hmac-function"></a>3.2 The <code>crypto:hmac</code> function
+               </h3>
+               <p>HMAC (Keyed-Hashing for Message Authentication) <a href="#rfc2104">[RFC 2104: HMAC: Keyed-Hashing for Message Authentication]</a> is a mechanism for message authentication using
+                  cryptographic hash functions. HMAC can be used with any iterative cryptographic hash
+                  function in combination with a secret shared key. Typically, message authentication
+                  codes are used between two parties that share a secret key in order to validate information
+                  transmitted between these parties.
+               </p>
+               <p>This function generates a message authentication code, based on the input message,
+                  by using a cryptographic algorithm and a secret key.
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:hmac</code>($data     as <code class="type">xs:anyAtomicType</code>,
+            $key        as <code class="type">xs:anyAtomicType</code>,
+            $algorithm  as <code class="type">xs:string</code>) as <code class="type">xs:byte*</code>
+</pre></div>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:hmac</code>($data     as <code class="type">xs:anyAtomicType</code>,
+            $key        as <code class="type">xs:anyAtomicType</code>,
+            $algorithm  as <code class="type">xs:string</code>,
+            $encoding  as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
+</pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the data to be authenticated. This parameter can be of type xs:string, xs:byte*,
+                        xs:base64Binary, or xs:hexBinary.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$key</code> is the secret key used for calculating the authentication code. This parameter can
+                        be of type xs:string, xs:byte*, xs:base64Binary, or xs:hexBinary.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm,
+                        this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. The supported algorithms are implementation dependent.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$encoding</code> is the encoding of the output. The legal values are "hex" and "base64". The result
+                        is generated accordingly as xs:base64Binary string or xs:hexBinary string.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e360" id="d4e360"></a>4 XML Digital Signature
+            </h2>
+            <p>A digital signature is a technique to certify that a digital document is authentic.
+               This means that the origin of the document is known and there is the
+               ability to identify if the digital document has been changed since the digital signature
+               was applied to it. This is done by means of a cryptographic transformation.
+            </p>
+            <p>This function can apply an XML digital signature to one or more resources. There are
+               three types of XML digital signatures, namely <code>enveloped</code>,
+               <code>enveloping</code>, and <code>detached</code> signatures.
+            </p>
+            <p>According to <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, the <code>enveloped</code> and <code>enveloping</code> signatures are applied to the same digital resource (and XML document),
+               while the <code>detached</code> signatures can be applied to more than one digital resources.
+            </p>
+            <p>The designation of these digital resources is to be made based upon the explanations
+               given in <a href="#xml-dig-sig-core">[XML Digital Signature]</a>.
+            </p>
+            <p>In order to reference these digital resources, this function is using an XML syntax
+               inspired by <a href="#xml-dig-sig-core">[XML Digital Signature]</a>. For details, see below the
+               parameter <code>$resources</code>.
+            </p>
+            <div class="div2">
+               
+               <h3><a name="d4e400" id="d4e400"></a>4.1 The <code>crypto:generate-signature</code> function
+               </h3>
+               <p>The function has its parameters passed as a <code class="type">map(xs:string, item())</code>. After the function's signature, an example of parameters is given.
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:generate-signature</code>($data     as <code class="type">document()?</code>,
+    			    $parameters as <code class="type">map(xs:string, item()+)?</code>) as <code class="type">document()*</code> 
+</pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the data to be signed.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$parameters</code> represent the parameters used for generating the XML digital signature. For details
+                        regarding these parameters, see the table
+                        <a href="#explanations-about-parameters-parameter"><b>4.1.1 Explanations about $parameters parameter</b></a>  and the example <a href="#example-of-parameters-parameter"><b>4.1.2 Example of $parameters parameter</b></a> below.
+                     </p>
+                  </li>
+               </ul>
+               <div class="div3">
+                  
+                  <h4><a name="explanations-about-parameters-parameter" id="explanations-about-parameters-parameter"></a>4.1.1 Explanations about <code>$parameters</code> parameter
+                  </h4>
+                  <table border="1" frame="border">
+                     <caption>Parameters used for generating a XML digital signature</caption>
+                     <thead>
+                        <tr>
+                           <th>Key (as <code>xs:string</code>)
+                           </th>
+                           <th>Value</th>
+                           <th>Meaning</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td><code>canonicalization-algorithm</code></td>
+                           <td><code>xs:string</code></td>
+                           <td>The canonicalization algorithm applied to the <code>SignedInfo</code> element prior to performing signature calculations. Possible values are given in
+                              the list
+                              				      below. The default value is "inclusive-with-comments-1.1". If the parameter
+                              specifies an unsupported algorithm, this is an error
+                              				      <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
+                              						
+                              <ul>
+                                 <li>
+                                    <p><code>inclusive-1.1</code>, identifier <code>http://www.w3.org/2006/12/xml-c14n11</code>, for XML 1.1 documents, see
+                                       						      <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.5.2 Canonical XML 1.1.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><code>inclusive-with-comments-1.1</code>, identifier <code>http://www.w3.org/2006/12/xml-c14n11#WithComments</code>, for XML 1.1 documents, see
+                                       						      <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.5.2 Canonical XML 1.1.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><code>inclusive-1.0</code>, identifier <code>http://www.w3.org/TR/2001/REC-xml-c14n-20010315</code>, for XML 1.0 documents, see
+                                       						      <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.5.1 Canonical XML 1.0.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><code>inclusive-with-comments-1.0</code>, identifier <code>http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments</code>, for XML 1.0 documents, see
+                                       						      <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.5.1 Canonical XML 1.0.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><code>exclusive</code>, identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#</code>, see <a href="#xml-exc-c14n">[Exclusive XML Canonicalization 1.0]</a>, section 4. Use in XML Security.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><code>exclusive-with-comments</code>, identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#WithComments</code>, see <a href="#xml-exc-c14n">[Exclusive XML Canonicalization 1.0]</a>, section 4. Use in XML Security.
+                                    </p>
+                                 </li>
+                              </ul>     
+                              				      
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>digest-algorithm</code></td>
+                           <td><code>xs:string</code></td>
+                           <td>The digest algorithm to be applied to the signed object. Possible values are: "SHA1"
+                              (identifier <code>http://www.w3.org/2000/09/xmldsig#sha1</code>, see
+                              				      <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements), "SHA256", and
+                              "SHA512". The default value is "SHA1". If the parameter specifies an
+                              				      unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>signature-algorithm</code></td>
+                           <td><code>xs:string</code></td>
+                           <td>The algorithm used for signature generation and validation. Possible values are: "DSAwithSHA1"
+                              (identifier <code>http://www.w3.org/2000/09/xmldsig#dsa-sha1</code>,
+                              				      see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements), and "RSAwithSHA1"
+                              (identifier <code>http://www.w3.org/2000/09/xmldsig#rsa-sha1</code>,
+                              				      see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements). The default
+                              value is "DSAwithSHA1". If the parameter specifies an unsupported algorithm,
+                              				      this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>. (Optional)
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>signature-namespace-prefix</code></td>
+                           <td><code>xs:string</code></td>
+                           <td>The namespace prefix for signature. If this parameter is not provided, the default
+                              value of 'dsig' will be used. (Optional)
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>signature-type</code></td>
+                           <td><code>xs:string</code></td>
+                           <td>The method used for signing the content of signature. Possible values are: "enveloping",
+                              "enveloped", and "detached". The default value is "enveloped".
+                              				      If the parameter specifies an unsupported signature type, this is an error
+                              <a href="#error.signatureType">[crypto:signature-type]</a>. (Optional)
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>references</code></td>
+                           <td><code>element(Reference)*</code></td>
+                           <td>The references to the digital resources to be signed. If this parameter is not provided,
+                              the whole input document will be signed. If the signature is of
+                              				      <code>enveloped</code> or <code>enveloping</code> type, and more than one resource is inputted to be signed, this is an error <a href="#error.inputResources">[crypto.input-resources]</a>.
+                              				      More details about this parameter can be found at <a href="#explanations-about-resources-parameter"><b>4.1.3 Explanations about $resources parameter</b></a>. (Optional)
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>key</code></td>
+                           <td><code>xs:anyAtomicType</code></td>
+                           <td>The secret key used for signing. This parameter can be of type <code>xs:string</code>, <code>xs:base64Binary</code>,
+                              				      or <code>xs:hexBinary</code>. If the key is invalid or missing, this is an error <a href="#error.cryptoKey">[crypto:invalid-crypto-key]</a>.
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <div class="div3">
+                  
+                  <h4><a name="example-of-parameters-parameter" id="example-of-parameters-parameter"></a>4.1.2 Example of <code>$parameters</code> parameter
+                  </h4>
+                  <div class="exampleInner"><pre>
+	map {
+		"canonicalization-algorithm" := "inclusive-with-comments",
+	 	"digest-algorithm" := "SHA1",
+	 	"signature-algorithm" := "RSA_SHA1",
+	 	"signature-namespace-prefix" := "digsig",
+	 	"signature-type" := "enveloped",
+	 	"references" :=
+	 		( 
+				&lt;Reference xmlns="http://www.w3.org/2000/09/xmldsig#" URI=""&gt;
+					&lt;Transforms&gt;
+						&lt;Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2"&gt;
+							&lt;XPath Filter="intersect"&gt;//ToBeSigned&lt;/XPath&gt;
+							&lt;XPath Filter="subtract"&gt;//NotToBeSigned&lt;/XPath&gt;
+							&lt;XPath Filter="union"&gt;//ReallyToBeSigned&lt;/XPath&gt;
+						&lt;/Transform&gt;
+					&lt;/Transforms&gt;
+				&lt;/Reference&gt;,
+				&lt;Reference xmlns="http://www.w3.org/2000/09/xmldsig#" URI="#id"&gt;
+					&lt;Transforms&gt;
+						&lt;Transform Algorithm="http://www.w3.org/TR/2001/10/xml-exc-c14n" /&gt;
+					&lt;/Transforms&gt;
+				&lt;/Reference&gt;
+			)
+		"key" :=
+			    "-----BEGIN RSA PRIVATE KEY-----
+			MIIEowIBAAKCAQEAhPxBGln4YOcOGOxmRYEN8nzYHYvQx+PP8GnbJ+kW4f6HvH8WMAUa2lTB6gib
+			LzJGezhqkMy8NT8ogVz8xbra3AyK/IBDzXpWtPhSxVOCo6hJfTjj7wX3E2AVN9CTUOYrS/3iSu1q
+			/6MoB6MDIj8wV0HO1ujXqEip45UgVl+xRVtU+1wiJQ7Gc8GEEyHVtK/X4joiyCEebJhFsI42Z9e4
+			aETI/XOaLszyEQeipMRlyznpRL2x0chz+yj7KuwiMqBZmPYyeWBsbldW8xREwnHEyko5GWc6wkEi
+			vgFwzKaZWo2ct3pmZ9vwXKecAxbeJbyJQl/PDfSnqcwyhL6pOaSAuQIDAQABAoIBAHo5hnR7wIb/
+			lbteetjitjjqeY8eU/OD9DfYcu6Jkth/Ia4jd/cGmhmU0O0Sn96O7KyPu5H+OfUOaWIMXt400LZy
+			aMON98NA77RAj4KBMI7OO0z2Hrgu2Vlbc+TqtJskESM04ulOsIroIAB02Ip/XSS1fS+UrbEjp9Fd
+			3GzGYp2E6IF/YtTXMiqgdrZVAoDPtxiMR/1KXuETiBkeMxPvXfgePXLi/rYBDcecmfsCEzDX8RZV
+			xLoPKFxuLaIrzdVhGVHwp88fB57OufLytmuvro71FNrFzcIO88NyDpEQVnsBadm9Ir0mb5uhYq9j
+			YV444b2Gra0/onJm7e/zRUSSJGkCgYEA67Q8gBSADrkc0UCypjnFV8WWCQJBPspb9Vnf2MJi5aYM
+			U5Sa/2H+tNoY+fJoa/eDSu1jeAn71TDcXZizihj3IT8gVdoXSncbcTulxEnaOi85Q2uKfSia16rX
+			d+MufjJ4UDC7vR/Ve+zIQOxpzBmcFO5cMnLS3mJdpWSdS7DyQpMCgYEAkG+6udsQ02GEKaJZl2mi
+			XBqe4Rh187sDCwiqSO5ItS4jUg1xF1cn1PuF2nvjztZyEsaKKYdiqekEQv3jA6gRsWFvRi/abFN3
+			zau/5M42v7H1cgU7m+FsDywhN5IRAmGfEyL/2wpKuZ6lD2qqhGkXmxqyEqgmEClyIwxJKHWiAwMC
+			gYBCJK8Bpj8VYp8SnZxEh1u4uMrUtlxG2ZSasmDdvBbyqPk2jzI7zm0ipT1zDrJ88dVXNmy+Z9bS
+			ycZdQZfIfh8DpmpVjUER9YCu8vUeszbZMx1XrRsM6lMhiGC01PzcDx+yKSrV9NP81cKQbYd27gzd
+			1tHqmkxQebwbyLNXZU1mnwKBgDpuiPsBbdgmHkJ9pIMFwCJEvrvPmoBEyuFe2wzwIUfy52UdfP/1
+			SW73ZlpSPoIB7Vo9Kc3NMJQOaaP0dC+Zgbbh9RNO7q1eQxxYfCRDbJC2nNZI2amhU4b70mBZ3jm5
+			ZpJmWV2y1zIqxRnsjBlPLraX4Sx9DBEDw2H8aWhN1oIjAoGBANc0gizRHGfOK2UASXskuO5Ueias
+			6z0V7J/m93E7wK8IQHcZXGloy8S9QSX6uAqe48ZDVCZGPxqq7TppT+P9WsdqkXqxR7M/KLa+7Y6C
+			s1tkDtD9uOJN6CsLuVjfuo4ZT5SwC7pq842aQrqJveKWKdzEorQjWKeN8OM2wzEMs0P1
+			-----END RSA PRIVATE KEY-----"	
+	}
+	</pre></div>
+               </div>
+               <div class="div3">
+                  
+                  <h4><a name="explanations-about-resources-parameter" id="explanations-about-resources-parameter"></a>4.1.3 Explanations about <code>$resources</code> parameter
+                  </h4>
+                  <table border="1" frame="border">
+                     <caption>The <code>$resources</code> parameter
+                     </caption>
+                     <thead>
+                        <tr>
+                           <th>Key (as <code>xs:string</code>)
+                           </th>
+                           <th>Value</th>
+                           <th>Meaning</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td><code>Reference</code></td>
+                           <td><code>element()</code></td>
+                           <td>This is the parent element for a reference to a resource to be signed. Its namespace
+                              is <code>http://www.w3.org/2000/09/xmldsig#</code>. Its
+                              				      <code>URI</code> attribute identifies a resource using a URI-Reference (for details see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 4.3.3.1 The URI Attribute).
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>Transforms</code></td>
+                           <td><code>element()</code></td>
+                           <td>This element contains an ordered list of <code>Transform</code> elements.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>Transform</code></td>
+                           <td><code>element()</code></td>
+                           <td>This element describes how the signer obtained the data object that is to be digested.
+                              The <code>Algorithm</code> attribute's value specifies the name of the
+                              				      algorithm to be applied, and the <code>Transform</code> element's text content provides additional data for processing using that algorithm.
+                              For more details and
+                              				      schema of this element, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 4.3.3.4 The Transforms Element.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>XPath</code></td>
+                           <td><code>element()</code></td>
+                           <td>The XPath expression to be applied to the input document, in order to get the resource
+                              to be signed. The version of XPath to be used is 1.0, 
+                              				      plus a function named <code>here</code>. The <code>Filter</code> attribute's value provides the name of the operation (intersection, subtraction and
+                              union)
+                              				      used for combining the XPath-selected subtrees. For more details, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.6.3 XPath Filtering, and
+                              				      <a href="#xml-dig-sig-xpath-filer20">[XML-Signature XPath Filter 2.0]</a>.
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e730" id="d4e730"></a>4.2 The <code>crypto:validate-signature</code> function
+               </h3>
+               <p>This function validates an XML Digital Signature.</p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:validate-signature</code>($data as <code class="type">document()</code>) as <code class="type">xs:boolean</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the enveloped, enveloping, or detached signature. If
+                        the Signature element cannot be found, this is an error <a href="#error.sigElem">[crypto:signature-element]</a>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e756" id="d4e756"></a>5 Encryption and Decryption
+            </h2>
+            <p>Encryption represents the process of conversion of data, by using a secret key (a
+               cipher), in a form (called cipher text) that cannot be understood by unautorized
+               persons.
+            </p>
+            <p>The decryption represents the reverse process, of converting encrypted data back to
+               plain text (original text).
+            </p>
+            <p>There are two main types of encryption: symmetric encryption, when both parties, the
+               sender and the receiver, use the same secret key, previously exchanged,
+               and asymmetric encryption, when a key pair, consisting of a private key and a private
+               key, is used, of which the public key is used by sender to encrypt a message that
+               can only be decrypted by the receiver, who holds the private key of that key pair.
+            </p>
+            <div class="div2">
+               
+               <h3><a name="d4e765" id="d4e765"></a>5.1 The <code>crypto:encrypt</code> function
+               </h3>
+               <p>This function encrypts data.</p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:encrypt</code>($data     as <code class="type">xs:anyAtomicType</code>,
+               $type       as <code class="type">xs:string</code>,
+               $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">xs:base64Binary</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary,
+                        or xs:hexBinary. When a particular padding mechanism
+                        is requested to be used for the input data, but this mechanism is not made available
+                        by the implementation, this is an error <a href="#error.noPadding">[crypto:inexistent-padding]</a>.
+                        Also, when the input data is expected to have a particular padding mechanism, but
+                        the data is not padded accordingly to this mechanism, this is an error
+                        <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p>
+                        <code>$type</code> is the type of encryption. Legal values: "symmetric", and "asymmetric". If the parameter
+                        has an illegal value, this is an error
+                        <a href="#error.encType">[crypto:encryption-type]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$parameters</code> represents the parameters needed for the current operation. More details about this
+                        parameter can be found at
+                        <a href="#explanations-about-parameters-parameter-of-crypto:encrypt"><b>5.1.1 Explanations about $parameters parameter</b></a>.
+                     </p>
+                  </li>
+               </ul>
+               <div class="div3">
+                  
+                  <h4><a name="explanations-about-parameters-parameter-of-crypto:encrypt" id="explanations-about-parameters-parameter-of-crypto:encrypt"></a>5.1.1 Explanations about <code>$parameters</code> parameter
+                  </h4>
+                  <table border="1" frame="border">
+                     <caption>The <code>$parameters</code> parameter of <code>crypto:encrypt</code></caption>
+                     <thead>
+                        <tr>
+                           <th>Key (as <code>xs:string</code>)
+                           </th>
+                           <th>Value</th>
+                           <th>Meaning</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td><code>key</code></td>
+                           <td><code>xs:anyAtomicType</code></td>
+                           <td>This is the cryptographic key used for encryption. This parameter can be of type xs:string,
+                              xs:base64Binary, or xs:hexBinary. If the key is invalid or missing,
+                              				      this is an error <a href="#error.cryptoKey">[crypto:invalid-crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              <a href="#error.blockSize">[crypto:block-size]</a>.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>algorithm</code></td>
+                           <td><code>xs:string</code></td>
+                           <td>This is the cryptographic algorithm used for encryption. For symmetric encryption,
+                              a transformation name can be used.
+                              		                  If the parameter specifies an unsupported algorithm or transformation
+                              name or the parameter is missing, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                              		                  The supported algorithms are implementation dependent.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>iv</code></td>
+                           <td><code>xs:string</code></td>
+                           <td>This is the initialization vector for symmetric encryption. If the initialization
+                              vector is missing or it is not as it is requested by the
+                              		                  encryption algorithm, this is an error <a href="#error.incorrectIV">[crypto:incorrect-initialization-vector]</a>. For asymmetric encryption, this parameter is not needed.
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e879" id="d4e879"></a>5.2 The <code>crypto:decrypt</code> function
+               </h3>
+               <p>This function decrypts data.</p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:decrypt</code>($data     as <code class="type">xs:anyAtomicType</code>,
+               $type       as <code class="type">xs:string</code>,
+               $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">xs:string</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary,
+                        or xs:hexBinary. When a particular padding mechanism
+                        is requested to be used for the input data, but this mechanism is not made available
+                        by the implementation, this is an error <a href="#error.noPadding">[crypto:inexistent-padding]</a>.
+                        Also, when the input data is expected to have a particular padding mechanism, but
+                        the data is not padded accordingly to this mechanism, this is an error
+                        <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$type</code> is the type of decryption. Legal values: "symmetric", and "asymmetric". If the parameter
+                        has an illegal value, this is an error
+                        <a href="#error.decryptionType">[crypto:decryption-type]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$parameters</code> represents the parameters needed for the current operation. More details about this
+                        parameter can be found at
+                        <a href="#explanations-about-parameters-parameter-of-crypto:decrypt"><b>5.2.1 Explanations about $parameters parameter</b></a>.
+                     </p>
+                  </li>
+               </ul>
+               <div class="div3">
+                  
+                  <h4><a name="explanations-about-parameters-parameter-of-crypto:decrypt" id="explanations-about-parameters-parameter-of-crypto:decrypt"></a>5.2.1 Explanations about <code>$parameters</code> parameter
+                  </h4>
+                  <table border="1" frame="border">
+                     <caption>The <code>$parameters</code> parameter of <code>crypto:decrypt</code></caption>
+                     <thead>
+                        <tr>
+                           <th>Key (as <code>xs:string</code>)
+                           </th>
+                           <th>Value</th>
+                           <th>Meaning</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td><code>key</code></td>
+                           <td><code>xs:anyAtomicType</code></td>
+                           <td>This is the cryptographic key used for decryption. This parameter can be of type xs:string,
+                              xs:base64Binary, or xs:hexBinary. If the key is invalid or missing,
+                              				      this is an error <a href="#error.cryptoKey">[crypto:invalid-crypto-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              <a href="#error.blockSize">[crypto:block-size]</a>.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>algorithm</code></td>
+                           <td><code>xs:string</code></td>
+                           <td>This is the cryptographic algorithm used for decryption. For symmetric decryption,
+                              a transformation name can be used.
+                              		                  If the parameter specifies an unsupported algorithm or transformation
+                              name or the parameter is missing, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                              		                  The supported algorithms are implementation dependent.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><code>iv</code></td>
+                           <td><code>xs:string</code></td>
+                           <td>This is the initialization vector for symmetric decryption. If the initialization
+                              vector is missing or it is not as it is requested by the
+                              		                  decryption algorithm, this is an error <a href="#error.incorrectIV">[crypto:incorrect-initialization-vector]</a>. For asymmetric decryption, this parameter is not needed.
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e1355" id="d4e1355"></a>6 Scenarios of usage
+            </h2>
+            <div class="div2">
+               
+               <h3><a name="d4e1358" id="d4e1358"></a>6.1 Generation of OAuth signature
+               </h3>
+               <p></p>
+               <div class="exampleInner"><pre>
+let $signature-base-string :=
+	"GET&amp;http%3A%2F%2Fexample.org%2Fresource%26oauth_consumer_key%3Dabcd%26
+	oauth_nonce%3DXxFM1VSdB6N%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1449422427%26
+	oauth_token%3Dijkl%26oauth_version%3D1.0"
+let $key := "dpf43f3p2l4k3l03"
+let $signature := return crypto:hmac($signature-base-string, $key, "HMAC-SHA-1")
 
-<code class="function">crypto:hmac</code>($message as <code class="type">xs:string</code>,
-            $secret-key as <code class="type">xs:string</code>,
-            $algorithm as <code class="type">xs:string</code>,
-            $encoding as <code class="type">xs:string</code>) as <code class="type">xs:string</code></pre></div><ul><li><p><code>$message</code> is the message to be authenticated.</p></li><li><p><code>$secret-key</code> is the secret key used for calculating the
-                     authentication code.</p></li><li><p><code>$algorithm</code> is the cryptographic hashing algorithm. If the
-                     parameter specifies an unsupported algorithm, this is an error <a href="#errCX13">[err:CX13]</a>.</p></li><li><p><code>$encoding</code> is the method used for encoding of the authentication
-                     code. Default value: "base64". If the parameter specifies an unsupported
-                     method, this is an error <a href="#errCX14">[err:CX14]</a>.</p></li></ul></div></div><div class="div1">
-<h2><a name="d3e178" id="d3e178"></a>3 XML Digital Signature</h2><p>The XML Signature is a method of associating a key with referenced data (octets); it
-            does not normatively specify how keys are associated with persons or institutions, nor
-            the meaning of the data being referenced and signed. XML Signatures are applied to
-            arbitrary digital content (data objects) via an indirection. Data objects are digested,
-            the resulting value is placed in an element (with other information) and that element is
-            then digested and cryptographically signed.</p><div class="div2">
-<h3><a name="d3e183" id="d3e183"></a>3.1 The <code>crypto:generate-signature</code> function</h3><p>This function has four signatures, as one have to consider that some applications
-               require the ability to specify a subset of a given XML document as the information
-               content to be signed (this is done by using XPath to indicate the subset), and also
-               the ability to use a digital certificate to obtain the key pair, instead of an
-               auto-generated key pair.</p><p>The first signature considers the case of auto-generated key pair, and signature for
-               the whole document.</p><p>The second signature considers the case of auto-generated key pair, and signature for
-               a subset of the document.</p><p>The third signature considers the case of key pair generated from an digital
-               certificate, and signature for the whole document.</p><p> The fourth signature considers the case of key pair generated from an digital
-               certificate, and signature for a subset of the document. </p><div class="exampleInner"><pre>
-<code class="function">crypto:generate-signature</code>($input-doc as <code class="type">node()</code>,
-                          $canonicalization-algorithm as <code class="type">xs:string</code>,
-                          $digest-algorithm as <code class="type">xs:string</code>,
-                          $signature-algorithm as <code class="type">xs:string</code>,
-                          $signature-namespace-prefix as <code class="type">xs:string</code>,
-                          $signature-type as <code class="type">xs:string</code>) as <code class="type">node()</code>
+return $signature				
+				</pre></div>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1364" id="d4e1364"></a>6.2 Generation of AWS Signature Version 4 signature
+               </h3>
+               <p></p>
+               <div class="exampleInner"><pre>
+let $region := "us-east-1"
+let $service := 'iam'
+let $date-YYYYMMDD := '20120215'
+let $s3-secret-key := 'wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY'
+let $kSecret := concat("AWS4", $s3-secret-key)
 
-<code class="function">crypto:generate-signature</code>($input-doc as <code class="type">node()</code>,
-                          $canonicalization-algorithm as <code class="type">xs:string</code>,
-                          $digest-algorithm as <code class="type">xs:string</code>,
-                          $signature-algorithm as <code class="type">xs:string</code>,
-                          $signature-namespace-prefix as <code class="type">xs:string</code>,
-                          $signature-type as <code class="type">xs:string</code>,
-                          $xpath-expression as <code class="type">xs:string</code>) as <code class="type">node()</code>
+let $dateKey := crypto:hmac($date-YYYYMMDD, $kSecret, "HMAC-SHA-256")
+let $dateRegionKey := crypto:hmac($region, $dateKey, "HMAC-SHA-256")
+let $dateRegionServiceKey := crypto:hmac($service, $dateRegionKey, "HMAC-SHA-256")
+let $signingKey := crypto:hmac("aws4_request", $dateRegionServiceKey, "HMAC-SHA-256”)
 
-<code class="function">crypto:generate-signature</code>($input-doc as <code class="type">node()</code>,
-                          $canonicalization-algorithm as <code class="type">xs:string</code>,
-                          $digest-algorithm as <code class="type">xs:string</code>,
-                          $signature-algorithm as <code class="type">xs:string</code>,
-                          $signature-namespace-prefix as <code class="type">xs:string</code>,
-                          $signature-type as <code class="type">xs:string</code>,
-                          $digital-certificate as <code class="type">node()</code>) as <code class="type">node()</code>
+return $signingKey				
+				</pre></div>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1370" id="d4e1370"></a>6.3 Generation of enveloped digital XML signature of a document
+               </h3>
+               <p></p>
+               <div class="exampleInner"><pre>
+let $doc :=
+  &lt;data&gt;
+    &lt;a&gt;1&lt;/a&gt;
+    &lt;b&gt;7&lt;/b&gt;
+    &lt;c /&gt;
+    &lt;c /&gt;
+  &lt;/data&gt;
+let $signature := crypto:generate-signature($doc,
+  map {
+    "canonicalization-algorithm" := "inclusive-with-comments",
+    "digest-algorithm" := "SHA1",
+    "signature-algorithm" := "RSA_SHA1",
+    "signature-namespace-prefix" := "digsig",
+    "signature-type" := "enveloped",
+    "key" :=
+      "-----BEGIN RSA PRIVATE KEY-----
+      MIIEowIBAAKCAQEAhPxBGln4YOcOGOxmRYEN8nzYHYvQx+PP8GnbJ+kW4f6HvH8WMAUa2lTB6gib
+      LzJGezhqkMy8NT8ogVz8xbra3AyK/IBDzXpWtPhSxVOCo6hJfTjj7wX3E2AVN9CTUOYrS/3iSu1q
+      /6MoB6MDIj8wV0HO1ujXqEip45UgVl+xRVtU+1wiJQ7Gc8GEEyHVtK/X4joiyCEebJhFsI42Z9e4
+      aETI/XOaLszyEQeipMRlyznpRL2x0chz+yj7KuwiMqBZmPYyeWBsbldW8xREwnHEyko5GWc6wkEi
+      vgFwzKaZWo2ct3pmZ9vwXKecAxbeJbyJQl/PDfSnqcwyhL6pOaSAuQIDAQABAoIBAHo5hnR7wIb/
+      lbteetjitjjqeY8eU/OD9DfYcu6Jkth/Ia4jd/cGmhmU0O0Sn96O7KyPu5H+OfUOaWIMXt400LZy
+      aMON98NA77RAj4KBMI7OO0z2Hrgu2Vlbc+TqtJskESM04ulOsIroIAB02Ip/XSS1fS+UrbEjp9Fd
+      3GzGYp2E6IF/YtTXMiqgdrZVAoDPtxiMR/1KXuETiBkeMxPvXfgePXLi/rYBDcecmfsCEzDX8RZV
+      xLoPKFxuLaIrzdVhGVHwp88fB57OufLytmuvro71FNrFzcIO88NyDpEQVnsBadm9Ir0mb5uhYq9j
+      YV444b2Gra0/onJm7e/zRUSSJGkCgYEA67Q8gBSADrkc0UCypjnFV8WWCQJBPspb9Vnf2MJi5aYM
+      U5Sa/2H+tNoY+fJoa/eDSu1jeAn71TDcXZizihj3IT8gVdoXSncbcTulxEnaOi85Q2uKfSia16rX
+      d+MufjJ4UDC7vR/Ve+zIQOxpzBmcFO5cMnLS3mJdpWSdS7DyQpMCgYEAkG+6udsQ02GEKaJZl2mi
+      XBqe4Rh187sDCwiqSO5ItS4jUg1xF1cn1PuF2nvjztZyEsaKKYdiqekEQv3jA6gRsWFvRi/abFN3
+      zau/5M42v7H1cgU7m+FsDywhN5IRAmGfEyL/2wpKuZ6lD2qqhGkXmxqyEqgmEClyIwxJKHWiAwMC
+      gYBCJK8Bpj8VYp8SnZxEh1u4uMrUtlxG2ZSasmDdvBbyqPk2jzI7zm0ipT1zDrJ88dVXNmy+Z9bS
+      ycZdQZfIfh8DpmpVjUER9YCu8vUeszbZMx1XrRsM6lMhiGC01PzcDx+yKSrV9NP81cKQbYd27gzd
+      1tHqmkxQebwbyLNXZU1mnwKBgDpuiPsBbdgmHkJ9pIMFwCJEvrvPmoBEyuFe2wzwIUfy52UdfP/1
+      SW73ZlpSPoIB7Vo9Kc3NMJQOaaP0dC+Zgbbh9RNO7q1eQxxYfCRDbJC2nNZI2amhU4b70mBZ3jm5
+      ZpJmWV2y1zIqxRnsjBlPLraX4Sx9DBEDw2H8aWhN1oIjAoGBANc0gizRHGfOK2UASXskuO5Ueias
+      6z0V7J/m93E7wK8IQHcZXGloy8S9QSX6uAqe48ZDVCZGPxqq7TppT+P9WsdqkXqxR7M/KLa+7Y6C
+      s1tkDtD9uOJN6CsLuVjfuo4ZT5SwC7pq842aQrqJveKWKdzEorQjWKeN8OM2wzEMs0P1
+      -----END RSA PRIVATE KEY-----"	
+  }
+)
 
-<code class="function">crypto:generate-signature</code>($input-doc as <code class="type">node()</code>,
-                          $canonicalization-algorithm as <code class="type">xs:string</code>,
-                          $digest-algorithm as <code class="type">xs:string</code>,
-                          $signature-algorithm as <code class="type">xs:string</code>,
-                          $signature-namespace-prefix as <code class="type">xs:string</code>,
-                          $signature-type as <code class="type">xs:string</code>,
-                          $xpath-expression as <code class="type">xs:string</code>,
-                          $digital-certificate as <code class="type">node()</code>) as <code class="type">node()</code></pre></div><ul><li><p><code>$input-doc</code> is the document to be signed.</p></li><li><p><code>$canonicalization-algorithm</code> is the canonicalization algorithm
-                     applied to the SignedInfo element prior to performing signature calculations.
-                     Possible values are: "exclusive", "exclusive-with-comments", "inclusive", and
-                     "inclusive-with-comments". The default value is "inclusive-with-comments". If
-                     the parameter specifies an unsupported algorithm, this is an error <a href="#errCX01">[err:CX01]</a>.</p></li><li><p><code>$digest-algorithm</code> is the digest algorithm to be applied to the
-                     signed object. Possible values are: "SHA1", "SHA256", and "SHA512". The default
-                     value is "SHA1". If the parameter specifies an unsupported algorithm, this is
-                     an error <a href="#errCX02">[err:CX02]</a>.</p></li><li><p><code>$signature-algorithm</code> is the algorithm used for signature
-                     generation and validation. Possible values are: "DSA_SHA1", and "RSA_SHA1". The
-                     default value is "RSA_SHA1". If the parameter specifies an unsupported
-                     algorithm, this is an error <a href="#errCX03">[err:CX03]</a>.</p></li><li><p><code>$signature-namespace-prefix</code> is the namespace prefix for
-                     signature.</p></li><li><p><code>$signature-type</code> is the method used for signing the content of
-                     signature. Possible values are: 'enveloping', 'enveloped', and 'detached'. The
-                     default value is 'enveloped'.</p></li><li><p><code>$xpath-expression</code> is the XPath expression used for selecting the
-                     subset to be signed. If the XPath expression is invalid, this is an error
-                        <a href="#errCX04">[err:CX04]</a>.</p></li><li><p><code>$digital-certificate</code> is the digital certificate to be used for
-                     signing the input document or document subset. The structure of this parameter
-                     is as follows (this is an example):</p><div class="exampleInner"><pre>
-&lt;digital-certificate&gt;
-   &lt;keystore-type&gt;JKS&lt;/keystore-type&gt;
-   &lt;keystore-password&gt;ab987c&lt;/keystore-password&gt;
-   &lt;key-alias&gt;eXist&lt;/key-alias&gt;
-   &lt;private-key-password&gt;kpi135&lt;/private-key-password&gt;
-   &lt;keystore-uri&gt;/db/mykeystoreEXist&lt;/keystore-uri&gt;
-&lt;/digital-certificate&gt;</pre></div><p>The following errors can be raised relative to the structure and content of
-                     $digital-certificate parameter: <a href="#errCX05">[err:CX05]</a>, <a href="#errCX06">[err:CX06]</a>, <a href="#errCX07">[err:CX07]</a>, <a href="#errCX08">[err:CX08]</a>, <a href="#errCX09">[err:CX09]</a>,
-                        <a href="#errCX10">[err:CX10]</a>, <a href="#errCX11">[err:CX11]</a>, and <a href="#errCX12">[err:CX12]</a>.</p></li></ul></div><div class="div2">
-<h3><a name="d3e384" id="d3e384"></a>3.2 The <code>crypto:validate-signature</code> function</h3><p>This function validates an XML Digital Signature.</p><div class="exampleInner"><pre>
-<code class="function">crypto:validate-signature</code>($input-doc as <code class="type">node()</code>) as <code class="type">xs:boolean</code></pre></div><ul><li><p><code>$input-doc</code> is the enveloped, enveloping, or detached signature. If
-                     the Signature element cannot be found, this is an error <a href="#errCX15">[err:CX15]</a>.</p></li></ul></div></div><div class="div1">
-<h2><a name="d3e410" id="d3e410"></a>4 Encryption and decryption</h2><p>Encryption represents the process of conversion of data, by using a secret key (a
-            cipher), in a form (called cipher text) that cannot be understood by unautorized
-            persons.</p><p>The decryption represents the reverse process, of converting encrypted data back to
-            plain text (original text).</p><p>There are two main types of encryption: symmetric encryption, when both parties, the
-            sender and the receiver, use the same secret key, previously exchanged, and asymmetric
-            encryption, when a key pair, consisting of a private key and a private key, is used, of
-            which the public key is used by sender to encrypt a message that can only be decrypted
-            by the receiver, who holds the private key of that key pair.</p><div class="div2">
-<h3><a name="d3e419" id="d3e419"></a>4.1 The <code>crypto:encrypt</code> function</h3><p>This function encrypts an input string.</p><div class="exampleInner"><pre>
-<code class="function">crypto:encrypt</code>($input-string as <code class="type">xs:string</code>,
-               $encryption-type as <code class="type">xs:string</code>,
-               $secret-key as <code class="type">xs:string</code>,
-               $cryptographic-algorithm as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code></pre></div><ul><li><p><code>$input-string</code> is the string to be encrypted. When a particular
-                     padding mechanism is requested, but is not available, this is an error <a href="#errCX16">[err:CX16]</a>. Also, when a particular padding mechanism is expected, but
-                     the data is not padded properly, this is an error <a href="#errCX17">[err:CX17]</a>.</p></li><li><p>
-                     <code>$encryption-type</code> is the type of encryption. Legal values:
-                     "symmetric", and "asymmetric". If the parameter has an illegal value, this is
-                     an error <a href="#errCX18">[err:CX18]</a>.</p></li><li><p><code>$secret-key</code> is the secret key used for encryption, as string. If
-                     the key is invalid, this is an error <a href="#errCX19">[err:CX19]</a>. If the length of
-                     data provided to the block cipher is incorrect, this is an error <a href="#errCX20">[err:CX20]</a>.</p></li><li><p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for
-                     encryption. If the parameter specifies an unsupported algorithm, this is an
-                     error <a href="#errCX21">[err:CX21]</a>.</p></li></ul></div><div class="div2">
-<h3><a name="d3e481" id="d3e481"></a>4.2 The <code>crypto:decrypt</code> function</h3><p>This function decrypts an input string.</p><div class="exampleInner"><pre>
-<code class="function">crypto:decrypt</code>($input-string as <code class="type">xs:string</code>,
-               $decryption-type as <code class="type">xs:string</code>,
-               $secret-key as <code class="type">xs:string</code>,
-               $cryptographic-algorithm as <code class="type">xs:string</code>) as <code class="type">xs:boolean</code></pre></div><ul><li><p><code>$input-string</code> is the string to be decrypted. When a particular
-                     padding mechanism is requested, but is not available, this is an error <a href="#errCX16">[err:CX16]</a>. Also, when a particular padding mechanism is expected, but
-                     the data is not padded properly, this is an error <a href="#errCX17">[err:CX17]</a>.</p></li><li><p><code>$encryption-type</code> is the type of encryption. Legal values:
-                     "symmetric", and "asymmetric". If the parameter has an illegal value, this is
-                     an error <a href="#errCX22">[err:CX22]</a>.</p></li><li><p><code>$secret-key</code> is the secret key used for encryption, as string. If
-                     the key is invalid, this is an error <a href="#errCX19">[err:CX19]</a>. If the length of
-                     data provided to the block cipher is incorrect, this is an error <a href="#errCX20">[err:CX20]</a>.</p></li><li><p><code>$cryptographic-algorithm</code> is the cryptographic algorithm used for
-                     encryption. If the parameter specifies an unsupported algorithm, this is an
-                     error <a href="#errCX21">[err:CX21]</a>
-                  </p></li></ul></div></div></div><div class="back"><div class="div1">
-<h2><a name="d3e543" id="d3e543"></a>A References</h2><dl><dt class="label"><a name="rfc2104" id="rfc2104"></a>RFC 2104</dt><dd>
-               <a href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
-                  Authentication</a>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
-               Working Group. February, 1997. </dd><dt class="label"><a name="rfc2617" id="rfc2617"></a>RFC 2617</dt><dd>
-               <a href="http://ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Authentication: Basic and
-                  Digest Access Authentication</a>. J. Franks, P. Hallam-Baker, J. Hostetler, S.
-               Lawrence, P. Leach, A. Luotonen, L. Stewart. June, 1999. </dd><dt class="label"><a name="fo11" id="fo11"></a>F&amp;O 1.1</dt><dd>
-               <a href="http://w3.org/TR/xpath-functions-11/">XPath and XQuery Functions and
-                  Operators 1.1</a>. Michael Kay, editor. W3C Working Draft. 15 January 2009. </dd><dt class="label"><a name="xslt20" id="xslt20"></a>XSLT 2.0</dt><dd>
-               <a href="http://w3.org/TR/xslt20/">XSL Transformations (XSLT) Version 2.0</a>.
-               Michael Kay, editor. W3C Recommendation. 23 January 2007. </dd><dt class="label"><a name="xml-dig-sig-core" id="xml-dig-sig-core"></a>XML Signature</dt><dd>
-               <a href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
-                  (Second Edition)</a>. Donald Eastlake, Joseph Reagle, David Solo, Frederick
-               Hirsch, Thomas Roessler, editors. Mark Bartel, John Boyer, Barb Fox, Brian LaMacchia,
-               Ed Simon, authors. W3C Recommendation, 10 June 2008. </dd><dt class="label"><a name="xml-dig-sig-xpath-filer20" id="xml-dig-sig-xpath-filer20"></a>XML-Signature XPath Filter 2.0</dt><dd>
-               <a href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</a>.
-               John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
-               November 2002. </dd></dl></div><div class="div1">
-<h2><a name="d3e577" id="d3e577"></a>B Summary of Error Conditions</h2><dl><dt class="label"><a name="errCX01" id="errCX01"></a>err:CX01</dt><dd>The canonicalization algorithm is not
-               supported.</dd><dt class="label"><a name="errCX02" id="errCX02"></a>err:CX02</dt><dd>The digest algorithm is not supported.</dd><dt class="label"><a name="errCX03" id="errCX03"></a>err:CX03</dt><dd>The signature algorithm is not supported.</dd><dt class="label"><a name="errCX04" id="errCX04"></a>err:CX04</dt><dd>The XPath expression is invalid.</dd><dt class="label"><a name="errCX05" id="errCX05"></a>err:CX05</dt><dd>The root element of argument $digital-certificate must
-               have the name 'digital-certificate'.</dd><dt class="label"><a name="errCX06" id="errCX06"></a>err:CX06</dt><dd>The child element of argument $digital-certificate
-               having position $position must have the name $child-element-name.</dd><dt class="label"><a name="errCX07" id="errCX07"></a>err:CX07</dt><dd>The keystore is null.</dd><dt class="label"><a name="errCX08" id="errCX08"></a>err:CX08</dt><dd>I/O error while reading keystore.</dd><dt class="label"><a name="errCX09" id="errCX09"></a>err:CX09</dt><dd>Permission denied to read keystore.</dd><dt class="label"><a name="errCX10" id="errCX10"></a>err:CX10</dt><dd>The keystore URL is invalid.</dd><dt class="label"><a name="errCX11" id="errCX11"></a>err:CX11</dt><dd>The keystore type is not supported.</dd><dt class="label"><a name="errCX12" id="errCX12"></a>err:CX12</dt><dd>Cannot find key for alias in given keystore.</dd><dt class="label"><a name="errCX13" id="errCX13"></a>err:CX13</dt><dd>The hashing algorithm is not supported.</dd><dt class="label"><a name="errCX14" id="errCX14"></a>err:CX14</dt><dd>The encoding method is not supported.</dd><dt class="label"><a name="errCX15" id="errCX15"></a>err:CX15</dt><dd>Cannot find Signature element.</dd><dt class="label"><a name="errCX16" id="errCX16"></a>err:CX16</dt><dd>No such padding.</dd><dt class="label"><a name="errCX17" id="errCX17"></a>err:CX17</dt><dd>Incorrect padding.</dd><dt class="label"><a name="errCX18" id="errCX18"></a>err:CX18</dt><dd>The encryption type is not supported.</dd><dt class="label"><a name="errCX19" id="errCX19"></a>err:CX19</dt><dd>The secret key is invalid.</dd><dt class="label"><a name="errCX20" id="errCX20"></a>err:CX20</dt><dd>Illegal block size.</dd><dt class="label"><a name="errCX21" id="errCX21"></a>err:CX21</dt><dd>The algorithm is not supported.</dd><dt class="label"><a name="errCX22" id="errCX22"></a>err:CX22</dt><dd>The decryption type is not supported.</dd></dl></div></div><script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-         </script><script type="text/javascript">
-            try {
-               var pageTracker = _gat._getTracker("UA-5463082-2");
-               pageTracker._trackPageview();
-            } catch(err) {}
-         </script></body></html>
+return $signature				
+				</pre></div>
+            </div>
+         </div>
+      </div>
+      <div class="back">
+         <div class="div1">
+            
+            <h2><a name="d4e1377" id="d4e1377"></a>A References
+            </h2>
+            <dl>
+               <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
+               </dt>
+               <dd>
+                  <a href="http://w3.org/TR/xpath-30/">XML Path Language (XPath) 3.0</a>.
+                  Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft,
+                  13 December 2011.
+               </dd>
+               <dt class="label"><a name="xslt-30" id="xslt-30"></a>XSLT 3.0
+               </dt>
+               <dd>                        
+                  <a href="http://w3.org/TR/xslt-30/">XSL Transformations (XSLT) Version 3.0</a>.
+                  Michael Kay, editor. W3C Working Draft, 10 July 2012.
+               </dd>
+               <dt class="label"><a name="xquery-30" id="xquery-30"></a>XQuery 3.0
+               </dt>
+               <dd>                        
+                  <a href="http://w3.org/TR/xquery-30/">XQuery 3.0: An XML Query Language</a>.
+                  Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft,
+                  13 December 2011.
+               </dd>
+               <dt class="label"><a name="xpath-functions-30" id="xpath-functions-30"></a>XPath and XQuery Functions and Operators 3.0
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and Operators 3.0</a>.
+                  		Michael Kay, editor. W3C Working Draft, 13 December 2011.
+               </dd>
+               <dt class="label"><a name="xpath-datamodel-30" id="xpath-datamodel-30"></a>XQuery and XPath Data Model 3.0
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xpath-datamodel-30/">XQuery and XPath Data Model 3.0</a>.
+                  		Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December
+                  2011.
+               </dd>
+               <dt class="label"><a name="xml-schema-part-2" id="xml-schema-part-2"></a>XML Schema Part 2: Datatypes Second Edition
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xmlschema-2/">XML Schema Part 2: Datatypes Second Edition</a>.
+                  		Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December
+                  2011.
+               </dd>
+               <dt class="label"><a name="xml-dig-sig-core" id="xml-dig-sig-core"></a>XML Digital Signature
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
+                     	(Second Edition)</a>. Donald Eastlake, Joseph Reagle, David Solo, Frederick
+                  		Hirsch, Thomas Roessler, editors. Mark Bartel, John Boyer, Barb Fox, Brian LaMacchia,
+                  		Ed Simon, authors. W3C Recommendation, 10 June 2008.
+               </dd>
+               <dt class="label"><a name="xml-dig-sig-xpath-filer20" id="xml-dig-sig-xpath-filer20"></a>XML-Signature XPath Filter 2.0
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</a>.
+                  		John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
+                  		November 2002.
+               </dd>
+               <dt class="label"><a name="canonical-xml-10" id="canonical-xml-10"></a>Canonical XML Version 1.0
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xml-c14n/">Exclusive XML Canonicalization Version 1.0</a>.
+                  		John Boyer, PureEdge Solutions Inc., author/editor. W3C Recommendation, 15 March
+                  2001.
+               </dd>
+               <dt class="label"><a name="xml-exc-c14n" id="xml-exc-c14n"></a>Exclusive XML Canonicalization 1.0
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xml-exc-c14n/">Exclusive XML Canonicalization Version 1.0</a>.
+                  		John Boyer, PureEdge Solutions Inc., Donald E. Eastlake 3rd, Motorola, Joseph Reagle,
+                  W3C, authors/editors. W3C Recommendation, 18 July 2002.
+               </dd>
+               <dt class="label"><a name="rfc2104" id="rfc2104"></a>RFC 2104: HMAC: Keyed-Hashing for Message Authentication
+               </dt>
+               <dd>
+                  		<a href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
+                     	Authentication</a>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
+                  		Working Group. February, 1997.
+               </dd>
+               <dt class="label"><a name="xml-signatures-scenarios-faq" id="xml-signatures-scenarios-faq"></a>XML Signatures Scenarios FAQ
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/Signature/Drafts/PROP-xmldsig-faq-20000218/Overview.html">XML Signatures Scenarios FAQ</a>.
+                  		John Boyer, PureEdge, (tweaks) Joseph Reagle, W3C, editors. WG Proposal, 18 February
+                  2000.
+               </dd>
+               <dt class="label"><a name="xmldsig-scenarios-990818" id="xmldsig-scenarios-990818"></a>XML-Signature Scenarios
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/Signature/Drafts/xmldsig-scenarios-990818.html">XML-Signature Scenarios</a>.
+                  		John M. Boyer, UWI.Com, Richard Brown, Globeset, Brian LaMacchia, Microsoft, editors.
+                  Draft W3C Note/IETF Informational RFC, 18 August 1999.
+               </dd>
+            </dl>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e1459" id="d4e1459"></a>B Summary of Error Conditions
+            </h2>
+            <dl>
+               <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
+               </dt>
+               <dd>The specified algorithm is not supported.</dd>
+               <dt class="label"><a name="error.signatureType" id="error.signatureType"></a>crypto:signature-type
+               </dt>
+               <dd>The specified signature type is not supported.</dd>
+               <dt class="label"><a name="error.readKeystore" id="error.readKeystore"></a>crypto:unreadable-keystore
+               </dt>
+               <dd>I/O error while reading keystore, or the password is incorrect.</dd>
+               <dt class="label"><a name="error.deniedKeystore" id="error.deniedKeystore"></a>crypto:denied-keystore
+               </dt>
+               <dd>Permission denied to read keystore.</dd>
+               <dt class="label"><a name="error.keystoreUrl" id="error.keystoreUrl"></a>crypto:keystore-url
+               </dt>
+               <dd>The keystore URL is invalid.</dd>
+               <dt class="label"><a name="error.keystoreType" id="error.keystoreType"></a>crypto:keystore-type
+               </dt>
+               <dd>The keystore type is not supported.</dd>
+               <dt class="label"><a name="error.aliasKey" id="error.aliasKey"></a>crypto:alias-key
+               </dt>
+               <dd>Cannot find key for alias in given keystore.</dd>
+               <dt class="label"><a name="error.sigElem" id="error.sigElem"></a>crypto:signature-element
+               </dt>
+               <dd>Cannot find Signature element.</dd>
+               <dt class="label"><a name="error.noPadding" id="error.noPadding"></a>crypto:inexistent-padding
+               </dt>
+               <dd>No such padding.</dd>
+               <dt class="label"><a name="error.incorrectPadding" id="error.incorrectPadding"></a>crypto:incorrect-padding
+               </dt>
+               <dd>Incorrect padding.</dd>
+               <dt class="label"><a name="error.encType" id="error.encType"></a>crypto:encryption-type
+               </dt>
+               <dd>The encryption type is not supported.</dd>
+               <dt class="label"><a name="error.cryptoKey" id="error.cryptoKey"></a>crypto:invalid-crypto-key
+               </dt>
+               <dd>The cryptographic key is invalid.</dd>
+               <dt class="label"><a name="error.blockSize" id="error.blockSize"></a>crypto:block-size
+               </dt>
+               <dd>Illegal block size.</dd>
+               <dt class="label"><a name="error.decryptionType" id="error.decryptionType"></a>crypto:decryption-type
+               </dt>
+               <dd>The decryption type is not supported.</dd>
+               <dt class="label"><a name="error.noProvider" id="error.noProvider"></a>crypto:no-provider
+               </dt>
+               <dd>The provider is not set.</dd>
+               <dt class="label"><a name="error.inputResources" id="error.inputResources"></a>crypto.input-resources
+               </dt>
+               <dd>The 'enveloped' and 'enveloping' signatures have to be applied to only one resource.</dd>
+               <dt class="label"><a name="error.incorrectIV" id="error.incorrectIV"></a>crypto:incorrect-initialization-vector
+               </dt>
+               <dd>The initialization vector is not correct.</dd>
+            </dl>
+         </div>
+      </div><script type="text/javascript">
+					var _gaq = _gaq || [];
+					_gaq.push(['_setAccount', 'UA-43293529-1']);
+					_gaq.push(['_trackPageview']);
+					(function() {
+					var ga = document.createElement('script'); ga.type =
+					'text/javascript';
+					ga.async = true;
+					ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www')
+					+
+					'.google-analytics.com/ga.js';
+					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga,
+					s);
+					})();
+				</script></body>
+</html>
