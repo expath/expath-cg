@@ -199,7 +199,9 @@
             <p>HMAC (Keyed-Hashing for Message Authentication) <bibref ref="rfc2104" /> is a mechanism for message authentication using
             cryptographic hash functions. HMAC can be used with any iterative cryptographic hash function in combination with a secret shared key. Typically, message authentication
             codes are used between two parties that share a secret key in order to validate information transmitted between these parties.</p>            
-            <p>This function generates a message authentication code, based on the input message, by using a cryptographic algorithm and a secret key.</p>
+            <p>This function generates a message authentication code, based on the input message, by using a cryptographic algorithm and a secret key. It has two
+            signatures; the first one outputs the result as <spec:type>xs:byte*</spec:type>, while the second one outputs the result as
+            encoded <spec:type>xs:string</spec:type>.</p>
             <eg>
 <spec:function>crypto:hmac</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
             $key        as <spec:type>xs:anyAtomicType</spec:type>,
@@ -222,7 +224,7 @@
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. The supported algorithms are implementation dependent.</p>
                </item>
                <item>
-                  <p><code>$encoding</code> is the encoding of the output. The legal values are "hex" and "base64". The result is generated accordingly as xs:base64Binary string or xs:hexBinary string.</p>
+                  <p><code>$encoding</code> is the encoding of the output. The legal values are "hex" and "base64". The result is generated accordingly, as xs:base64Binary string or xs:hexBinary string.</p>
                </item>
             </ulist>
          </div2>
