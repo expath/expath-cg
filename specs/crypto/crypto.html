@@ -48,12 +48,12 @@ div.exampleHeader { font-weight: bold;
          <h1><a name="title" id="title"></a>Cryptographic Module
          </h1>
          
-         <h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 14 February 2015
+         <h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 20 March 2017
          </h2>
          <dl>
             <dt>This version:</dt>
             <dd>
-               <a href="http://expath.org/spec/crypto/20150214">http://expath.org/spec/crypto/20150214</a>
+               <a href="http://expath.org/spec/crypto/20170320">http://expath.org/spec/crypto/20170320</a>
                
             </dd>
             <dt>Latest version:</dt>
@@ -68,10 +68,8 @@ div.exampleHeader { font-weight: bold;
             </dd>
             <dt>Editor:</dt>
             <dd>Claudius Teodorescu, XML Consultant</dd>
-            <dt>Contributor:</dt>
-            <dd>Joe Wicentowski, U.S. Department Of State, Historian Office</dd>
          </dl>
-         <p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/crypto/20150214.xml">XML</a> and <a href="http://expath.org/spec/crypto/20150214/diff">Revision markup</a>.
+         <p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/crypto/20170320.xml">XML</a> and <a href="http://expath.org/spec/crypto/20170320/diff">Revision markup</a>.
          </p>
          <p class="copyright"></p>
       </div>
@@ -94,35 +92,35 @@ div.exampleHeader { font-weight: bold;
          
          <h2><a name="contents" id="contents"></a>Table of Contents
          </h2>
-         <p class="toc">1 <a href="#d4e82">Status of this document</a><br />
-            2 <a href="#d4e93">Introduction</a><br />
-            2.1 <a href="#d4e102">Namespace conventions</a><br />
-            2.2 <a href="#d4e121">Error management</a><br />
-            3 <a href="#d4e214">Integrity and Authentication of Data</a><br />
+         <p class="toc">1 <a href="#d4e77">Status of this document</a><br />
+            2 <a href="#d4e88">Introduction</a><br />
+            2.1 <a href="#d4e97">Namespace conventions</a><br />
+            2.2 <a href="#d4e116">Error management</a><br />
+            3 <a href="#d4e209">Integrity and Authentication of Data</a><br />
             3.1 <a href="#hash-function">The crypto:hash function</a><br />
             3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
-            4 <a href="#d4e360">XML Digital Signature</a><br />
-            4.1 <a href="#d4e400">The crypto:generate-signature function</a><br />
+            4 <a href="#d4e378">XML Digital Signature</a><br />
+            4.1 <a href="#d4e418">The crypto:generate-signature function</a><br />
             4.1.1 <a href="#explanations-about-parameters-parameter">Explanations about $parameters parameter</a><br />
             4.1.2 <a href="#example-of-parameters-parameter">Example of $parameters parameter</a><br />
             4.1.3 <a href="#explanations-about-resources-parameter">Explanations about $resources parameter</a><br />
-            4.2 <a href="#d4e730">The crypto:validate-signature function</a><br />
-            5 <a href="#d4e756">Encryption and Decryption</a><br />
-            5.1 <a href="#d4e765">The crypto:encrypt function</a><br />
+            4.2 <a href="#d4e748">The crypto:validate-signature function</a><br />
+            5 <a href="#d4e774">Encryption and Decryption</a><br />
+            5.1 <a href="#d4e783">The crypto:encrypt function</a><br />
             5.1.1 <a href="#explanations-about-parameters-parameter-of-crypto:encrypt">Explanations about $parameters parameter</a><br />
-            5.2 <a href="#d4e879">The crypto:decrypt function</a><br />
+            5.2 <a href="#d4e897">The crypto:decrypt function</a><br />
             5.2.1 <a href="#explanations-about-parameters-parameter-of-crypto:decrypt">Explanations about $parameters parameter</a><br />
-            6 <a href="#d4e1355">Scenarios of usage</a><br />
-            6.1 <a href="#d4e1358">Generation of OAuth signature</a><br />
-            6.2 <a href="#d4e1364">Generation of AWS Signature Version 4 signature</a><br />
-            6.3 <a href="#d4e1370">Generation of enveloped digital XML signature of a document</a><br />
+            6 <a href="#d4e1373">Scenarios of usage</a><br />
+            6.1 <a href="#d4e1376">Generation of OAuth signature</a><br />
+            6.2 <a href="#d4e1382">Generation of AWS Signature Version 4 signature</a><br />
+            6.3 <a href="#d4e1388">Generation of enveloped digital XML signature of a document</a><br />
             
          </p>
          
          <h3><a name="appendices" id="appendices"></a>Appendices
          </h3>
-         <p class="toc">A <a href="#d4e1377">References</a><br />
-            B <a href="#d4e1459">Summary of Error Conditions</a><br />
+         <p class="toc">A <a href="#d4e1395">References</a><br />
+            B <a href="#d4e1477">Summary of Error Conditions</a><br />
             
          </p>
       </div>
@@ -130,14 +128,14 @@ div.exampleHeader { font-weight: bold;
       <div class="body">
          <div class="div1">
             
-            <h2><a name="d4e82" id="d4e82"></a>1 Status of this document
+            <h2><a name="d4e77" id="d4e77"></a>1 Status of this document
             </h2>
             <p>This document is in an interim draft stage. Comments are welcomed at <a href="mailto:public-expath@w3.org">public-expath@w3.org</a> mailing list (<a href="http://lists.w3.org/Archives/Public/public-expath/">archive</a>).
             </p>
          </div>
          <div class="div1">
             
-            <h2><a name="d4e93" id="d4e93"></a>2 Introduction
+            <h2><a name="d4e88" id="d4e88"></a>2 Introduction
             </h2>
             <p>Cryptography is the science of communicating in secret code, by conversion of data
                with
@@ -157,7 +155,7 @@ div.exampleHeader { font-weight: bold;
             </p>
             <div class="div2">
                
-               <h3><a name="d4e102" id="d4e102"></a>2.1 Namespace conventions
+               <h3><a name="d4e97" id="d4e97"></a>2.1 Namespace conventions
                </h3>
                <p>The module defined by this document defines functions and elements in the namespace
                   <code>http://expath.org/ns/crypto</code>. In this document, the
@@ -169,7 +167,7 @@ div.exampleHeader { font-weight: bold;
             </div>
             <div class="div2">
                
-               <h3><a name="d4e121" id="d4e121"></a>2.2 Error management
+               <h3><a name="d4e116" id="d4e116"></a>2.2 Error management
                </h3>
                <p>Error conditions are identified by a code (a <code>QName</code>). When such an error
                   condition is reached during the execution of the function, a dynamic error is thrown,
@@ -180,19 +178,23 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e214" id="d4e214"></a>3 Integrity and Authentication of Data
+            <h2><a name="d4e209" id="d4e209"></a>3 Integrity and Authentication of Data
             </h2>
             <div class="div2">
                
                <h3><a name="hash-function" id="hash-function"></a>3.1 The <code>crypto:hash</code> function
                </h3>
                <p>This function generates a "message digest" of the input data, by using a cryptographic
-                  algorithm. It returns the hash value as <code class="type">xs:base64Binary</code>,
-                  (identifier <code>http://www.w3.org/2000/09/xmldsig#base64</code>, see <a href="#xml-dig-sig-core">[XML Digital Signature]</a>, section 6.1 Algorithm Identifiers and Implementation Requirements).
+                  algorithm. It returns the hash value as <code class="type">xs:string</code>.
                </p>
                <div class="exampleInner"><pre>
 <code class="function">crypto:hash</code>($data     as <code class="type">xs:anyAtomicType</code>,
-	     $algorithm as <code class="type">xs:string</code>) as <code class="type">xs:base64Binary</code>
+	     $algorithm as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
+</pre></div>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:hash</code>($data     as <code class="type">xs:anyAtomicType</code>,
+	     $algorithm as <code class="type">xs:string</code>,
+	     $encoding as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
 </pre></div>
                <ul>
                   <li>
@@ -204,6 +206,11 @@ div.exampleHeader { font-weight: bold;
                      <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm,
                         this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
                         The supported algorithms are implementation dependent.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$encoding</code> is the encoding of the output. The legal values are \"hex\" and "base64". The default
+                        value is "base64".
                      </p>
                   </li>
                </ul>
@@ -219,7 +226,9 @@ div.exampleHeader { font-weight: bold;
                   transmitted between these parties.
                </p>
                <p>This function generates a message authentication code, based on the input message,
-                  by using a cryptographic algorithm and a secret key.
+                  by using a cryptographic algorithm and a secret key. It has two
+                  signatures; the first one outputs the result as <code class="type">xs:byte*</code>, while the second one outputs the result as
+                  encoded <code class="type">xs:string</code>.
                </p>
                <div class="exampleInner"><pre>
 <code class="function">crypto:hmac</code>($data     as <code class="type">xs:anyAtomicType</code>,
@@ -250,7 +259,7 @@ div.exampleHeader { font-weight: bold;
                   </li>
                   <li>
                      <p><code>$encoding</code> is the encoding of the output. The legal values are "hex" and "base64". The result
-                        is generated accordingly as xs:base64Binary string or xs:hexBinary string.
+                        is generated accordingly, as xs:base64Binary string or xs:hexBinary string.
                      </p>
                   </li>
                </ul>
@@ -258,7 +267,7 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e360" id="d4e360"></a>4 XML Digital Signature
+            <h2><a name="d4e378" id="d4e378"></a>4 XML Digital Signature
             </h2>
             <p>A digital signature is a technique to certify that a digital document is authentic.
                This means that the origin of the document is known and there is the
@@ -281,7 +290,7 @@ div.exampleHeader { font-weight: bold;
             </p>
             <div class="div2">
                
-               <h3><a name="d4e400" id="d4e400"></a>4.1 The <code>crypto:generate-signature</code> function
+               <h3><a name="d4e418" id="d4e418"></a>4.1 The <code>crypto:generate-signature</code> function
                </h3>
                <p>The function has its parameters passed as a <code class="type">map(xs:string, item())</code>. After the function's signature, an example of parameters is given.
                </p>
@@ -527,7 +536,7 @@ div.exampleHeader { font-weight: bold;
             </div>
             <div class="div2">
                
-               <h3><a name="d4e730" id="d4e730"></a>4.2 The <code>crypto:validate-signature</code> function
+               <h3><a name="d4e748" id="d4e748"></a>4.2 The <code>crypto:validate-signature</code> function
                </h3>
                <p>This function validates an XML Digital Signature.</p>
                <div class="exampleInner"><pre>
@@ -543,7 +552,7 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e756" id="d4e756"></a>5 Encryption and Decryption
+            <h2><a name="d4e774" id="d4e774"></a>5 Encryption and Decryption
             </h2>
             <p>Encryption represents the process of conversion of data, by using a secret key (a
                cipher), in a form (called cipher text) that cannot be understood by unautorized
@@ -560,7 +569,7 @@ div.exampleHeader { font-weight: bold;
             </p>
             <div class="div2">
                
-               <h3><a name="d4e765" id="d4e765"></a>5.1 The <code>crypto:encrypt</code> function
+               <h3><a name="d4e783" id="d4e783"></a>5.1 The <code>crypto:encrypt</code> function
                </h3>
                <p>This function encrypts data.</p>
                <div class="exampleInner"><pre>
@@ -640,7 +649,7 @@ div.exampleHeader { font-weight: bold;
             </div>
             <div class="div2">
                
-               <h3><a name="d4e879" id="d4e879"></a>5.2 The <code>crypto:decrypt</code> function
+               <h3><a name="d4e897" id="d4e897"></a>5.2 The <code>crypto:decrypt</code> function
                </h3>
                <p>This function decrypts data.</p>
                <div class="exampleInner"><pre>
@@ -720,11 +729,11 @@ div.exampleHeader { font-weight: bold;
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1355" id="d4e1355"></a>6 Scenarios of usage
+            <h2><a name="d4e1373" id="d4e1373"></a>6 Scenarios of usage
             </h2>
             <div class="div2">
                
-               <h3><a name="d4e1358" id="d4e1358"></a>6.1 Generation of OAuth signature
+               <h3><a name="d4e1376" id="d4e1376"></a>6.1 Generation of OAuth signature
                </h3>
                <p></p>
                <div class="exampleInner"><pre>
@@ -740,7 +749,7 @@ return $signature
             </div>
             <div class="div2">
                
-               <h3><a name="d4e1364" id="d4e1364"></a>6.2 Generation of AWS Signature Version 4 signature
+               <h3><a name="d4e1382" id="d4e1382"></a>6.2 Generation of AWS Signature Version 4 signature
                </h3>
                <p></p>
                <div class="exampleInner"><pre>
@@ -760,7 +769,7 @@ return $signingKey
             </div>
             <div class="div2">
                
-               <h3><a name="d4e1370" id="d4e1370"></a>6.3 Generation of enveloped digital XML signature of a document
+               <h3><a name="d4e1388" id="d4e1388"></a>6.3 Generation of enveloped digital XML signature of a document
                </h3>
                <p></p>
                <div class="exampleInner"><pre>
@@ -813,7 +822,7 @@ return $signature
       <div class="back">
          <div class="div1">
             
-            <h2><a name="d4e1377" id="d4e1377"></a>A References
+            <h2><a name="d4e1395" id="d4e1395"></a>A References
             </h2>
             <dl>
                <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
@@ -910,7 +919,7 @@ return $signature
          </div>
          <div class="div1">
             
-            <h2><a name="d4e1459" id="d4e1459"></a>B Summary of Error Conditions
+            <h2><a name="d4e1477" id="d4e1477"></a>B Summary of Error Conditions
             </h2>
             <dl>
                <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
