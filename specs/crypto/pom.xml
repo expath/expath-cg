@@ -10,7 +10,7 @@
 	<version>1.0</version>
 	<name>Specification for EXPath Cryptographic Module</name>
 	<packaging>pom</packaging>
-	<url>http://expath.org/spec/crypto/</url>
+	<url>http://expath.org/spec/crypto</url>
 
 	<properties>
 		<java-package-name>crypto</java-package-name>
