@@ -8,16 +8,16 @@
       <w3c-designation>w3c-designation</w3c-designation>
       <w3c-doctype>EXPath Candidate Module</w3c-doctype>
       <pubdate>
-         <day>14</day>
-         <month>February</month>
-         <year>2015</year>
+         <day>20</day>
+         <month>March</month>
+         <year>2017</year>
       </pubdate>
       <publoc>
-         <loc href="http://expath.org/spec/crypto/20150214"/>
+         <loc href="http://expath.org/spec/crypto/20170320"/>
       </publoc>
       <altlocs>
-         <loc href="http://expath.org/spec/crypto/20150214.xml">XML</loc>
-         <loc href="http://expath.org/spec/crypto/20150214/diff">Revision markup</loc>
+         <loc href="http://expath.org/spec/crypto/20170320.xml">XML</loc>
+         <loc href="http://expath.org/spec/crypto/20170320/diff">Revision markup</loc>
       </altlocs>
       <latestloc>
          <loc href="http://expath.org/spec/crypto"/>
@@ -29,10 +29,6 @@
          <author role="editor">
             <name>Claudius Teodorescu</name>
             <affiliation>XML Consultant</affiliation>
-         </author>
-         <author role="contrib">
-            <name>Joe Wicentowski</name>
-            <affiliation>U.S. Department Of State, Historian Office</affiliation>
          </author>
       </authlist>
       <copyright>
@@ -175,11 +171,15 @@
          <head>Integrity and Authentication of Data</head>
          <div2 id="hash-function">
             <head>The <code>crypto:hash</code> function</head>
-            <p>This function generates a "message digest" of the input data, by using a cryptographic algorithm. It returns the hash value as <spec:type>xs:base64Binary</spec:type>,
-            (identifier <code>http://www.w3.org/2000/09/xmldsig#base64</code>, see <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements).</p>
+            <p>This function generates a "message digest" of the input data, by using a cryptographic algorithm. It returns the hash value as <spec:type>xs:string</spec:type>.</p>
             <eg>
 <spec:function>crypto:hash</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
-	     $algorithm as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64Binary</spec:type>
+	     $algorithm as <spec:type>xs:string</spec:type>) as <spec:type>xs:string</spec:type>
+</eg>
+            <eg>
+<spec:function>crypto:hash</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
+	     $algorithm as <spec:type>xs:string</spec:type>,
+	     $encoding as <spec:type>xs:string</spec:type>) as <spec:type>xs:string</spec:type>
 </eg>
             <ulist>
                <item>
@@ -188,7 +188,10 @@
                <item>
                   <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>.
                   The supported algorithms are implementation dependent.</p>
-               </item>               
+               </item>
+               <item>
+                  <p><code>$encoding</code> is the encoding of the output. The legal values are \"hex\" and "base64". The default value is "base64".</p>
+               </item>
             </ulist>
          </div2>
          <div2 id="hmac-function">
