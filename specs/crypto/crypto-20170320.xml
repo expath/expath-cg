@@ -1,0 +1,1170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?oxygen RNGSchema="http://expath.org/ns/xmlspec/xmlspec.rnc" type="compact"?>
+
+<spec xmlns:spec="http://expath.org/ns/xmlspec" role="editors-copy" spec:w3c="true">
+   <header>
+      <title>Cryptographic Module</title>
+      <w3c-designation>w3c-designation</w3c-designation>
+      <w3c-doctype>EXPath Candidate Module</w3c-doctype>
+      <pubdate>
+         <day>20</day>
+         <month>March</month>
+         <year>2017</year>
+      </pubdate>
+      <publoc>
+         <loc href="http://expath.org/spec/crypto/20170320"/>
+      </publoc>
+      <altlocs>
+         <loc href="http://expath.org/spec/crypto/20170320.xml">XML</loc>
+         <loc href="http://expath.org/spec/crypto/20170320/diff">Revision markup</loc>
+      </altlocs>
+      <latestloc>
+         <loc href="http://expath.org/spec/crypto"/>
+      </latestloc>
+      <prevlocs>
+         <loc href="http://expath.org/spec/crypto/20110810"/>
+      </prevlocs>
+      <authlist>
+         <author role="editor">
+            <name>Claudius Teodorescu</name>
+            <affiliation>XML Consultant</affiliation>
+         </author>
+      </authlist>
+      <copyright>
+         <p/>
+      </copyright>
+      <abstract>
+         <p>This document defines a set of <bibref ref="xpath-30"/> extension functions to perform cryptographic operations. These functions are related to
+         XML Digital Signature, to encryption and decryption, and to hashing and digesting of messages. They have been designed to be compatible with
+         <bibref ref="xquery-30"/> and <bibref ref="xslt-30"/>, as well as any other standard based on <bibref ref="xpath-30"/>.</p>
+         <p>The functions are defined on the datatypes defined in <bibref ref="xml-schema-part-2"/> and <bibref ref="xpath-datamodel-30"/>. Also, the functions are defined on
+         nodes and node sequences as defined in the <bibref ref="xpath-datamodel-30"/> and are following the good practices inferred from <bibref ref="xpath-functions-30"/>.</p>
+      </abstract>
+      <status>
+         <p>Must be ignored, but is required by the schema...</p>
+      </status>
+      <langusage>
+         <language>langusage</language>
+      </langusage>
+      <revisiondesc>
+         <p>revisiondesc</p>
+      </revisiondesc>
+   </header>
+   <body>
+      <div1>
+         <head>Status of this document</head>
+         <p>This document is in an interim draft stage. Comments are welcomed at <loc href="mailto:public-expath@w3.org">public-expath@w3.org</loc> mailing list (<loc href="http://lists.w3.org/Archives/Public/public-expath/">archive</loc>).</p>
+      </div1>   
+      <div1>
+         <head>Introduction</head>
+         <p>Cryptography is the science of communicating in secret code, by conversion of data with
+            the help of a key. In modern times, cryptography is necessary when communicating over
+            any untrusted medium, particularly the Internet.</p>
+         <p>Encryption of data can be of two types: symmetric and asymmetric. Symmetric encryption
+            means that the same key is used for encryption and decryption. Asymmetric encryption
+            means that a message can be encrypted by using a key that is public, but the decryption
+            can be made only by using a private key, which form a pair with the respective public
+            key.</p>
+         <p>A related technique of cryptography is to apply a one-way hash or digest function to
+            data; replicating the operation with the same data and function can ensure the integrity
+            of the data.</p>
+         <div2>
+            <head>Namespace conventions</head>
+            <p>The module defined by this document defines functions and elements in the namespace
+                  <code>http://expath.org/ns/crypto</code>. In this document, the
+                  <code>crypto</code> prefix, when used, is bound to this namespace URI.</p>
+            <p>Error codes are defined in the same namespace (<code>http://expath.org/ns/crypto</code>),
+            and in this document are displayed with the same prefix, <code>crypto</code>.</p>               
+         </div2>
+         <div2>
+            <head>Error management</head>
+            <p>Error conditions are identified by a code (a <code>QName</code>). When such an error
+               condition is reached during the execution of the function, a dynamic error is thrown,
+               with the corresponding error code (as if the standard XPath function
+                  <code>error</code> had been called).</p>
+         </div2>
+      </div1>
+<!--       <div1> -->
+<!--          <head>Cryptographic Service Providers</head> -->
+<!--          <p>Cryptographic providers provide cryptographic services, involving cryptographic operations (encryption, digital signatures, message digests, message authentication),  -->
+<!--          generators and converters of cryptographic material and cryptographic objects (keystores or certificates) containing the cryptographic data. They can be implemented -->
+<!--          using software, hardware, or both.</p> -->
+<!--           <table border="1" frame="border"> -->
+<!--             <caption>Cryptographic services described by this specification</caption> -->
+<!--             <thead> -->
+<!--               <tr> -->
+<!--                 <th>Cryptographic Service QName</th> -->
+<!--                 <th>Cryptographic Service Description</th> -->
+<!--               </tr> -->
+<!--             </thead> -->
+<!--             <tbody> -->
+<!--               <tr> -->
+<!--                 <td>crypto:hash</td> -->
+<!--                 <td>See <specref ref="hash-function" />.</td> -->
+<!--               </tr> -->
+<!--               <tr> -->
+<!--                 <td>crypto:hmac</td> -->
+<!--                 <td>See <specref ref="hmac-function" />.</td> -->
+<!--               </tr> -->
+<!--             </tbody> -->
+<!--           </table> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:list-providers</code> function</head> -->
+<!--             <p>This function lists the available cryptographic providers.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:list-providers</spec:function>() as <spec:type>element(crypto:provider-list)</spec:type> -->
+<!-- </eg> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:providers-list</code> element</head> -->
+<!--                 <p>The <code>crypto:providers-list</code> element represents the list of the available cryptographic providers:</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:providers-list&gt; -->
+<!--     (crypto:provider*) -->
+<!-- &lt;/crypto:providers-list&gt; -->
+<!--     </eg> -->
+<!--             </div3> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:provider</code> element</head> -->
+<!--                 <p>The <code>crypto:provider</code> element contains the name of an available cryptographic provider:</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:provider name = xs:string -->
+<!--     version = xs:string&gt; -->
+<!-- &lt;/crypto:provider&gt; -->
+<!--                 </eg> -->
+<!--               </div3>             -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:list-services</code> function</head> -->
+<!--             <p>This function lists the cryptographic services a provider provides.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:list-services</spec:function>($provider-name as <spec:type>xs:string</spec:type>) as <spec:type>element(crypto:service-list)</spec:type> -->
+<!-- </eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$provider-name</code> is the provider's name. TBD: case when provider is not registered, etc.</p> -->
+<!--                </item> -->
+<!--             </ulist> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:services-list</code> element</head> -->
+<!--                 <p>The <code>crypto:services-list</code> element represents the list of the available cryptographic services for a provider:</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:services-list&gt; -->
+<!--     (crypto:service*) -->
+<!-- &lt;/crypto:services-list&gt; -->
+<!--     </eg> -->
+<!--             </div3> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:service</code> element</head> -->
+<!--                 <p>The <code>crypto:service</code> element contains details about an available cryptographic service:</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:service qname = xsd:QName -->
+<!--     algorithm? = xs:string -->
+<!--     type? = xs:string -->
+<!--     format? = xs:string?/&gt; -->
+<!--                 </eg> -->
+<!--               </div3>              -->
+<!--          </div2>           -->
+<!--       </div1>         -->
+      
+      <div1>
+         <head>Integrity and Authentication of Data</head>
+         <div2 id="hash-function">
+            <head>The <code>crypto:hash</code> function</head>
+            <p>This function generates a "message digest" of the input data, by using a cryptographic algorithm. It returns the hash value as <spec:type>xs:string</spec:type>.</p>
+            <eg>
+<spec:function>crypto:hash</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
+	     $algorithm as <spec:type>xs:string</spec:type>) as <spec:type>xs:string</spec:type>
+</eg>
+            <eg>
+<spec:function>crypto:hash</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
+	     $algorithm as <spec:type>xs:string</spec:type>,
+	     $encoding as <spec:type>xs:string</spec:type>) as <spec:type>xs:string</spec:type>
+</eg>
+            <ulist>
+               <item>
+                  <p><code>$data</code> is the data to be hashed. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary.</p>
+               </item>
+               <item>
+                  <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>.
+                  The supported algorithms are implementation dependent.</p>
+               </item>
+               <item>
+                  <p><code>$encoding</code> is the encoding of the output. The legal values are \"hex\" and "base64". The default value is "base64".</p>
+               </item>
+            </ulist>
+         </div2>
+         <div2 id="hmac-function">
+            <head>The <code>crypto:hmac</code> function</head>
+            <p>HMAC (Keyed-Hashing for Message Authentication) <bibref ref="rfc2104" /> is a mechanism for message authentication using
+            cryptographic hash functions. HMAC can be used with any iterative cryptographic hash function in combination with a secret shared key. Typically, message authentication
+            codes are used between two parties that share a secret key in order to validate information transmitted between these parties.</p>            
+            <p>This function generates a message authentication code, based on the input message, by using a cryptographic algorithm and a secret key. It has two
+            signatures; the first one outputs the result as <spec:type>xs:byte*</spec:type>, while the second one outputs the result as
+            encoded <spec:type>xs:string</spec:type>.</p>
+            <eg>
+<spec:function>crypto:hmac</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
+            $key        as <spec:type>xs:anyAtomicType</spec:type>,
+            $algorithm  as <spec:type>xs:string</spec:type>) as <spec:type>xs:byte*</spec:type>
+</eg>
+            <eg>
+<spec:function>crypto:hmac</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
+            $key        as <spec:type>xs:anyAtomicType</spec:type>,
+            $algorithm  as <spec:type>xs:string</spec:type>,
+            $encoding  as <spec:type>xs:string</spec:type>) as <spec:type>xs:string</spec:type>
+</eg>
+            <ulist>
+               <item>
+                  <p><code>$data</code> is the data to be authenticated. This parameter can be of type xs:string, xs:byte*, xs:base64Binary, or xs:hexBinary.</p>
+               </item>
+               <item>
+                  <p><code>$key</code> is the secret key used for calculating the authentication code. This parameter can be of type xs:string, xs:byte*, xs:base64Binary, or xs:hexBinary.</p>
+               </item>               
+               <item>
+                  <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. The supported algorithms are implementation dependent.</p>
+               </item>
+               <item>
+                  <p><code>$encoding</code> is the encoding of the output. The legal values are "hex" and "base64". The result is generated accordingly, as xs:base64Binary string or xs:hexBinary string.</p>
+               </item>
+            </ulist>
+         </div2>
+      </div1>
+<!--       <div1> -->
+<!--          <head>Key Management</head> -->
+<!--          <p>TBD.</p> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-key-pair</code> function</head> -->
+<!--             <p>This function generates a new pair of public and private cryptographic keys, to be used with a specific cryptographic algorithm.</p> -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-secret-key</code> function</head> -->
+<!--             <p>This function generates a new secret key, to be used with a specific cryptographic algorithm.</p> -->
+<!--          </div2>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:compare-keys</code> function</head> -->
+<!--             <p></p> -->
+<!--          </div2>  -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:key-agrement</code> function</head> -->
+<!--             <p>http://ietf.org/rfc/rfc2631.txt, http://docs.oracle.com/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html#KeyAgreement</p> -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:convert-key-specification-to-key-object, crypto:convert-key-object-to-key-specification</code> function</head> -->
+<!--             <p>http://docs.oracle.com/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html#KeyFactory, -->
+<!--             http://docs.oracle.com/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html#SecretKeyFactory (for secret (symmetric) keys) -->
+<!--             </p> -->
+<!--          </div2>                     -->
+<!--       </div1>       -->
+      <div1>
+         <head>XML Digital Signature</head>
+         <p>A digital signature is a technique to certify that a digital document is authentic. This means that the origin of the document is known and there is the
+         ability to identify if the digital document has been changed since the digital signature was applied to it. This is done by means of a cryptographic transformation.</p>
+         <p>This function can apply an XML digital signature to one or more resources. There are three types of XML digital signatures, namely <code>enveloped</code>,
+         <code>enveloping</code>, and <code>detached</code> signatures.</p>
+         <p>According to <bibref ref="xml-dig-sig-core" />, the <code>enveloped</code> and <code>enveloping</code> signatures are applied to the same digital resource (and XML document),
+         while the <code>detached</code> signatures can be applied to more than one digital resources.</p>
+         <p>The designation of these digital resources is to be made based upon the explanations given in <bibref ref="xml-dig-sig-core" />.</p>
+         <p>In order to reference these digital resources, this function is using an XML syntax inspired by <bibref ref="xml-dig-sig-core" />. For details, see below the
+         parameter <code>$resources</code>.</p>
+         <div2>
+            <head>The <code>crypto:generate-signature</code> function</head>
+            <p>The function has its parameters passed as a <spec:type>map(xs:string, item())</spec:type>. After the function's signature, an example of parameters is given.</p>
+            <eg>
+<spec:function>crypto:generate-signature</spec:function>($data     as <spec:type>document()?</spec:type>,
+    			    $parameters as <spec:type>map(xs:string, item()+)?</spec:type>) as <spec:type>document()*</spec:type> 
+</eg>
+            <ulist>
+               <item>
+                  <p><code>$data</code> is the data to be signed.</p>
+               </item>
+               <item>
+                  <p><code>$parameters</code> represent the parameters used for generating the XML digital signature. For details regarding these parameters, see the table
+                  <specref ref="explanations-about-parameters-parameter" />  and the example <specref ref="example-of-parameters-parameter" /> below.</p>
+               </item>
+            </ulist>
+	        <div3 id="explanations-about-parameters-parameter">
+	            <head>Explanations about <code>$parameters</code> parameter</head>
+				<table border="1" frame="border">
+				  <caption>Parameters used for generating a XML digital signature</caption>
+				  <thead>
+				    <tr>
+				      <th>Key (as <code>xs:string</code>)</th>
+				      <th>Value</th>
+				      <th>Meaning</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <td><code>canonicalization-algorithm</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>The canonicalization algorithm applied to the <code>SignedInfo</code> element prior to performing signature calculations. Possible values are given in the list
+				      below. The default value is "inclusive-with-comments-1.1". If the parameter specifies an unsupported algorithm, this is an error
+				      <bibref ref="error.unknownAlgorithm"/>. (Optional)
+						<ulist>
+						   <item>
+						      <p><code>inclusive-1.1</code>, identifier <code>http://www.w3.org/2006/12/xml-c14n11</code>, for XML 1.1 documents, see
+						      <bibref ref="xml-dig-sig-core" />, section 6.5.2 Canonical XML 1.1.</p>
+						   </item>
+						   <item>
+						      <p><code>inclusive-with-comments-1.1</code>, identifier <code>http://www.w3.org/2006/12/xml-c14n11#WithComments</code>, for XML 1.1 documents, see
+						      <bibref ref="xml-dig-sig-core" />, section 6.5.2 Canonical XML 1.1.</p>
+						   </item>
+						   <item>
+						      <p><code>inclusive-1.0</code>, identifier <code>http://www.w3.org/TR/2001/REC-xml-c14n-20010315</code>, for XML 1.0 documents, see
+						      <bibref ref="xml-dig-sig-core" />, section 6.5.1 Canonical XML 1.0.</p>
+						   </item>
+						   <item>
+						      <p><code>inclusive-with-comments-1.0</code>, identifier <code>http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments</code>, for XML 1.0 documents, see
+						      <bibref ref="xml-dig-sig-core" />, section 6.5.1 Canonical XML 1.0.</p>
+						   </item>
+						   <item>
+						      <p><code>exclusive</code>, identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#</code>, see <bibref ref="xml-exc-c14n" />, section 4. Use in XML Security.</p>
+						   </item>
+						   <item>
+						      <p><code>exclusive-with-comments</code>, identifier <code>http://www.w3.org/2001/10/xml-exc-c14n#WithComments</code>, see <bibref ref="xml-exc-c14n" />, section 4. Use in XML Security.</p>
+						   </item>					   
+						</ulist>     
+				      </td>
+				    </tr>
+				    <tr>
+				      <td><code>digest-algorithm</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>The digest algorithm to be applied to the signed object. Possible values are: "SHA1" (identifier <code>http://www.w3.org/2000/09/xmldsig#sha1</code>, see
+				      <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements), "SHA256", and "SHA512". The default value is "SHA1". If the parameter specifies an
+				      unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
+				    </tr>
+				    <tr>
+				      <td><code>signature-algorithm</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>The algorithm used for signature generation and validation. Possible values are: "DSAwithSHA1" (identifier <code>http://www.w3.org/2000/09/xmldsig#dsa-sha1</code>,
+				      see <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements), and "RSAwithSHA1" (identifier <code>http://www.w3.org/2000/09/xmldsig#rsa-sha1</code>,
+				      see <bibref ref="xml-dig-sig-core" />, section 6.1 Algorithm Identifiers and Implementation Requirements). The default value is "DSAwithSHA1". If the parameter specifies an unsupported algorithm,
+				      this is an error <bibref ref="error.unknownAlgorithm"/>. (Optional)</td>
+				    </tr>
+				    <tr>
+				      <td><code>signature-namespace-prefix</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>The namespace prefix for signature. If this parameter is not provided, the default value of 'dsig' will be used. (Optional)</td>
+				    </tr>
+				    <tr>
+				      <td><code>signature-type</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>The method used for signing the content of signature. Possible values are: "enveloping", "enveloped", and "detached". The default value is "enveloped".
+				      If the parameter specifies an unsupported signature type, this is an error <bibref ref="error.signatureType"/>. (Optional)</td>
+				    </tr>
+				    <tr>
+				      <td><code>references</code></td>
+				      <td><code>element(Reference)*</code></td>
+				      <td>The references to the digital resources to be signed. If this parameter is not provided, the whole input document will be signed. If the signature is of
+				      <code>enveloped</code> or <code>enveloping</code> type, and more than one resource is inputted to be signed, this is an error <bibref ref="error.inputResources" />.
+				      More details about this parameter can be found at <specref ref="explanations-about-resources-parameter"/>. (Optional)</td>
+				    </tr>
+				    <tr>
+				      <td><code>key</code></td>
+				      <td><code>xs:anyAtomicType</code></td>
+				      <td>The secret key used for signing. This parameter can be of type <code>xs:string</code>, <code>xs:base64Binary</code>,
+				      or <code>xs:hexBinary</code>. If the key is invalid or missing, this is an error <bibref ref="error.cryptoKey"/>.</td>
+				    </tr>		              		              
+				  </tbody>
+				</table>	            
+            </div3>
+	        <div3 id="example-of-parameters-parameter">
+	            <head>Example of <code>$parameters</code> parameter</head>            
+	        <eg xml:space="preserve">
+	map {
+		"canonicalization-algorithm" := "inclusive-with-comments",
+	 	"digest-algorithm" := "SHA1",
+	 	"signature-algorithm" := "RSA_SHA1",
+	 	"signature-namespace-prefix" := "digsig",
+	 	"signature-type" := "enveloped",
+	 	"references" :=
+	 		( 
+				&lt;Reference xmlns="http://www.w3.org/2000/09/xmldsig#" URI=""&gt;
+					&lt;Transforms&gt;
+						&lt;Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2"&gt;
+							&lt;XPath Filter="intersect"&gt;//ToBeSigned&lt;/XPath&gt;
+							&lt;XPath Filter="subtract"&gt;//NotToBeSigned&lt;/XPath&gt;
+							&lt;XPath Filter="union"&gt;//ReallyToBeSigned&lt;/XPath&gt;
+						&lt;/Transform&gt;
+					&lt;/Transforms&gt;
+				&lt;/Reference&gt;,
+				&lt;Reference xmlns="http://www.w3.org/2000/09/xmldsig#" URI="#id"&gt;
+					&lt;Transforms&gt;
+						&lt;Transform Algorithm="http://www.w3.org/TR/2001/10/xml-exc-c14n" /&gt;
+					&lt;/Transforms&gt;
+				&lt;/Reference&gt;
+			)
+		"key" :=
+			    "-----BEGIN RSA PRIVATE KEY-----
+			MIIEowIBAAKCAQEAhPxBGln4YOcOGOxmRYEN8nzYHYvQx+PP8GnbJ+kW4f6HvH8WMAUa2lTB6gib
+			LzJGezhqkMy8NT8ogVz8xbra3AyK/IBDzXpWtPhSxVOCo6hJfTjj7wX3E2AVN9CTUOYrS/3iSu1q
+			/6MoB6MDIj8wV0HO1ujXqEip45UgVl+xRVtU+1wiJQ7Gc8GEEyHVtK/X4joiyCEebJhFsI42Z9e4
+			aETI/XOaLszyEQeipMRlyznpRL2x0chz+yj7KuwiMqBZmPYyeWBsbldW8xREwnHEyko5GWc6wkEi
+			vgFwzKaZWo2ct3pmZ9vwXKecAxbeJbyJQl/PDfSnqcwyhL6pOaSAuQIDAQABAoIBAHo5hnR7wIb/
+			lbteetjitjjqeY8eU/OD9DfYcu6Jkth/Ia4jd/cGmhmU0O0Sn96O7KyPu5H+OfUOaWIMXt400LZy
+			aMON98NA77RAj4KBMI7OO0z2Hrgu2Vlbc+TqtJskESM04ulOsIroIAB02Ip/XSS1fS+UrbEjp9Fd
+			3GzGYp2E6IF/YtTXMiqgdrZVAoDPtxiMR/1KXuETiBkeMxPvXfgePXLi/rYBDcecmfsCEzDX8RZV
+			xLoPKFxuLaIrzdVhGVHwp88fB57OufLytmuvro71FNrFzcIO88NyDpEQVnsBadm9Ir0mb5uhYq9j
+			YV444b2Gra0/onJm7e/zRUSSJGkCgYEA67Q8gBSADrkc0UCypjnFV8WWCQJBPspb9Vnf2MJi5aYM
+			U5Sa/2H+tNoY+fJoa/eDSu1jeAn71TDcXZizihj3IT8gVdoXSncbcTulxEnaOi85Q2uKfSia16rX
+			d+MufjJ4UDC7vR/Ve+zIQOxpzBmcFO5cMnLS3mJdpWSdS7DyQpMCgYEAkG+6udsQ02GEKaJZl2mi
+			XBqe4Rh187sDCwiqSO5ItS4jUg1xF1cn1PuF2nvjztZyEsaKKYdiqekEQv3jA6gRsWFvRi/abFN3
+			zau/5M42v7H1cgU7m+FsDywhN5IRAmGfEyL/2wpKuZ6lD2qqhGkXmxqyEqgmEClyIwxJKHWiAwMC
+			gYBCJK8Bpj8VYp8SnZxEh1u4uMrUtlxG2ZSasmDdvBbyqPk2jzI7zm0ipT1zDrJ88dVXNmy+Z9bS
+			ycZdQZfIfh8DpmpVjUER9YCu8vUeszbZMx1XrRsM6lMhiGC01PzcDx+yKSrV9NP81cKQbYd27gzd
+			1tHqmkxQebwbyLNXZU1mnwKBgDpuiPsBbdgmHkJ9pIMFwCJEvrvPmoBEyuFe2wzwIUfy52UdfP/1
+			SW73ZlpSPoIB7Vo9Kc3NMJQOaaP0dC+Zgbbh9RNO7q1eQxxYfCRDbJC2nNZI2amhU4b70mBZ3jm5
+			ZpJmWV2y1zIqxRnsjBlPLraX4Sx9DBEDw2H8aWhN1oIjAoGBANc0gizRHGfOK2UASXskuO5Ueias
+			6z0V7J/m93E7wK8IQHcZXGloy8S9QSX6uAqe48ZDVCZGPxqq7TppT+P9WsdqkXqxR7M/KLa+7Y6C
+			s1tkDtD9uOJN6CsLuVjfuo4ZT5SwC7pq842aQrqJveKWKdzEorQjWKeN8OM2wzEMs0P1
+			-----END RSA PRIVATE KEY-----"	
+	}
+	</eg>
+			</div3>
+			<div3 id="explanations-about-resources-parameter">
+				<head>Explanations about <code>$resources</code> parameter</head>
+	 			<table border="1" frame="border">
+				  <caption>The <code>$resources</code> parameter</caption>
+				  <thead>
+				    <tr>
+				      <th>Key (as <code>xs:string</code>)</th>
+				      <th>Value</th>
+				      <th>Meaning</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <td><code>Reference</code></td>
+				      <td><code>element()</code></td>
+				      <td>This is the parent element for a reference to a resource to be signed. Its namespace is <code>http://www.w3.org/2000/09/xmldsig#</code>. Its
+				      <code>URI</code> attribute identifies a resource using a URI-Reference (for details see <bibref ref="xml-dig-sig-core" />, section 4.3.3.1 The URI Attribute).</td>
+				    </tr>
+				    <tr>
+				      <td><code>Transforms</code></td>
+				      <td><code>element()</code></td>
+				      <td>This element contains an ordered list of <code>Transform</code> elements.</td>
+				    </tr>
+				    <tr>
+				      <td><code>Transform</code></td>
+				      <td><code>element()</code></td>
+				      <td>This element describes how the signer obtained the data object that is to be digested. The <code>Algorithm</code> attribute's value specifies the name of the
+				      algorithm to be applied, and the <code>Transform</code> element's text content provides additional data for processing using that algorithm. For more details and
+				      schema of this element, see <bibref ref="xml-dig-sig-core" />, section 4.3.3.4 The Transforms Element.</td>
+				    </tr>
+				    <tr>
+				      <td><code>XPath</code></td>
+				      <td><code>element()</code></td>
+				      <td>The XPath expression to be applied to the input document, in order to get the resource to be signed. The version of XPath to be used is 1.0, 
+				      plus a function named <code>here</code>. The <code>Filter</code> attribute's value provides the name of the operation (intersection, subtraction and union)
+				      used for combining the XPath-selected subtrees. For more details, see <bibref ref="xml-dig-sig-core" />, section 6.6.3 XPath Filtering, and
+				      <bibref ref="xml-dig-sig-xpath-filer20" />.</td>
+				    </tr>			    
+				  </tbody>
+				</table>			
+			</div3>
+         </div2>
+         <div2>
+            <head>The <code>crypto:validate-signature</code> function</head>
+            <p>This function validates an XML Digital Signature.</p>
+            <eg>
+<spec:function>crypto:validate-signature</spec:function>($data as <spec:type>document()</spec:type>) as <spec:type>xs:boolean</spec:type></eg>
+            <ulist>
+               <item>
+                  <p><code>$data</code> is the enveloped, enveloping, or detached signature. If
+                     the Signature element cannot be found, this is an error <bibref ref="error.sigElem"/>.</p>
+               </item>
+            </ulist>
+         </div2>
+      </div1>
+      <div1>
+         <head>Encryption and Decryption</head>
+         <p>Encryption represents the process of conversion of data, by using a secret key (a cipher), in a form (called cipher text) that cannot be understood by unautorized
+            persons.</p>
+         <p>The decryption represents the reverse process, of converting encrypted data back to plain text (original text).</p>
+         <p>There are two main types of encryption: symmetric encryption, when both parties, the sender and the receiver, use the same secret key, previously exchanged,
+         and asymmetric encryption, when a key pair, consisting of a private key and a private key, is used, of which the public key is used by sender to encrypt a message that
+         can only be decrypted by the receiver, who holds the private key of that key pair.</p>
+         <div2>
+            <head>The <code>crypto:encrypt</code> function</head>
+            <p>This function encrypts data.</p>
+            <eg>
+<spec:function>crypto:encrypt</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
+               $type       as <spec:type>xs:string</spec:type>,
+               $parameters as <spec:type>map(xs:string, item())?</spec:type>) as <spec:type>xs:base64Binary</spec:type></eg>
+            <ulist>
+               <item>
+                  <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. When a particular padding mechanism
+                  is requested to be used for the input data, but this mechanism is not made available by the implementation, this is an error <bibref ref="error.noPadding"/>.
+                  Also, when the input data is expected to have a particular padding mechanism, but the data is not padded accordingly to this mechanism, this is an error
+                  <bibref ref="error.incorrectPadding"/>.</p>
+               </item>
+               <item>
+                  <p>
+                     <code>$type</code> is the type of encryption. Legal values: "symmetric", and "asymmetric". If the parameter has an illegal value, this is an error
+                     <bibref ref="error.encType"/>.</p>
+               </item>
+               <item>
+                  <p><code>$parameters</code> represents the parameters needed for the current operation. More details about this parameter can be found at
+                  <specref ref="explanations-about-parameters-parameter-of-crypto:encrypt"/>.</p>
+               </item>
+            </ulist>
+			<div3 id="explanations-about-parameters-parameter-of-crypto:encrypt">
+				<head>Explanations about <code>$parameters</code> parameter</head>
+	 			<table border="1" frame="border">
+				  <caption>The <code>$parameters</code> parameter of <code>crypto:encrypt</code></caption>
+				  <thead>
+				    <tr>
+				      <th>Key (as <code>xs:string</code>)</th>
+				      <th>Value</th>
+				      <th>Meaning</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <td><code>key</code></td>
+				      <td><code>xs:anyAtomicType</code></td>
+				      <td>This is the cryptographic key used for encryption. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. If the key is invalid or missing,
+				      this is an error <bibref ref="error.cryptoKey"/>. If the length of data provided to the block cipher is incorrect, this is an error <bibref ref="error.blockSize"/>.</td>
+				    </tr>
+				    <tr>
+				      <td><code>algorithm</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>This is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation name can be used.
+		                  If the parameter specifies an unsupported algorithm or transformation name or the parameter is missing, this is an error <bibref ref="error.unknownAlgorithm"/>.
+		                  The supported algorithms are implementation dependent.</td>
+				    </tr>
+				    <tr>
+				      <td><code>iv</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>This is the initialization vector for symmetric encryption. If the initialization vector is missing or it is not as it is requested by the
+		                  encryption algorithm, this is an error <bibref ref="error.incorrectIV"/>. For asymmetric encryption, this parameter is not needed.</td>
+				    </tr>
+<!-- 		               <item> -->
+<!-- 		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the -->
+<!-- 		                  default provider. If the provider does not exist, this is an error <bibref ref="error.noProvider"/>.</p> -->
+<!-- 		               </item>                 -->				    
+				  </tbody>
+				</table>			
+			</div3>            
+         </div2>
+         <div2>
+            <head>The <code>crypto:decrypt</code> function</head>
+            <p>This function decrypts data.</p>
+            <eg>
+<spec:function>crypto:decrypt</spec:function>($data     as <spec:type>xs:anyAtomicType</spec:type>,
+               $type       as <spec:type>xs:string</spec:type>,
+               $parameters as <spec:type>map(xs:string, item())?</spec:type>) as <spec:type>xs:string</spec:type></eg>
+            <ulist>
+               <item>
+                  <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. When a particular padding mechanism
+                  is requested to be used for the input data, but this mechanism is not made available by the implementation, this is an error <bibref ref="error.noPadding"/>.
+                  Also, when the input data is expected to have a particular padding mechanism, but the data is not padded accordingly to this mechanism, this is an error
+                  <bibref ref="error.incorrectPadding"/>.</p>
+               </item>
+               <item>
+                  <p><code>$type</code> is the type of decryption. Legal values: "symmetric", and "asymmetric". If the parameter has an illegal value, this is an error
+                  <bibref ref="error.decryptionType"/>.</p>
+               </item>
+               <item>
+                  <p><code>$parameters</code> represents the parameters needed for the current operation. More details about this parameter can be found at
+                  <specref ref="explanations-about-parameters-parameter-of-crypto:decrypt"/>.</p>                  
+               </item>
+            </ulist>
+			<div3 id="explanations-about-parameters-parameter-of-crypto:decrypt">
+				<head>Explanations about <code>$parameters</code> parameter</head>
+	 			<table border="1" frame="border">
+				  <caption>The <code>$parameters</code> parameter of <code>crypto:decrypt</code></caption>
+				  <thead>
+				    <tr>
+				      <th>Key (as <code>xs:string</code>)</th>
+				      <th>Value</th>
+				      <th>Meaning</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <td><code>key</code></td>
+				      <td><code>xs:anyAtomicType</code></td>
+				      <td>This is the cryptographic key used for decryption. This parameter can be of type xs:string, xs:base64Binary, or xs:hexBinary. If the key is invalid or missing,
+				      this is an error <bibref ref="error.cryptoKey"/>. If the length of data provided to the block cipher is incorrect, this is an error <bibref ref="error.blockSize"/>.</td>		                  
+				    </tr>
+				    <tr>
+				      <td><code>algorithm</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>This is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation name can be used.
+		                  If the parameter specifies an unsupported algorithm or transformation name or the parameter is missing, this is an error <bibref ref="error.unknownAlgorithm"/>.
+		                  The supported algorithms are implementation dependent.</td>		                  
+				    </tr>
+				    <tr>
+				      <td><code>iv</code></td>
+				      <td><code>xs:string</code></td>
+				      <td>This is the initialization vector for symmetric decryption. If the initialization vector is missing or it is not as it is requested by the
+		                  decryption algorithm, this is an error <bibref ref="error.incorrectIV"/>. For asymmetric decryption, this parameter is not needed.</td>		                  
+				    </tr>
+<!-- 		               <item> -->
+<!-- 		                  <p><code>provider</code> as <spec:type>xs:string</spec:type> is the cryptographic provider for the current operation. If the provider is not specified, the implementation will use the -->
+<!-- 		                  default provider. If the provider does not exist, this is an error <bibref ref="error.noProvider"/>.</p> -->
+<!-- 		               </item>                 -->				    
+				  </tbody>
+				</table>			
+			</div3>            
+         </div2>
+      </div1>
+<!--       <div1> -->
+<!--          <head>Secure Storing of Sensitive Keying and Data Material</head> -->
+<!--          <p>A secure storage is a collection of CRLs, cryptographic keys, cryptographic certificates, cryptographic certificate chains, -->
+<!--          various secrets, and extensions. It may have different implementation, according to different cryptographic providers. -->
+<!--          Every entry has a unique alias name and can be protected by its own password.</p>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:create-secure-store</code> function</head> -->
+<!--             <p>This function creates a secure store. It returns the store as xs:base64binary if successfully completed, empty sequence if not.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:create-secure-store</spec:function>($store-format as <spec:type>xs:string</spec:type>, -->
+<!--                $store-password as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64binary</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$store-format</code> is the format of the secure store.</p> -->
+<!--                </item>                -->
+<!--                <item> -->
+<!--                   <p><code>$store-password</code> is the password for the secure store.</p> -->
+<!--                </item> -->
+<!--             </ulist>             -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:load-secure-store</code> function</head> -->
+<!--             <p>This function loads a secure store in order to operate against it. It returns an xs:long representing the secure store handle.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:load-secure-store</spec:function>($secure-store as <spec:type>xs:base64binary</spec:type>, -->
+<!--                $store-password as <spec:type>xs:string</spec:type>) as <spec:type>xs:long</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store</code> is the secure store.</p> -->
+<!--                </item>                -->
+<!--                <item> -->
+<!--                   <p><code>$store-password</code> is the password for the secure store.</p> -->
+<!--                </item> -->
+<!--             </ulist>             -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:convert-secure-store</code> function</head> -->
+<!--             <p>This function converts a secure store from one format to another. It returns the converted store as xs:base64binary -->
+<!--             if successfully completed, empty sequence if not.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:convert-secure-store</spec:function>($input-store as <spec:type>xs:base64binary</spec:type>, -->
+<!--                $input-format as <spec:type>xs:string</spec:type>, -->
+<!--                $output-format as <spec:type>xs:string</spec:type>) as <spec:type>xs:base64binary</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$input-store</code> is the secure store to be converted.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$input-format</code> is the format of the input secure store.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$output-format</code> is the format of the output secure store.</p> -->
+<!--                </item>                -->
+<!--             </ulist>             -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:get-secure-store-metadata</code> function</head> -->
+<!--             <p>This function gets metadata for a secure store. It returns a crypto:metadata element.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:get-secure-store-metadata</spec:function>($secure-store-handle as <spec:type>xs:long</spec:type>) as <spec:type>element(crypto:metadata)</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store-handle</code> is the secure store handle.</p> -->
+<!--                </item> -->
+<!--             </ulist> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:metadata</code> element</head> -->
+<!--                 <p>The <code>crypto:metadata</code> element contains metadata about a resource.</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:metadata&gt; -->
+<!--     &lt;crypto:secure-store-type&gt;xs:string&lt;/crypto:secure-store-type&gt; -->
+<!--     &lt;crypto:provider&gt;xs:string&lt;/crypto:provider&gt; -->
+<!--     &lt;crypto:aliases-list&gt;xs:string&lt;/crypto:aliases-list&gt; -->
+<!--     &lt;crypto:size&gt;xs:integer&lt;/crypto:size&gt; -->
+<!-- &lt;/crypto:metadata&gt; -->
+<!--     </eg> -->
+<!--                 <ulist> -->
+<!--                     <item> -->
+<!--                       <p> -->
+<!--                         <code>secure-store-type</code> is the type of the secure store. -->
+<!--                       </p> -->
+<!--                     </item> -->
+<!--                     <item> -->
+<!--                         <p> -->
+<!--                             <code>provider</code> is the provider that generated the secure store.</p> -->
+<!--                     </item> -->
+<!--                     <item> -->
+<!--                       <p> -->
+<!--                         <code>aliases-list</code> is the list of all the aliases in the secure store. -->
+<!--                       </p> -->
+<!--                    </item> -->
+<!--                     <item> -->
+<!--                       <p> -->
+<!--                         <code>size</code> is the number of entries in the secure store. -->
+<!--                       </p> -->
+<!--                    </item>     -->
+<!--                 </ulist> -->
+<!--             </div3>    -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:add-entry</code> function</head> -->
+<!--             <p>This function adds an entry to a secure store. It returns true if successfully completed, false if not.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:add-entry</spec:function>($secure-store-handle as <spec:type>xs:long</spec:type>, -->
+<!--                $data as <spec:type>xs:base64binary</spec:type>, -->
+<!--                $alias as <spec:type>xs:string</spec:type>, -->
+<!--                $entry-password as <spec:type>xs:string?</spec:type>) as <spec:type>xs:boolean</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store-handle</code> is the secure store handle.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$data</code> is the data to be stored.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$alias</code> is the alias for the data to be stored.</p> -->
+<!--                </item>                -->
+<!--                <item> -->
+<!--                   <p><code>$entry-password</code> is the password for the entry.</p> -->
+<!--                </item> -->
+<!--             </ulist>             -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:get-entry</code> function</head> -->
+<!--             <p>This function gets an entry from a secure store. It returns the entry.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:get-entry</spec:function>($secure-store-handle as <spec:type>xs:long</spec:type>, -->
+<!--                $alias as <spec:type>xs:string</spec:type>, -->
+<!--                $entry-password as <spec:type>xs:string?</spec:type>) as <spec:type>xs:base64binary</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store-handle</code> is the secure store handle.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$alias</code> is the alias for the data to be stored.</p> -->
+<!--                </item>                -->
+<!--                <item> -->
+<!--                   <p><code>$entry-password</code> is the password for the entry.</p> -->
+<!--                </item> -->
+<!--             </ulist>             -->
+<!--          </div2>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:delete-entry</code> function</head> -->
+<!--             <p>This function delets an entry from a secure store. It returns true if successfully completed, false if not.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:delete-entry</spec:function>($secure-store-handle as <spec:type>xs:long</spec:type>, -->
+<!--                $alias as <spec:type>xs:string</spec:type>, -->
+<!--                $entry-password as <spec:type>xs:string?</spec:type>) as <spec:type>xs:boolean</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store-handle</code> is the secure store handle.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$alias</code> is the alias for the data to be stored.</p> -->
+<!--                </item>                -->
+<!--                <item> -->
+<!--                   <p><code>$entry-password</code> is the password for the entry.</p> -->
+<!--                </item> -->
+<!--             </ulist>             -->
+<!--          </div2>  -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:get-entry-metadata</code> function</head> -->
+<!--             <p>This function gets metadata for a secure store entry. It returns a crypto:metadata element if entry exists, empty sequence if -->
+<!--             the entry does not exist.</p> -->
+<!--             <eg> -->
+<!-- <spec:function>crypto:get-entry-metadata</spec:function>($secure-store-handle as <spec:type>xs:long</spec:type>, -->
+<!--                $alias as <spec:type>xs:string</spec:type>) as <spec:type>element(crypto:metadata)?</spec:type></eg> -->
+<!--             <ulist> -->
+<!--                <item> -->
+<!--                   <p><code>$secure-store-handle</code> is the secure store handle.</p> -->
+<!--                </item> -->
+<!--                <item> -->
+<!--                   <p><code>$alias</code> is the alias for the data to be stored.</p> -->
+<!--                </item>                -->
+<!--             </ulist> -->
+<!--             <div3> -->
+<!--                 <head>The <code>crypto:metadata</code> element</head> -->
+<!--                 <p>The <code>crypto:metadata</code> element contains metadata about a resource.</p> -->
+<!--                 <eg> -->
+<!-- &lt;crypto:metadata&gt; -->
+<!--     &lt;crypto:creation-date&gt;xs:dateTime&lt;/crypto:creation-date&gt; -->
+<!--     &lt;crypto:type&gt;("certificate" | "key" | "other")&lt;/crypto:provider&gt; -->
+<!-- &lt;/crypto:metadata&gt; -->
+<!--     </eg> -->
+<!--                 <ulist> -->
+<!--                     <item> -->
+<!--                       <p> -->
+<!--                         <code>creation-date</code> is the entry's creation date. -->
+<!--                       </p> -->
+<!--                     </item> -->
+<!--                     <item> -->
+<!--                         <p> -->
+<!--                             <code>type</code> is the entry's type.</p> -->
+<!--                     </item>    -->
+<!--                 </ulist> -->
+<!--             </div3>    -->
+<!--          </div2>          -->
+                 
+         
+         
+              
+              
+<!--          <div2> -->
+<!--             <head>The <code>crypto:list-trusted-certificate-authorities</code> function</head> -->
+<!--             <p>This function lists the most-trusted certificate authorities in a secure store.</p> -->
+<!--          </div2>          -->
+<!--       </div1>        -->
+
+<!--       <div1> -->
+<!--          <head>Digital Certificates</head> -->
+
+<!-- 			    <tr> -->
+<!-- 			      <td><code>digital-certificate</code></td> -->
+<!-- 			      <td><code>map(xs:string, xs:string)</code></td> -->
+<!-- 			      <td>The digital certificate to be used for signing the references. If this parameter is missing, an auto-generated key pair will be used. The -->
+<!-- 			      components of this parameter are given in the table <bibref ref="digital-certificate-parameter-components" /> below.(Optional)</td> -->
+<!-- 			    </tr> -->
+
+<!-- 			<table id="digital-certificate-parameter-components" border="1" frame="border"> -->
+<!-- 			  <caption>Components of the <code>digital-certificate</code> parameter</caption> -->
+<!-- 			  <thead> -->
+<!-- 			    <tr> -->
+<!-- 			      <th>Key (as <code>xs:string</code>)</th> -->
+<!-- 			      <th>Value</th> -->
+<!-- 			      <th>Meaning</th> -->
+<!-- 			    </tr> -->
+<!-- 			  </thead> -->
+<!-- 			  <tbody> -->
+<!-- 			    <tr> -->
+<!-- 			      <td><code>keystore-type</code></td> -->
+<!-- 			      <td><code>xs:string</code></td> -->
+<!-- 			      <td>The keystore type. If the type is not supported, this is an error <bibref ref="error.keystoreType" />.</td> -->
+<!-- 			    </tr> -->
+<!-- 			    <tr> -->
+<!-- 			      <td><code>keystore-password</code></td> -->
+<!-- 			      <td><code>xs:string</code></td> -->
+<!-- 			      <td>The keystore's password. If the keystore cannot be loaded or the password is incorrect, this is an error <bibref ref="error.readKeystore" />.</td> -->
+<!-- 			    </tr> -->
+<!-- 			    <tr> -->
+<!-- 			      <td><code>key-alias</code></td> -->
+<!-- 			      <td><code>xs:string</code></td> -->
+<!-- 			      <td>The alias for the key pair used for signing. If no key pair exists for this alias, this is an error <bibref ref="error.aliasKey"/>.</td> -->
+<!-- 			    </tr> -->
+<!-- 			    <tr> -->
+<!-- 			      <td><code>private-key-password</code></td> -->
+<!-- 			      <td><code>xs:string</code></td> -->
+<!-- 			      <td>The password for the selected key.</td> -->
+<!-- 			    </tr> -->
+<!-- 			    <tr> -->
+<!-- 			      <td><code>keystore-url</code></td> -->
+<!-- 			      <td><code>xs:string</code></td> -->
+<!-- 			      <td>The URL of the keystore. If the URL is not correct, this is an error <bibref ref="error.keystoreUrl"/>. If the user has no acces to the keystore, -->
+<!-- 			      this is an error <bibref ref="error.deniedKeystore" />.</td> -->
+<!-- 			    </tr>		              		               -->
+<!-- 			  </tbody> -->
+<!-- 			</table> -->
+
+
+<!--  	"digital-certificate" := -->
+<!--  		map { -->
+<!--  			"keystore-type" := "JKS", -->
+<!--  			"keystore-password" := "password", -->
+<!--  			"key-alias" := "alias", -->
+<!--  			"private-key-password" := "password", -->
+<!--  			"keystore-url" := "/db/mykeystore" -->
+<!--  		}  -->
+
+
+
+			
+
+
+<!--          <p>TBD.</p> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-certificate</code> function</head> -->
+<!--             <p>This function generates a digital certificate.</p> -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-self-signed-certificate</code> function</head> -->
+<!--             <p>This function generates, for development purposes, a self signed digital certificate. -->
+<!--                TODO: To be developed, if such function is of any use.</p> -->
+<!--          </div2>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:validate-certificate</code> function</head> -->
+<!--             <p>This function validates a digital certificate.</p> -->
+<!--          </div2>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:parse-certificate</code> function</head> -->
+<!--             <p>This function parses a digital certificate.</p> -->
+<!--          </div2>  -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-certification-path</code> function</head> -->
+<!--             <p>This function validates the certification path for a digital certificate.</p> -->
+<!--          </div2>          -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:validate-certification-path</code> function</head> -->
+<!--             <p>This function validates the certification path for a digital certificate.</p> -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-certification-request</code> function</head> -->
+<!--             <p>This function generates a certificate signing request, in order to apply for a digital -->
+<!--             identity certificate, which is to be issued by a Certificate Authority .</p> -->
+<!--          </div2> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:validate-certification-request</code> function</head> -->
+<!--             <p>This function validates a certificate signing request.</p> -->
+<!--          </div2>    -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:validate-certificate-revocation-list</code> function</head> -->
+<!--             <p>This function validates a certificate revocation list.</p> -->
+<!--          </div2>                   -->
+<!--       </div1> -->
+      
+<!--       <div1> -->
+<!--          <head>Cryptographic Hardware</head> -->
+<!--          <p>TBD.</p> -->
+<!--       </div1> -->
+      
+<!--       <div1> -->
+<!--          <head>Random Sequences Generation</head> -->
+<!--          <p>TBD.</p> -->
+<!--          <div2> -->
+<!--             <head>The <code>crypto:generate-random-number</code> function</head> -->
+<!--             <p>This function generates a random number that is cryptographically strong.</p> -->
+<!--          </div2>            -->
+<!--       </div1> -->
+            
+<!--       <div1> -->
+<!--             <head>The <code>crypto:options</code> element</head> -->
+<!--             <p>The <code>crypto:options</code> element represents the options needed for the functions included in this module. -->
+<!--             Users will specify for a certain functions only the options mentioned in function's description above. In case a needed option -->
+<!--             is not mentioned for a function, its default value will be used.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:options&gt; -->
+<!--     &lt;crypto:option name = xs:string value? = xs:string&gt; -->
+<!--         any* -->
+<!--     &lt;/crypto:option&gt; * -->
+<!-- &lt;/crypto:options&gt; ? -->
+<!-- </eg> -->
+<!--          <div2 id="provider-option"> -->
+<!--             <head>The <code>provider</code> option</head> -->
+<!--             <p>Represents the provider for the current operation. If the provider does not exist, this is an error <bibref ref="error.noProvider"/>.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:option name = "provider" -->
+<!--     value = xs:string/&gt; -->
+<!-- </eg>             -->
+<!--          </div2>   -->
+<!--          <div2 id="canonicalization-algorithm"> -->
+<!--             <head>The <code>canonicalization-algorithm</code> option</head> -->
+<!--             <p>This option represents the canonicalization algorithm applied to the <code>SignedInfo</code> element prior to performing -->
+<!--             signature calculations. The default value is "inclusive-with-comments". If the parameter specifies an unsupported algorithm, -->
+<!--             this is an error <bibref ref="error.unknownAlgorithm"/>.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:option name = "canonicalization-algorithm" -->
+<!--     value = "exclusive" | "exclusive-with-comments" | "inclusive" | "inclusive-with-comments" /&gt; ? -->
+<!-- </eg>             -->
+<!--          </div2>  -->
+<!--          <div2 id="digest-algorithm"> -->
+<!--             <head>The <code>digest-algorithm</code> option</head> -->
+<!--             <p>This option represents the digest algorithm to be applied to the signed object. If the parameter specifies an unsupported -->
+<!--             algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:option name = "digest-algorithm" value = xs:string /&gt; -->
+<!-- </eg>             -->
+<!--          </div2>          -->
+<!--          <div2 id="signature-algorithm"> -->
+<!--             <head>The <code>signature-algorithm</code> option</head> -->
+<!--             <p>This option represents the algorithm used for signature generation and validation. If the parameter specifies an -->
+<!--             unsupported algorithm, this is an error <bibref ref="error.unknownAlgorithm"/>.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:option name = "signature-algorithm" value = xs:string /&gt; -->
+<!-- </eg>             -->
+<!--          </div2>          -->
+<!--          <div2 id="signature-namespace-prefix"> -->
+<!--             <head>The <code>signature-namespace-prefix</code> option</head> -->
+<!--             <p>This option represents the namespace prefix for signature.</p> -->
+<!--             <eg> -->
+<!-- &lt;crypto:option name = "signature-namespace-prefix" value = xs:string /&gt; -->
+<!-- </eg>             -->
+<!--          </div2>                   -->
+
+                                
+<!--       </div1> -->
+      <div1>
+         <head>Scenarios of usage</head>
+			<div2>
+				<head>Generation of OAuth signature</head>
+				<p></p>
+				<eg>
+let $signature-base-string :=
+	"GET&amp;http%3A%2F%2Fexample.org%2Fresource%26oauth_consumer_key%3Dabcd%26
+	oauth_nonce%3DXxFM1VSdB6N%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1449422427%26
+	oauth_token%3Dijkl%26oauth_version%3D1.0"
+let $key := "dpf43f3p2l4k3l03"
+let $signature := return crypto:hmac($signature-base-string, $key, "HMAC-SHA-1")
+
+return $signature				
+				</eg>
+			</div2>
+			<div2>
+				<head>Generation of AWS Signature Version 4 signature</head>
+				<p></p>
+				<eg>
+let $region := "us-east-1"
+let $service := 'iam'
+let $date-YYYYMMDD := '20120215'
+let $s3-secret-key := 'wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY'
+let $kSecret := concat("AWS4", $s3-secret-key)
+
+let $dateKey := crypto:hmac($date-YYYYMMDD, $kSecret, "HMAC-SHA-256")
+let $dateRegionKey := crypto:hmac($region, $dateKey, "HMAC-SHA-256")
+let $dateRegionServiceKey := crypto:hmac($service, $dateRegionKey, "HMAC-SHA-256")
+let $signingKey := crypto:hmac("aws4_request", $dateRegionServiceKey, "HMAC-SHA-256”)
+
+return $signingKey				
+				</eg>
+			</div2>	
+			<div2>
+				<head>Generation of enveloped digital XML signature of a document</head>
+				<p></p>
+				<eg>
+let $doc :=
+  &lt;data&gt;
+    &lt;a&gt;1&lt;/a&gt;
+    &lt;b&gt;7&lt;/b&gt;
+    &lt;c /&gt;
+    &lt;c /&gt;
+  &lt;/data&gt;
+let $signature := crypto:generate-signature($doc,
+  map {
+    "canonicalization-algorithm" := "inclusive-with-comments",
+    "digest-algorithm" := "SHA1",
+    "signature-algorithm" := "RSA_SHA1",
+    "signature-namespace-prefix" := "digsig",
+    "signature-type" := "enveloped",
+    "key" :=
+      "-----BEGIN RSA PRIVATE KEY-----
+      MIIEowIBAAKCAQEAhPxBGln4YOcOGOxmRYEN8nzYHYvQx+PP8GnbJ+kW4f6HvH8WMAUa2lTB6gib
+      LzJGezhqkMy8NT8ogVz8xbra3AyK/IBDzXpWtPhSxVOCo6hJfTjj7wX3E2AVN9CTUOYrS/3iSu1q
+      /6MoB6MDIj8wV0HO1ujXqEip45UgVl+xRVtU+1wiJQ7Gc8GEEyHVtK/X4joiyCEebJhFsI42Z9e4
+      aETI/XOaLszyEQeipMRlyznpRL2x0chz+yj7KuwiMqBZmPYyeWBsbldW8xREwnHEyko5GWc6wkEi
+      vgFwzKaZWo2ct3pmZ9vwXKecAxbeJbyJQl/PDfSnqcwyhL6pOaSAuQIDAQABAoIBAHo5hnR7wIb/
+      lbteetjitjjqeY8eU/OD9DfYcu6Jkth/Ia4jd/cGmhmU0O0Sn96O7KyPu5H+OfUOaWIMXt400LZy
+      aMON98NA77RAj4KBMI7OO0z2Hrgu2Vlbc+TqtJskESM04ulOsIroIAB02Ip/XSS1fS+UrbEjp9Fd
+      3GzGYp2E6IF/YtTXMiqgdrZVAoDPtxiMR/1KXuETiBkeMxPvXfgePXLi/rYBDcecmfsCEzDX8RZV
+      xLoPKFxuLaIrzdVhGVHwp88fB57OufLytmuvro71FNrFzcIO88NyDpEQVnsBadm9Ir0mb5uhYq9j
+      YV444b2Gra0/onJm7e/zRUSSJGkCgYEA67Q8gBSADrkc0UCypjnFV8WWCQJBPspb9Vnf2MJi5aYM
+      U5Sa/2H+tNoY+fJoa/eDSu1jeAn71TDcXZizihj3IT8gVdoXSncbcTulxEnaOi85Q2uKfSia16rX
+      d+MufjJ4UDC7vR/Ve+zIQOxpzBmcFO5cMnLS3mJdpWSdS7DyQpMCgYEAkG+6udsQ02GEKaJZl2mi
+      XBqe4Rh187sDCwiqSO5ItS4jUg1xF1cn1PuF2nvjztZyEsaKKYdiqekEQv3jA6gRsWFvRi/abFN3
+      zau/5M42v7H1cgU7m+FsDywhN5IRAmGfEyL/2wpKuZ6lD2qqhGkXmxqyEqgmEClyIwxJKHWiAwMC
+      gYBCJK8Bpj8VYp8SnZxEh1u4uMrUtlxG2ZSasmDdvBbyqPk2jzI7zm0ipT1zDrJ88dVXNmy+Z9bS
+      ycZdQZfIfh8DpmpVjUER9YCu8vUeszbZMx1XrRsM6lMhiGC01PzcDx+yKSrV9NP81cKQbYd27gzd
+      1tHqmkxQebwbyLNXZU1mnwKBgDpuiPsBbdgmHkJ9pIMFwCJEvrvPmoBEyuFe2wzwIUfy52UdfP/1
+      SW73ZlpSPoIB7Vo9Kc3NMJQOaaP0dC+Zgbbh9RNO7q1eQxxYfCRDbJC2nNZI2amhU4b70mBZ3jm5
+      ZpJmWV2y1zIqxRnsjBlPLraX4Sx9DBEDw2H8aWhN1oIjAoGBANc0gizRHGfOK2UASXskuO5Ueias
+      6z0V7J/m93E7wK8IQHcZXGloy8S9QSX6uAqe48ZDVCZGPxqq7TppT+P9WsdqkXqxR7M/KLa+7Y6C
+      s1tkDtD9uOJN6CsLuVjfuo4ZT5SwC7pq842aQrqJveKWKdzEorQjWKeN8OM2wzEMs0P1
+      -----END RSA PRIVATE KEY-----"	
+  }
+)
+
+return $signature				
+				</eg>
+			</div2>	
+      </div1>      
+   </body>
+   <back>
+      <div1>
+         <head>References</head>
+         <blist>
+            <bibl id="xpath-30" key="XPath 3.0">
+                <loc href="http://w3.org/TR/xpath-30/">XML Path Language (XPath) 3.0</loc>.
+                Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>
+            <bibl id="xslt-30" key="XSLT 3.0">                        
+                <loc href="http://w3.org/TR/xslt-30/">XSL Transformations (XSLT) Version 3.0</loc>.
+                Michael Kay, editor. W3C Working Draft, 10 July 2012.</bibl>         
+            <bibl id="xquery-30" key="XQuery 3.0">                        
+                <loc href="http://w3.org/TR/xquery-30/">XQuery 3.0: An XML Query Language</loc>.
+                Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>
+            <bibl id="xpath-functions-30" key="XPath and XQuery Functions and Operators 3.0">
+              		<loc href="http://w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and Operators 3.0</loc>.
+              		Michael Kay, editor. W3C Working Draft, 13 December 2011.</bibl>                                
+           	<bibl id="xpath-datamodel-30" key="XQuery and XPath Data Model 3.0">
+              		<loc href="http://w3.org/TR/xpath-datamodel-30/">XQuery and XPath Data Model 3.0</loc>.
+              		Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>  
+           	<bibl id="xml-schema-part-2" key="XML Schema Part 2: Datatypes Second Edition">
+              		<loc href="http://w3.org/TR/xmlschema-2/">XML Schema Part 2: Datatypes Second Edition</loc>.
+              		Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December 2011.</bibl>              		
+           	<bibl id="xml-dig-sig-core" key="XML Digital Signature">
+              		<loc href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
+                 	(Second Edition)</loc>. Donald Eastlake, Joseph Reagle, David Solo, Frederick
+              		Hirsch, Thomas Roessler, editors. Mark Bartel, John Boyer, Barb Fox, Brian LaMacchia,
+              		Ed Simon, authors. W3C Recommendation, 10 June 2008.</bibl>
+           	<bibl id="xml-dig-sig-xpath-filer20" key="XML-Signature XPath Filter 2.0">
+              		<loc href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</loc>.
+              		John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
+              		November 2002.</bibl>
+           	<bibl id="canonical-xml-10" key="Canonical XML Version 1.0">
+              		<loc href="http://w3.org/TR/xml-c14n/">Exclusive XML Canonicalization Version 1.0</loc>.
+              		John Boyer, PureEdge Solutions Inc., author/editor. W3C Recommendation, 15 March 2001.</bibl>              		
+           	<bibl id="xml-exc-c14n" key="Exclusive XML Canonicalization 1.0">
+              		<loc href="http://w3.org/TR/xml-exc-c14n/">Exclusive XML Canonicalization Version 1.0</loc>.
+              		John Boyer, PureEdge Solutions Inc., Donald E. Eastlake 3rd, Motorola, Joseph Reagle, W3C, authors/editors. W3C Recommendation, 18 July 2002.</bibl>
+              		
+              		
+              		              		
+              		
+              		
+              		
+            <bibl id="rfc2104" key="RFC 2104: HMAC: Keyed-Hashing for Message Authentication">
+              		<loc href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
+                 	Authentication</loc>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
+              		Working Group. February, 1997.</bibl>
+            <bibl id="xml-signatures-scenarios-faq" key="XML Signatures Scenarios FAQ">
+              		<loc href="http://w3.org/Signature/Drafts/PROP-xmldsig-faq-20000218/Overview.html">XML Signatures Scenarios FAQ</loc>.
+              		John Boyer, PureEdge, (tweaks) Joseph Reagle, W3C, editors. WG Proposal, 18 February 2000.</bibl>              		
+            <bibl id="xmldsig-scenarios-990818" key="XML-Signature Scenarios">
+              		<loc href="http://w3.org/Signature/Drafts/xmldsig-scenarios-990818.html">XML-Signature Scenarios</loc>.
+              		John M. Boyer, UWI.Com, Richard Brown, Globeset, Brian LaMacchia, Microsoft, editors. Draft W3C Note/IETF Informational RFC, 18 August 1999.</bibl>              		
+<!--            	<bibl id="rfc1750" key="RFC 1750"> -->
+<!--               		<loc href="http://ietf.org/rfc/rfc1750.txt">RFC 1750: Randomness Recommendations for Security</loc>.  -->
+<!--               		D. Eastlake, 3rd, S. Crocker, J. Schiller, editors. Network Working Group. December 1994.</bibl>              		 -->
+<!--            	<bibl id="rfc3852" key="RFC 3852"> -->
+<!--               		<loc href="http://ietf.org/rfc/rfc3852.txt">RFC 3852: Cryptographic Message Syntax (CMS)</loc>.  -->
+<!--               		R. Housley, editor. Network Working Group. July 2004.</bibl> -->
+<!--            	<bibl id="rfc5958" key="RFC 5958"> -->
+<!--               		<loc href="http://tools.ietf.org/html/rfc5958">RFC 5958: Asymmetric Key Packages</loc>.  -->
+<!--               		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.</bibl> -->
+<!--            	<bibl id="rfc5959" key="RFC 5959"> -->
+<!--               		<loc href="http://tools.ietf.org/html/rfc5959">RFC 5959: Algorithms for Asymmetric Key Package Content Type</loc>.  -->
+<!--               		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.</bibl> -->
+         </blist>
+      </div1>
+      <div1>
+         <head>Summary of Error Conditions</head>
+         <blist id="summary-of-error-conditions">
+            <bibl id="error.unknownAlgorithm" key="crypto:unknown-algorithm">The specified algorithm is not supported.</bibl>
+            <bibl id="error.signatureType" key="crypto:signature-type">The specified signature type is not supported.</bibl>            
+            <bibl id="error.readKeystore" key="crypto:unreadable-keystore">I/O error while reading keystore, or the password is incorrect.</bibl>
+            <bibl id="error.deniedKeystore" key="crypto:denied-keystore">Permission denied to read keystore.</bibl>
+            <bibl id="error.keystoreUrl" key="crypto:keystore-url">The keystore URL is invalid.</bibl>
+            <bibl id="error.keystoreType" key="crypto:keystore-type">The keystore type is not supported.</bibl>
+            <bibl id="error.aliasKey" key="crypto:alias-key">Cannot find key for alias in given keystore.</bibl>
+            <bibl id="error.sigElem" key="crypto:signature-element">Cannot find Signature element.</bibl>
+            <bibl id="error.noPadding" key="crypto:inexistent-padding">No such padding.</bibl>
+            <bibl id="error.incorrectPadding" key="crypto:incorrect-padding">Incorrect padding.</bibl>
+            <bibl id="error.encType" key="crypto:encryption-type">The encryption type is not supported.</bibl>
+            <bibl id="error.cryptoKey" key="crypto:invalid-crypto-key">The cryptographic key is invalid.</bibl>
+            <bibl id="error.blockSize" key="crypto:block-size">Illegal block size.</bibl>
+            <bibl id="error.decryptionType" key="crypto:decryption-type">The decryption type is not supported.</bibl>
+            <bibl id="error.noProvider" key="crypto:no-provider">The provider is not set.</bibl>
+            <bibl id="error.inputResources" key="crypto.input-resources">The 'enveloped' and 'enveloping' signatures have to be applied to only one resource.</bibl>
+            <bibl id="error.incorrectIV" key="crypto:incorrect-initialization-vector">The initialization vector is not correct.</bibl>
+         </blist>
+      </div1>
+   </back>
+</spec>
