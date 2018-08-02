@@ -5,13 +5,16 @@ This directory contains the sources of all the specifications published by the
 [W3C EXPath Community Group](http://w3.org/community/expath/).  For now, it
 contains:
 
-* archive -- the Archive module
+* [archive](archive) -- the Archive module
 * binary -- the Binary module
 * crypto -- the Cryptographic module
+* facet -- the Facet module
 * file -- the File module
 * http -- the HTTP Model
+* mongo -- the MongoDB module
 * pkg -- the Packaging System
 * webapp -- the Web Applications specification
+* xparse -- the XParse module
 
 TODO: Create a checklist when adding a new module (for the specs, the
 website, etc.), and a checklist when publishing a new draft (write an
