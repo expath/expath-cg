@@ -149,7 +149,7 @@ http:get($uri as xs:string, $options as map(*)) as map(*)
 </pre>
         </div>
         <p>
-          Sends a GET request to the specified <code>$uri</code> and returns the response as a map.
+          Sends a GET request to the supplied <code>$uri</code> and returns the response as a map.
           Additional <code>$options</code> can be supplied.
         </p>
       </section>
@@ -163,9 +163,9 @@ http:post($uri as xs:string, $body as item()?, $options as map(*)) as map(*)
 </pre>
         </div>
         <p>
-          Sends a POST request with an optional <code>$body</code> to the specified
+          Sends a POST request with an optional <code>$body</code> to the supplied
           <code>$uri</code> and returns the response as a map. Additional <code>$options</code> can
-          be specified.
+          be supplied.
         </p>
       </section>
 
@@ -178,8 +178,8 @@ http:put($uri as xs:string, $body as item()?, $options as map(*)) as map(*)
 </pre>
         </div>
         <p>
-          Sends a PUT request with an optional <code>$body</code> to the specified <code>$uri</code>
-          and returns the response as a map. Additional <code>$options</code> can be specified.
+          Sends a PUT request with an optional <code>$body</code> to the supplied <code>$uri</code>
+          and returns the response as a map. Additional <code>$options</code> can be supplied.
         </p>
       </section>
 
@@ -192,8 +192,8 @@ http:delete($uri as xs:string, $options as map(*)) as map(*)
 </pre>
         </div>
         <p>
-          Sends a DELETE request to the specified <code>$uri</code> and returns the response as a
-          map. Additional <code>$options</code> can be specified.
+          Sends a DELETE request to the supplied <code>$uri</code> and returns the response as a
+          map. Additional <code>$options</code> can be supplied.
         </p>
       </section>
 
@@ -206,8 +206,8 @@ http:head($uri as xs:string, $options as map(*)) as map(*)
 </pre>
         </div>
         <p>
-          Sends a HEAD request to the specified <code>$uri</code> and returns the response as a map.
-          Additional <code>$options</code> can be specified.
+          Sends a HEAD request to the supplied <code>$uri</code> and returns the response as a map.
+          Additional <code>$options</code> can be supplied.
         </p>
       </section>
 
@@ -220,7 +220,7 @@ http:options($uri as xs:string, $options as map(*)) as xs:string*
 </pre>
         </div>
         <p>
-          Sends an OPTIONS request to the specified <code>$uri</code> and returns the supported
+          Sends an OPTIONS request to the supplied <code>$uri</code> and returns the supported
           methods as a sequence of strings. Additional <code>$options</code> can be supplied.
         </p>
       </section>
@@ -235,9 +235,9 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
 </pre>
         </div>
         <p>
-          Sends a custom HTTP request with the specified <code>$method</code> and an optional
+          Sends a custom HTTP request with the supplied <code>$method</code> and an optional
           <code>$body</code> to the specified <code>$uri</code> and returns the response as a map.
-          Additional <code>$options</code> can be specified.
+          Additional <code>$options</code> can be supplied.
         </p>
       </section>
     </section>
@@ -295,8 +295,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         </pre>
 
         <p>
-          The <a href="#errors"><code>http:options</code></a> error will be raised if a specified
-          option has an invalid type or value.
+          The <a href="#errors"><code>http:options</code></a> error will be raised if the value of
+          an option is invalid, or if it has an invalid type.
         </p>
       </section>
 
@@ -324,7 +324,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
             data, media type will be <code>application/octet-stream</code>.</li>
           <li> <code>xs:string</code>: The string will be serialized as UTF-8 octets, media type
             will be <code>text/plain</code>.</li>
-          <li> <code>node()</code>: The node will serialized as XML, media type will be
+          <li> <code>node()</code>: The node will be serialized as XML, media type will be
             <code>application/xml</code>.</li>
           <li> <code>array(*)</code>: Multipart body, media type will be
             <code>multipart/mixed</code>. Each array member:
@@ -341,18 +341,18 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         </p>
 
         <p>
-          The evaluated media type will be adopted as <code>Content-Type</code> of the request
-          unless a header field was explicitly specified by the user. For multipart requests, the
-          single media types will be sent as <code>Content-Type</code> in the corresponding
-          multipart headers.
+          The evaluated media type will be assigned as value of the <code>Content-Type</code> header
+          unless a value has been supplied by the user. For multipart requests, each media type
+          will be sent as <code>Content-Type</code> in the corresponding multipart header section.
         </p>
         
-        <pre class="example" title="PUT request, single body, implicit Content-Type: text/plain">
+        <pre class="example"
+             title="PUT request, single body, implicit Content-Type value: text/plain">
           http:put('http://expath.org/xyz', 'plain and simple')
         </pre>
         
-        <pre class="example" title="POST request, multipart body, implicit Content-Type:
-          multipart/mixed">
+        <pre class="example"
+             title="POST request, multipart body, implicit Content-Type value: multipart/mixed">
           http:send('http://expath.org/xyz', 'POST', [
             (: Body 1, implicit Content-Type: application/xml :)
             &lt;persons&gt;...&lt;/persons&gt;,
@@ -372,12 +372,13 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           serialized to a string or binary item in advance:
         </p>
 
-        <pre class="example" title="POST request, single body, Content-Type: application/json">
+        <pre class="example"
+             title="POST request, single body, Content-Type value: application/json">
           http:post(
             'http://expath.org/xyz',
             fn:serialize(
               map { 'name': 'John', 'town': 'Houston', 'year': 1984 },
-              map { 'method': 'json'}
+              map { 'method': 'json' }
             ),
             map { 'headers': 'Content-Type': 'application/json' }
           )
@@ -429,7 +430,6 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
       
       <ul>
         <li> XML media type: parsed to XML, returned as <code>document-node()</code>.</li>
-        <li> HTML media type (?): parsed to XML, returned as <code>document-node()</code>.</li>
         <li> Text media type: returned as <code>xs:string</code>.</li>
         <li> Multipart media type: returned as <code>array(*)</code>. Similar to the top-level map,
           each array member will be a map with a <code>headers</code> and a <code>body</code>
@@ -461,6 +461,63 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         }
       </pre>
 
+      <div class="ednote" title="CG">
+        Suggestions for controlling parsing of reponse bodies (the result of this discussion should
+        actually be specified in <a href="#request-options" class="sectionRef"></a>):
+        <dl>
+          <dt> <code>override-media-type</code> (<code>xs:boolean</code>):<br></dt>
+          <dd>
+            Overrides the returned content-type value.<br>
+            + Already used in version 1.0 (adopted from XProc, where is was called
+              <code>override-content-type</code>).<br>
+            – Only works for single bodies.<br>
+          </dd>
+
+          <dt> <code>parse-response</code>
+            (<code>function(xs:base64Binary, xs:string) as item()</code>):</dt>
+          <dd>
+            Alternative 1. Override the default parsing behavior. Parameters: body, Content-Type
+            value.<br>
+            + Could be applied to all parts of a multipart response.<br>
+            + Direct access to the binary response stream allows us to handle all potential
+              conversion errors.<br>
+            – String input may possibly be easier to deal with for many XQuery functions.<br>
+            – We may need more header information (Encoding, etc.) to correctly handle the
+              result.<br>
+          </dd>
+
+          <dt> <code>parse-response</code>
+            (<code>function(xs:base64Binary, map(xs:string, xs:string)) as item()</code>):</dt>
+          <dd>
+            Alternative 2. Parameters: body, response headers.
+            + Even more control and information on the sent response.<br>
+            – Response handling may get too low-level and technical.<br>
+          </dd>
+
+          <dt> <code>parse-response</code> (<code>function(item()) as item()</code>):</dt>
+          <dd>
+            Alternative 3. Parameters: parsed body (xs:string, xs:base64Binary, document-node())
+            + We don’t need to care about binary/string conversion.<br>
+            – May fail if server supplies wrong encoding for string conversions.<br>
+          </dd>
+        </dl>
+
+        <pre class="example" title="Use of parse-response, Alternative 1">
+          http:get('http://expath.org/xyz', map {
+            "parse-response": function($body, $media-type) {
+              if(ends-with($media-type, '/csv') then (
+                csv:parse($body)
+              ) else if(ends-with($media-type, '/json') then (
+                json:parse($body)
+              ) else (
+                bin:decode-string($body)
+              )
+            }
+          })
+        </pre>
+      </div>
+
+
     </section>
 
     <section id='errors'>
@@ -469,7 +526,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         <dt><code>http:body</code></dt>
         <dd>A request body argument has an invalid type.</dd>
         <dt><code>http:options</code></dt>
-        <dd>A specified option has an invalid type or value.</dd>
+        <dd>The value of an option is invalid, or has an invalid type.</dd>
       </dl>
     </section>
 
