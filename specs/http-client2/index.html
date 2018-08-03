@@ -17,7 +17,7 @@
           subtitle: "An EXPath Project",
 
           // if you wish the publication date to be other than today, set this
-          // publishDate:  "2009-08-06",
+          // publishDate: "2009-08-06",
 
           // if the specification's copyright date is a range of years, specify
           // the start date here:
@@ -25,11 +25,11 @@
 
           // if there is a previously published draft, uncomment this and set its YYYY-MM-DD date
           // and its maturity status
-          // previousPublishDate:  "1977-03-15",
-          // previousMaturity:  "WD",
+          // previousPublishDate: "1977-03-15",
+          // previousMaturity: "WD",
 
           // if there a publicly available Editor's Draft, this is the link
-          // edDraftURI:           "http://dev.w3.org/2009/dap/ReSpec.js/documentation.html",
+          // edDraftURI: "http://dev.w3.org/2009/dap/ReSpec.js/documentation.html",
           edDraftURI: "http://expath.github.io/expath-cg/specs/http-client2/",
 
           // if this is a LCWD, uncomment and set the end of its review period
@@ -37,7 +37,7 @@
 
           // editors, add as many as you like
           // only "name" is required
-          editors:  [
+          editors: [
               { name: "Christian Grün", url: "http://christian-gruen.de/",
                 company: "BaseX GmbH", companyURL: "http://basex.org/" },
               { name: "Adam Retter", url: "http://adamretter.org.uk/",
@@ -47,7 +47,7 @@
           // authors, add as many as you like.
           // This is optional, uncomment if you have authors as well as editors.
           // only "name" is required. Same format as editors.
-          //authors:  [
+          //authors: [
           //],
 
           // name of the WG
@@ -64,7 +64,7 @@
           // This is important for Rec-track documents, do not copy a patent URI from a random
           // document unless you know what you're doing. If in doubt ask your friendly neighbourhood
           // Team Contact.
-          wgPatentURI:  "",
+          wgPatentURI: "",
 
           // If specified, defines an array of alternate formats in which document is available
           // (e.g., XML, Postscript). The format of the array is:
@@ -101,8 +101,9 @@
         <li> In the initial specification, different ways exist to supply some of the arguments,
           such as the request URI or the payload. In the new functions, single locations are
           defined for all arguments.</li>
-        <li> Single and multipart bodies are passed on to the functions without intermediate
-          serialization. This facilitates implementations to stream data to the addressed server.
+        <li> Single and multipart bodies are always passed on as items and never passed on as text
+          nodes of an XML body element. This simplifies lazy evaluation and streaming of data
+          in implementations.
         </li>
       </ul>
 
@@ -239,7 +240,6 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           Additional <code>$options</code> can be specified.
         </p>
       </section>
-
     </section>
 
     <section id='request'>
@@ -272,24 +272,32 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           <dt><code>auth-method</code> (<code>xs:string</code>)</dt>
           <dd>Authentication method (Basic, Digest, possibly others). Default: Basic.</dd>
 
-          <dt><code>headers</code> (<code>map(*)</code>)</dt>
+          <dt><code>headers</code> (<code>map(xs:string, xs:string)</code>)</dt>
           <dd>HTTP header fields.</dd>
         </dl>
 
-        <p>
-          Authentication data is processed if a non-empty username is supplied.
-        </p>
-
-        <pre class="example" title="GET request: user authentication, User-Agent header">
+        <pre class="example" title="GET request with User-Agent header, skip body in response">
           http:get('http://expath.org/xyz', map {
-            'username': 'john',
-            'password': '****',
-            'headers': map {
-              'User-Agent': 'EXPath/1.0'
-            }
+            'status-only': true(),
+            'headers': map { 'User-Agent': 'EXPath/1.0' }
           })
         </pre>
 
+        <p>
+          Authentication data is processed if a non-empty username is supplied:
+        </p>
+
+        <pre class="example" title="DELETE request: user authentication">
+          http:delete('http://expath.org/xyz', map {
+            'username': 'john',
+            'password': '****'
+          })
+        </pre>
+
+        <p>
+          The <a href="#errors"><code>http:options</code></a> error will be raised if a specified
+          option has an invalid type or value.
+        </p>
       </section>
 
       <section id='request-body'>
@@ -301,25 +309,25 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         </p>
           
         <p>
-If the body is an empty sequence, no data will be sent. Otherwise, the value
-          can have one of the following types:
+          If the body is an empty sequence, no data will be sent. Otherwise, the value can have one
+          of the following types:
         </p>
 
         <div class="ednote" title="CG">
           In my last comments on GitHub, I ignored the fact that we need a solution for defining
-          Content-Type headers of multipart bodies. This is why we’ll probably need to drop my idea
-          of implicitly converting maps to JSON strings.
+          Content-Type headers of multipart bodies. This is why I have dropped my idea of
+          converting maps to JSON strings.
         </div>
 
         <ul>
           <li> <code>xs:base64Binary</code>, <code>xs:hexBinary</code>: Value will be sent as binary
-            data, media-type will be <code>application/octet-stream</code>.</li>
-          <li> <code>xs:string</code>: The string will be serialized as UTF-8 octets, media-type
+            data, media type will be <code>application/octet-stream</code>.</li>
+          <li> <code>xs:string</code>: The string will be serialized as UTF-8 octets, media type
             will be <code>text/plain</code>.</li>
-          <li> <code>node()</code>: The node will serialized as XML, media-type will be
+          <li> <code>node()</code>: The node will serialized as XML, media type will be
             <code>application/xml</code>.</li>
-          <li> <code>array(*)</code>: Multipart body, media-type will be <code>multipart/mixed</code>.
-            Each array member:
+          <li> <code>array(*)</code>: Multipart body, media type will be
+            <code>multipart/mixed</code>. Each array member:
             <ul>
               <li> must be a map with a <code>headers</code> and a <code>body</code> entry, or</li>
               <li> must have one of the types of this listing.</li>
@@ -333,16 +341,18 @@ If the body is an empty sequence, no data will be sent. Otherwise, the value
         </p>
 
         <p>
-          The evaluated media-type will be adopted as <code>Content-Type</code> of the request
+          The evaluated media type will be adopted as <code>Content-Type</code> of the request
           unless a header field was explicitly specified by the user. For multipart requests, the
-          single media-types will be sent as Content-Types in the corresponding multipart headers.
+          single media types will be sent as <code>Content-Type</code> in the corresponding
+          multipart headers.
         </p>
         
         <pre class="example" title="PUT request, single body, implicit Content-Type: text/plain">
           http:put('http://expath.org/xyz', 'plain and simple')
         </pre>
         
-        <pre class="example" title="POST request, multipart body, implicit Content-Type: multipart/mixed">
+        <pre class="example" title="POST request, multipart body, implicit Content-Type:
+          multipart/mixed">
           http:send('http://expath.org/xyz', 'POST', [
             (: Body 1, implicit Content-Type: application/xml :)
             &lt;persons&gt;...&lt;/persons&gt;,
@@ -358,35 +368,108 @@ If the body is an empty sequence, no data will be sent. Otherwise, the value
         </pre>
 
         <p>
-          If no implicit conversion is defined for the preferred media-type, the request can be
-          serialized in advance:
+          If no implicit conversion is available for the desired media type, the body can be
+          serialized to a string or binary item in advance:
         </p>
 
         <pre class="example" title="POST request, single body, Content-Type: application/json">
           http:post(
             'http://expath.org/xyz',
-            fn:serialize(map { 'year': 1984 }, map { 'method': 'json'}),
+            fn:serialize(
+              map { 'name': 'John', 'town': 'Houston', 'year': 1984 },
+              map { 'method': 'json'}
+            ),
             map { 'headers': 'Content-Type': 'application/json' }
           )
         </pre>
-
-
       </section>
-
     </section>
 
     <section id='response'>
       <h2>The Response</h2>
       <p>
-        …
+        An HTTP response is returned as a map, which may contain the following entries:
       </p>
+
+      <dl>
+        <dt> <code>status</code> (<code>xs:string</code>)</dt>
+        <dd> Status code.</dd>
+
+        <dt> <code>message</code> (<code>xs:string</code>)</dt>
+        <dd> Status message (also called <i>reason phrase</i>).</dd>
+
+        <dt> <code>headers</code> (<code>map(xs:string, xs:string)</code>)</dt>
+        <dd> Response headers. The syntax is identical to the request header.</dd>
+
+        <dt> <code>body</code> (<code>item()?</code>)</dt>
+        <dd> Optional response body.</dd>
+      </dl>
+      
+      <pre class="example" title="Response of a GET request">
+        map {
+          "status": "200",
+          "message": "OK",
+          "headers": map {
+            "Date": "Fri, 31 Dec 1999 23:59:59 GMT",
+            "Server": "Apache",
+            "Content-Type": "text/plain"
+          },
+          "body": "Happy new year"
+        }
+      </pre>
+
+      <div class="ednote" title="CG">
+        More than the rest of this spec, the following rules should be taken with a grain of salt.
+      </div>
+
+      <p>
+        If no body is returned, the body value will be an empty sequence. Otherwise, the value of
+        the <code>Content-Type</code> header defines the target type of the body:
+      </p>
+      
+      <ul>
+        <li> XML media type: parsed to XML, returned as <code>document-node()</code>.</li>
+        <li> HTML media type (?): parsed to XML, returned as <code>document-node()</code>.</li>
+        <li> Text media type: returned as <code>xs:string</code>.</li>
+        <li> Multipart media type: returned as <code>array(*)</code>. Similar to the top-level map,
+          each array member will be a map with a <code>headers</code> and a <code>body</code>
+          entry. The body will have one of the types of this list.</li>
+        <li> otherwise: returned as <code>xs:base64Binary</code>.</li>
+      </ul>
+
+      <pre class="example" title="Multipart response">
+        map {
+          "status": "200",
+          "message": "OK",
+          "headers": map {
+            "Content-Type": "multipart/mixed"
+          },
+          "body": [
+            map {
+              "headers" : map {
+                "Content-Type": "image/png"
+              },
+              "body": xs:base64Binary('abcdefgh')
+            },
+            map {
+              "headers" : map {
+                "Content-Type": "image/jpeg"
+              },
+              "body": xs:base64Binary('ijklmnop')
+            }
+          ]
+        }
+      </pre>
+
     </section>
 
     <section id='errors'>
       <h2>Errors</h2>
       <dl>
         <dt><code>http:body</code></dt>
-        <dd>A wrong type was specified in the supplied request body.</dd>
+        <dd>A request body argument has an invalid type.</dd>
+        <dt><code>http:options</code></dt>
+        <dd>A specified option has an invalid type or value.</dd>
       </dl>
     </section>
 
