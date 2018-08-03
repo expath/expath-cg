@@ -66,7 +66,8 @@
           // Team Contact.
           wgPatentURI:  "",
 
-          // If specified, defines an array of alternate formats in which document is available (e.g., XML, Postscript). The format of the array is:
+          // If specified, defines an array of alternate formats in which document is available
+          // (e.g., XML, Postscript). The format of the array is:
           // alternateFormats:
 
           doRDFa: "1.1",
@@ -82,7 +83,7 @@
         This specification provides an HTTP client interface for XML languages.
         It defines several extension functions to perform HTTP requests.
         It is backward-compliant with version 1.0 of the
-        <a href='http://expath.org/spec/http-client/'>HTTP Client Module</a>
+        <a href='http://expath.org/spec/http-client'>HTTP Client Module</a>
         and has been designed to be compatible with [[!XQUERY-31]] and [[!XPATH-31]].
       </p>
     </section>
@@ -90,31 +91,27 @@
     <section id='introduction'>
       <h2>Introduction</h2>
       <p>
-        Version 2.0 of the HTTP Client Module specification provides the following new features:
-        <ul>
-          <li> With [[!XPATH-31]], maps and arrays were added.
-            In the new functions, we take advantage of the new data structures.</li>
-          <li> Convenience functions are provided to make basic user requests more convenient.</li>
-          <li> The old specification provided multiple ways to supply arguments, such as the request URI
-            and the payload. In the new functions, the location for all arguments is unique.</li>
-          <li> Single and multipart payloads are supplied without intermediate serialization.
-            This facilitates implementations to stream data to the server.
-          </li>
-        </ul>
+        The <a href='http://expath.org/spec/http-client'>HTTP Client Module</a> provides an HTTP
+        client interface for XML languages. Version 2.0 provides the following features:
       </p>
+      <ul>
+        <li> Convenience functions are provided to make basic user requests more convenient.</li>
+        <li> Maps and arrays were added to [[!XPATH-31]]. The functions take advantage of the new
+          data structures.</li>
+        <li> In the initial specification, different ways exist to supply some of the arguments,
+          such as the request URI or the payload. In the new functions, single locations are
+          defined for all arguments.</li>
+        <li> Single and multipart bodies are passed on to the functions without intermediate
+          serialization. This facilitates implementations to stream data to the addressed server.
+        </li>
+      </ul>
 
       <section>
         <h2>Namespaces and Prefixes</h2>
         <p>
-          <ul>
-            <li> All functions in this module are assigned to the
-              <code>http://basex.org/modules/archive</code> namespace.
-              In this document, the <code>http</code> prefix is bound to this URI.
-            </li>
-            <li> Error codes are assigned to the namespace <code>http://expath.org/ns/error</code> namespace.
-              The <code>err</code> prefix is bound to this URI.
-            </li>
-          </ul>
+          All functions and errors in this module are assigned to the
+          <code>http://expath.org/ns/http-client</code> namespace. In this document, the
+          <code>http</code> prefix is bound to this URI.
         </p>
       </section>
     </section>
@@ -122,17 +119,24 @@
     <section id='functions'>
       <h2>Functions</h2>
       <p>
-        The defined functions have several things in common:
-        <ul>
-          <li> All functions come with a <code>$uri</code>. For simplicity, it is of type <code>xs:string</code> (instead of <code>xs:anyURI</code>).</li>
-          <li> The <code>$body</code> parameter is explained in <a href="#request-syntax" class="sectionRef"></a>.</li>
-          <li> In <a href="#request-options" class="sectionRef"></a>, the supported <code>$options</code> are described.</li>
-          <li> In <a href="#response" class="sectionRef"></a>, the format of the returned map is specified.
-            It is identical for all functions except for <a href="#http-options">http:options</a>.</li>
-        </ul>
-        
-        The <code>http:send-request</code> function is available as well; it is specified in the original
-        <a href='http://expath.org/spec/http-client/'>HTTP Client Module</a>.
+        The functions of this document have several things in common:
+      </p>
+      <ul>
+        <li> All of them have been designed to send HTTP requests to a server, and
+          to return the reponse to the client.</li>
+        <li> The first parameter, <code>$uri</code>, contains the URI of the addressed
+          server.</li>
+        <li> The <code>$body</code> parameter is explained in
+          <a href="#request-body" class="sectionRef"></a>.</li>
+        <li> In <a href="#request-options" class="sectionRef"></a>, the supported
+          <code>$options</code> are listed.</li>
+        <li> In <a href="#response" class="sectionRef"></a>, the format of the returned result is
+          described. It is identical for all functions (except for
+          <a href="#http-options">http:options</a>, which returns a simple string sequnece).</li>
+      </ul>
+      <p>
+        The legacy function <code>http:send-request</code> is still available; it is explained in
+        detail in the original <a href='http://expath.org/spec/http-client'>HTTP Client Module</a>.
       </p>
 
       <section>
@@ -158,9 +162,9 @@ http:post($uri as xs:string, $body as item()?, $options as map(*)) as map(*)
 </pre>
         </div>
         <p>
-          Sends a POST request with an optional <code>$body</code> to the specified <code>$uri</code>
-          and returns the response as a map.
-          Additional <code>$options</code> can be specified.
+          Sends a POST request with an optional <code>$body</code> to the specified
+          <code>$uri</code> and returns the response as a map. Additional <code>$options</code> can
+          be specified.
         </p>
       </section>
 
@@ -174,8 +178,7 @@ http:put($uri as xs:string, $body as item()?, $options as map(*)) as map(*)
         </div>
         <p>
           Sends a PUT request with an optional <code>$body</code> to the specified <code>$uri</code>
-          and returns the response as a map.
-          Additional <code>$options</code> can be specified.
+          and returns the response as a map. Additional <code>$options</code> can be specified.
         </p>
       </section>
 
@@ -188,8 +191,8 @@ http:delete($uri as xs:string, $options as map(*)) as map(*)
 </pre>
         </div>
         <p>
-          Sends a DELETE request to the specified <code>$uri</code> and returns the response as a map.
-          Additional <code>$options</code> can be specified.
+          Sends a DELETE request to the specified <code>$uri</code> and returns the response as a
+          map. Additional <code>$options</code> can be specified.
         </p>
       </section>
 
@@ -216,9 +219,8 @@ http:options($uri as xs:string, $options as map(*)) as xs:string*
 </pre>
         </div>
         <p>
-          Sends an OPTIONS request to the specified <code>$uri</code> and returns the supported methods
-          as a sequence of strings.
-          Additional <code>$options</code> can be supplied.
+          Sends an OPTIONS request to the specified <code>$uri</code> and returns the supported
+          methods as a sequence of strings. Additional <code>$options</code> can be supplied.
         </p>
       </section>
 
@@ -242,26 +244,153 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
 
     <section id='request'>
       <h2>The Request</h2>
-      <p>…</p>
-
-      <section id='request-syntax'>
-        <h3>Request Syntax</h3>
-        <p>…</p>
-      </section>
+      <p>
+        An HTTP request consists of a header section and an optional body section.
+      </p>
 
       <section id='request-options'>
         <h3>Request Options</h3>
-        <p>…</p>
+        <p>
+          The following options are available:
+        </p>
+        <dl>
+          <dt><code>status-only</code> (<code>xs:boolean</code>)</dt>
+          <dd>Skip body in response. Default: false.</dd>
+
+          <dt><code>follow-redirect</code> (<code>xs:boolean</code>)</dt>
+          <dd>Follow HTTP redirects. Default: true.</dd>
+
+          <dt><code>timeout</code> (<code>xs:integer</code>)</dt>
+          <dd>Maximum number of seconds to wait for a response.</dd>
+
+          <dt><code>username</code> (<code>xs:string</code>)</dt>
+          <dd>Authentication: username.</dd>
+
+          <dt><code>password</code> (<code>xs:string</code>)</dt>
+          <dd>Authentication: password.</dd>
+
+          <dt><code>auth-method</code> (<code>xs:string</code>)</dt>
+          <dd>Authentication method (Basic, Digest, possibly others). Default: Basic.</dd>
+
+          <dt><code>headers</code> (<code>map(*)</code>)</dt>
+          <dd>HTTP header fields.</dd>
+        </dl>
+
+        <p>
+          Authentication data is processed if a non-empty username is supplied.
+        </p>
+
+        <pre class="example" title="GET request: user authentication, User-Agent header">
+          http:get('http://expath.org/xyz', map {
+            'username': 'john',
+            'password': '****',
+            'headers': map {
+              'User-Agent': 'EXPath/1.0'
+            }
+          })
+        </pre>
+
+      </section>
+
+      <section id='request-body'>
+        <h3>Request Body</h3>
+        <p>
+          Some HTTP methods (such as POST and PUT, and others that are less common) come with a
+          request body. In the functions of this document, it can be supplied via the
+          <code>$body</code> parameter.
+        </p>
+          
+        <p>
+If the body is an empty sequence, no data will be sent. Otherwise, the value
+          can have one of the following types:
+        </p>
+
+        <div class="ednote" title="CG">
+          In my last comments on GitHub, I ignored the fact that we need a solution for defining
+          Content-Type headers of multipart bodies. This is why we’ll probably need to drop my idea
+          of implicitly converting maps to JSON strings.
+        </div>
+
+        <ul>
+          <li> <code>xs:base64Binary</code>, <code>xs:hexBinary</code>: Value will be sent as binary
+            data, media-type will be <code>application/octet-stream</code>.</li>
+          <li> <code>xs:string</code>: The string will be serialized as UTF-8 octets, media-type
+            will be <code>text/plain</code>.</li>
+          <li> <code>node()</code>: The node will serialized as XML, media-type will be
+            <code>application/xml</code>.</li>
+          <li> <code>array(*)</code>: Multipart body, media-type will be <code>multipart/mixed</code>.
+            Each array member:
+            <ul>
+              <li> must be a map with a <code>headers</code> and a <code>body</code> entry, or</li>
+              <li> must have one of the types of this listing.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p>
+          If the supplied value, or the value of a multipart body, has any other type, the
+          <a href="#errors"><code>http:body</code></a> error will be raised.
+        </p>
+
+        <p>
+          The evaluated media-type will be adopted as <code>Content-Type</code> of the request
+          unless a header field was explicitly specified by the user. For multipart requests, the
+          single media-types will be sent as Content-Types in the corresponding multipart headers.
+        </p>
+        
+        <pre class="example" title="PUT request, single body, implicit Content-Type: text/plain">
+          http:put('http://expath.org/xyz', 'plain and simple')
+        </pre>
+        
+        <pre class="example" title="POST request, multipart body, implicit Content-Type: multipart/mixed">
+          http:send('http://expath.org/xyz', 'POST', [
+            (: Body 1, implicit Content-Type: application/xml :)
+            &lt;persons&gt;...&lt;/persons&gt;,
+            (: Body 2, explicit Content-Type: application/x-object :)
+            map {
+              'headers': map {
+                'Content-Disposition': 'form-data; name="uploadedfile"; filename="hello.o"',
+                'Content-Type': 'application/x-object'
+              },
+              'body': xs:hexBinary('414243')
+            }
+          ])
+        </pre>
+
+        <p>
+          If no implicit conversion is defined for the preferred media-type, the request can be
+          serialized in advance:
+        </p>
+
+        <pre class="example" title="POST request, single body, Content-Type: application/json">
+          http:post(
+            'http://expath.org/xyz',
+            fn:serialize(map { 'year': 1984 }, map { 'method': 'json'}),
+            map { 'headers': 'Content-Type': 'application/json' }
+          )
+        </pre>
+
+
       </section>
 
     </section>
 
     <section id='response'>
       <h2>The Response</h2>
-      <p>…</p>
+      <p>
+        …
+      </p>
     </section>
 
-    <section>
+    <section id='errors'>
+      <h2>Errors</h2>
+      <dl>
+        <dt><code>http:body</code></dt>
+        <dd>A wrong type was specified in the supplied request body.</dd>
+      </dl>
+    </section>
+
+    <section class="appendix">
       <h2>Acknowledgements</h2>
       <p>
         Many thanks to Robin Berjon for making the production of this specification much simpler
