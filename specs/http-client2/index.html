@@ -95,7 +95,7 @@
         client interface for XML languages. Version 2.0 provides the following features:
       </p>
       <ul>
-        <li>Convenience functions are provided to make basic user requests more convenient.</li>
+        <li>Convenience functions are provided to simplify basic requests.</li>
         <li>Maps and arrays were added to [[!XPATH-31]]. The functions take advantage of the new
           data structures.</li>
         <li>In the initial specification, different ways exist to supply some of the arguments, such
@@ -469,15 +469,15 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           "body": [
             map {
               "headers" : map {
-                "Content-Type": "image/png"
+                "Content-Type": "application/json"
               },
-              "body": xs:base64Binary('abcdefgh')
+              "body": map { "creator": "John", "year": 2018 }
             },
             map {
               "headers" : map {
-                "Content-Type": "image/jpeg"
+                "Content-Type": "image/png"
               },
-              "body": xs:base64Binary('ijklmnop')
+              "body": xs:base64Binary('abcdefgh')
             }
           ]
         }
@@ -561,14 +561,15 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
             <dt><code>parse-response</code>
               (<code>function(xs:base64Binary, map(xs:string, xs:string)) as item()</code>):</dt>
             <dd>
-              Alternative 2. Parameters: body, response headers.
+              Alternative 2. Parameters: body, response headers.<br>
               + Even more control and information on the sent response.<br>
               – Response handling may get too low-level and technical.<br>
             </dd>
   
             <dt><code>parse-response</code> (<code>function(item()) as item()</code>):</dt>
             <dd>
-              Alternative 3. Parameters: parsed body (xs:string, xs:base64Binary, document-node())
+              Alternative 3. Parameters: parsed body (xs:string, xs:base64Binary,
+              document-node())<br>
               + We don’t need to care about binary/string conversion.<br>
               – May fail if server supplies wrong encoding for string conversions.<br>
             </dd>
