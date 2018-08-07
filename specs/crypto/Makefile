@@ -19,10 +19,10 @@ crypto.html: crypto.xml
 crypto-diff.html: crypto-diff.xml
 	saxon -s:$< -xsl:$(DIFFSPEC) > $@
 
-crypto-20150214.html: crypto-20150214.xml
+crypto-20170320.html: crypto-20170320.xml
 	saxon -s:$< -xsl:$(XMLSPEC) > $@
 
-crypto-20150214-diff.html: crypto-20150214-diff.xml
+crypto-20170320-diff.html: crypto-20170320-diff.xml
 	saxon -s:$< -xsl:$(DIFFSPEC) > $@
 
 # crypto-20110810.html: crypto-20110810.xml
