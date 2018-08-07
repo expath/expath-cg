@@ -238,6 +238,24 @@ http:options($uri as xs:string, $options as map(*)) as xs:string*
       </section>
 
       <section>
+        <h3>http:trace</h3>
+        <div class="exampleInner">
+          <pre>
+http:trace($uri as xs:string, $body as item()?) as map(*)
+http:trace($uri as xs:string, $body as item()?, $options as map(*)) as map(*)
+</pre>
+        </div>
+        <p>
+          Sends a TRACE request with an optional <code>$body</code> to the supplied <code>$uri</code>
+          and returns the response as a map. Additional <code>$options</code> can be supplied.
+        </p>
+        <p>
+          HTTP TRACE is only supported in HTTP 1.1. If <code>"http-version": "1.0"</code> is set in
+          the <code>$options</code> then TODO-ERROR-CODE is raised.
+        </p>
+      </section>
+
+      <section>
         <h3>http:send</h3>
         <div class="exampleInner">
           <pre>
