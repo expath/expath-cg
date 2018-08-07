@@ -255,14 +255,23 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         </p>
 
         <dl>
-          <dt><code>status-only</code> (<code>xs:boolean</code>)</dt>
-          <dd>Skip body in response. Default: false.</dd>
+          <dt><code>http-version</code> (<code>xs:string</code>)</dt>
+          <dd>The HTTP Version to use for the request. Default: 1.1. Supported versions are <code>1.0</code> and <code>1.1</code>. An unsupported version raises the error: TODO-ERROR-CODE.</dd>
+
+          <dt><code>headers</code> (<code>map(xs:string, xs:string)</code>)</dt>
+          <dd>HTTP header fields.</dd>
+
+          <dt><code>content-encoding</code> (<code>xs:string</code>)</dt>
+          <dd>Uses a specific content encoding for the request body. Supported encodings are <code>gzip</code> and <code>deflate</code>. An usupported encoding raises the error: TODO-ERROR-CODE.</dd>
+
+          <dt><code>chunked</code> (<code>xs:boolean</code>)</dt>
+          <dt>Use chunked Transfer Encoding. Default: true for HTTP 1.1, false for HTTP 1.0. Sets the HTTP Header <code>Transfer-Encoding: chunked</code>, overrides any existing header in <code>$options</code>.</dt>
 
           <dt><code>follow-redirect</code> (<code>xs:boolean</code>)</dt>
           <dd>Follow HTTP redirects. Default: true.</dd>
 
           <dt><code>timeout</code> (<code>xs:integer</code>)</dt>
-          <dd>Maximum number of seconds to wait for a response.</dd>
+          <dd>Maximum number of milliseconds to wait for a response.</dd>
 
           <dt><code>username</code> (<code>xs:string</code>)</dt>
           <dd>Authentication: username.</dd>
@@ -271,14 +280,14 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           <dd>Authentication: password.</dd>
 
           <dt><code>auth-method</code> (<code>xs:string</code>)</dt>
-          <dd>Authentication method (Basic, Digest, possibly others). Default: Basic.</dd>
+          <dd>Authentication method (Basic, Digest, possibly others). Default: Basic. An unsuppoeted authentication method raises the error: TODO-ERROR-CODE.</dd>
+
+          <dt><code>status-only</code> (<code>xs:boolean</code>)</dt>
+          <dd>Skip body in response. Default: false.</dd>
 
           <dt><code>parse-response</code> (<code>xs:boolean</code>)</dt>
           <dd>Function for parsing the response bodies (see
           <a href="#response-bodies" class="sectionRef"></a>).</dd>
-
-          <dt><code>headers</code> (<code>map(xs:string, xs:string)</code>)</dt>
-          <dd>HTTP header fields.</dd>
 
         </dl>
 
@@ -401,6 +410,9 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
       </p>
 
       <dl>
+        <dt><code>http-version</code> (<code>xs:string</code>)</dt>
+        <dd>The HTTP Version of the response.</dd>
+
         <dt><code>status</code> (<code>xs:string</code>)</dt>
         <dd>Status code.</dd>
 
@@ -416,6 +428,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
 
       <pre class="example" title="Response of a GET request">
         map {
+          "http-version": "1.1",
           "status": "200",
           "message": "OK",
           "headers": map {
