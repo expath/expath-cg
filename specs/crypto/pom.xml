@@ -10,7 +10,7 @@
 	<version>1.0</version>
 	<name>Specification for EXPath Cryptographic Module</name>
 	<packaging>pom</packaging>
-	<url>http://expath.org/spec/crypto/</url>
+	<url>http://expath.org/spec/crypto</url>
 
 	<properties>
 		<java-package-name>crypto</java-package-name>
@@ -23,7 +23,7 @@
 			<plugin>
 				<groupId>ro.kuberam.maven.plugins</groupId>
 				<artifactId>kuberam-expath-plugin</artifactId>
-				<version>0.4.6</version>
+				<version>0.4.8</version>
 				<executions>
 					<execution>
 						<id>generate-first-spec</id>
