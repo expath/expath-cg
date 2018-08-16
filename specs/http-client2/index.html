@@ -267,7 +267,15 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         <p>
           Sends a custom HTTP request with the supplied <code>$method</code> and an optional
           <code>$body</code> to the specified <code>$uri</code> and returns the response as a map.
-          Additional <code>$options</code> can be supplied.
+          Additional <code>$options</code> can be supplied. The <code>$method</code> should be
+          specified accoding to the appropriate specification, for HTTP this means in upper-case
+          characters.
+        </p>
+        <p>
+          NOTE: HTTP 1.0 only supports the HTTP Methods <code>GET</code>, <code>HEAD</code>, and
+          <code>PUT</code>; If <code>"http-version": "1.0"</code> is specified in
+          <code>$options</code> and an unsupported method is used, then the error TODO-ERROR-CODE
+          is raised.
         </p>
       </section>
     </section>
