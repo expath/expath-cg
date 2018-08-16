@@ -310,8 +310,10 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           <dt><code>follow-redirect</code> (<code>xs:boolean</code>)</dt>
           <dd>Follow HTTP redirects. Default: true.</dd>
 
-          <dt><code>timeout</code> (<code>xs:integer</code>)</dt>
-          <dd>Maximum number of milliseconds to wait for a response.</dd>
+          <dt><code>timeout</code> (<code>xs:decimal</code>)</dt>
+          <dd>Maximum number of seconds to wait for a response. Milliseconds may be specified using
+            the fractional digits of the xs:decimal e.g. 0.200 is 200 milliseconds.
+          </dd>
 
           <dt><code>username</code> (<code>xs:string</code>)</dt>
           <dd>Authentication: username.</dd>
