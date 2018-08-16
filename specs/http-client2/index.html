@@ -145,7 +145,7 @@
         <div class="exampleInner">
           <pre>
 http:get($uri as xs:string) as map(xs:string, item())
-http:get($uri as xs:string, $options as map(*)) as map(xs:string, item())
+http:get($uri as xs:string, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -159,7 +159,7 @@ http:get($uri as xs:string, $options as map(*)) as map(xs:string, item())
         <div class="exampleInner">
           <pre>
 http:post($uri as xs:string, $body as item()?) as map(xs:string, item())
-http:post($uri as xs:string, $body as item()?, $options as map(*)) as map(xs:string, item())
+http:post($uri as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -174,7 +174,7 @@ http:post($uri as xs:string, $body as item()?, $options as map(*)) as map(xs:str
         <div class="exampleInner">
           <pre>
 http:put($uri as xs:string, $body as item()?) as map(xs:string, item())
-http:put($uri as xs:string, $body as item()?, $options as map(*)) as map(xs:string, item())
+http:put($uri as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -192,7 +192,7 @@ http:put($uri as xs:string, $body as item()?, $options as map(*)) as map(xs:stri
         <div class="exampleInner">
           <pre>
 http:delete($uri as xs:string) as map(xs:string, item())
-http:delete($uri as xs:string, $options as map(*)) as map(xs:string, item())
+http:delete($uri as xs:string, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -210,7 +210,7 @@ http:delete($uri as xs:string, $options as map(*)) as map(xs:string, item())
         <div class="exampleInner">
           <pre>
 http:head($uri as xs:string) as map(xs:string, item())
-http:head($uri as xs:string, $options as map(*)) as map(xs:string, item())
+http:head($uri as xs:string, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -224,7 +224,7 @@ http:head($uri as xs:string, $options as map(*)) as map(xs:string, item())
         <div class="exampleInner">
           <pre>
 http:options($uri as xs:string) as map(xs:string, item())
-http:options($uri as xs:string, $options as map(*)) as map(xs:string, item())
+http:options($uri as xs:string, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -242,7 +242,7 @@ http:options($uri as xs:string, $options as map(*)) as map(xs:string, item())
         <div class="exampleInner">
           <pre>
 http:trace($uri as xs:string, $body as item()?) as map(xs:string, item())
-http:trace($uri as xs:string, $body as item()?, $options as map(*)) as map(xs:string, item())
+http:trace($uri as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -261,7 +261,7 @@ http:trace($uri as xs:string, $body as item()?, $options as map(*)) as map(xs:st
           <pre>
 http:send($uri as xs:string, $method as xs:string) as map(xs:string, item())
 http:send($uri as xs:string, $method as xs:string, $body as item()?) as map(xs:string, item())
-http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as map(*)) as map(xs:string, item())
+http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
