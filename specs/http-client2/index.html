@@ -306,12 +306,18 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           <dt><code>content-encoding</code> (<code>xs:string</code>)</dt>
           <dd>Uses a specific content encoding for the request body.
             Supported encodings are <code>gzip</code> and <code>deflate</code>.
+            NOTE: Setting the content-encoding option will override any content-encoding
+            HTTP header.
           </dd>
 
-          <dt><code>chunked</code> (<code>xs:boolean</code>)</dt>
-          <dt>Use chunked Transfer Encoding. Default: true for HTTP 1.1, false for HTTP 1.0.
-            Sets the HTTP Header <code>Transfer-Encoding: chunked</code>, overrides any existing
-            header in <code>$options</code>.
+          <dt><code>transfer-encoding</code> (<code>xs:string</code>)</dt>
+          <dd>Uses a specific transfer encoding for the request body.
+            Supported encodings are <code>none</code> and <code>chunked</code>.
+            Default is <code>chunked</code> for HTTP 1.1, and <code>none</code>
+            for HTTP 1.0.
+            NOTE: Setting the transfer-encoding option will override any transfer-encoding
+            HTTP header.
+            NOTE: <code>chunked</code> is not supported on HTTP 1.0.
           </dt>
 
           <dt><code>follow-redirect</code> (<code>xs:boolean</code>)</dt>
