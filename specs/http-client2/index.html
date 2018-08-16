@@ -131,8 +131,7 @@
         <li>In <a href="#request-options" class="sectionRef"></a>, the supported
           <code>$options</code> are listed.</li>
         <li>In <a href="#response" class="sectionRef"></a>, the format of the returned result is
-          described. It is identical for all functions (except for
-          <a href="#http-options">http:options</a>, which returns a simple string sequnece).</li>
+          described.</li>
       </ul>
 
       <p>
@@ -228,8 +227,8 @@ http:options($uri as xs:string, $options as map(xs:string, item())) as map(xs:st
 </pre>
         </div>
         <p>
-          Sends an OPTIONS request to the supplied <code>$uri</code> and returns the supported
-          methods as a sequence of strings. Additional <code>$options</code> can be supplied.
+          Sends an OPTIONS request to the supplied <code>$uri</code> and returns the response as a
+          map. Additional <code>$options</code> can be supplied.
         </p>
         <p>
           HTTP OPTIONS is only supported in HTTP 1.1. If <code>"http-version": "1.0"</code> is set in
