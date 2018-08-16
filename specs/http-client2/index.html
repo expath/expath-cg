@@ -144,8 +144,8 @@
         <h3>http:get</h3>
         <div class="exampleInner">
           <pre>
-http:get($uri as xs:string) as map(*)
-http:get($uri as xs:string, $options as map(*)) as map(*)
+http:get($uri as xs:string) as map(xs:string, item())
+http:get($uri as xs:string, $options as map(*)) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -158,8 +158,8 @@ http:get($uri as xs:string, $options as map(*)) as map(*)
         <h3>http:post</h3>
         <div class="exampleInner">
           <pre>
-http:post($uri as xs:string, $body as item()?) as map(*)
-http:post($uri as xs:string, $body as item()?, $options as map(*)) as map(*)
+http:post($uri as xs:string, $body as item()?) as map(xs:string, item())
+http:post($uri as xs:string, $body as item()?, $options as map(*)) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -173,8 +173,8 @@ http:post($uri as xs:string, $body as item()?, $options as map(*)) as map(*)
         <h3>http:put</h3>
         <div class="exampleInner">
           <pre>
-http:put($uri as xs:string, $body as item()?) as map(*)
-http:put($uri as xs:string, $body as item()?, $options as map(*)) as map(*)
+http:put($uri as xs:string, $body as item()?) as map(xs:string, item())
+http:put($uri as xs:string, $body as item()?, $options as map(*)) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -191,8 +191,8 @@ http:put($uri as xs:string, $body as item()?, $options as map(*)) as map(*)
         <h3>http:delete</h3>
         <div class="exampleInner">
           <pre>
-http:delete($uri as xs:string) as map(*)
-http:delete($uri as xs:string, $options as map(*)) as map(*)
+http:delete($uri as xs:string) as map(xs:string, item())
+http:delete($uri as xs:string, $options as map(*)) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -209,8 +209,8 @@ http:delete($uri as xs:string, $options as map(*)) as map(*)
         <h3>http:head</h3>
         <div class="exampleInner">
           <pre>
-http:head($uri as xs:string) as map(*)
-http:head($uri as xs:string, $options as map(*)) as map(*)
+http:head($uri as xs:string) as map(xs:string, item())
+http:head($uri as xs:string, $options as map(*)) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -223,8 +223,8 @@ http:head($uri as xs:string, $options as map(*)) as map(*)
         <h3>http:options</h3>
         <div class="exampleInner">
           <pre>
-http:options($uri as xs:string) as xs:string*
-http:options($uri as xs:string, $options as map(*)) as xs:string*
+http:options($uri as xs:string) as map(xs:string, item())
+http:options($uri as xs:string, $options as map(*)) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -241,8 +241,8 @@ http:options($uri as xs:string, $options as map(*)) as xs:string*
         <h3>http:trace</h3>
         <div class="exampleInner">
           <pre>
-http:trace($uri as xs:string, $body as item()?) as map(*)
-http:trace($uri as xs:string, $body as item()?, $options as map(*)) as map(*)
+http:trace($uri as xs:string, $body as item()?) as map(xs:string, item())
+http:trace($uri as xs:string, $body as item()?, $options as map(*)) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -259,9 +259,9 @@ http:trace($uri as xs:string, $body as item()?, $options as map(*)) as map(*)
         <h3>http:send</h3>
         <div class="exampleInner">
           <pre>
-http:send($uri as xs:string, $method as xs:string) as map(*)
-http:send($uri as xs:string, $method as xs:string, $body as item()?) as map(*)
-http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as map(*)) as map(*)
+http:send($uri as xs:string, $method as xs:string) as map(xs:string, item())
+http:send($uri as xs:string, $method as xs:string, $body as item()?) as map(xs:string, item())
+http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as map(*)) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -558,7 +558,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
            : @return flat sequence with parsed bodies
            :)
           declare function local:parse(
-            $response as map(*)
+            $response as map(xs:string, item())
           ) as item()* {
             let $type := $response?headers?Content-Type
             let $body := $response?body
