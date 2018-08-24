@@ -182,7 +182,7 @@ http:put($uri as xs:string, $body as item()?, $options as map(xs:string, item())
         </p>
         <p>
           HTTP PUT is only supported in HTTP 1.1. If <code>"http-version": "1.0"</code> is set in
-          the <code>$options</code> then TODO-ERROR-CODE is raised.
+          the <code>$options</code> then <code>http:version</code> is raised.
 	</p>
       </section>
 
@@ -200,7 +200,7 @@ http:delete($uri as xs:string, $options as map(xs:string, item())) as map(xs:str
         </p>
         <p>
           HTTP DELETE is only supported in HTTP 1.1. If <code>"http-version": "1.0"</code> is set in
-          the <code>$options</code> then TODO-ERROR-CODE is raised.
+          the <code>$options</code> then <code>http:version</code> is raised.
         </p>
       </section>
 
@@ -232,7 +232,7 @@ http:options($uri as xs:string, $options as map(xs:string, item())) as map(xs:st
         </p>
         <p>
           HTTP OPTIONS is only supported in HTTP 1.1. If <code>"http-version": "1.0"</code> is set in
-          the <code>$options</code> then TODO-ERROR-CODE is raised.
+          the <code>$options</code> then <code>http:version</code> is raised.
         </p>
       </section>
 
@@ -250,7 +250,7 @@ http:trace($uri as xs:string, $body as item()?, $options as map(xs:string, item(
         </p>
         <p>
           HTTP TRACE is only supported in HTTP 1.1. If <code>"http-version": "1.0"</code> is set in
-          the <code>$options</code> then TODO-ERROR-CODE is raised.
+          the <code>$options</code> then <code>http:version</code> is raised.
         </p>
       </section>
 
@@ -271,10 +271,10 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           characters.
         </p>
         <p>
-          NOTE: HTTP 1.0 only supports the HTTP Methods <code>GET</code>, <code>HEAD</code>, and
-          <code>PUT</code>; If <code>"http-version": "1.0"</code> is specified in
-          <code>$options</code> and an unsupported method is used, then the error TODO-ERROR-CODE
-          is raised.
+          NOTE: HTTP 1.0 only supports the HTTP methods <code>GET</code>, <code>HEAD</code>, and
+          <code>PUT</code>. If <code>"http-version": "1.0"</code> is specified in
+          <code>$options</code> and an unsupported method is used, then the error
+          <code>http:version</code> is raised.
         </p>
       </section>
     </section>
@@ -658,6 +658,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
       <dl>
         <dt><code>http:body</code></dt>
         <dd>A request body argument has an invalid type.</dd>
+        <dt><code>http:version</code></dt>
+        <dd>A feature is not supported by the specified HTTP version.</dd>
         <dt><code>http:options</code></dt>
         <dd>The value of an option is invalid, or has an invalid type.</dd>
         <dt><code>http:parse</code></dt>
