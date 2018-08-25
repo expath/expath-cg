@@ -330,8 +330,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
             <a>http:version</a> error.
           </dt>
 
-          <dt><dfn>multipart</dfn> (<code>xs:boolean</code>)</dt>
-          <dd>Specifies that the request body is a Multipart request.</dd>
+          <dt><code>multipart</code> (<code>xs:boolean</code>)</dt>
+          <dd>Indicates if the request body is a multipart request. Default: false.</dd>
 
           <dt><code>permit-expired-ssl-certificate</code> (<code>xs:boolean</code>)</dt>
           <dd>This allows HTTPS requests to still work when the server provides an SSL
@@ -340,7 +340,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           <dt><code>permit-untrusted-ssl-certificate</code> (<code>xs:boolean</code>)</dt>
           <dd>This allows HTTPS requests to still work when the server provides an SSL
             certificate which is not trusted, this may be because the CA (Certificate Authority)
-            is unknown</dd>. Default: false.</dd>
+            is unknown. Default: false.</dd>
 
           <dt><code>follow-redirect</code> (<code>xs:boolean</code>)</dt>
           <dd>Follow HTTP redirects. Default: true.</dd>
@@ -363,8 +363,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           <dd>Skip body in response. Default: false.</dd>
 
           <dt><code>parse-response</code> (<code>xs:boolean</code>)</dt>
-          <dd>Function for parsing the response bodies (see
-          <a href="#response-bodies" class="sectionRef"></a>).</dd>
+          <dd>Indicates if the response bodies will be parsed (see
+          <a href="#response-bodies" class="sectionRef"></a>). Default: true.</dd>
 
         </dl>
 
@@ -387,8 +387,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         </pre>
 
         <p>
-          The <a href="#errors"><code>http:options</code></a> error will be raised if the value of
-          an option is invalid, or if it has an invalid type.
+          The <a>http:options</a> error will be raised if the value of an option is invalid,
+          or if it has an invalid type.
         </p>
       </section>
 
@@ -398,86 +398,112 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           Some HTTP methods (such as POST and PUT, and others that are less common) transmit a
           request body. The functions in this module use the <dfn>$body</dfn> parameter to supply this.
         </p>
-
         <p>
-          If the body is an empty sequence, the corresponding request body will be empty.
-          Otherwise, the value must have one of the following types:
-        </p>
-
-        <dd>
-          <dt><code>xs:base64Binary</code>, <code>xs:hexBinary</code></dt>
-          <dd>Value will be sent as binary data, the media type will be
-            <code>application/octet-stream</code>.</dd>
-
-          <dt><code>xs:string</code></dt>
-          <dd>The string will be serialized as UTF-8 octets, the media type will be
-            <code>text/plain</code>.</dd>
-
-          <dt><code>node()</code></dt>
-          <dd>The node will be serialized as XML, the media type will be
-            <code>application/xml</code>.</dd>
-
-          <dt><code>map(*)</code></dt>
-          <dd>Unless the <a>multipart</a> option is set, the map will be serialized
-            as a JSON string, the media type will be <code>application/json</code>.</dd>
-
-          <dt><code>array(*)</code></dt>
-          <dd>The array will be serialized as a JSON string, the media type will be
-            <code>application/json</code>.</dd>
-
-          <dt><code>map(*)+</code> (Multipart)</dt>
-          <dd>When the <a>multipart</a> option is set, the body is a sequence of maps that have the
-            type <code>map(xs:string, item())</code> and the
-            format: <code>map { "headers": $part-headers, "body": $part-body}</code>. At least one
-            of <code>headers</code> or <code>body</code> is required, otherwise the error
-            <a>http:body</a> MUST be raised.
-            <pre class="example" title="Multipart Request Body">
-(
-  map {
-    "headers": map {
-      "Content-Disposition": 'form-data; name="file"; filename="covering-letter.md"',
-      "Content-Type": "text/markdown"
-    },
-    "body": fn:unparsed-text("covering-letter.md")
-  },
-  map {
-    "headers": map {
-      "Content-Disposition": 'form-data; name="application-name"'
-    },
-    "body": "John Smith"
-  },
-  map {
-    "headers": map {
-      "Content-Disposition": 'form-data; name="email"'
-    },
-    "body": "john@smith.com"
-  }
-)
-            </pre></dd>
-
-        </dd>
-
-        <p>
-          If the supplied value, or the value of a multipart body, has any other type, the
-          <a>http:body</a> error MUST be raised.
+          If the supplied value, or the value of a multipart body, has any other type than
+          described in the following, the <a>http:body</a> error MUST be raised.
           <a>http:serialize</a> MUST be raised if an error occurs while
           an item is being serialized (e.g. because a supplied map cannot be serialized as JSON).
         </p>
 
-        <p>
-          The evaluated media type will be assigned as value of the <code>Content-Type</code> header
-          unless a value has been supplied by the user. For multipart requests, each media type
-          will be sent as <code>Content-Type</code> in the corresponding multipart header section.
-        </p>
+        <section id='single-body'>
+          <h4>Single-Body Request</h4>
+ 
+          <p>
+            By default, or if the <code>multipart</code> option is set to <code>false</code>,
+            a single request body will be sent.
+            If the body is an empty sequence, the corresponding request body will be empty.
+            Otherwise, the value must have one of the following types:
+          </p>
+  
+          <dl>
+            <dt><code>xs:base64Binary</code>, <code>xs:hexBinary</code></dt>
+            <dd>Value will be sent as binary data, the media type will be
+              <code>application/octet-stream</code>.</dd>
+  
+            <dt><code>xs:string</code></dt>
+            <dd>The string will be serialized as UTF-8 octets, the media type will be
+              <code>text/plain</code>.</dd>
+  
+            <dt><code>node()</code></dt>
+            <dd>The node will be serialized as XML, the media type will be
+              <code>application/xml</code>.</dd>
+  
+            <dt><code>map(*)</code>, <code>array(*)</code></dt>
+            <dd>The map will be serialized as JSON, the media type will be
+              <code>application/json</code>.</dd>
+          </dl>
 
-        <pre class="example"
-             title="PUT request, single body, implicit Content-Type value: text/plain">
-          http:put('http://expath.org/xyz', 'plain and simple')
-        </pre>
+          <p>
+            The evaluated media type will be assigned as value of the <code>Content-Type</code> header
+            unless a value has been supplied by the user. For multipart requests, each media type
+            will be sent as <code>Content-Type</code> in the corresponding multipart header section.
+          </p>
 
+          <pre class="example"
+               title="PUT request, single body, implicit Content-Type value: text/plain">
+            http:put('http://expath.org/xyz', 'plain and simple')
+          </pre>
+
+          <p>
+            If no implicit conversion is available for the desired media type, the body can be
+            serialized to a string or binary item in advance, and a custom
+            <code>Content-Type</code> header value can be supplied:
+          </p>
+          <pre class="example"
+               title="POST request, single body, Content-Type value: application/json">
+            http:post(
+              'http://expath.org/xyz',
+              file:read-text('persons.csv'),
+              map { 'headers': 'Content-Type': 'text/csv;charset=UTF-8' }
+            )
+          </pre>
+        </section>
+
+        <section id='multipart-body'>
+          <h4>Multipart Request</h4>
+          <p>
+            A multipart request will be sent if the <a>multipart</a> option is set to
+            <code>true</code>. The supplied body value must have the type
+            <code>map(xs:string, item())</code> and the format:
+            <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
+            If <code>body</code> entry is not supplied, or if it is an empty sequence,
+            the error <a>http:body</a> MUST be raised.
+          </p>
+
+          <p>
+            The <code>$part-body</code> value will be parsed as single body
+            (see <a href="#single-body" class="sectionRef"></a>). If no <code>Content-Type</code>
+            header is supplied for the specific part, the resulting media type will be assigned.
+          </p>
+
+          <pre class="example" title="Multipart Request Body">
+(
+  map {
+    'headers': map {
+      'Content-Disposition': 'form-data; name="file"; filename="covering-letter.md"',
+      'Content-Type': 'text/markdown'
+    },
+    'body': fn:unparsed-text('covering-letter.md')
+  },
+  map {
+    'headers': map {
+      'Content-Disposition': 'form-data; name="application-name"'
+    },
+    'body': 'John Smith'
+  },
+  map {
+    'headers': map {
+      'Content-Disposition': 'form-data; name="email"'
+    },
+    'body': 'john@smith.com'
+  }
+)
+          </pre>
+        </section>
+  
         <pre class="example"
              title="POST request, multipart body, implicit Content-Type value: multipart/mixed">
-          http:send('http://expath.org/xyz', 'POST', [
+          http:send('http://expath.org/xyz', 'POST', (
             (: Body 1, implicit Content-Type: application/xml :)
             map {
               'body': &lt;persons&gt;...&lt;/persons&gt;,
@@ -490,21 +516,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
               },
               'body': xs:hexBinary('414243')
             }
-          ])
-        </pre>
-
-        <p>
-          If no implicit conversion is available for the desired media type, the body can be
-          serialized to a string or binary item in advance:
-        </p>
-
-        <pre class="example"
-             title="POST request, single body, Content-Type value: application/json">
-          http:post(
-            'http://expath.org/xyz',
-            file:read-text('persons.csv'),
-            map { 'headers': 'Content-Type': 'text/csv' }
-          )
+          ))
         </pre>
       </section>
     </section>
@@ -574,8 +586,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
       </dl>
 
       <p>
-        <a href="#errors"><code>http:parse</code></a> will be raised if an error occurs while
-          parsing the body.
+        <a>http:parse</a> will be raised if an error occurs while parsing the body.
       </p>
 
       <pre class="example" title="Multipart response">
@@ -714,9 +725,9 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         <dt><dfn>http:invalid-uri</dfn></dt>
         <dd>The URI specified in the <a>$uri</a> parameter to the function is invalid with respect
           to the HTTP version in use.</dd>
-        <dt><code>http:options</code></dt>
+        <dt><dfn>http:options</dfn></dt>
         <dd>The value of an option is invalid, or has an invalid type.</dd>
-        <dt><code>http:parse</code></dt>
+        <dt><dfn>http:parse</dfn></dt>
         <dd>A response body could not be parsed.</dd>
         <dt><dfn>http:serialize</dfn></dt>
         <dd>A request body could not be serialized.</dd>
