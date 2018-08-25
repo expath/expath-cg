@@ -347,6 +347,28 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
             the fractional digits of the xs:decimal e.g. 0.200 is 200 milliseconds.
           </dd>
 
+          <dt><code>certificates</code> (<code>map(xs:string, item()+)+</code>)</dt>
+          <dd>Options for authenticating the client with the server using certificate(s). The type
+            and use of this option is implementation defined. Java implementations SHOULD use the
+            following definition:
+            <pre class="example" title="Certificates with a HTTP Client 2.0 Java Implementation">
+"certificates": (
+  map {
+    "trust": map {
+      "keystore": "/x/y/my-trust-store.jks",
+      "keystore-password": "trust-store-password",
+      "alias": "trust-certificate"
+    },
+    "client": map {
+      "keystore": "/x/y/my-client-store.jks",
+      "keystore-password": "client-store-password",
+      "alias": "my-certificate",
+      "password": "my-certificate-password"
+    }
+  }
+)
+            </pre>. In the above example the <code>alias</code> options are OPTIONAL.</dd>
+
           <dt><code>username</code> (<code>xs:string</code>)</dt>
           <dd>Authentication: username.</dd>
 
