@@ -147,7 +147,7 @@
       <ul>
         <li>All of them have been designed to send HTTP requests to a server, and to return the
           response to the client.</li>
-        <li>The first parameter, <code>$uri</code>, contains the URI of the addressed server.</li>
+        <li>The first parameter, <a>$uri</a>, contains the URI of the addressed server.</li>
         <li>The <code>$body</code> parameter is explained in
           <a href="#request-body" class="sectionRef"></a>.</li>
         <li>In <a href="#request-options" class="sectionRef"></a>, the supported
@@ -282,8 +282,16 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
     <section id='request'>
       <h2>The Request</h2>
       <p>
-        An HTTP request consists of a header section and an optional body section.
+        An HTTP request is made to a URI, and consists of a header section and an optional body section.
       </p>
+
+      <section id="request-uri">
+        <h3>The Request URI</h3>
+        <p>The request URI is always specified in the <dfn>$uri</dfn> parameter to each function.
+          The request URI MUST be a valid URI according to the RFC of the HTTP version that is
+          being used for the request. If the URI is invalid, the error <a>http:invalid-uri</a>
+          MUST be raised.</p>
+      </section>
 
       <section id='request-options'>
         <h3>Request Options</h3>
@@ -662,6 +670,9 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         <dd>A request body argument has an invalid type.</dd>
         <dt><dfn>http:version</dfn></dt>
         <dd>A feature is not supported by the specified HTTP version.</dd>
+        <dt><dfn>http:invalid-uri</dfn></dt>
+        <dd>The URI specified in the <a>$uri</a> parameter to the function is invalid with respect
+          to the HTTP version in use.</dd>
         <dt><code>http:options</code></dt>
         <dd>The value of an option is invalid, or has an invalid type.</dd>
         <dt><code>http:parse</code></dt>
