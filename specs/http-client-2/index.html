@@ -417,24 +417,25 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
       <section id='request-body'>
         <h3>Request Body</h3>
         <p>
-          Some HTTP methods (such as POST and PUT, and others that are less common) transmit a
-          request body. The functions in this module use the <dfn>$body</dfn> parameter to supply this.
+          Some HTTP methods (such as <code>POST</code> and <code>PUT</code>, and others that are
+          less common) transmit a request body. The functions in this module use the
+          <dfn>$body</dfn> parameter to supply this.
         </p>
         <p>
           If the supplied value, or the value of a multipart body, has any other type than
           described in the following, the <a>http:body</a> error MUST be raised.
-          <a>http:serialize</a> MUST be raised if an error occurs while
-          an item is being serialized (e.g. because a supplied map cannot be serialized as JSON).
+          The <a>http:serialize</a> error MUST be raised if an error occurs whilst serializing an
+          item (e.g. because a supplied map cannot be serialized as JSON).
         </p>
 
-        <section id='single-body'>
-          <h4>Single-Body Request</h4>
+        <section id='single-entity'>
+          <h4><dfn>Single Entity Request</dfn></h4>
  
           <p>
-            By default, or if the <code>multipart</code> option is set to <code>false</code>,
-            a single request body will be sent.
-            If the body is an empty sequence, the corresponding request body will be empty.
-            Otherwise, the value must have one of the following types:
+            By default, or if the <a>multipart</a> option is set to <code>false</code>,
+            a single entity will be sent in the requests entity body.
+            If the <a>$body</a> is an empty sequence, the corresponding request's entity body will
+            be empty. Otherwise, the value must have one of the following types:
           </p>
   
           <dl>
@@ -458,11 +459,11 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           <p>
             The evaluated media type will be assigned as value of the <code>Content-Type</code> header
             unless a value has been supplied by the user. For multipart requests, each media type
-            will be sent as <code>Content-Type</code> in the corresponding multipart header section.
+            will be sent as the <code>Content-Type</code> header in the corresponding multipart header section.
           </p>
 
           <pre class="example"
-               title="PUT request, single body, implicit Content-Type value: text/plain">
+               title="PUT request, single entity, implicit Content-Type value: text/plain">
             http:put('http://expath.org/xyz', 'plain and simple')
           </pre>
 
@@ -472,7 +473,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
             <code>Content-Type</code> header value can be supplied:
           </p>
           <pre class="example"
-               title="POST request, single body, Content-Type value: application/json">
+               title="POST request, single entity, Content-Type value: application/json">
             http:post(
               'http://expath.org/xyz',
               file:read-text('persons.csv'),
@@ -481,24 +482,26 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           </pre>
         </section>
 
-        <section id='multipart-body'>
-          <h4>Multipart Request</h4>
+        <section id='multipart-entity'>
+          <h4><dfn>Multipart Entity Request</dfn></h4>
+          <p>Multipart provides for the encapsulation of several entities within the requests
+            entity body.</p>
           <p>
             A multipart request will be sent if the <a>multipart</a> option is set to
             <code>true</code>. The supplied body value must have the type
             <code>map(xs:string, item())</code> and the format:
             <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
-            If <code>body</code> entry is not supplied, or if it is an empty sequence,
+            If the <code>body</code> entry is not supplied, or if it is an empty sequence,
             the error <a>http:body</a> MUST be raised.
           </p>
 
           <p>
-            The <code>$part-body</code> value will be parsed as single body
-            (see <a href="#single-body" class="sectionRef"></a>). If no <code>Content-Type</code>
-            header is supplied for the specific part, the resulting media type will be assigned.
+            The <code>$part-body</code> value will be parsed as a <a>Single Entity Request</a>.
+            If no <code>Content-Type</code> header is supplied for the specific part, the resulting
+            media type will be assigned.
           </p>
 
-          <pre class="example" title="Multipart Request Body">
+          <pre class="example" title="Multipart Entity Request">
 (
   map {
     'headers': map {
@@ -524,7 +527,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         </section>
   
         <pre class="example"
-             title="POST request, multipart body, implicit Content-Type value: multipart/mixed">
+             title="POST request, multipart entity, implicit Content-Type value: multipart/mixed">
           http:send('http://expath.org/xyz', 'POST', (
             (: Body 1, implicit Content-Type: application/xml :)
             map {
