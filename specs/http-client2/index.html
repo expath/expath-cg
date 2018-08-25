@@ -129,6 +129,14 @@
           these methods do not appear to be widely used, they are still supported via the
           <a>http:send</a> function.
       </section>
+      <section id="http2-support">
+        <h3>HTTP/2 Support</h3>
+        <p>We acknowledge that HTTP/2 support is currently in its infancy. We have attempted to
+          design for a future version of this specification to extend control for HTTP/2 via.
+          extension points such as <code>$options</code> and further arity functions. We await
+          feedback from the users of the HTTP Client 2.0 spec, with regards to revisions for further
+          support of HTTP/2 features.</p>
+      </section>
     </section>
 
     <section id='functions'>
@@ -289,7 +297,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         <dl>
           <dt><code>http-version</code> (<code>xs:string</code>)</dt>
           <dd>The HTTP Version to use for the request. Default: 1.1.
-            Supported versions are <code>1.0</code> and <code>1.1</code>.
+            Supported versions are <code>1.0</code>, <code>1.1</code>,
+            and <code>2.0</code>.
           </dd>
 
           <dt><code>headers</code> (<code>map(xs:string, xs:string)</code>)</dt>
