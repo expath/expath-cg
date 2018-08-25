@@ -330,6 +330,15 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
             <a>http:version</a> error.
           </dt>
 
+          <dt><code>permit-expired-ssl-certificate</code> (<code>xs:boolean</code>)</dt>
+          <dd>This allows HTTPS requests to still work when the server provides an SSL
+            certificate which has expired. Default: false.</dd>
+
+          <dt><code>permit-untrusted-ssl-certificate</code> (<code>xs:boolean</code>)</dt>
+          <dd>This allows HTTPS requests to still work when the server provides an SSL
+            certificate which is not trusted, this may be because the CA (Certificate Authority)
+            is unknown</dd>. Default: false.</dd>
+
           <dt><code>follow-redirect</code> (<code>xs:boolean</code>)</dt>
           <dd>Follow HTTP redirects. Default: true.</dd>
 
