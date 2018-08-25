@@ -330,6 +330,9 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
             <a>http:version</a> error.
           </dt>
 
+          <dt><dfn>multipart</dfn> (<code>xs:boolean</code>)</dt>
+          <dd>Specifies that the request body is a Multipart request.</dd>
+
           <dt><code>permit-expired-ssl-certificate</code> (<code>xs:boolean</code>)</dt>
           <dd>This allows HTTPS requests to still work when the server provides an SSL
             certificate which has expired. Default: false.</dd>
@@ -414,14 +417,13 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
       <section id='request-body'>
         <h3>Request Body</h3>
         <p>
-          Some HTTP methods (such as POST and PUT, and others that are less common) come with a
-          request body. In the functions of this document, it can be supplied via the
-          <code>$body</code> parameter.
+          Some HTTP methods (such as POST and PUT, and others that are less common) transmit a
+          request body. The functions in this module use the <dfn>$body</dfn> parameter to supply this.
         </p>
 
         <p>
-          If the body is an empty sequence, no data will be sent. Otherwise, the value must have one
-          of the following types:
+          If the body is an empty sequence, the corresponding request body will be empty.
+          Otherwise, the value must have one of the following types:
         </p>
 
         <dd>
@@ -438,19 +440,49 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
             <code>application/xml</code>.</dd>
 
           <dt><code>map(*)</code></dt>
-          <dd>The map will be serialized as JSON string, the media type will be
-            <code>application/json</code>.</dd>
+          <dd>Unless the <a>multipart</a> option is set, the map will be serialized
+            as a JSON string, the media type will be <code>application/json</code>.</dd>
 
           <dt><code>array(*)</code></dt>
-          <dd>A Multipart body, the media type will be <code>multipart/mixed</code>.
-            Each array member must be a map with a <code>body</code> entry and an optional
-            <code>headers</code> entry.</dd>
+          <dd>The array will be serialized as a JSON string, the media type will be
+            <code>application/json</code>.</dd>
+
+          <dt><code>map(*)+</code> (Multipart)</dt>
+          <dd>When the <a>multipart</a> option is set, the body is a sequence of maps that have the
+            type <code>map(xs:string, item())</code> and the
+            format: <code>map { "headers": $part-headers, "body": $part-body}</code>. At least one
+            of <code>headers</code> or <code>body</code> is required, otherwise the error
+            <a>http:body</a> MUST be raised.
+            <pre class="example" title="Multipart Request Body">
+(
+  map {
+    "headers": map {
+      "Content-Disposition": 'form-data; name="file"; filename="covering-letter.md"',
+      "Content-Type": "text/markdown"
+    },
+    "body": fn:unparsed-text("covering-letter.md")
+  },
+  map {
+    "headers": map {
+      "Content-Disposition": 'form-data; name="application-name"'
+    },
+    "body": "John Smith"
+  },
+  map {
+    "headers": map {
+      "Content-Disposition": 'form-data; name="email"'
+    },
+    "body": "john@smith.com"
+  }
+)
+            </pre></dd>
+
         </dd>
 
         <p>
           If the supplied value, or the value of a multipart body, has any other type, the
-          <a href="#errors"><code>http:body</code></a> error will be raised.
-          <a href="#errors"><code>http:serialize</code></a> will be raised if an error occurs while
+          <a>http:body</a> error MUST be raised.
+          <a>http:serialize</a> MUST be raised if an error occurs while
           an item is being serialized (e.g. because a supplied map cannot be serialized as JSON).
         </p>
 
@@ -697,7 +729,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
     <section id='errors'>
       <h2>Errors</h2>
       <dl>
-        <dt><code>http:body</code></dt>
+        <dt><dfn>http:body</dfn></dt>
         <dd>A request body argument has an invalid type.</dd>
         <dt><dfn>http:version</dfn></dt>
         <dd>A feature is not supported by the specified HTTP version.</dd>
@@ -708,7 +740,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         <dd>The value of an option is invalid, or has an invalid type.</dd>
         <dt><code>http:parse</code></dt>
         <dd>A response body could not be parsed.</dd>
-        <dt><code>http:serialize</code></dt>
+        <dt><dfn>http:serialize</dfn></dt>
         <dd>A request body could not be serialized.</dd>
       </dl>
     </section>
