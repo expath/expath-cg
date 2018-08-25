@@ -41,7 +41,7 @@
               { name: "Christian Grün", url: "http://christian-gruen.de/",
                 company: "BaseX GmbH", companyURL: "http://basex.org/" },
               { name: "Adam Retter", url: "http://adamretter.org.uk/",
-                company: "Evolved Binary", companyURL: "http://adamretter.org.uk/" }
+                company: "Evolved Binary", companyURL: "http://evolvedbinary.com/" }
           ],
 
           // authors, add as many as you like.
@@ -117,6 +117,28 @@
       </section>
     </section>
 
+    <section id='supported-http-versions'>
+      <h2>Supported HTTP versions</h2>
+      <p>Implementations of this module are expected to support HTTP 1.0 [[!rfc1945]],
+        1.1 [[!rfc2616]], and 2.0 [[!rfc7540]]. Unless otherwise explicitly stated in this
+        specification, client behaviour is expected to conform to the appropriate HTTP RFC.</p>
+      <section id="http1-support">
+        <h3>HTTP 1.0 Support</h3>
+        <p>This module supports all features of HTTP 1.0. Although we do not provide explicit
+          functions for the <code>LINK</code> and <code>UNLINK</code> HTTP methods, as in practice
+          these methods do not appear to be widely used, they are still supported via the
+          <a>http:send</a> function.
+      </section>
+      <section id="http2-support">
+        <h3>HTTP/2 Support</h3>
+        <p>We acknowledge that HTTP/2 support is currently in its infancy. We have attempted to
+          design for a future version of this specification to extend control for HTTP/2 via.
+          extension points such as <code>$options</code> and further arity functions. We await
+          feedback from the users of the HTTP Client 2.0 spec, with regards to revisions for further
+          support of HTTP/2 features.</p>
+      </section>
+    </section>
+
     <section id='functions'>
       <h2>Functions</h2>
       <p>
@@ -125,7 +147,7 @@
       <ul>
         <li>All of them have been designed to send HTTP requests to a server, and to return the
           response to the client.</li>
-        <li>The first parameter, <code>$uri</code>, contains the URI of the addressed server.</li>
+        <li>The first parameter, <a>$uri</a>, contains the URI of the addressed server.</li>
         <li>The <code>$body</code> parameter is explained in
           <a href="#request-body" class="sectionRef"></a>.</li>
         <li>In <a href="#request-options" class="sectionRef"></a>, the supported
@@ -180,10 +202,6 @@ http:put($uri as xs:string, $body as item()?, $options as map(xs:string, item())
           Sends a PUT request with an optional <code>$body</code> to the supplied <code>$uri</code>
           and returns the response as a map. Additional <code>$options</code> can be supplied.
         </p>
-        <p>
-          HTTP PUT is only supported in HTTP 1.1. If <code>"http-version": "1.0"</code> is set in
-          the <code>$options</code> then <code>http:version</code> is raised.
-	</p>
       </section>
 
       <section>
@@ -197,10 +215,6 @@ http:delete($uri as xs:string, $options as map(xs:string, item())) as map(xs:str
         <p>
           Sends a DELETE request to the supplied <code>$uri</code> and returns the response as a
           map. Additional <code>$options</code> can be supplied.
-        </p>
-        <p>
-          HTTP DELETE is only supported in HTTP 1.1. If <code>"http-version": "1.0"</code> is set in
-          the <code>$options</code> then <code>http:version</code> is raised.
         </p>
       </section>
 
@@ -230,10 +244,6 @@ http:options($uri as xs:string, $options as map(xs:string, item())) as map(xs:st
           Sends an OPTIONS request to the supplied <code>$uri</code> and returns the response as a
           map. Additional <code>$options</code> can be supplied.
         </p>
-        <p>
-          HTTP OPTIONS is only supported in HTTP 1.1. If <code>"http-version": "1.0"</code> is set in
-          the <code>$options</code> then <code>http:version</code> is raised.
-        </p>
       </section>
 
       <section>
@@ -248,14 +258,10 @@ http:trace($uri as xs:string, $body as item()?, $options as map(xs:string, item(
           Sends a TRACE request with an optional <code>$body</code> to the supplied <code>$uri</code>
           and returns the response as a map. Additional <code>$options</code> can be supplied.
         </p>
-        <p>
-          HTTP TRACE is only supported in HTTP 1.1. If <code>"http-version": "1.0"</code> is set in
-          the <code>$options</code> then <code>http:version</code> is raised.
-        </p>
       </section>
 
       <section>
-        <h3>http:send</h3>
+        <h3><dfn>http:send</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:send($uri as xs:string, $method as xs:string) as map(xs:string, item())
@@ -270,20 +276,22 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           specified accoding to the appropriate specification, for HTTP this means in upper-case
           characters.
         </p>
-        <p>
-          NOTE: HTTP 1.0 only supports the HTTP methods <code>GET</code>, <code>HEAD</code>, and
-          <code>PUT</code>. If <code>"http-version": "1.0"</code> is specified in
-          <code>$options</code> and an unsupported method is used, then the error
-          <code>http:version</code> is raised.
-        </p>
       </section>
     </section>
 
     <section id='request'>
       <h2>The Request</h2>
       <p>
-        An HTTP request consists of a header section and an optional body section.
+        An HTTP request is made to a URI, and consists of a header section and an optional body section.
       </p>
+
+      <section id="request-uri">
+        <h3>The Request URI</h3>
+        <p>The request URI is always specified in the <dfn>$uri</dfn> parameter to each function.
+          The request URI MUST be a valid URI according to the RFC of the HTTP version that is
+          being used for the request. If the URI is invalid, the error <a>http:invalid-uri</a>
+          MUST be raised.</p>
+      </section>
 
       <section id='request-options'>
         <h3>Request Options</h3>
@@ -297,7 +305,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         <dl>
           <dt><code>http-version</code> (<code>xs:string</code>)</dt>
           <dd>The HTTP Version to use for the request. Default: 1.1.
-            Supported versions are <code>1.0</code> and <code>1.1</code>.
+            Supported versions are <code>1.0</code>, <code>1.1</code>,
+            and <code>2.0</code>.
           </dd>
 
           <dt><code>headers</code> (<code>map(xs:string, xs:string)</code>)</dt>
@@ -317,11 +326,21 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
             for HTTP 1.0.
             NOTE: Setting the transfer-encoding option will override any transfer-encoding
             HTTP header.
-            NOTE: <code>chunked</code> is not supported on HTTP 1.0.
+            NOTE: <code>chunked</code> is not supported on HTTP 1.0, such use will raise the
+            <a>http:version</a> error.
           </dt>
 
           <dt><dfn>multipart</dfn> (<code>xs:boolean</code>)</dt>
           <dd>Specifies that the request body is a Multipart request.</dd>
+
+          <dt><code>permit-expired-ssl-certificate</code> (<code>xs:boolean</code>)</dt>
+          <dd>This allows HTTPS requests to still work when the server provides an SSL
+            certificate which has expired. Default: false.</dd>
+
+          <dt><code>permit-untrusted-ssl-certificate</code> (<code>xs:boolean</code>)</dt>
+          <dd>This allows HTTPS requests to still work when the server provides an SSL
+            certificate which is not trusted, this may be because the CA (Certificate Authority)
+            is unknown</dd>. Default: false.</dd>
 
           <dt><code>follow-redirect</code> (<code>xs:boolean</code>)</dt>
           <dd>Follow HTTP redirects. Default: true.</dd>
@@ -690,8 +709,11 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
       <dl>
         <dt><dfn>http:body</dfn></dt>
         <dd>A request body argument has an invalid type.</dd>
-        <dt><code>http:version</code></dt>
+        <dt><dfn>http:version</dfn></dt>
         <dd>A feature is not supported by the specified HTTP version.</dd>
+        <dt><dfn>http:invalid-uri</dfn></dt>
+        <dd>The URI specified in the <a>$uri</a> parameter to the function is invalid with respect
+          to the HTTP version in use.</dd>
         <dt><code>http:options</code></dt>
         <dd>The value of an option is invalid, or has an invalid type.</dd>
         <dt><code>http:parse</code></dt>
