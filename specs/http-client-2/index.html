@@ -77,6 +77,31 @@
           doRDFa: "1.1",
       };
     </script>
+    <style>
+      table.minborder {
+        border: 1px solid #000000;
+        border-collapse: collapse;
+        word-wrap: normal;
+        overflow-wrap: normal;
+        hyphens: manual;
+        font-size: smaller;
+      }
+      table.minborder tbody {
+        display: table-row-group;
+      }
+      table.minborder th {
+        border: 1px solid #000000;
+        text-align: start;
+      }
+      table.minborder td {
+        border: 1px solid #000000;
+        text-align: start;
+        padding-left: 5px;
+      }
+      .option-description {
+        vertical-align: top;
+      }
+    </style>
   </head>
   <body>
     <section id='abstract'>
@@ -305,96 +330,172 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
           The following options can be specified via the <dfn>$options</dfn> parameter:
         </p>
 
-        <div class="ednote" title="CG">
-        </div>
-
-        <dl>
-          <dt><code>http-version</code> (<code>xs:string</code>)</dt>
-          <dd>The HTTP Version to use for the request. Default: 1.1.
-            Supported versions are <code>1.0</code>, <code>1.1</code>,
-            and <code>2.0</code>.
-          </dd>
-
-          <dt><dfn>headers</dfn> (<code>map(xs:string, xs:string)</code>)</dt>
-          <dd>HTTP header fields.</dd>
-
-          <dt><code>content-encoding</code> (<code>xs:string</code>)</dt>
-          <dd>Uses a specific content encoding for the request body.
-            Supported encodings are <code>gzip</code> and <code>deflate</code>.
-            NOTE: Setting the content-encoding option will override any content-encoding
-            HTTP header.
-          </dd>
-
-          <dt><code>transfer-encoding</code> (<code>xs:string</code>)</dt>
-          <dd>Uses a specific transfer encoding for the request body.
-            Supported encodings are <code>none</code> and <code>chunked</code>.
-            Default is <code>chunked</code> for HTTP 1.1, and <code>none</code>
-            for HTTP 1.0.
-            NOTE: Setting the transfer-encoding option will override any transfer-encoding
-            HTTP header.
-            NOTE: <code>chunked</code> is not supported on HTTP 1.0, such use will raise the
-            <a>http:version</a> error.
-          </dt>
-
-          <dt><dfn>multipart</dfn> (<code>xs:boolean</code>)</dt>
-          <dd>Indicates if the request body is a multipart request. Default: false.</dd>
-
-          <dt><code>permit-expired-ssl-certificate</code> (<code>xs:boolean</code>)</dt>
-          <dd>This allows HTTPS requests to still work when the server provides an SSL
-            certificate which has expired. Default: false.</dd>
-
-          <dt><code>permit-untrusted-ssl-certificate</code> (<code>xs:boolean</code>)</dt>
-          <dd>This allows HTTPS requests to still work when the server provides an SSL
-            certificate which is not trusted, this may be because the CA (Certificate Authority)
-            is unknown. Default: false.</dd>
-
-          <dt><code>follow-redirect</code> (<code>xs:boolean</code>)</dt>
-          <dd>Follow HTTP redirects. Default: true.</dd>
-
-          <dt><code>timeout</code> (<code>xs:decimal</code>)</dt>
-          <dd>Maximum number of seconds to wait for a response. Milliseconds may be specified using
-            the fractional digits of the xs:decimal e.g. 0.200 is 200 milliseconds.
-          </dd>
-
-          <dt><code>certificates</code> (<code>map(xs:string, item()+)+</code>)</dt>
-          <dd>Options for authenticating the client with the server using certificate(s). The type
-            and use of this option is implementation defined. Java implementations SHOULD use the
-            following definition:
-            <pre class="example" title="Certificates with a HTTP Client 2.0 Java Implementation">
-"certificates": (
-  map {
-    "trust": map {
-      "keystore": "/x/y/my-trust-store.jks",
-      "keystore-password": "trust-store-password",
-      "alias": "trust-certificate"
-    },
-    "client": map {
-      "keystore": "/x/y/my-client-store.jks",
-      "keystore-password": "client-store-password",
-      "alias": "my-certificate",
-      "password": "my-certificate-password"
-    }
-  }
-)
-            </pre>. In the above example the <code>alias</code> options are OPTIONAL.</dd>
-
-          <dt><code>username</code> (<code>xs:string</code>)</dt>
-          <dd>Authentication: username.</dd>
-
-          <dt><code>password</code> (<code>xs:string</code>)</dt>
-          <dd>Authentication: password.</dd>
-
-          <dt><code>auth-method</code> (<code>xs:string</code>)</dt>
-          <dd>Authentication method (Basic, Digest, possibly others). Default: Basic.</dd>
-
-          <dt><code>status-only</code> (<code>xs:boolean</code>)</dt>
-          <dd>Skip body in response. Default: false.</dd>
-
-          <dt><code>parse-response</code> (<code>xs:boolean</code>)</dt>
-          <dd>Indicates if the response bodies will be parsed (see
-          <a href="#response-bodies" class="sectionRef"></a>). Default: true.</dd>
-
-        </dl>
+        <table class="minborder">
+          <caption>Request Options</caption>
+          <colgroup>
+            <col span="1">
+            <col span="1">
+            <col span="1">
+            <col span="1" class="option-description">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Option Key</th>
+              <th>XDM Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><dfn>http-version</dfn></td>
+              <td><code>xs:string</code></td>
+              <td><code>1.1</code></td>
+              <td>
+                <p>The HTTP Version to use for the request.</p>
+                <p>Supported versions are <code>1.0</code>, <code>1.1</code>,
+                and <code>2.0</code>.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>headers</dfn></td>
+              <td><code>map(xs:string, xs:string)</code></td>
+              <td><code>empty-sequence()</code></td>
+              <td>HTTP header fields.</td>
+            </tr>
+            <tr>
+              <td><dfn>content-encoding</dfn></td>
+              <td><code>xs:string</code></td>
+              <td><code>none</code></td>
+              <td>
+                <p>Uses a specific content encoding for the request body.</p>
+                <p>Supported encodings are <code>none</code>, <code>gzip</code>, and
+                  <code>deflate</code>.</p>
+                <p><strong>NOTE:</strong> Setting the this option will override any
+                  <code>content-encoding</code> HTTP header.</p></td>
+            </tr>
+            <tr>
+              <td><dfn>transfer-encoding</dfn></td>
+              <td><code>xs:string</code></td>
+              <td>
+                <ul>
+                  <li><code>none</code> for HTTP 1.0</li>
+                  <li><code>chunked</code> for HTTP 1.1, and 2.0</li>
+                </ul>
+              </td>
+              <td>
+                <p>Uses a specific transfer encoding for the request body.</p>
+                <p>Supported encodings are <code>none</code> and <code>chunked</code>.</p>
+                <p><strong>NOTE</strong>: Setting this option will override any
+                  <code>transfer-encoding</code> HTTP header.</p>
+                <p><strong>NOTE</strong>: <code>chunked</code> is not supported on HTTP 1.0, such
+                  use MUST raise the <a>http:version</a> error.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>multipart</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>false()</code></td>
+              <td>
+                <p>Indicates if the entity body in <a>$body</a> is a multipart entity body.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>permit-expired-ssl-certificate</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>false()</code></td>
+              <td>
+                <p>This allows HTTPS requests to still work when the server provides an SSL
+                  certificate which has expired.</p></td>
+            </tr>
+            <tr>
+              <td><dfn>permit-untrusted-ssl-certificate</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>false()</code></td>
+              <td>
+                <p>This allows HTTPS requests to still work when the server provides an SSL
+                  certificate which is not trusted, this may be because the CA (Certificate Authority)
+                  is unknown.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>follow-redirect</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>false()</code></td>
+              <td><p>Follow HTTP redirects from the server.</p></td>
+            </tr>
+            <tr>
+              <td><dfn>timeout</dfn></td>
+              <td><code>xs:decimal</code></td>
+              <td><code>120</code></td>
+              <td>
+                <p>Maximum number of seconds to wait for a response. Milliseconds may be specified
+                  using the fractional digits of an <code>xs:decimal</code> e.g. <code>0.200</code>
+                  is 200 milliseconds.</p>
+                <p>The value <code>-1</code> indicates that no timeout should be imposed</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>certificates</dfn></td>
+              <td><code>map(xs:string, item()+)+</code></td>
+              <td><code>empty-sequence()</code></td>
+              <td>
+                <p>Options for authenticating the client with the server using certificate(s). The type
+                  and use of this option is implementation defined.</p>
+                <p><strong>NOTE</strong>: Java implementations SHOULD use the
+                  definition defined in
+                  <a href="#certificates-option-format-for-java-implementations" class="sectionRef"></a>.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>auth-method</dfn></td>
+              <td><code>xs:string</code></td>
+              <td><code>Basic</code></td>
+              <td>
+                <p>HTTP Authentication method.</p>
+                <p>Supported values are: <code>Basic</code>, and <code>Digest</code>.</p>
+                <p>Implementations are free to define additional authentication methods.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>username</dfn></td>
+              <td><code>xs:string</code></td>
+              <td></td>
+              <td>
+                <p>Authentication: username.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>password</dfn></td>
+              <td><code>xs:string</code></td>
+              <td></td>
+              <td>
+                <p>Authentication: password.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>status-only</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>false()</code></td>
+              <td>
+                <p>Ignore the headers and body in the HTTP response.</p>
+                <p>This may be used to save resources on parsing the response when the user is
+                  only interested in the response code.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>parse-response-enity-body</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>true()</code></td>
+              <td>
+                <p>Indicates if the response bodies will be parsed (see
+                  <a href="#response-bodies" class="sectionRef"></a>).</p>
+                <p>When set to <code>true()</code>, if <a>status-only</a> is also set to
+                  <code>true()</code>, the error <a>http:invalid-option</a> MUST be raised.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         <pre class="example" title="GET request with User-Agent header, skip body in response">
           http:get('http://expath.org/xyz', map {
@@ -776,6 +877,28 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         <dt><dfn>http:serialize</dfn></dt>
         <dd>A request body could not be serialized.</dd>
       </dl>
+    </section>
+
+    <section class="appendix informative">
+      <h2>Certificates Option format for Java implementations</h2>
+      <pre class="example" title="Certificates with a HTTP Client 2.0 Java Implementation">
+"certificates": (
+  map {
+    "trust": map {
+      "keystore": "/x/y/my-trust-store.jks",
+      "keystore-password": "trust-store-password",
+      "alias": "trust-certificate"
+    },
+    "client": map {
+      "keystore": "/x/y/my-client-store.jks",
+      "keystore-password": "client-store-password",
+      "alias": "my-certificate",
+      "password": "my-certificate-password"
+    }
+  }
+)
+      </pre>
+      <p><strong>NOTE</strong>: In the above example the <code>alias</code> options are OPTIONAL.</p>
     </section>
 
     <section class="appendix informative">
