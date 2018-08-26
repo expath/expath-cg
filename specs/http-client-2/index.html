@@ -178,8 +178,8 @@ http:get($uri as xs:string, $options as map(xs:string, item())) as map(xs:string
         <h3>http:post</h3>
         <div class="exampleInner">
           <pre>
-http:post($uri as xs:string, $body as item()?) as map(xs:string, item())
-http:post($uri as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
+http:post($uri as xs:string, $body as item()*) as map(xs:string, item())
+http:post($uri as xs:string, $body as item()*, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -193,8 +193,8 @@ http:post($uri as xs:string, $body as item()?, $options as map(xs:string, item()
         <h3>http:put</h3>
         <div class="exampleInner">
           <pre>
-http:put($uri as xs:string, $body as item()?) as map(xs:string, item())
-http:put($uri as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
+http:put($uri as xs:string, $body as item()*) as map(xs:string, item())
+http:put($uri as xs:string, $body as item()*, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -249,8 +249,8 @@ http:options($uri as xs:string, $options as map(xs:string, item())) as map(xs:st
         <h3>http:trace</h3>
         <div class="exampleInner">
           <pre>
-http:trace($uri as xs:string, $body as item()?) as map(xs:string, item())
-http:trace($uri as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
+http:trace($uri as xs:string, $body as item()*) as map(xs:string, item())
+http:trace($uri as xs:string, $body as item()*, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
@@ -264,8 +264,8 @@ http:trace($uri as xs:string, $body as item()?, $options as map(xs:string, item(
         <div class="exampleInner">
           <pre>
 http:send($uri as xs:string, $method as xs:string) as map(xs:string, item())
-http:send($uri as xs:string, $method as xs:string, $body as item()?) as map(xs:string, item())
-http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
+http:send($uri as xs:string, $method as xs:string, $body as item()*) as map(xs:string, item())
+http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
