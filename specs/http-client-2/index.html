@@ -409,7 +409,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         </pre>
 
         <p>
-          The <a>http:options</a> error will be raised if the value of an option is invalid,
+          The <a>http:invalid-option</a> error will be raised if the value of an option is invalid,
           or if it has an invalid type.
         </p>
       </section>
@@ -750,7 +750,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         <dt><dfn>http:invalid-uri</dfn></dt>
         <dd>The URI specified in the <a>$uri</a> parameter to the function is invalid with respect
           to the HTTP version in use.</dd>
-        <dt><dfn>http:options</dfn></dt>
+        <dt><dfn>http:invalid-option</dfn></dt>
         <dd>The value of an option is invalid, or has an invalid type.</dd>
         <dt><dfn>http:parse</dfn></dt>
         <dd>A response body could not be parsed.</dd>
