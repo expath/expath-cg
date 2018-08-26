@@ -129,16 +129,17 @@
       <section id="http1-support">
         <h3>HTTP 1.0 Support</h3>
         <p>This module supports all features of HTTP 1.0. Although we do not provide explicit
-          functions for the <code>LINK</code> and <code>UNLINK</code> HTTP methods, as in practice
-          these methods do not appear to be widely used, they are still supported via the
-          <a>http:send</a> function.
+          functions for the <dfn data-cite="rfc1945#appendix-D.1.3">LINK</dfn> and
+          <dfn data-cite="rfc1945#appendix-D.1.4">UNLINK</dfn> HTTP methods, as in practice these
+          methods do not appear to be widely used, they are still supported via the
+          <a>http:send</a> function.</p>
       </section>
       <section id="http2-support">
         <h3>HTTP/2 Support</h3>
         <p>We acknowledge that HTTP/2 support is currently in its infancy. We have attempted to
           design for a future version of this specification to extend control for HTTP/2 via.
-          extension points such as <code>$options</code> and further arity functions. We await
-          feedback from the users of the HTTP Client 2.0 spec, with regards to revisions for further
+          extension points such as <a>$options</a> and further arity functions. We await
+          feedback from the users of this specifcation, with regards to revisions for further
           support of HTTP/2 features.</p>
       </section>
     </section>
@@ -160,12 +161,14 @@
       </ul>
 
       <p>
+        <!-- TODO once HTTP Client 1.0 module is on W3C EXPath CG - we should add it to refspec.org
+          and link http:send-request below using a <dfn data-cite="... -->
         The legacy function <code>http:send-request</code> is still available; it is explained in
         detail in the original <a href='http://expath.org/spec/http-client'>HTTP Client Module</a>.
       </p>
 
       <section>
-        <h3>http:get</h3>
+        <h3><dfn>http:get</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:get($uri as xs:string) as map(xs:string, item())
@@ -173,13 +176,13 @@ http:get($uri as xs:string, $options as map(xs:string, item())) as map(xs:string
 </pre>
         </div>
         <p>
-          Sends a GET request to the supplied <code>$uri</code> and returns the response as a map.
-          Additional <code>$options</code> can be supplied.
+          Sends a GET request to the supplied <a>$uri</a> and returns the response as a map.
+          Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:post</h3>
+        <h3><dfn>http:post</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:post($uri as xs:string, $body as item()*) as map(xs:string, item())
@@ -187,14 +190,14 @@ http:post($uri as xs:string, $body as item()*, $options as map(xs:string, item()
 </pre>
         </div>
         <p>
-          Sends a POST request with an optional <code>$body</code> to the supplied
-          <code>$uri</code> and returns the response as a map. Additional <code>$options</code> can
+          Sends a POST request with an optional <a>$body</a> to the supplied
+          <a>$uri</a> and returns the response as a map. Additional <a>$options</a> can
           be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:put</h3>
+        <h3><dfn>http:put</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:put($uri as xs:string, $body as item()*) as map(xs:string, item())
@@ -202,13 +205,13 @@ http:put($uri as xs:string, $body as item()*, $options as map(xs:string, item())
 </pre>
         </div>
         <p>
-          Sends a PUT request with an optional <code>$body</code> to the supplied <code>$uri</code>
-          and returns the response as a map. Additional <code>$options</code> can be supplied.
+          Sends a PUT request with an optional <a>$body</a> to the supplied <a>$uri</a>
+          and returns the response as a map. Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:delete</h3>
+        <h3><dfn>http:delete</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:delete($uri as xs:string) as map(xs:string, item())
@@ -216,13 +219,13 @@ http:delete($uri as xs:string, $options as map(xs:string, item())) as map(xs:str
 </pre>
         </div>
         <p>
-          Sends a DELETE request to the supplied <code>$uri</code> and returns the response as a
-          map. Additional <code>$options</code> can be supplied.
+          Sends a DELETE request to the supplied <a>$uri</a> and returns the response as a
+          map. Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:head</h3>
+        <h3><dfn>http:head</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:head($uri as xs:string) as map(xs:string, item())
@@ -230,13 +233,13 @@ http:head($uri as xs:string, $options as map(xs:string, item())) as map(xs:strin
 </pre>
         </div>
         <p>
-          Sends a HEAD request to the supplied <code>$uri</code> and returns the response as a map.
-          Additional <code>$options</code> can be supplied.
+          Sends a HEAD request to the supplied <a>$uri</a> and returns the response as a map.
+          Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:options</h3>
+        <h3><dfn>http:options</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:options($uri as xs:string) as map(xs:string, item())
@@ -244,13 +247,13 @@ http:options($uri as xs:string, $options as map(xs:string, item())) as map(xs:st
 </pre>
         </div>
         <p>
-          Sends an OPTIONS request to the supplied <code>$uri</code> and returns the response as a
-          map. Additional <code>$options</code> can be supplied.
+          Sends an OPTIONS request to the supplied <a>$uri</a> and returns the response as a
+          map. Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:trace</h3>
+        <h3><dfn>http:trace</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:trace($uri as xs:string, $body as item()*) as map(xs:string, item())
@@ -258,8 +261,8 @@ http:trace($uri as xs:string, $body as item()*, $options as map(xs:string, item(
 </pre>
         </div>
         <p>
-          Sends a TRACE request with an optional <code>$body</code> to the supplied <code>$uri</code>
-          and returns the response as a map. Additional <code>$options</code> can be supplied.
+          Sends a TRACE request with an optional <a>$body</a> to the supplied <a>$uri</a>
+          and returns the response as a map. Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
@@ -274,10 +277,10 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         </div>
         <p>
           Sends a custom HTTP request with the supplied <code>$method</code> and an optional
-          <code>$body</code> to the specified <code>$uri</code> and returns the response as a map.
-          Additional <code>$options</code> can be supplied. The <code>$method</code> should be
-          specified accoding to the appropriate specification, for HTTP this means in upper-case
-          characters.
+          <a>$body</a> to the specified <a>$uri</a> and returns the response as a map.
+          Additional <a>$options</a> can be supplied. The <code>$method</code> should be
+          given accoding to the appropriate specification, for HTTP this means in upper-case
+          characters, e.g. <code>GET</code>.
         </p>
       </section>
     </section>
@@ -420,7 +423,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
       <section id='request-entity-body'>
         <h3>The Request Entity Body</h3>
         <p>
-          Some HTTP methods (such as <code>POST</code> and <code>PUT</code>, and others that are
+          Some HTTP methods (such as <code>POST</code>, <code>PUT</code>, and others that are
           less common) transmit an <dfn data-cite="rfc1945#section-7.2">entity body</dfn> (often
           colloquially shortened to the "<dfn>Request Body</dfn>"). The functions in this module use
           the <dfn>$body</dfn> parameter to supply this.
@@ -626,7 +629,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
       </dl>
 
       <p>
-        <a>http:parse</a> will be raised if an error occurs while parsing the body.
+        The error <a>http:parse</a> will be raised if an error occurs while parsing the body.
       </p>
 
       <pre class="example" title="Multipart response">
@@ -662,10 +665,10 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
           or the implicit conversion of response bodies might not match the client’s requirements.
         </p>
         <p>
-          Parsing of the response body can be disabled via the <code>parse-response</code> option.
-          All bodies of single and multipart responses will be returned as binary items of type
-          <code>xs:base64Binary</code>, and the values can be processed (stored, parsed, forwarded)
-          in a second step.
+          Parsing of the response body can be disabled via the <a>parse-response-entity-body</a>
+          option. All bodies of single and multipart responses will be returned as binary items
+          of type <code>xs:base64Binary</code>, and the values can be processed (stored, parsed,
+          forwarded) in a second step.
         </p>
 
         <pre class="example" title="XQuery example for parsing response bodies">
@@ -757,6 +760,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
 
     <section id='errors'>
       <h2>Errors</h2>
+      <p>This section defines and describes the error codes that may be raised by the module.</p> 
       <dl>
         <dt><dfn>http:body</dfn></dt>
         <dd>A request body argument has an invalid type.</dd>
@@ -774,7 +778,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
       </dl>
     </section>
 
-    <section class="appendix">
+    <section class="appendix informative">
       <h2>Acknowledgements</h2>
       <p>
         Many thanks to Robin Berjon for making the production of this specification much simpler
