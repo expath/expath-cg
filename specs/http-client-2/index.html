@@ -488,8 +488,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
             entity body.</p>
           <p>
             A multipart request will be sent if the <a>multipart</a> option is set to
-            <code>true</code>. The supplied body value must have the type
-            <code>map(xs:string, item())</code> and the format:
+            <code>true</code>. All body items must have the type
+            <code>map(xs:string, item())</code> and the format
             <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
             If the <code>body</code> entry is not supplied, or if it is an empty sequence,
             the error <a>http:body</a> MUST be raised.
