@@ -313,7 +313,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
     <section id='request'>
       <h2>The Request</h2>
       <p>
-        An HTTP request is made to a URI, and consists of a header section and an optional body section.
+        An HTTP request is made to a URI, and consists of headers and an optional entity body.
       </p>
 
       <section id="request-uri">
@@ -570,9 +570,9 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
           </dl>
 
           <p>
-            The evaluated media type will be assigned as value of the <code>Content-Type</code> header
-            unless a value has been supplied by the user in <a>headers</a>. For multipart requests,
-            each media type will be sent as the <code>Content-Type</code> header in the
+            The evaluated media type will be assigned as the value of the <code>Content-Type</code>
+            header unless a value has been supplied by the user in <a>headers</a>. For multipart
+            requests, each media type will be sent as the <code>Content-Type</code> header in the
             corresponding multipart header section.
           </p>
 
@@ -904,8 +904,9 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
     <section class="appendix informative">
       <h2>Acknowledgements</h2>
       <p>
-        Many thanks to Robin Berjon for making the production of this specification much simpler
-        with his cool ReSpec tool.
+        Many thanks to <a href="https://berjon.com/">Robin Berjon</a> for making the production of
+        this specification much simpler by starting the
+        <a href="https://github.com/w3c/respec">ReSpec</a> tool project.
       </p>
     </section>
   </body>
