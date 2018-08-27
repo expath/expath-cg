@@ -162,9 +162,9 @@
       <section id="http2-support">
         <h3>HTTP/2 Support</h3>
         <p>We acknowledge that HTTP/2 support is currently in its infancy. We have attempted to
-          design for a future version of this specification to extend control for HTTP/2 via.
+          design for a future version of this specification to extend control for HTTP/2 via
           extension points such as <a>$options</a> and further arity functions. We await
-          feedback from the users of this specifcation, with regards to revisions for further
+          feedback from the users of this specification, with regards to revisions for further
           support of HTTP/2 features.</p>
       </section>
     </section>
@@ -301,10 +301,10 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
 </pre>
         </div>
         <p>
-          Sends a custom HTTP request with the supplied <code>$method</code> and an optional
+          Sends a custom HTTP request with the supplied $method and an optional
           <a>$body</a> to the specified <a>$uri</a> and returns the response as a map.
-          Additional <a>$options</a> can be supplied. The <code>$method</code> should be
-          given accoding to the appropriate specification, for HTTP this means in upper-case
+          Additional <a>$options</a> can be supplied. The $method should be
+          given according to the appropriate specification, for HTTP this means in upper-case
           characters, e.g. <code>GET</code>.
         </p>
       </section>
@@ -371,8 +371,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
                 <p>Uses a specific content encoding for the request body.</p>
                 <p>Supported encodings are <code>none</code>, <code>gzip</code>, and
                   <code>deflate</code>.</p>
-                <p><strong>NOTE:</strong> Setting the this option will override any
-                  <code>content-encoding</code> HTTP header.</p></td>
+                <p><strong>NOTE:</strong> Setting this option will override any
+                  <code>Content-Encoding</code> HTTP header.</p></td>
             </tr>
             <tr>
               <td><dfn>transfer-encoding</dfn></td>
@@ -387,7 +387,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
                 <p>Uses a specific transfer encoding for the request body.</p>
                 <p>Supported encodings are <code>none</code> and <code>chunked</code>.</p>
                 <p><strong>NOTE</strong>: Setting this option will override any
-                  <code>transfer-encoding</code> HTTP header.</p>
+                  <code>Transfer-Encoding</code> HTTP header.</p>
                 <p><strong>NOTE</strong>: <code>chunked</code> is not supported on HTTP 1.0, such
                   use MUST raise the <a>http:version</a> error.</p>
               </td>
@@ -484,7 +484,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
               </td>
             </tr>
             <tr>
-              <td><dfn>parse-response-enity-body</dfn></td>
+              <td><dfn>parse-response-entity-body</dfn></td>
               <td><code>xs:boolean</code></td>
               <td><code>true()</code></td>
               <td>
@@ -800,7 +800,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         
           local:parse(
             http:get('http://expath.org/xyz',
-            map { 'parse-response': false() })
+            map { 'parse-response-entity-body': false() })
           )
         </pre>
         
@@ -818,7 +818,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
               – Only works for single bodies.<br>
             </dd>
   
-            <dt><code>parse-response</code>
+            <dt><code>parse-response-entity-body</code>
               (<code>function(xs:base64Binary, xs:string) as item()</code>):</dt>
             <dd>
               Alternative 2. Override the default parsing behavior. Parameters: body, Content-Type
@@ -831,7 +831,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
                 result.<br>
             </dd>
   
-            <dt><code>parse-response</code>
+            <dt><code>parse-response-entity-body</code>
               (<code>function(xs:base64Binary, map(xs:string, xs:string)) as item()</code>):</dt>
             <dd>
               Alternative 2. Parameters: body, response headers.<br>
@@ -839,7 +839,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
               – Response handling may get too low-level and technical.<br>
             </dd>
   
-            <dt><code>parse-response</code> (<code>function(item()) as item()</code>):</dt>
+            <dt><code>parse-response-entity-body</code> (<code>function(item()) as item()</code>):</dt>
             <dd>
               Alternative 3. Parameters: parsed body (xs:string, xs:base64Binary,
               document-node())<br>
@@ -847,7 +847,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
               – May fail if server supplies wrong encoding for string conversions.<br>
             </dd>
   
-            <dt><code>parse-response</code> (<code>xs:boolean</code>):<br></dt>
+            <dt><code>parse-response-entity-body</code> (<code>xs:boolean</code>):<br></dt>
             <dd>
               Alternative 4: If disabled, return single and multipart bodies as xs:base64Binary.<br>
               + Multipart responses could still be parsed.<br>
