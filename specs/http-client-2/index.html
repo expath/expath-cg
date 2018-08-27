@@ -597,27 +597,26 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         </section>
 
         <section id='multipart-entity-body'>
-  <h4><dfn>Multipart Entity Body Request</dfn></h4>
-  <p>
-    <dfn data-cite="rfc1945#section-3.6.2">Multipart Types</dfn> provides for the encapsulation
-    of several entities (aka <em>parts</em>) within the request's <a>entity body</a>.
-  </p>
-  <p>
-    An entity body of multiple parts, wherein each part is itself an entity, will be sent
-    if the <a>multipart</a> option is set to <code>true</code>.
-  </p>
-  <p>
-    The <a>$body</a> parameter allows one or more entities to be provided;
-    Each entity MUST have the type <code>map(xs:string, item())</code>, and the format:
-    <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
-    If the <code>body</code> entry is not supplied, or if it is an empty sequence,
-    the error <a>http:body</a> MUST be raised.
-  </p>
-
-  <p>
-    The <code>$part-body</code> value will be parsed as a <a>Single Entity</a>.
-    If no <code>Content-Type</code> header is supplied in the for the specific part, the resulting
-    media type will be assigned.
+          <h4><dfn>Multipart Entity Body Request</dfn></h4>
+          <p>
+            <dfn data-cite="rfc1945#section-3.6.2">Multipart Types</dfn> provide for the encapsulation
+            of several entities (aka <em>parts</em>) within the request's <a>entity body</a>.
+          </p>
+          <p>
+            An entity body of multiple parts, wherein each part is itself an entity, will be sent
+            if the <a>multipart</a> option is set to <code>true</code>.
+          </p>
+          <p>
+            The <a>$body</a> parameter allows one or more entities to be provided;
+            Each entity MUST have the type <code>map(xs:string, item())</code>, and the format:
+            <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
+            If the <code>body</code> entry is not supplied, or if it is an empty sequence,
+            the error <a>http:body</a> MUST be raised.
+          </p>
+          <p>
+            The <code>$part-body</code> value will be parsed as a <a>Single Entity</a>.
+            If no <code>Content-Type</code> header is supplied in the for the specific part, the resulting
+            media type will be assigned.
           </p>
 
           <pre class="example" title="Multipart Entity Request">
