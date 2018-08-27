@@ -7,14 +7,14 @@
     <script class='remove'>
       var respecConfig = {
           // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
-          specStatus: "base",
+          specStatus: "ED",
 
           // the specification's short name, as in http://www.w3.org/TR/short-name/
-          shortName: "http-client2",
+          shortName: "http-client-2",
 
           // if your specification has a subtitle that goes below the main
           // formal title, define it here
-          subtitle: "An EXPath Project",
+          //subtitle: "An EXPath Project",
 
           // if you wish the publication date to be other than today, set this
           // publishDate: "2009-08-06",
@@ -30,7 +30,11 @@
 
           // if there a publicly available Editor's Draft, this is the link
           // edDraftURI: "http://dev.w3.org/2009/dap/ReSpec.js/documentation.html",
-          edDraftURI: "http://expath.github.io/expath-cg/specs/http-client2/",
+          edDraftURI: "https://expath.github.io/expath-cg/specs/http-client-2/",
+
+          wgURI: "https://www.w3.org/community/expath/",
+          wgPublicList: "public-expath",
+          repoURL: "https://github.com/expath/expath-cg/",
 
           // if this is a LCWD, uncomment and set the end of its review period
           // lcEnd: "2009-08-05",
@@ -38,10 +42,10 @@
           // editors, add as many as you like
           // only "name" is required
           editors: [
-              { name: "Christian Grün", url: "http://christian-gruen.de/",
-                company: "BaseX GmbH", companyURL: "http://basex.org/" },
-              { name: "Adam Retter", url: "http://adamretter.org.uk/",
-                company: "Evolved Binary", companyURL: "http://evolvedbinary.com/" }
+              { name: "Christian Grün", url: "https://christian-gruen.de/",
+                company: "BaseX GmbH", companyURL: "https://basex.org/" },
+              { name: "Adam Retter", url: "https://adamretter.org.uk/",
+                company: "Evolved Binary", companyURL: "https://evolvedbinary.com/" }
           ],
 
           // authors, add as many as you like.
@@ -73,11 +77,33 @@
           doRDFa: "1.1",
       };
     </script>
+    <style>
+      table.minborder {
+        border: 1px solid #000000;
+        border-collapse: collapse;
+        word-wrap: normal;
+        overflow-wrap: normal;
+        hyphens: manual;
+        font-size: smaller;
+      }
+      table.minborder tbody {
+        display: table-row-group;
+      }
+      table.minborder th {
+        border: 1px solid #000000;
+        text-align: start;
+      }
+      table.minborder td {
+        border: 1px solid #000000;
+        text-align: start;
+        padding-left: 5px;
+      }
+      .option-description {
+        vertical-align: top;
+      }
+    </style>
   </head>
   <body>
-    <!--<section id="sotd"/>
-    </section>-->
-
     <section id='abstract'>
       <p>
         This specification provides an HTTP client interface for XML languages.
@@ -86,6 +112,9 @@
         <a href='http://expath.org/spec/http-client'>HTTP Client Module</a>
         and has been designed to be compatible with [[!XQUERY-31]] and [[!XPATH-31]].
       </p>
+    </section>
+
+    <section id="sotd">
     </section>
 
     <section id='introduction'>
@@ -125,16 +154,17 @@
       <section id="http1-support">
         <h3>HTTP 1.0 Support</h3>
         <p>This module supports all features of HTTP 1.0. Although we do not provide explicit
-          functions for the <code>LINK</code> and <code>UNLINK</code> HTTP methods, as in practice
-          these methods do not appear to be widely used, they are still supported via the
-          <a>http:send</a> function.
+          functions for the <dfn data-cite="rfc1945#appendix-D.1.3">LINK</dfn> and
+          <dfn data-cite="rfc1945#appendix-D.1.4">UNLINK</dfn> HTTP methods, as in practice these
+          methods do not appear to be widely used, they are still supported via the
+          <a>http:send</a> function.</p>
       </section>
       <section id="http2-support">
         <h3>HTTP/2 Support</h3>
         <p>We acknowledge that HTTP/2 support is currently in its infancy. We have attempted to
-          design for a future version of this specification to extend control for HTTP/2 via.
-          extension points such as <code>$options</code> and further arity functions. We await
-          feedback from the users of the HTTP Client 2.0 spec, with regards to revisions for further
+          design for a future version of this specification to extend control for HTTP/2 via
+          extension points such as <a>$options</a> and further arity functions. We await
+          feedback from the users of this specification, with regards to revisions for further
           support of HTTP/2 features.</p>
       </section>
     </section>
@@ -148,21 +178,22 @@
         <li>All of them have been designed to send HTTP requests to a server, and to return the
           response to the client.</li>
         <li>The first parameter, <a>$uri</a>, contains the URI of the addressed server.</li>
-        <li>The <code>$body</code> parameter is explained in
-          <a href="#request-body" class="sectionRef"></a>.</li>
-        <li>In <a href="#request-options" class="sectionRef"></a>, the supported
-          <code>$options</code> are listed.</li>
+        <li>The <a>$body</a> parameter allows an entity body to be sent in the request.</li>
+        <li>The <a>$options</a> parameter is used to control the format, framing and transmission,
+            of the request.</li>
         <li>In <a href="#response" class="sectionRef"></a>, the format of the returned result is
           described.</li>
       </ul>
 
       <p>
+        <!-- TODO once HTTP Client 1.0 module is on W3C EXPath CG - we should add it to refspec.org
+          and link http:send-request below using a <dfn data-cite="... -->
         The legacy function <code>http:send-request</code> is still available; it is explained in
         detail in the original <a href='http://expath.org/spec/http-client'>HTTP Client Module</a>.
       </p>
 
       <section>
-        <h3>http:get</h3>
+        <h3><dfn>http:get</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:get($uri as xs:string) as map(xs:string, item())
@@ -170,42 +201,42 @@ http:get($uri as xs:string, $options as map(xs:string, item())) as map(xs:string
 </pre>
         </div>
         <p>
-          Sends a GET request to the supplied <code>$uri</code> and returns the response as a map.
-          Additional <code>$options</code> can be supplied.
+          Sends a GET request to the supplied <a>$uri</a> and returns the response as a map.
+          Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:post</h3>
+        <h3><dfn>http:post</dfn></h3>
         <div class="exampleInner">
           <pre>
-http:post($uri as xs:string, $body as item()?) as map(xs:string, item())
-http:post($uri as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
+http:post($uri as xs:string, $body as item()*) as map(xs:string, item())
+http:post($uri as xs:string, $body as item()*, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
-          Sends a POST request with an optional <code>$body</code> to the supplied
-          <code>$uri</code> and returns the response as a map. Additional <code>$options</code> can
+          Sends a POST request with an optional <a>$body</a> to the supplied
+          <a>$uri</a> and returns the response as a map. Additional <a>$options</a> can
           be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:put</h3>
+        <h3><dfn>http:put</dfn></h3>
         <div class="exampleInner">
           <pre>
-http:put($uri as xs:string, $body as item()?) as map(xs:string, item())
-http:put($uri as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
+http:put($uri as xs:string, $body as item()*) as map(xs:string, item())
+http:put($uri as xs:string, $body as item()*, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
-          Sends a PUT request with an optional <code>$body</code> to the supplied <code>$uri</code>
-          and returns the response as a map. Additional <code>$options</code> can be supplied.
+          Sends a PUT request with an optional <a>$body</a> to the supplied <a>$uri</a>
+          and returns the response as a map. Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:delete</h3>
+        <h3><dfn>http:delete</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:delete($uri as xs:string) as map(xs:string, item())
@@ -213,13 +244,13 @@ http:delete($uri as xs:string, $options as map(xs:string, item())) as map(xs:str
 </pre>
         </div>
         <p>
-          Sends a DELETE request to the supplied <code>$uri</code> and returns the response as a
-          map. Additional <code>$options</code> can be supplied.
+          Sends a DELETE request to the supplied <a>$uri</a> and returns the response as a
+          map. Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:head</h3>
+        <h3><dfn>http:head</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:head($uri as xs:string) as map(xs:string, item())
@@ -227,13 +258,13 @@ http:head($uri as xs:string, $options as map(xs:string, item())) as map(xs:strin
 </pre>
         </div>
         <p>
-          Sends a HEAD request to the supplied <code>$uri</code> and returns the response as a map.
-          Additional <code>$options</code> can be supplied.
+          Sends a HEAD request to the supplied <a>$uri</a> and returns the response as a map.
+          Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:options</h3>
+        <h3><dfn>http:options</dfn></h3>
         <div class="exampleInner">
           <pre>
 http:options($uri as xs:string) as map(xs:string, item())
@@ -241,22 +272,22 @@ http:options($uri as xs:string, $options as map(xs:string, item())) as map(xs:st
 </pre>
         </div>
         <p>
-          Sends an OPTIONS request to the supplied <code>$uri</code> and returns the response as a
-          map. Additional <code>$options</code> can be supplied.
+          Sends an OPTIONS request to the supplied <a>$uri</a> and returns the response as a
+          map. Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
       <section>
-        <h3>http:trace</h3>
+        <h3><dfn>http:trace</dfn></h3>
         <div class="exampleInner">
           <pre>
-http:trace($uri as xs:string, $body as item()?) as map(xs:string, item())
-http:trace($uri as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
+http:trace($uri as xs:string, $body as item()*) as map(xs:string, item())
+http:trace($uri as xs:string, $body as item()*, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
-          Sends a TRACE request with an optional <code>$body</code> to the supplied <code>$uri</code>
-          and returns the response as a map. Additional <code>$options</code> can be supplied.
+          Sends a TRACE request with an optional <a>$body</a> to the supplied <a>$uri</a>
+          and returns the response as a map. Additional <a>$options</a> can be supplied.
         </p>
       </section>
 
@@ -265,16 +296,16 @@ http:trace($uri as xs:string, $body as item()?, $options as map(xs:string, item(
         <div class="exampleInner">
           <pre>
 http:send($uri as xs:string, $method as xs:string) as map(xs:string, item())
-http:send($uri as xs:string, $method as xs:string, $body as item()?) as map(xs:string, item())
-http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as map(xs:string, item())) as map(xs:string, item())
+http:send($uri as xs:string, $method as xs:string, $body as item()*) as map(xs:string, item())
+http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as map(xs:string, item())) as map(xs:string, item())
 </pre>
         </div>
         <p>
-          Sends a custom HTTP request with the supplied <code>$method</code> and an optional
-          <code>$body</code> to the specified <code>$uri</code> and returns the response as a map.
-          Additional <code>$options</code> can be supplied. The <code>$method</code> should be
-          specified accoding to the appropriate specification, for HTTP this means in upper-case
-          characters.
+          Sends a custom HTTP request with the supplied $method and an optional
+          <a>$body</a> to the specified <a>$uri</a> and returns the response as a map.
+          Additional <a>$options</a> can be supplied. The $method should be
+          given according to the appropriate specification, for HTTP this means in upper-case
+          characters, e.g. <code>GET</code>.
         </p>
       </section>
     </section>
@@ -282,7 +313,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
     <section id='request'>
       <h2>The Request</h2>
       <p>
-        An HTTP request is made to a URI, and consists of a header section and an optional body section.
+        An HTTP request is made to a URI, and consists of headers and an optional entity body.
       </p>
 
       <section id="request-uri">
@@ -296,99 +327,175 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
       <section id='request-options'>
         <h3>Request Options</h3>
         <p>
-          The following options are available:
+          The following options can be specified via the <dfn>$options</dfn> parameter:
         </p>
 
-        <div class="ednote" title="CG">
-        </div>
-
-        <dl>
-          <dt><code>http-version</code> (<code>xs:string</code>)</dt>
-          <dd>The HTTP Version to use for the request. Default: 1.1.
-            Supported versions are <code>1.0</code>, <code>1.1</code>,
-            and <code>2.0</code>.
-          </dd>
-
-          <dt><code>headers</code> (<code>map(xs:string, xs:string)</code>)</dt>
-          <dd>HTTP header fields.</dd>
-
-          <dt><code>content-encoding</code> (<code>xs:string</code>)</dt>
-          <dd>Uses a specific content encoding for the request body.
-            Supported encodings are <code>gzip</code> and <code>deflate</code>.
-            NOTE: Setting the content-encoding option will override any content-encoding
-            HTTP header.
-          </dd>
-
-          <dt><code>transfer-encoding</code> (<code>xs:string</code>)</dt>
-          <dd>Uses a specific transfer encoding for the request body.
-            Supported encodings are <code>none</code> and <code>chunked</code>.
-            Default is <code>chunked</code> for HTTP 1.1, and <code>none</code>
-            for HTTP 1.0.
-            NOTE: Setting the transfer-encoding option will override any transfer-encoding
-            HTTP header.
-            NOTE: <code>chunked</code> is not supported on HTTP 1.0, such use will raise the
-            <a>http:version</a> error.
-          </dt>
-
-          <dt><dfn>multipart</dfn> (<code>xs:boolean</code>)</dt>
-          <dd>Indicates if the request body is a multipart request. Default: false.</dd>
-
-          <dt><code>permit-expired-ssl-certificate</code> (<code>xs:boolean</code>)</dt>
-          <dd>This allows HTTPS requests to still work when the server provides an SSL
-            certificate which has expired. Default: false.</dd>
-
-          <dt><code>permit-untrusted-ssl-certificate</code> (<code>xs:boolean</code>)</dt>
-          <dd>This allows HTTPS requests to still work when the server provides an SSL
-            certificate which is not trusted, this may be because the CA (Certificate Authority)
-            is unknown. Default: false.</dd>
-
-          <dt><code>follow-redirect</code> (<code>xs:boolean</code>)</dt>
-          <dd>Follow HTTP redirects. Default: true.</dd>
-
-          <dt><code>timeout</code> (<code>xs:decimal</code>)</dt>
-          <dd>Maximum number of seconds to wait for a response. Milliseconds may be specified using
-            the fractional digits of the xs:decimal e.g. 0.200 is 200 milliseconds.
-          </dd>
-
-          <dt><code>certificates</code> (<code>map(xs:string, item()+)+</code>)</dt>
-          <dd>Options for authenticating the client with the server using certificate(s). The type
-            and use of this option is implementation defined. Java implementations SHOULD use the
-            following definition:
-            <pre class="example" title="Certificates with a HTTP Client 2.0 Java Implementation">
-"certificates": (
-  map {
-    "trust": map {
-      "keystore": "/x/y/my-trust-store.jks",
-      "keystore-password": "trust-store-password",
-      "alias": "trust-certificate"
-    },
-    "client": map {
-      "keystore": "/x/y/my-client-store.jks",
-      "keystore-password": "client-store-password",
-      "alias": "my-certificate",
-      "password": "my-certificate-password"
-    }
-  }
-)
-            </pre>. In the above example the <code>alias</code> options are OPTIONAL.</dd>
-
-          <dt><code>username</code> (<code>xs:string</code>)</dt>
-          <dd>Authentication: username.</dd>
-
-          <dt><code>password</code> (<code>xs:string</code>)</dt>
-          <dd>Authentication: password.</dd>
-
-          <dt><code>auth-method</code> (<code>xs:string</code>)</dt>
-          <dd>Authentication method (Basic, Digest, possibly others). Default: Basic.</dd>
-
-          <dt><code>status-only</code> (<code>xs:boolean</code>)</dt>
-          <dd>Skip body in response. Default: false.</dd>
-
-          <dt><code>parse-response</code> (<code>xs:boolean</code>)</dt>
-          <dd>Indicates if the response bodies will be parsed (see
-          <a href="#response-bodies" class="sectionRef"></a>). Default: true.</dd>
-
-        </dl>
+        <table class="minborder">
+          <caption>Request Options</caption>
+          <colgroup>
+            <col span="1">
+            <col span="1">
+            <col span="1">
+            <col span="1" class="option-description">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Option Key</th>
+              <th>XDM Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><dfn>http-version</dfn></td>
+              <td><code>xs:string</code></td>
+              <td><code>1.1</code></td>
+              <td>
+                <p>The HTTP Version to use for the request.</p>
+                <p>Supported versions are <code>1.0</code>, <code>1.1</code>,
+                and <code>2.0</code>.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>headers</dfn></td>
+              <td><code>map(xs:string, xs:string)</code></td>
+              <td><code>empty-sequence()</code></td>
+              <td>HTTP header fields.</td>
+            </tr>
+            <tr>
+              <td><dfn>content-encoding</dfn></td>
+              <td><code>xs:string</code></td>
+              <td><code>none</code></td>
+              <td>
+                <p>Uses a specific content encoding for the request body.</p>
+                <p>Supported encodings are <code>none</code>, <code>gzip</code>, and
+                  <code>deflate</code>.</p>
+                <p><strong>NOTE:</strong> Setting this option will override any
+                  <code>Content-Encoding</code> HTTP header.</p></td>
+            </tr>
+            <tr>
+              <td><dfn>transfer-encoding</dfn></td>
+              <td><code>xs:string</code></td>
+              <td>
+                <ul>
+                  <li><code>none</code> for HTTP 1.0</li>
+                  <li><code>chunked</code> for HTTP 1.1, and 2.0</li>
+                </ul>
+              </td>
+              <td>
+                <p>Uses a specific transfer encoding for the request body.</p>
+                <p>Supported encodings are <code>none</code> and <code>chunked</code>.</p>
+                <p><strong>NOTE</strong>: Setting this option will override any
+                  <code>Transfer-Encoding</code> HTTP header.</p>
+                <p><strong>NOTE</strong>: <code>chunked</code> is not supported on HTTP 1.0, such
+                  use MUST raise the <a>http:version</a> error.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>multipart</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>false()</code></td>
+              <td>
+                <p>Indicates if the entity body in <a>$body</a> is a multipart entity body.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>permit-expired-ssl-certificate</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>false()</code></td>
+              <td>
+                <p>This allows HTTPS requests to still work when the server provides an SSL
+                  certificate which has expired.</p></td>
+            </tr>
+            <tr>
+              <td><dfn>permit-untrusted-ssl-certificate</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>false()</code></td>
+              <td>
+                <p>This allows HTTPS requests to still work when the server provides an SSL
+                  certificate which is not trusted, this may be because the CA (Certificate Authority)
+                  is unknown.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>follow-redirect</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>false()</code></td>
+              <td><p>Follow HTTP redirects from the server.</p></td>
+            </tr>
+            <tr>
+              <td><dfn>timeout</dfn></td>
+              <td><code>xs:decimal</code></td>
+              <td><code>120</code></td>
+              <td>
+                <p>Maximum number of seconds to wait for a response. Milliseconds may be specified
+                  using the fractional digits of an <code>xs:decimal</code> e.g. <code>0.200</code>
+                  is 200 milliseconds.</p>
+                <p>The value <code>-1</code> indicates that no timeout should be imposed</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>certificates</dfn></td>
+              <td><code>map(xs:string, item()+)+</code></td>
+              <td><code>empty-sequence()</code></td>
+              <td>
+                <p>Options for authenticating the client with the server using certificate(s). The type
+                  and use of this option is implementation defined.</p>
+                <p><strong>NOTE</strong>: Java implementations SHOULD use the
+                  definition defined in
+                  <a href="#certificates-option-format-for-java-implementations" class="sectionRef"></a>.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>auth-method</dfn></td>
+              <td><code>xs:string</code></td>
+              <td><code>Basic</code></td>
+              <td>
+                <p>HTTP Authentication method.</p>
+                <p>Supported values are: <code>Basic</code>, and <code>Digest</code>.</p>
+                <p>Implementations are free to define additional authentication methods.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>username</dfn></td>
+              <td><code>xs:string</code></td>
+              <td></td>
+              <td>
+                <p>Authentication: username.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>password</dfn></td>
+              <td><code>xs:string</code></td>
+              <td></td>
+              <td>
+                <p>Authentication: password.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>status-only</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>false()</code></td>
+              <td>
+                <p>Ignore the headers and body in the HTTP response.</p>
+                <p>This may be used to save resources on parsing the response when the user is
+                  only interested in the response code.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><dfn>parse-response-entity-body</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>true()</code></td>
+              <td>
+                <p>Indicates if the response bodies will be parsed (see
+                  <a href="#response-bodies" class="sectionRef"></a>).</p>
+                <p>When set to <code>true()</code>, if <a>status-only</a> is also set to
+                  <code>true()</code>, the error <a>http:invalid-option</a> MUST be raised.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         <pre class="example" title="GET request with User-Agent header, skip body in response">
           http:get('http://expath.org/xyz', map {
@@ -414,30 +521,36 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         </p>
       </section>
 
-      <section id='request-body'>
-        <h3>Request Body</h3>
+      <section id='request-entity-body'>
+        <h3>The Request Entity Body</h3>
         <p>
-          Some HTTP methods (such as <code>POST</code> and <code>PUT</code>, and others that are
-          less common) transmit a request body. The functions in this module use the
-          <dfn>$body</dfn> parameter to supply this.
+          Some HTTP methods (such as <code>POST</code>, <code>PUT</code>, and others that are
+          less common) transmit an <dfn data-cite="rfc1945#section-7.2">entity body</dfn> (often
+          colloquially shortened to the "<dfn>Request Body</dfn>"). The functions in this module use
+          the <dfn>$body</dfn> parameter to supply this.
         </p>
         <p>
-          If the supplied value, or the value of a multipart body, has any other type than
-          described in the following, the <a>http:body</a> error MUST be raised.
+          If the value supplied as the <a>$body</a> parameter is an empty sequence, the
+          corresponding request's <a>entity body</a> will be omitted.
+        </p>
+        <p>
+          If the supplied value, or the value(s) of a multipart entity body, have any other type
+          than described in ths section, the <a>http:body</a> error MUST be raised.
           The <a>http:serialize</a> error MUST be raised if an error occurs whilst serializing an
           item (e.g. because a supplied map cannot be serialized as JSON).
         </p>
 
-        <section id='single-entity'>
-          <h4><dfn>Single Entity Request</dfn></h4>
- 
+        <section id='single-entity-body'>
+          <h4><dfn>Single Entity Body Request</dfn></h4>
           <p>
             By default, or if the <a>multipart</a> option is set to <code>false</code>,
-            a single entity will be sent in the requests entity body.
-            If the <a>$body</a> is an empty sequence, the corresponding request's entity body will
-            be empty. Otherwise, the value must have one of the following types:
+            a <dfn>single entity</dfn> will be sent in the request's <a>entity body</a>.
           </p>
-  
+          <p>   
+            For a <a>single entity</a>, the value for the <a>$body</a> parameter must have one of
+            the following types:
+          </p>
+
           <dl>
             <dt><code>xs:base64Binary</code>, <code>xs:hexBinary</code></dt>
             <dd>Value will be sent as binary data, the media type will be
@@ -457,9 +570,10 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           </dl>
 
           <p>
-            The evaluated media type will be assigned as value of the <code>Content-Type</code> header
-            unless a value has been supplied by the user. For multipart requests, each media type
-            will be sent as the <code>Content-Type</code> header in the corresponding multipart header section.
+            The evaluated media type will be assigned as the value of the <code>Content-Type</code>
+            header unless a value has been supplied by the user in <a>headers</a>. For multipart
+            requests, each media type will be sent as the <code>Content-Type</code> header in the
+            corresponding multipart header section.
           </p>
 
           <pre class="example"
@@ -482,23 +596,28 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           </pre>
         </section>
 
-        <section id='multipart-entity'>
-          <h4><dfn>Multipart Entity Request</dfn></h4>
-          <p>Multipart provides for the encapsulation of several entities within the requests
-            entity body.</p>
-          <p>
-            A multipart request will be sent if the <a>multipart</a> option is set to
-            <code>true</code>. All body items must have the type
-            <code>map(xs:string, item())</code> and the format
-            <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
-            If the <code>body</code> entry is not supplied, or if it is an empty sequence,
-            the error <a>http:body</a> MUST be raised.
-          </p>
+        <section id='multipart-entity-body'>
+  <h4><dfn>Multipart Entity Body Request</dfn></h4>
+  <p>
+    <dfn data-cite="rfc1945#section-3.6.2">Multipart Types</dfn> provides for the encapsulation
+    of several entities (aka <em>parts</em>) within the request's <a>entity body</a>.
+  </p>
+  <p>
+    An entity body of multiple parts, wherein each part is itself an entity, will be sent
+    if the <a>multipart</a> option is set to <code>true</code>.
+  </p>
+  <p>
+    The <a>$body</a> parameter allows one or more entities to be provided;
+    Each entity MUST have the type <code>map(xs:string, item())</code>, and the format:
+    <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
+    If the <code>body</code> entry is not supplied, or if it is an empty sequence,
+    the error <a>http:body</a> MUST be raised.
+  </p>
 
-          <p>
-            The <code>$part-body</code> value will be parsed as a <a>Single Entity Request</a>.
-            If no <code>Content-Type</code> header is supplied for the specific part, the resulting
-            media type will be assigned.
+  <p>
+    The <code>$part-body</code> value will be parsed as a <a>Single Entity</a>.
+    If no <code>Content-Type</code> header is supplied in the for the specific part, the resulting
+    media type will be assigned.
           </p>
 
           <pre class="example" title="Multipart Entity Request">
@@ -611,7 +730,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
       </dl>
 
       <p>
-        <a>http:parse</a> will be raised if an error occurs while parsing the body.
+        The error <a>http:parse</a> will be raised if an error occurs while parsing the body.
       </p>
 
       <pre class="example" title="Multipart response">
@@ -647,10 +766,10 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
           or the implicit conversion of response bodies might not match the client’s requirements.
         </p>
         <p>
-          Parsing of the response body can be disabled via the <code>parse-response</code> option.
-          All bodies of single and multipart responses will be returned as binary items of type
-          <code>xs:base64Binary</code>, and the values can be processed (stored, parsed, forwarded)
-          in a second step.
+          Parsing of the response body can be disabled via the <a>parse-response-entity-body</a>
+          option. All bodies of single and multipart responses will be returned as binary items
+          of type <code>xs:base64Binary</code>, and the values can be processed (stored, parsed,
+          forwarded) in a second step.
         </p>
 
         <pre class="example" title="XQuery example for parsing response bodies">
@@ -681,7 +800,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
         
           local:parse(
             http:get('http://expath.org/xyz',
-            map { 'parse-response': false() })
+            map { 'parse-response-entity-body': false() })
           )
         </pre>
         
@@ -699,7 +818,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
               – Only works for single bodies.<br>
             </dd>
   
-            <dt><code>parse-response</code>
+            <dt><code>parse-response-entity-body</code>
               (<code>function(xs:base64Binary, xs:string) as item()</code>):</dt>
             <dd>
               Alternative 2. Override the default parsing behavior. Parameters: body, Content-Type
@@ -712,7 +831,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
                 result.<br>
             </dd>
   
-            <dt><code>parse-response</code>
+            <dt><code>parse-response-entity-body</code>
               (<code>function(xs:base64Binary, map(xs:string, xs:string)) as item()</code>):</dt>
             <dd>
               Alternative 2. Parameters: body, response headers.<br>
@@ -720,7 +839,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
               – Response handling may get too low-level and technical.<br>
             </dd>
   
-            <dt><code>parse-response</code> (<code>function(item()) as item()</code>):</dt>
+            <dt><code>parse-response-entity-body</code> (<code>function(item()) as item()</code>):</dt>
             <dd>
               Alternative 3. Parameters: parsed body (xs:string, xs:base64Binary,
               document-node())<br>
@@ -728,7 +847,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
               – May fail if server supplies wrong encoding for string conversions.<br>
             </dd>
   
-            <dt><code>parse-response</code> (<code>xs:boolean</code>):<br></dt>
+            <dt><code>parse-response-entity-body</code> (<code>xs:boolean</code>):<br></dt>
             <dd>
               Alternative 4: If disabled, return single and multipart bodies as xs:base64Binary.<br>
               + Multipart responses could still be parsed.<br>
@@ -742,6 +861,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
 
     <section id='errors'>
       <h2>Errors</h2>
+      <p>This section defines and describes the error codes that may be raised by the module.</p> 
       <dl>
         <dt><dfn>http:body</dfn></dt>
         <dd>A request body argument has an invalid type.</dd>
@@ -759,11 +879,34 @@ http:send($uri as xs:string, $method as xs:string, $body as item()?, $options as
       </dl>
     </section>
 
-    <section class="appendix">
+    <section class="appendix informative">
+      <h2>Certificates Option format for Java implementations</h2>
+      <pre class="example" title="Certificates with a HTTP Client 2.0 Java Implementation">
+"certificates": (
+  map {
+    "trust": map {
+      "keystore": "/x/y/my-trust-store.jks",
+      "keystore-password": "trust-store-password",
+      "alias": "trust-certificate"
+    },
+    "client": map {
+      "keystore": "/x/y/my-client-store.jks",
+      "keystore-password": "client-store-password",
+      "alias": "my-certificate",
+      "password": "my-certificate-password"
+    }
+  }
+)
+      </pre>
+      <p><strong>NOTE</strong>: In the above example the <code>alias</code> options are OPTIONAL.</p>
+    </section>
+
+    <section class="appendix informative">
       <h2>Acknowledgements</h2>
       <p>
-        Many thanks to Robin Berjon for making the production of this specification much simpler
-        with his cool ReSpec tool.
+        Many thanks to <a href="https://berjon.com/">Robin Berjon</a> for making the production of
+        this specification much simpler by starting the
+        <a href="https://github.com/w3c/respec">ReSpec</a> tool project.
       </p>
     </section>
   </body>
