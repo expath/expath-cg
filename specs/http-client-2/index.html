@@ -793,7 +793,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
               html:parse($body)
             ) else if(starts-with($type, 'multipart/') then (
               (: parse multipart entries recursively :)
-              for $part in $body?*
+              for $part in $body
               return local:parse($part)
             ) else (
               error(xs:QName('http:parse'), 'Type not supported: ' || $type)
