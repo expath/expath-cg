@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="houtil-before-first">
+   <description>Tests for the higher-order houtil:before-first function</description>
+   
+   <!-- Tests derived from the test set for fn:filter -->
+   
+   <link type="spec" document="http://www.w3.org/TR/xpath-functions-30/" idref="func-filter"/>
+
+
+   <dependency type="spec" value="XP30+ XQ30+"/>
+   <dependency type="feature" value="higherOrderFunctions"/>
+
+   <test-case name="houtil-before-first-001">
+      <description>Basic test using starts-with()</description>
+      <created by="Michael Kay" on="2018-08-29"/>
+      <test>houtil:before-first(("apple", "pear", "apricot", "advocado", "orange"), starts-with(?, "p"))</test>
+      <result>
+         <assert-deep-eq>"apple"</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-before-first-002">
+      <description>Test using an inline user-defined function</description>
+      <created by="Michael Kay" on="2010-02-10"/>
+      <test>houtil:before-first((12, 4, 46, 23, -8), function($x){$x gt 40})</test>
+      <result>
+         <assert-deep-eq>12, 4</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-before-first-003">
+      <description>Test using an inline user-defined function</description>
+      <created by="Michael Kay" on="2010-02-10"/>
+      <environment>
+         <source role="." file="filter/filter003.xml">
+            <description/>
+            <created by="Michael Kay" on="2010-02-10"/>
+         </source>
+      </environment>
+      <dependency type="spec" value="XQ30+"/>
+      <test>let $data := (/employees) return houtil:before-first($data/emp, function($x as
+         element(emp)){xs:int($x/@salary) lt 300})</test>
+      <result>
+         <all-of>
+            <assert-count>3</assert-count>
+            <assert-type>element(emp)*</assert-type>
+            <assert>$result/@name = 'john'</assert>
+            <assert>$result/@name = 'anne'</assert>
+            <assert>$result/@name = 'kumar'</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-before-first-004">
+      <description>Test using an inline user-defined function</description>
+      <created by="Michael Kay" on="2010-02-10"/>
+      <test>(1 to 20)[. = houtil:before-first(1 to position(), function($x){$x idiv 2 * 2 = $x})]</test>
+      <result>
+         <assert-deep-eq>2, 4, 6, 8, 10, 12, 14, 16, 18, 20</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-before-first-006">
+      <description>Filter returns an untyped node that can be cast to boolean</description>
+      <created by="Michael Kay" on="2015-03-12"/>
+      <dependency type="spec" value="XQ30+"/>
+      <test><![CDATA[
+            houtil:before-first((1 to 20), function($i){<a>{1 - ($i mod 2)}</a>})
+        ]]></test>
+      <result>
+         <assert-deep-eq>2, 4, 6, 8, 10, 12, 14, 16, 18, 20</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-before-first-901">
+      <description>"before-first" function - not a boolean</description>
+      <created by="Michael Kay" on="2010-02-10"/>
+      <test>houtil:before-first(("apple", "pear", "apricot", "advocado", "orange"), normalize-space#1)</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-before-first-902">
+      <description>"before-first" function - returns empty sequence </description>
+      <created by="Michael Kay" on="2010-02-10"/>
+      <test>houtil:before-first(("apple", "pear", "apricot", "advocado", "orange"),
+         function($x){if(starts-with($x,'a')) then true() else ()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-before-first-903">
+      <description>"before-first" function - returns non-singleton sequence</description>
+      <created by="Michael Kay" on="2010-02-10"/>
+      <test>houtil:before-first( ("apple", "pear", "apricot", "advocado", "orange"),
+         function($x){if(starts-with($x,'a')) then (true(), true()) else false()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-before-first-904">
+      <description>"before-first" function - item in sequence is of wrong type</description>
+      <created by="Michael Kay" on="2010-02-10"/>
+      <test>houtil:before-first(("apple", "pear", "apricot", "advocado", "orange", current-date()), ends-with(?, 'e'))</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-911">
+      <description>Attempts to evaluate the "before-first" function with no arguments.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first()</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-912">
+      <description>Attempts to reference the "before-first" function with arity zero.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first#0</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-913">
+      <description>Attempts to evaluate the "before-first" function with one argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( fn:boolean#1 )</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-914">
+      <description>Attempts to reference the "before-first" function with arity one.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first#1</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-915">
+      <description>Attempts to reference the "before-first" function with arity two.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>fn:exists( houtil:before-first#2 )</test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-916">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="feature" value="staticTyping"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>( houtil:before-first( (), if ( fn:current-dateTime() eq fn:dateTime( fn:current-date(),
+         fn:current-time() )) then fn:exists#1 else 1 ), fn:filter( (), if ( fn:current-dateTime()
+         eq fn:dateTime( fn:current-date(), fn:current-time() )) then 1 else fn:exists#1 ) )</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-917">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="feature" value="staticTyping"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( (), if ( fn:current-dateTime() eq fn:dateTime( fn:current-date(),
+         fn:current-time() )) then fn:exists#1 else 1 )</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-918">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <dependency type="feature" value="staticTyping"/>
+      <test>houtil:before-first( (), fn:true() )</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-919">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <dependency type="feature" value="staticTyping"/>
+      <test>houtil:before-first( (), fn:true() )</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-920">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( (), function($a as item()) as xs:boolean* { fn:boolean($a), fn:boolean($a) }
+         )</test>
+      <result>
+         <any-of>
+            <error code="XPST0005"/>
+            <assert-empty/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-921">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( (), function($a as item()) as xs:boolean? { () } )</test>
+      <result>
+         <any-of>
+            <error code="XPST0005"/>
+            <assert-empty/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-922">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <modified by="Michael Kay after Tim Mills" on="2012-05-31" change="See bug 17250"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( (), fn:string#1 )</test>
+      <result>
+         <any-of>
+            <error code="XPTY0004"/>
+            <error code="XPST0005"/>
+            <assert-empty/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-923">
+      <description>Evaluates the "before-first" function with $seq set to a mix of item types </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <environment>
+         <source role="." file="filter/houtil-before-first-012.xml">
+            <description/>
+            <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+         </source>
+      </environment>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( (//node(), 1, "string", 3.14, 2.7e0, fn:exists#1), function($arg) { $arg
+         instance of function(*) } )</test>
+      <result>
+         <assert-count>1</assert-count>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-924">
+      <description>Evaluates the "before-first" function with $f set to a function which _could_ (but
+         doesn't) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( 1 to 10, function($arg) { if ($arg eq 100) then () else fn:true()})</test>
+      <result>
+         <assert-count>10</assert-count>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-925">
+      <description>Evaluates the "before-first" function with $f set to a function which _could_ (and
+         does) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( 1 to 10, function($arg) { if ($arg eq 10) then () else fn:true()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-926">
+      <description>Evaluates the "before-first" function with $f set to a function which _could_ (but
+         doesn't) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="feature" value="staticTyping"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( 1 to 10, function($arg) { if ($arg eq 100) then () else fn:true()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-927">
+      <description>Evaluates the "before-first" function with $f set to a function which _could_ (but
+         doesn't) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>fn:filter( 1 to 10, function($arg) { if ($arg eq 100) then 0 else fn:true()})</test>
+      <result>
+         <assert-count>10</assert-count>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-928">
+      <description>Evaluates the "before-first" function with $f set to a function which _could_ (and
+         does) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( 1 to 10, function($arg) { if ($arg eq 10) then 0 else fn:true()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-929">
+      <description>Evaluates the "before-first" function with $f set to a function which _could_ (but
+         doesn't) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="feature" value="staticTyping"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( 1 to 10, function($arg) { if ($arg eq 100) then 0 else fn:true()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-930">
+      <description>Evaluates the "before-first" function with $f set to a function which _could_ (but
+         doesn't) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( 1 to 10, function($arg) { if ($arg eq 100) then (fn:true(), fn:false()) else
+         fn:true()})</test>
+      <result>
+         <assert-count>10</assert-count>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-931">
+      <description>Evaluates the "before-first" function with $f set to a function which _could_ (and
+         does) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( 1 to 10, function($arg) { if ($arg eq 10) then (fn:true(), fn:false()) else
+         fn:true()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-932">
+      <description>Evaluates the "before-first" function with $f set to a function which _could_ (but
+         doesn't) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="feature" value="staticTyping"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( 1 to 10, function($arg) { if ($arg eq 100) then (fn:true(), fn:false()) else
+         fn:true()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-before-first-933">
+      <description>Evaluates the "before-first" function with $f set to a function which expects integers,
+         but is supplied with strings.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="feature" value="staticTyping"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:before-first( ("1", "2", "3"), function($arg as xs:integer) as xs:boolean { $arg eq 100 }
+         )</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+</test-set>

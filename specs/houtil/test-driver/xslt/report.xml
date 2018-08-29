@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<r:test-suite-result xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                     xmlns:r="http://www.w3.org/2012/11/xslt30-test-results">
+   <r:test-run dateRun="2018-03-15Z" testsuiteVersion="3.0.1"/>
+   <r:test-case set="match" name="match-260" result="pass"/>
+</r:test-suite-result>
