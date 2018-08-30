@@ -2,9 +2,9 @@
 <html>
   <head>
     <title>HTTP Client Module 1.0</title>
-    <meta charset='utf-8'>
-    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove'></script>
-    <script class='remove'>
+    <meta charset="utf-8">
+    <script src="https://www.w3.org/Tools/respec/respec-w3c-common" class="remove"></script>
+    <script class="remove">
       var respecConfig = {
           // the CG
           wg: "EXPath Community Group",
@@ -34,19 +34,18 @@
 
           doRDFa: "1.1",
 
-          // TODO once HTTP Client 1.0 module is on W3C EXPath CG - we should submit it to
-          // specref.org and remove it from here
+          // references that do not exist on specref
           // localBiblio: {
-          //   "expath-http-client-10": {
-          //     title: "EXPath HTTP Client Module 1.0",
-          //     href: "https://expath.org/spec/http-client",
-          //     status: "CR",
-          //     publisher: "EXPath",
+          //   "some-label": {
+          //     title: "The title",
+          //     href: "https://example.org/the-stuff",
+          //     status: "REC",
+          //     publisher: "Xyz",
           //     authors: [
-          //       "Florent Georges",
+          //       "Bla bla",
           //     ],
           //     versions: [
-          //       "expath-http-client-10-20100109",
+          //       "version-tag-20100109",
           //     ]
           //   }
           // },
@@ -176,7 +175,7 @@
   </head>
   <body>
 
-    <section id='abstract'>
+    <section id="abstract">
       <p>
         This proposal provides an HTTP client interface for XPath 2.0.  It
         defines one extension function to perform HTTP requests, and has been
@@ -184,16 +183,11 @@
         other XPath 2.0 usage.
       </p>
     </section>
-    <section id='sotd'>
+    <section id="sotd">
     </section>
 
     <section>
       <h2>Introduction</h2>
-      <ul>
-        <li>TODO: Add @href to http:response, taking redirects into account.</li>
-        <li>TODO: Do not we want 'hex' and 'base64' serialization methods instead of 'binary'? (or
-            in addition to?)</li>
-      </ul>
       <section>
 	<h3>Namespace conventions</h3>
         <p>The module defined by this document does define one function in the namespace
@@ -310,8 +304,8 @@
           <li><code>http-version</code> is the version of HTTP to use. It must be either the
             string <code>1.0</code> or <code>1.1</code>. Default is implementation-defined.  An
             implementation SHOULD support both and the default SHOULD be
-            <code>1.1</code>. If the value specified is not supported by a specific
-            implementation, it should throw an appropriate error message <bibref ref="errHC007"/>.</li>
+            <code>1.1</code>. If the value specified is not supported by a specific implementation,
+            it should throw an appropriate error message <a href="#dfn-errHC007">err:HC007</a>.</li>
           <li><code>status-only</code> control how the response will look like; if it is true, only
             the status code and the headers are returned, the content is not (no http:body nor
             http:multipart, nor the interpreted additional value in the returned sequence, see
@@ -330,7 +324,7 @@
             to following a first redirect).</li>
           <li><code>timeout</code> is the maximum number of seconds to wait for the server to
             respond. If this time duration is reached, an error is thrown
-            <bibref ref="errHC006"/>. (TODO: Allow one to ask for an empty sequence instead?)</li>
+            <a href="#dfn-errHC006">err:HC006</a>.</li>
           <li><code>http:header</code> represent an HTTP header, either in the
             <code>http:request</code> or in the <code>http:response</code> elements, as defined
             below.</li>
@@ -382,13 +376,13 @@
           the children of the <code>http:body</code> element. When this attribute is used, only
           the <code>media-type</code> attribute must also be present, and there can be neither
           content in the <code>http:body</code> element, nor any other attribute, or this is an
-          error <bibref ref="errHC004"/>.</p>
+          error <a href="#dfn-errHC004">err:HC004</a>.</p>
         <p>All the attributes, except <code>src</code>, are used to set the corresponding
-          serialization parameter defined in <bibref ref="xserial"/>, as defined for the XPath 2.1
-          function <code>fn:serialize()</code> <bibref ref="fo11"/>. Those attributes can be given
-          by the user on a request to control the way a part body is serialized. In the response,
-          the implementation can, but is not required, to provide some of them if it has the
-          corresponding information (some of them do not make any sense in a response, therefore
+          serialization parameter defined in [[!xslt-xquery-serialization]], as defined for the
+          XPath 3.0 function <code>fn:serialize()</code> [[!xpath-functions-30]]. Those attributes
+          can be given by the user on a request to control the way a part body is serialized. In the
+          response, the implementation can, but is not required, to provide some of them if it has
+          the corresponding information (some of them do not make any sense in a response, therefore
           they will never be on a response element, for instance <code>version</code>).</p>
         <p>The <code>http:multipart</code> element represents an HTTP multi-part request or
           response:</p>
@@ -416,7 +410,7 @@
           as follow.</p>
         <p>Except when its attribute <code>src</code> is present, a <code>http:request</code>
           element can have several attributes representing serialization parameters, as defined in
-          <bibref ref="xserial"/>. This spec defines in addition the method
+          [[!xslt-xquery-serialization]]. This spec defines in addition the method
           <code>'binary'</code>; in this case the body content must be either an xs:hexBinary or an
           xs:base64Binary item, and no other serialization parameter can be set
           besides <code>media-type</code>.</p>
@@ -444,40 +438,116 @@
           attributes have been set, <code>username</code> must be set too.</p>
         <p>The attribute <code>auth-method</code> can be either <code>"Basic"</code> or
           <code>"Digest"</code>, but other values can also be used, in an implementation-defined
-          way.  The handling of those attributes must be done in conformance to
-          <bibref ref="rfc2617"/>.  If <code>send-authorization</code> is true (default value is
-          false) and the authentication method supports generating the
-          header <code>Authorization</code> without challenge, the request contains this header.
-          The default value is to send a non-authenticated request, and if the response is an
-          authentication challenge, then only send the credentials in a second message.</p>
+          way.  The handling of those attributes must be done in conformance to [[!rfc2617]].
+          If <code>send-authorization</code> is true (default value is false) and the authentication
+          method supports generating the header <code>Authorization</code> without challenge, the
+          request contains this header.  The default value is to send a non-authenticated request,
+          and if the response is an authentication challenge, then only send the credentials in a
+          second message.</p>
       </section>
     </section>
 
     <section>
-      <h2>Errors</h2>
-      <p>Bla bla bla.  TODO: Still to copy and paste...</p>
-      <dl>
-	<dt><dfn id="dfn-errHC001">err:HC001</dfn></dt>
-	<dd>Bla bla bla</dd>
-      </dl>
+      <h2>Dealing with the response</h2>
+      <p>After having sent the request to the HTTP server, the function waits for the response.
+        It analyses it and returns a sequence representing this response.  This sequence has
+        an <code>http:response</code> element as first item, which is followed be an additional
+        item for each body or body part in the response.</p>
+
+      <section>
+        <h3>The result element</h3>
+        <div class="proto">
+          <pre>
+&lt;http:response status = integer
+               message = string>
+   &lt;!-- Content: (http:header*, (http:body|http:multipart)?) -->
+&lt;/http:response></pre>
+        </div>
+        <p>This is the first item returned by the function defined in this module.
+          The <code>status</code> attribute is the HTTP status code returned by the server,
+          and <code>message</code> is the message coming with the status on the status line.
+          The <code>http:header</code> elements are as defined for the request, but represent
+          instead the response headers.  The <code>http:body</code>
+          and <code>http:multipart</code> elements are also like in the request, but
+          <code>http:body</code> elements must be empty.</p>
+      </section>
+
+      <section>
+        <h3>Representing the result content</h3>
+        <p>Instead of being inserted within the <code>http:response</code> element, the content of
+          each body is returned as a single item in the return sequence.  Each item is in the same
+          order (after the <code>http:response</code> element) than the <code>http:body</code>
+          elements.  For each body, the way this item is built from the HTTP response is as
+          follow.</p>
+        <p>If the <code>status-only</code> attribute has the value <code>true</code> (default
+          is <code>false</code>), the returned sequence will only contain the
+          <code>http:response</code> element (with the headers, but also the empty
+          <code>http:body</code> or <code>http:multipart</code> elements, as if
+          <code>status-only</code> was false), and the following items, representing the bodies
+          content are not generated from the HTTP response.</p>
+        <p>For each body that has to be interpreted, the following rules apply in order to build the
+          corresponding item.  If the body media type is a text media type, the item is a string,
+          containing the body content.  If the media type is an XML media type, the content is
+          parsed and the item is the resulting document node.  If the media type is an HTML type,
+          the content is <emph>tidied up</emph> and parsed (this process is
+          implementation-dependant) and the item is the resulting document node.  If this is a
+          binary media type, the content is returned as a base64Binary item.  From the previous
+          rules, a result item can then be either a document node (from XML or HTML), a string or a
+          base64Binary.</p>
+        <p>When the type of a part is either XML or HTML, its body has to be parsed into a document
+          node. If there is any error when parsing the content, an error is raised with an
+          appropriate message <a href="#dfn-errHC002">err:HC002</a>.</p>
+        <p>If the attribute <code>override-media-type</code> is set on the request, its value is
+          used instead of the Content-Type returned by the HTTP server. If the Content-Type of the
+          response is a multipart type, the value of <code>override-media-type</code> can only be a
+          multipart type, or <code>application/octet-stream</code> (to get the raw entity as a
+          binary item). If it is not, this is an error <a href="#dfn-errHC003">err:HC003</a>.</p>
+      </section>
     </section>
 
     <section>
-      <h2>An example - <dfn>Foo</dfn> interface</h2>
+      <h2>Content types handling</h2>
+      <p>In both requests and responses, MIME type strings are used to choose the way the entity
+        content has to be respectively serialized or parsed.  Four different kinds of type are
+        defined here, which are used in the above text about sending request and receiving response.
+        The intent is to provide the spirit of the entity content handling regarding its content
+        type, but an implementation is encouraged to deviate from those rules if it is obvious that
+        a particular type should be treated in a specific way (normally, that would be the case only
+        to treat a binary type as another type).</p>
+      <ul>
+        <li>An XML media type has a MIME type of <code>text/xml</code>,
+          <code>application/xml</code>, <code>text/xml-external-parsed-entity</code>,
+          or <code>application/xml-external-parsed-entity</code>, as defined in [[!rfc3023]] (except
+          that <code>application/xml-dtd</code> is considered a text media type).  MIME types ending
+          by <code>+xml</code> are also XML media types.</li>
+        <li>An HTML media type has a MIME type of <code>text/html</code>.</li>
+        <li>Text media types are the remaining types beginning with <code>text/</code>.</li>
+        <li>Binary types are all the other types.  An implementation can treat some of those binary
+          types as either an XML, HTML or text media type if it is more appropriate (this is
+          implementation-defined).</li>
+      </ul>
+    </section>
 
-      <div class="proto">
-        <code class="function">fn:document-uri</code>(<code class="arg">$arg</code><code class="as">&nbsp;as&nbsp;</code><code class="type">node()?</code>)<code class="as"> as </code><code class="return-type">xs:anyURI?</code>
-      </div>
-
-      <div class="example">
-	<div class="exampleHeader">Yo</div>
-	<p>Bla bla bla</p>
-	<div class="exampleInner">
-	  <pre>
-some/example/fn:call()</pre>
-        </div>
-	<p>Bla bla bla</p>
-      </div>
+    <section class="appendix">
+      <h2>Summary of Error Conditions</h2>
+      <dl>
+        <dt><dfn id="dfn-errHC001">err:HC001</dfn></dt>
+        <dd>An HTTP error occurred.</dd>
+        <dt><dfn id="dfn-errHC002">err:HC002</dfn></dt>
+        <dd>Error parsing the entity content as XML or HTML.</dd>
+        <dt><dfn id="dfn-errHC003">err:HC003</dfn></dt>
+        <dd>With a multipart response, the override-media-type must be either a multipart media type
+          or application/octet-stream.</dd>
+        <dt><dfn id="dfn-errHC004">err:HC004</dfn></dt>
+        <dd>The src attribute on the body element is mutually exclusive with all other attribute
+          (except the media-type).</dd>
+        <dt><dfn id="dfn-errHC005">err:HC005</dfn></dt>
+        <dd>The request element is not valid.</dd>
+        <dt><dfn id="dfn-errHC006">err:HC006</dfn></dt>
+        <dd>A timeout occurred waiting for the response.</dd>
+        <dt><dfn id="dfn-errHC007">err:HC007</dfn></dt>
+        <dd>The specified HTTP version is not supported by this implementation.</dd>
+      </dl>
     </section>
 
   </body>
