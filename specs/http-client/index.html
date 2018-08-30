@@ -5,80 +5,32 @@
     <meta charset='utf-8'>
     <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove'></script>
     <script class='remove'>
-      // var respecConfig = {
-      //   specStatus: "ED",
-      //   editors: [{
-      //     name: "Your Name",
-      //     url: "http://your-site.com",
-      //   }],
-      //   github: "https://github.com/w3c/some-spec",
-      //   shortName: "dahut",
-      //   wg: "EXPath Community Group"
-      // };
-
       var respecConfig = {
-          // specification status (e.g. WD, LCWD, NOTE, etc.). CG-DRAFT and CG-FINAL for CG reports
-          specStatus: "CG-DRAFT",
-
-          // if your specification has a subtitle that goes below the main
-          // formal title, define it here
-          //subtitle: "EXPath Candidate Module 9 January 2010",
-
-          // if you wish the publication date to be other than today, set this
-          publishDate: "2018-09-01",
-
-          // if the specification's copyright date is a range of years, specify
-          // the start date here:
-          copyrightStart: "2018",
-
-          // if there is a previously published draft, uncomment this and set its YYYY-MM-DD date
-          // and its maturity status
-          // previousPublishDate: "1977-03-15",
-          // previousMaturity: "WD",
-
-          // if there a publicly available Editor's Draft, this is the link
-          // edDraftURI: "http://dev.w3.org/2009/dap/ReSpec.js/documentation.html",
-          edDraftURI: "https://expath.github.io/expath-cg/specs/http-client/",
-
+          // the CG
+          wg: "EXPath Community Group",
           wgURI: "https://www.w3.org/community/expath/",
           wgPublicList: "public-expath",
-          repoURL: "https://github.com/expath/expath-cg/",
+          //github: "https://github.com/expath/expath-cg/",
+          //repoURL: "https://github.com/expath/expath-cg/",
 
-          // if this is a LCWD, uncomment and set the end of its review period
-          // lcEnd: "2009-08-05",
+          // specification status (e.g. WD, LCWD, NOTE, etc.). CG-DRAFT and CG-FINAL for CG reports
+          specStatus: "CG-DRAFT",
+          shortName: "expath-http-client",
 
-          // editors, add as many as you like
-          // only "name" is required
+          // once the final report is published
+          //publishDate: "2017-09-01",
+
+          // if there a publicly available Editor's Draft, this is the link
+          edDraftURI: "https://expath.github.io/expath-cg/specs/http-client/",
+
+          // editors, add as many as you like, only "name" is required
           editors: [
               { name: "Florent Georges", url: "https://linkedin.com/in/fgeorges/",
                 company: "H2O Consulting", companyURL: "http://h2o.consulting/" }
           ],
 
-          // authors, add as many as you like.
-          // This is optional, uncomment if you have authors as well as editors.
-          // only "name" is required. Same format as editors.
-          //authors: [
-          //],
-
-          // name of the WG
-          wg: "EXPath Community Group",
-
-          // URI of the public WG page
-          wgURI: "https://www.w3.org/community/expath/",
-
-          // name (without the @w3c.org) of the public mailing to which comments are due
-          wgPublicList: "public-expath",
-
           // URI of the patent status for this WG, for Rec-track documents
-          // !!!! IMPORTANT !!!!
-          // This is important for Rec-track documents, do not copy a patent URI from a random
-          // document unless you know what you're doing. If in doubt ask your friendly neighbourhood
-          // Team Contact.
           wgPatentURI: "",
-
-          // If specified, defines an array of alternate formats in which document is available
-          // (e.g., XML, Postscript). The format of the array is:
-          // alternateFormats:
 
           doRDFa: "1.1",
 
@@ -98,9 +50,37 @@
           //     ]
           //   }
           // },
+
+	  otherLinks: [{
+	    key: 'Previous versions',
+	    data: [{
+	      value: 'http://expath.org/spec/http-client/20100109',
+	      href: 'http://expath.org/spec/http-client/20100109'
+	    }, {
+	      value: 'http://expath.org/spec/http-client/20090413',
+	      href: 'http://expath.org/spec/http-client/20090413'
+	    }, {
+	      value: 'http://expath.org/spec/http-client/20090302',
+	      href: 'http://expath.org/spec/http-client/20090302'
+	    }, {
+	      value: 'http://expath.org/spec/http-client/20090112',
+	      href: 'http://expath.org/spec/http-client/20090112'
+	    }]
+          }, {
+	    key: 'Participate',
+	    data: [{
+	      value: 'GitHub expath/expath-cg',
+	      href: 'https://github.com/expath/expath-cg/'
+	    }, {
+	      value: 'File a bug',
+	      href: 'https://github.com/expath/expath-cg/issues/'
+	    }]
+	  }],
+
       };
     </script>
     <style type="text/css">
+
       pre, code, samp {
           color: black !important;
           font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
@@ -111,6 +91,7 @@
           text-align: left;
           text-align: start;
       }
+
       div.proto {
           color: black;
           border: 0;
@@ -124,9 +105,63 @@
 	  background: #ffe6ff;
 	  overflow: auto;
       }
+
+      code.function {
+          font-weight: bold;
+      }
+
+      code.return-type, code.type {
+          font-style: italic;
+      }
+
+      code.return-varies {
+          font-weight: bold;
+          font-style: italic;
+      }
+
+      code.as {
+          font-style: normal;
+      }
+
+      code.arg {
+      }
+
+      div.exampleHeader {
+          font-weight: bold;
+          margin: 4px;
+      }
+
+      div.exampleInner {
+          background-color: #d5dee3;
+          padding: 4px;
+          margin: 0em;
+      }
+
+      div.exampleInner pre {
+          margin-left: 1em;
+          margin-top: 0em;
+          margin-bottom: 0em;
+      }
+
+      p>code, li>code {
+	  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+	  box-sizing: border-box;
+	  padding: 0;
+	  padding-top: 0px;
+	  padding-bottom: 0px;
+	  padding-top: 0.2em;
+	  padding-bottom: 0.2em;
+	  margin: 0;
+	  font-size: 85%;
+	  background-color: rgba(0,0,0,0.04);
+	  border-radius: 3px;
+	  color: #333;
+      }
+
     </style>
   </head>
   <body>
+
     <section id='abstract'>
       <p>
         This proposal provides an HTTP client interface for XPath 2.0.  It
@@ -137,22 +172,107 @@
     </section>
     <section id='sotd'>
     </section>
-    <section defang_data-dfn-for="Foo">
-      <h2><dfn>Foo</dfn> interface</h2>
+
+    <section>
+      <h2>Introduction</h2>
+      <ul>
+        <li>TODO: Add @href to http:response, taking redirects into account.</li>
+        <li>TODO: Do not we want 'hex' and 'base64' serialization methods instead of 'binary'? (or
+            in addition to?)</li>
+      </ul>
+      <section>
+	<h3>Namespace conventions</h3>
+        <p>The module defined by this document does define one function in the namespace
+          <code>http://expath.org/ns/http-client</code>. In this document, the
+          <code>http</code> prefix, when used, is bound to this namespace URI.</p>
+        <p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>. In this
+          document, the <code>err</code> prefix, when used, is bound to this namespace URI.</p>
+      </section>
+      <section>
+        <h3>Error management</h3>
+        <p>Error conditions are identified by a code (a <code>QName</code>). When such an error
+          condition is reached during the execution of the function, a dynamic error is thrown, with
+          the corresponding error code (as if the standard XPath function
+          <code>error</code> had been called).</p>
+        <p>Error codes are defined through the spec. For too many reasons to enumerate here, the
+          HTTP protocol layer can raise an error. In this case, if the error condition is not
+          mentioned explicitly in the spec, the implementation must raise an error with an
+          appropriate message <a href="#dfn-errHC001">err:HC001</a>.</p>
+      </section>
+    </section>
+
+    <section>
+      <h2>The <dfn>http:send-request</dfn> function</h2>
+      <p>This module defines an XPath extension function that sends an HTTP request and return the
+        corresponding response. It supports HTTP multi-part messages. Here is the signature of this
+        function:</p>
+      <div class="proto">
+        <code class="function">http:send-request</code>(<code class="arg">$request</code> as <code class="type">element(http:request)?</code>) as <code class="return-type">xs:anyURI?</code>
+      </div>
+      <eg>
+<ex:function></ex:function>($request as <ex:type>element(http:request)?</ex:type>,
+                  $href as <ex:type>xs:string?</ex:type>,
+                  $bodies as <ex:type>item()*</ex:type>) as <ex:type>item()+</ex:type></eg>
+         <ulist>
+            <item>
+               <p><code>$request</code> contains the various parameters of the request, for instance
+                  the HTTP method to use or the HTTP headers. Among other things, it can also
+                  contain the other param's values: the URI and the bodies. If they are not set as
+                  parameter to the function, their value in $request, if any, is used instead. See
+                  the following section for the detailed definition of the http:request element. If
+                  the parameter does not follow the grammar defined in this spec, this is an error
+                     <bibref ref="errHC005"/>.</p>
+            </item>
+            <item>
+               <p><code>$href</code> is the HTTP or HTTPS URI to send the request to. It is an
+                  xs:anyURI, but is declared as a string to be able to pass literal strings (without
+                  requiring to explicitly cast it to an xs:anyURI).</p>
+            </item>
+            <item>
+               <p><code>$bodies</code> is the request body content, for HTTP methods that can
+                  contain a body in the request (e.g. POST). This is an error if this param is not
+                  the empty sequence for methods that must be empty (e.g. DELETE). The details of
+                  the methods are defined in their respective specs (e.g. <bibref ref="rfc2616"/> or
+                     <bibref ref="rfc4918"/>). In case of a multipart request, it can be a sequence
+                  of several items, each one is the body of the corresponding body descriptor in
+                     <code>$request</code>. See below for details.</p>
+            </item>
+         </ulist>
+         <p>Besides the 3-params signature above, there are 2 other signatures that are convenient
+            shortcuts (corresponding to the full version in which corresponding params have been set
+            to the empty sequence). They are:</p>
+         <eg>
+<ex:function>http:send-request</ex:function>($request as <ex:type>element(http:request)</ex:type>) as <ex:type>item()+</ex:type>
+<ex:function>http:send-request</ex:function>($request as <ex:type>element(http:request)?</ex:type>,
+                  $href as <ex:type>xs:string?</ex:type>) as <ex:type>item()+</ex:type></eg>
+      </div1>
+
+    <section>
+      <h2>Errors</h2>
+      <p>Bla bla bla.  TODO: Still to copy and paste...</p>
+      <dl>
+	<dt><dfn id="dfn-errHC001">err:HC001</dfn></dt>
+	<dd>Bla bla bla</dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>An example - <dfn>Foo</dfn> interface</h2>
 
       <div class="proto">
         <code class="function">fn:document-uri</code>(<code class="arg">$arg</code><code class="as">&nbsp;as&nbsp;</code><code class="type">node()?</code>)<code class="as"> as </code><code class="return-type">xs:anyURI?</code>
       </div>
 
-      <pre class="example" title="Bla bla bla">
-      interface Foo {
-        attribute Bar bar;
-        void doTheFoo();
-      };
-      </pre>
-      <p>The <a>Foo</a> interface is nice. Lets you do stuff.</p>
-      <p>The <dfn>bar</dfn> attribute, returns 🍺.</p>
-      <p>The <dfn>doTheFoo()</dfn> method, returns nothing.</p>
+      <div class="example">
+	<div class="exampleHeader">Yo</div>
+	<p>Bla bla bla</p>
+	<div class="exampleInner">
+	  <pre>
+some/example/fn:call()</pre>
+        </div>
+	<p>Bla bla bla</p>
+      </div>
     </section>
+
   </body>
 </html>
