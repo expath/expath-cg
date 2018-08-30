@@ -92,7 +92,7 @@
           text-align: start;
       }
 
-      div.proto {
+      div.proto, pre.proto {
           color: black;
           border: 0;
           border-spacing: 0;
@@ -104,6 +104,12 @@
 	  border-color: #ff99ff;
 	  background: #ffe6ff;
 	  overflow: auto;
+      }
+
+      div.proto pre {
+          padding: 0;
+	  margin-bottom: 0;
+	  margin-top: 0;
       }
 
       code.function {
@@ -158,6 +164,14 @@
 	  color: #333;
       }
 
+      table.proto td {
+          vertical-align: baseline;
+      }
+
+      var {
+          font-style: italic;
+      }
+
     </style>
   </head>
   <body>
@@ -207,45 +221,237 @@
         corresponding response. It supports HTTP multi-part messages. Here is the signature of this
         function:</p>
       <div class="proto">
-        <code class="function">http:send-request</code>(<code class="arg">$request</code> as <code class="type">element(http:request)?</code>) as <code class="return-type">xs:anyURI?</code>
+        <table class="proto">
+          <tbody>
+            <tr>
+              <td rowspan="3"><code class="function">http:send-request</code>(</td>
+              <td><code class="arg">$request</code></td>
+              <td><code class="as"> as </code><code class="type">element(http:request)?</code>,</td>
+            </tr>
+            <tr>
+              <td><code class="arg">$href</code></td>
+              <td><code class="as"> as </code><code class="type">xs:string?</code>,</td>
+            </tr>
+            <tr>
+              <td><code class="arg">$bodies</code></td>
+              <td><code class="as"> as </code><code class="type">item()*</code>)<code class="as"> as </code><code class="return-type">item()+</code></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <eg>
-<ex:function></ex:function>($request as <ex:type>element(http:request)?</ex:type>,
-                  $href as <ex:type>xs:string?</ex:type>,
-                  $bodies as <ex:type>item()*</ex:type>) as <ex:type>item()+</ex:type></eg>
-         <ulist>
-            <item>
-               <p><code>$request</code> contains the various parameters of the request, for instance
-                  the HTTP method to use or the HTTP headers. Among other things, it can also
-                  contain the other param's values: the URI and the bodies. If they are not set as
-                  parameter to the function, their value in $request, if any, is used instead. See
-                  the following section for the detailed definition of the http:request element. If
-                  the parameter does not follow the grammar defined in this spec, this is an error
-                     <bibref ref="errHC005"/>.</p>
-            </item>
-            <item>
-               <p><code>$href</code> is the HTTP or HTTPS URI to send the request to. It is an
-                  xs:anyURI, but is declared as a string to be able to pass literal strings (without
-                  requiring to explicitly cast it to an xs:anyURI).</p>
-            </item>
-            <item>
-               <p><code>$bodies</code> is the request body content, for HTTP methods that can
-                  contain a body in the request (e.g. POST). This is an error if this param is not
-                  the empty sequence for methods that must be empty (e.g. DELETE). The details of
-                  the methods are defined in their respective specs (e.g. <bibref ref="rfc2616"/> or
-                     <bibref ref="rfc4918"/>). In case of a multipart request, it can be a sequence
-                  of several items, each one is the body of the corresponding body descriptor in
-                     <code>$request</code>. See below for details.</p>
-            </item>
-         </ulist>
-         <p>Besides the 3-params signature above, there are 2 other signatures that are convenient
-            shortcuts (corresponding to the full version in which corresponding params have been set
-            to the empty sequence). They are:</p>
-         <eg>
-<ex:function>http:send-request</ex:function>($request as <ex:type>element(http:request)</ex:type>) as <ex:type>item()+</ex:type>
-<ex:function>http:send-request</ex:function>($request as <ex:type>element(http:request)?</ex:type>,
-                  $href as <ex:type>xs:string?</ex:type>) as <ex:type>item()+</ex:type></eg>
-      </div1>
+      <ul>
+        <li><code>$request</code> contains the various parameters of the request, for instance the
+          HTTP method to use or the HTTP headers. Among other things, it can also contain the other
+          param's values: the URI and the bodies. If they are not set as parameter to the function,
+          their value in $request, if any, is used instead. See the following section for the
+          detailed definition of the http:request element. If the parameter does not follow the
+          grammar defined in this spec, this is an error <a href="#dfn-errHC005">err:HC005</a>.</li>
+        <li><code>$href</code> is the HTTP or HTTPS URI to send the request to. It is an xs:anyURI,
+          but is declared as a string to be able to pass literal strings (without requiring to
+          explicitly cast it to an xs:anyURI).</li>
+        <li><code>$bodies</code> is the request body content, for HTTP methods that can contain a
+          body in the request (e.g. POST). This is an error if this param is not the empty sequence
+          for methods that must be empty (e.g. DELETE). The details of the methods are defined in
+          their respective specs (e.g. [[!rfc2616]] or [[!rfc4918]]). In case of a multipart
+          request, it can be a sequence of several items, each one is the body of the corresponding
+          body descriptor in
+          <code>$request</code>. See below for details.</li>
+      </ul>
+      <p>Besides the 3-params signature above, there are 2 other signatures that are convenient
+        shortcuts (corresponding to the full version in which corresponding params have been set
+        to the empty sequence). They are:</p>
+      <div class="proto">
+        <code class="function">http:send-request</code>(<code class="arg">$request</code><code class="as"> as </code><code class="type">element(http:request)?</code>, <code class="arg">$href</code><code class="as"> as </code><code class="type">xs:string?</code>) as <code class="return-type">item()+</code>
+      </div>
+      <div class="proto">
+        <code class="function">http:send-request</code>(<code class="arg">$request</code><code class="as"> as </code><code class="type">element(http:request)?</code>, <code class="arg">$href</code>) as <code class="return-type">item()+</code>
+      </div>
+    </section>
+
+    <section>
+      <h2>Sending a request</h2>
+      <p>The functions defined in this module make one able to send a request to an HTTP server and
+        receive the corresponding response.  Here is how the request is represented by the
+        parameters to this function, and how they are used to generate the actual HTTP request to
+        send.</p>
+
+      <section>
+        <h3>The request elements</h3>
+        <p>The <code>http:request</code> element represents all the needed information to send the
+          HTTP request.  So it is always possible to create such an element that will carry over all
+          the needed info for a particular request.  For some of those values though, you can use an
+          additional param instead.  For instance, some signatures define the
+          parameter <code>$href</code>.  If the value of this parameter is not the empty sequence,
+          it will then be used instead of the value of the attribute <code>href</code> on
+          the <code>http:request</code> element.</p>
+
+        <div class="proto">
+          <pre>
+&lt;http:request method = ncname
+              href? = uri
+              http-version? = string
+              status-only? = boolean
+              username? = string
+              password? = string
+              auth-method? = string
+              send-authorization? = boolean
+              override-media-type? = string
+              follow-redirect? = boolean
+              timeout? = integer>
+   &lt;!-- Content: (http:header*, (http:body|http:multipart)?) -->
+&lt;/http:request></pre>
+        </div>
+
+        <ul>
+          <li><code>method</code> is the HTTP verb to use, as GET, POST, etc.  It is case
+            insensitive</li>
+          <li><code>href</code> is the URI the request has to be sent to.  It can be overridden by
+            the parameter <code>$href</code></li>
+          <li><code>http-version</code> is the version of HTTP to use. It must be either the
+            string <code>1.0</code> or <code>1.1</code>. Default is implementation-defined.  An
+            implementation SHOULD support both and the default SHOULD be
+            <code>1.1</code>. If the value specified is not supported by a specific
+            implementation, it should throw an appropriate error message <bibref ref="errHC007"/>.</li>
+          <li><code>status-only</code> control how the response will look like; if it is true, only
+            the status code and the headers are returned, the content is not (no http:body nor
+            http:multipart, nor the interpreted additional value in the returned sequence, see
+            hereafter).</li>
+          <li><code>username</code>, <code>password</code>, <code>auth-method</code>
+            and <code>send-authorization</code> are used for authentication (see section
+            below).</li>
+          <li><code>override-media-type</code> is a MIME type.  It can be used only with
+            <code>http:request</code>, and will override the Content-Type header returned by the
+            server.</li>
+          <li><code>follow-redirect</code> control whether an HTTP redirect is automatically
+            followed or not.  If it is false, the HTTP redirect is returned as the response.  If it
+            is true (the default) the function tries to follow the redirect, by sending the same
+            request to the new address (including body, headers, and authentication credentials).
+            Maximum one redirect is followed (there is no attempt to follow a redirect in response
+            to following a first redirect).</li>
+          <li><code>timeout</code> is the maximum number of seconds to wait for the server to
+            respond. If this time duration is reached, an error is thrown
+            <bibref ref="errHC006"/>. (TODO: Allow one to ask for an empty sequence instead?)</li>
+          <li><code>http:header</code> represent an HTTP header, either in the
+            <code>http:request</code> or in the <code>http:response</code> elements, as defined
+            below.</li>
+          <li><code>http:multipart</code> represents a multi-part body, either in a request or a
+            response, as defined below.</li>
+          <li><code>http:body</code> represents the body, either of a request or a response, as
+            defined below.</li>
+        </ul>
+        <p>The <code>http:header</code> element represents an HTTP header, either in a request or in
+          a response:</p>
+        <div class="proto">
+          <pre>
+&lt;http:header name = string
+             value = string>
+   &lt;!-- Content: empty -->
+&lt;/http:header></pre>
+          </div>
+        <p>The <code>http:body</code> element represents the body of either an HTTP request or of an
+          HTTP response (in multipart requests and responses, it represents the body of a single one
+          part):</p>
+        <div class="proto">
+          <pre>
+&lt;http:body media-type = string
+           src? = uri
+           method? = "xml" | "html" | "xhtml" | "text" | "binary"
+             | qname-but-not-ncname
+           byte-order-mark? = "yes" | "no"
+           cdata-section-elements? = qnames
+           doctype-public? = string
+           doctype-system? = string
+           encoding? = string
+           escape-uri-attributes? = "yes" | "no"
+           indent? = "yes" | "no"
+           normalization-form? = "NFC" | "NFD" | "NFKC" | "NFKD"
+             | "fully-normalized" | "none" | nmtoken
+           omit-xml-declaration? = "yes" | "no"
+           standalone? = "yes" | "no" | "omit"
+           suppress-indentation? = qnames
+           undeclare-prefixes? = "yes" | "no"
+           version? = nmtoken>
+   &lt;!-- Content: any* -->
+&lt;/http:body></pre>
+          </div>
+        <p>The <code>media-type</code> is the MIME media type of the body part. It is mandatory.  In
+          a request it is given by the user and is the default value of the Content-Type header if
+          it is not set explicitly. In a response, it is given by the implementation from the
+          Content-Type header returned by the server. The <code>src</code> attribute can be used in
+          a request to set the body content as the content of the linked resource instead of using
+          the children of the <code>http:body</code> element. When this attribute is used, only
+          the <code>media-type</code> attribute must also be present, and there can be neither
+          content in the <code>http:body</code> element, nor any other attribute, or this is an
+          error <bibref ref="errHC004"/>.</p>
+        <p>All the attributes, except <code>src</code>, are used to set the corresponding
+          serialization parameter defined in <bibref ref="xserial"/>, as defined for the XPath 2.1
+          function <code>fn:serialize()</code> <bibref ref="fo11"/>. Those attributes can be given
+          by the user on a request to control the way a part body is serialized. In the response,
+          the implementation can, but is not required, to provide some of them if it has the
+          corresponding information (some of them do not make any sense in a response, therefore
+          they will never be on a response element, for instance <code>version</code>).</p>
+        <p>The <code>http:multipart</code> element represents an HTTP multi-part request or
+          response:</p>
+        <div class="proto">
+          <pre>
+&lt;http:multipart media-type = string
+                boundary? = string>
+   &lt;!-- (http:header*, http:body)+ -->
+&lt;/http:multipart></pre>
+        </div>
+        <p>The <code>media-type</code> attribute is the media type of the whole request or response,
+          and has to be a multipart media type (that is, its main type must be
+          <code>multipart</code>). The <code>boundary</code> attribute is the boundary marker used
+          to separate the several parts in the message (the value of the attribute is prefixed with
+          "<code>--</code>" to form the actual boundary marker in the request; on the other way,
+          this prefix is removed from the boundary marker in the response to set the value of the
+          attribute).</p>
+      </section>
+
+      <section>
+        <h3>Serializing the request content</h3>
+        <p>If the request can have content (one body or several body parts), it can be specified by
+          the <code>http:multipart</code> element, the <code>http:body</code> element, and/or the
+          parameter <code>$bodies</code>. For each body, the content of the HTTP body is generated
+          as follow.</p>
+        <p>Except when its attribute <code>src</code> is present, a <code>http:request</code>
+          element can have several attributes representing serialization parameters, as defined in
+          <bibref ref="xserial"/>. This spec defines in addition the method
+          <code>'binary'</code>; in this case the body content must be either an xs:hexBinary or an
+          xs:base64Binary item, and no other serialization parameter can be set
+          besides <code>media-type</code>.</p>
+        <p>The default value of the serialization method depends on the <code>media-type</code>: it
+          is <code>'xml'</code> if it is an XML media type, <code>'html'</code> if it is an HTML
+          media type, <code>'xhtml'</code> if it is <code>application/xhtml+xml</code>,
+          <code>'text'</code> if it is a textual media type, and <code>'binary'</code> for any other
+          case.</p>
+        <p>When a body element has an empty content (i.e. it has no child node at all) its content
+          is given by the parameter <code>$bodies</code>. In a single part request, this param must
+          have at most one item. If the body is empty, the param cannot be the empty sequence. In a
+          multipart request, <code>$bodies</code> must have as many items as there are empty body
+          elements. If there are three empty body elements, the content of the first of them
+          is <code>$bodies[1]</code>, and so on. The number of empty body elements must be equal to
+          the number of items in <code>$bodies</code>.</p>
+      </section>
+
+      <section>
+        <h3>Authentication</h3>
+        <p>HTTP authentication when sending a request is controlled by the attributes 
+          <code>username</code>, <code>password</code>, <code>auth-method</code> and
+          <code>send-authorization</code> on the element <code>http:request</code>.
+          If <code>username</code> has a value, <code>password</code> and
+          <code>auth-method</code> must have a value too.  And if any one of the three other
+          attributes have been set, <code>username</code> must be set too.</p>
+        <p>The attribute <code>auth-method</code> can be either <code>"Basic"</code> or
+          <code>"Digest"</code>, but other values can also be used, in an implementation-defined
+          way.  The handling of those attributes must be done in conformance to
+          <bibref ref="rfc2617"/>.  If <code>send-authorization</code> is true (default value is
+          false) and the authentication method supports generating the
+          header <code>Authorization</code> without challenge, the request contains this header.
+          The default value is to send a non-authenticated request, and if the response is an
+          authentication challenge, then only send the credentials in a second message.</p>
+      </section>
+    </section>
 
     <section>
       <h2>Errors</h2>
