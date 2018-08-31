@@ -159,6 +159,16 @@
           element, this simplifies lazy evaluation and streaming of data for implementers, and
           therefore should offer better performance for users.</li>
       </ul>
+      <p>
+        An implementation of the module MUST be “backward-compliant” with version 1.0 of the
+        <a href='http://expath.org/spec/http-client'>HTTP Client Module</a>.
+        We define backward-compliant to mean that both versions of HTTP Client Module live in
+        harmony side-by-side, that is to say that their functions, etc. are all in the same
+        namespace. We have intentionally designed 2.0 so that it does not override, replace,
+        or conflict, with any specific behavior of 1.0. Rather, 2.0 complements 1.0, providing
+        a fresh API for newer versions of XPath. The design allows users to conveniently use
+        either version, or to use both 2.0 and 1.0 versions together should they wish.
+      </p>
 
       <section>
         <h2>Namespaces and Prefixes</h2>
@@ -174,7 +184,7 @@
       <h2>Supported HTTP versions</h2>
       <p>Implementations of this module are expected to support HTTP 1.0 [[!rfc1945]],
         1.1 [[!rfc2616]], and 2.0 [[!rfc7540]]. Unless otherwise explicitly stated in this
-        specification, client behaviour is expected to conform to the appropriate HTTP RFC.</p>
+        specification, client behavior is expected to conform to the appropriate HTTP RFC.</p>
       <section id="http1-support">
         <h3>HTTP 1.0 Support</h3>
         <p>This module supports all features of HTTP 1.0. Although we do not provide explicit
@@ -553,7 +563,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         </p>
         <p>
           If the value supplied as the <a>$body</a> parameter is an empty sequence, the
-          corresponding request's <a>entity body</a> will be omitted.
+          corresponding request’s <a>entity body</a> will be omitted.
         </p>
         <p>
           If the supplied value, or the value(s) of a multipart entity body, have any other type
@@ -566,10 +576,10 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
           <h4><dfn>Single Entity Body Request</dfn></h4>
           <p>
             By default, or if the <a>multipart</a> option is set to <code>false</code>,
-            a <dfn>single entity</dfn> will be sent in the request's <a>entity body</a>.
+            a <dfn>single entity</dfn> will be sent in the request’s <a>entity body</a>.
           </p>
           <p>   
-            For a <a>single entity</a>, the value for the <a>$body</a> parameter must have one of
+            For a <a>single entity</a>, the value for the <a>$body</a> parameter MUST have one of
             the following types:
           </p>
 
@@ -622,7 +632,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
   <h4><dfn>Multipart Entity Body Request</dfn></h4>
   <p>
     <dfn data-cite="rfc1945#section-3.6.2">Multipart Types</dfn> provides for the encapsulation
-    of several entities (aka <em>parts</em>) within the request's <a>entity body</a>.
+    of several entities (aka <em>parts</em>) within the request’s <a>entity body</a>.
   </p>
   <p>
     An entity body of multiple parts, wherein each part is itself an entity, will be sent
