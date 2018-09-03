@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="houtil-lowest" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <description>Tests for the EXPath houtil:lowest</description>
+    <description>Tests for the EXPath houtil:lowest function</description>
     <link type="spec" document="http://www.w3.org/TR/xpath-functions-31/" idref="func-array-head"/>
     <dependency type="spec" value="XP31+ XQ31+"/>
 
     <environment name="houtil">
-        <namespace prefix="houtil" uri="http://saxon.sf.net/"/>
+        <namespace prefix="houtil" uri="http://expath.org/ns/houtil"/>
     </environment>
 
     <test-case name="houtil-lowest-001">
@@ -106,6 +106,19 @@
         <test>houtil:lowest(doc(static-base-uri())//*:test-case, function($t){xs:date($t/*:created/@on)})/*:description</test>
         <result>
             <assert-eq>"Empty sequence"</assert-eq>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-lowest-011">
+        <description>Non-codepoint collation</description>
+        <!-- Note, this cannot be tested using xsl:evaluate because the default collation cannot be set dynamically -->
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment>
+            <collation uri="http://www.w3.org/2013/collation/UCA?lang=en;strength=primary" default="true"/>
+        </environment>
+        <test>houtil:highest(("a", "A", "z", "Z"), string#1)</test>
+        <result>
+            <assert-deep-eq>"a", "A"</assert-deep-eq>
         </result>
     </test-case>
     

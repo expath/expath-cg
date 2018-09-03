@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="houtil-before-first">
-   <description>Tests for the higher-order houtil:before-first function</description>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="houtil-after-first">
+   <description>Tests for the higher-order houtil:after-first function</description>
    
    <!-- Tests derived from the test set for fn:filter -->
    
@@ -10,25 +10,25 @@
    <dependency type="spec" value="XP30+ XQ30+"/>
    <dependency type="feature" value="higherOrderFunctions"/>
 
-   <test-case name="houtil-before-first-001">
+   <test-case name="houtil-after-first-001">
       <description>Basic test using starts-with()</description>
       <created by="Michael Kay" on="2018-08-29"/>
-      <test>houtil:before-first(("apple", "pear", "apricot", "advocado", "orange"), starts-with(?, "p"))</test>
+      <test>houtil:after-first(("apple", "pear", "apricot", "advocado", "orange"), starts-with(?, "p"))</test>
       <result>
-         <assert-deep-eq>"apple"</assert-deep-eq>
+         <assert-deep-eq>"apricot", "advocado", "orange"</assert-deep-eq>
       </result>
    </test-case>
    
-   <test-case name="houtil-before-first-002">
+   <test-case name="houtil-after-first-002">
       <description>Test using an inline user-defined function</description>
       <created by="Michael Kay" on="2018-08-29"/>
-      <test>houtil:before-first((12, 4, 46, 23, -8), function($x){$x gt 40})</test>
+      <test>houtil:after-first((12, 4, 46, 23, -8), function($x){$x gt 40})</test>
       <result>
-         <assert-deep-eq>12, 4</assert-deep-eq>
+         <assert-deep-eq>23, -8</assert-deep-eq>
       </result>
    </test-case>
    
-   <test-case name="houtil-before-first-003">
+   <test-case name="houtil-after-first-003">
       <description>Test using an inline user-defined function</description>
       <created by="Michael Kay" on="2018-08-29"/>
       <environment>
@@ -37,28 +37,27 @@
             <created by="Michael Kay" on="2010-02-10"/>
          </source>
       </environment>
-      <test>let $data := (/employees) return houtil:before-first($data/emp, function($x as
+      <test>let $data := (/employees) return houtil:after-first($data/emp, function($x as
          element(emp)){xs:int($x/@salary) eq 250})</test>
       <result>
          <all-of>
-            <assert-count>2</assert-count>
+            <assert-count>1</assert-count>
             <assert-type>element(emp)*</assert-type>
-            <assert>$result/@name = 'john'</assert>
-            <assert>$result/@name = 'mary'</assert>
+            <assert>$result/@name = 'kumar'</assert>
          </all-of>
       </result>
    </test-case>
    
-   <test-case name="houtil-before-first-004">
+   <test-case name="houtil-after-first-004">
       <description>Test using an inline user-defined function</description>
       <created by="Michael Kay" on="2018-08-29"/>
-      <test>for $n in 1 to 9 return houtil:before-first(1 to 20, function($x){$x gt $n})</test>
+      <test>for $n in 1 to 9 return houtil:after-first(1 to 6, function($x){$x eq $n})</test>
       <result>
-         <assert-deep-eq>1, 1,2, 1,2,3, 1,2,3,4, 1,2,3,4,5, 1,2,3,4,5,6, 1,2,3,4,5,6,7, 1,2,3,4,5,6,7,8, 1,2,3,4,5,6,7,8,9</assert-deep-eq>
+         <assert-deep-eq>2,3,4,5,6, 3,4,5,6, 4,5,6, 5,6, 6</assert-deep-eq>
       </result>
    </test-case>
    
-   <test-case name="houtil-before-first-005">
+   <test-case name="houtil-after-first-005">
       <description>Condition not satisfied by any item in the sequence</description>
       <created by="Michael Kay" on="2018-09-01"/>
       <environment>
@@ -67,144 +66,137 @@
             <created by="Michael Kay" on="2010-02-10"/>
          </source>
       </environment>
-      <test>let $data := (/employees) return houtil:before-first($data/emp, function($x as
+      <test>let $data := (/employees) return houtil:after-first($data/emp, function($x as
          element(emp)){xs:int($x/@salary) eq 0})</test>
       <result>
-         <all-of>
-            <assert-count>4</assert-count>
-            <assert-type>element(emp)*</assert-type>
-            <assert>$result/@name = 'john'</assert>
-            <assert>$result/@name = 'mary'</assert>
-            <assert>$result/@name = 'anne'</assert>
-            <assert>$result/@name = 'kumar'</assert>
-         </all-of>
+         <assert-empty/>
       </result>
    </test-case>
    
-   <test-case name="houtil-before-first-006">
+   <test-case name="houtil-after-first-006">
       <description>Filter returns an untyped node that can be cast to boolean</description>
       <created by="Michael Kay" on="2018-08-29"/>
       <test><![CDATA[
-            houtil:before-first((1 to 20), function($i){parse-xml("<a>" || (1 - ($i mod 2)) || "</a>")})
+            houtil:after-first((1 to 5), function($i){parse-xml("<a>" || (1 - ($i mod 2)) || "</a>")})
         ]]></test>
       <result>
-         <assert-eq>1</assert-eq>
+         <assert-deep-eq>3, 4, 5</assert-deep-eq>
       </result>
    </test-case>
    
-   <test-case name="houtil-before-first-901">
-      <description>"before-first" function - not a boolean</description>
+   <test-case name="houtil-after-first-901">
+      <description>"after-first" function - not a boolean</description>
       <created by="Michael Kay" on="2018-08-29"/>
-      <test>houtil:before-first(("apple", "pear", "apricot", "advocado", "orange"), normalize-space#1)</test>
+      <test>houtil:after-first(("apple", "pear", "apricot", "advocado", "orange"), normalize-space#1)</test>
       <result>
          <error code="XPTY0004"/>
       </result>
    </test-case>
    
-   <test-case name="houtil-before-first-902">
-      <description>"before-first" function - returns empty sequence </description>
+   <test-case name="houtil-after-first-902">
+      <description>"after-first" function - returns empty sequence </description>
       <created by="Michael Kay" on="2018-08-29"/>
-      <test>houtil:before-first(("apple", "pear", "apricot", "advocado", "orange"),
+      <test>houtil:after-first(("apple", "pear", "apricot", "advocado", "orange"),
          function($x){if(starts-with($x,'o')) then true() else ()})</test>
       <result>
          <error code="XPTY0004"/>
       </result>
    </test-case>
    
-   <test-case name="houtil-before-first-903">
-      <description>"before-first" function - returns non-singleton sequence</description>
+   <test-case name="houtil-after-first-903">
+      <description>"after-first" function - returns non-singleton sequence</description>
       <created by="Michael Kay" on="2018-08-29"/>
-      <test>houtil:before-first( ("apple", "pear", "apricot", "advocado", "orange"),
+      <test>houtil:after-first( ("apple", "pear", "apricot", "advocado", "orange"),
          function($x){if(starts-with($x,'a')) then (true(), true()) else false()})</test>
       <result>
          <error code="XPTY0004"/>
       </result>
    </test-case>
    
-   <test-case name="houtil-before-first-904">
-      <description>"before-first" function - item in sequence is of wrong type</description>
+   <test-case name="houtil-after-first-904">
+      <description>"after-first" function - item in sequence is of wrong type</description>
       <created by="Michael Kay" on="2018-08-29"/>
-      <test>houtil:before-first(("apple", "pear", current-date(), "apricot", "advocado", "orange"), ends-with(?, 'o'))</test>
+      <test>houtil:after-first(("apple", "pear", current-date(), "apricot", "advocado", "orange"), ends-with(?, 'o'))</test>
       <result>
          <error code="XPTY0004"/>
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-911">
-      <description>Attempts to evaluate the "before-first" function with no arguments.</description>
+   <test-case name="houtil-after-first-911">
+      <description>Attempts to evaluate the "after-first" function with no arguments.</description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
-      <test>houtil:before-first()</test>
+      <test>houtil:after-first()</test>
       <result>
          <error code="XPST0017"/>
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-912">
-      <description>Attempts to reference the "before-first" function with arity zero.</description>
+   <test-case name="houtil-after-first-912">
+      <description>Attempts to reference the "after-first" function with arity zero.</description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
-      <test>houtil:before-first#0</test>
+      <test>houtil:after-first#0</test>
       <result>
          <error code="XPST0017"/>
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-913">
-      <description>Attempts to evaluate the "before-first" function with one argument.</description>
+   <test-case name="houtil-after-first-913">
+      <description>Attempts to evaluate the "after-first" function with one argument.</description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
-      <test>houtil:before-first( boolean#1 )</test>
+      <test>houtil:after-first( boolean#1 )</test>
       <result>
          <error code="XPST0017"/>
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-914">
-      <description>Attempts to reference the "before-first" function with arity one.</description>
+   <test-case name="houtil-after-first-914">
+      <description>Attempts to reference the "after-first" function with arity one.</description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
-      <test>houtil:before-first#1</test>
+      <test>houtil:after-first#1</test>
       <result>
          <error code="XPST0017"/>
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-915">
-      <description>Attempts to reference the "before-first" function with arity two.</description>
+   <test-case name="houtil-after-first-915">
+      <description>Attempts to reference the "after-first" function with arity two.</description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
-      <test>exists( houtil:before-first#2 )</test>
+      <test>exists( houtil:after-first#2 )</test>
       <result>
          <assert-true/>
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-920">
+   <test-case name="houtil-after-first-920">
       <description>Tests the type checking of the $f argument.</description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
-      <test>houtil:before-first( 1, function($a as item()) as xs:boolean* { boolean($a), boolean($a) }
+      <test>houtil:after-first( 1, function($a as item()) as xs:boolean* { boolean($a), boolean($a) }
          )</test>
       <result>
          <any-of>
             <error code="XPST0005"/>
-            <assert-empty/>
+            <error code="XPTY0004"/>
          </any-of>
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-921">
+   <test-case name="houtil-after-first-921">
       <description>Tests the type checking of the $f argument.</description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
-      <test>houtil:before-first( 1, function($a as item()) as xs:boolean? { () } )</test>
+      <test>houtil:after-first( 1, function($a as item()) as xs:boolean? { () } )</test>
       <result>
          <any-of>
             <error code="XPST0005"/>
-            <assert-empty/>
+            <error code="XPTY0004"/>
          </any-of>
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-922">
+   <test-case name="houtil-after-first-922">
       <description>Tests the type checking of the $f argument.</description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
       <modified by="Michael Kay after Tim Mills" on="2012-05-31" change="See bug 17250"/>
-      <test>houtil:before-first( 1, string#1 )</test>
+      <test>houtil:after-first( 1, string#1 )</test>
       <result>
          <any-of>
             <error code="XPTY0004"/>
@@ -214,8 +206,8 @@
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-923">
-      <description>Evaluates the "before-first" function with $seq set to a mix of item types </description>
+   <test-case name="houtil-after-first-923">
+      <description>Evaluates the "after-first" function with $seq set to a mix of item types </description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
       <environment>
          <source role="." file="docs/filter003.xml">
@@ -223,38 +215,38 @@
             <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
          </source>
       </environment>
-      <test>houtil:before-first( (//emp, 1, "string", 3.14, 2.7e0, exists#1), function($arg) { $arg
+      <test>houtil:after-first( (//emp, 1, "string", 3.14, 2.7e0, exists#1), function($arg) { $arg
          instance of function(*) } )</test>
       <result>
-         <assert-count>8</assert-count>
+         <assert-empty/>
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-924">
-      <description>Evaluates the "before-first" function with $f set to a function which _could_ (but
+   <test-case name="houtil-after-first-924">
+      <description>Evaluates the "after-first" function with $f set to a function which _could_ (but
          doesn't) return a non-boolean value </description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
-      <test>houtil:before-first( 1 to 10, function($arg) { if ($arg eq 100) then () else false()})</test>
+      <test>houtil:after-first( 1 to 10, function($arg) { if ($arg eq 100) then () else false()})</test>
       <result>
-         <assert-count>10</assert-count>
+         <assert-empty/>
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-925">
-      <description>Evaluates the "before-first" function with $f set to a function which _could_ (and
+   <test-case name="houtil-after-first-925">
+      <description>Evaluates the "after-first" function with $f set to a function which _could_ (and
          does) return a non-boolean value </description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
-      <test>houtil:before-first( 1 to 10, function($arg) { if ($arg eq 5) then () else false()})</test>
+      <test>houtil:after-first( 1 to 10, function($arg) { if ($arg eq 5) then () else false()})</test>
       <result>
          <error code="XPTY0004"/>
       </result>
    </test-case>
 
-   <test-case name="houtil-before-first-933">
-      <description>Evaluates the "before-first" function with $f set to a function which expects integers,
+   <test-case name="houtil-after-first-933">
+      <description>Evaluates the "after-first" function with $f set to a function which expects integers,
          but is supplied with strings.</description>
       <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
-      <test>houtil:before-first( ("1", "2", "3"), function($arg as xs:integer) as xs:boolean { $arg eq 100 }
+      <test>houtil:after-first( ("1", "2", "3"), function($arg as xs:integer) as xs:boolean { $arg eq 100 }
          )</test>
       <result>
          <error code="XPTY0004"/>

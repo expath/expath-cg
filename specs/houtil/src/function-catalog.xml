@@ -199,6 +199,8 @@
    
    Returns a sequence, in undefined order, of all nodes reachable from the supplied starting node by one or more repeated applications of the function. Duplicates are eliminated and cycles are tolerated.
    
+   Note: may fail catastrophically (e.g non termination or out of memory) if the supplied function creates new nodes rather than selecting existing nodes.
+   
    (C2) houtil:is-reachable($node1, $node2, function($node as node()*) => xs:boolean
    
    Returns true if and only if $node2 is a member of the transitive closure of $node1. Cycles are tolerated.
@@ -226,10 +228,17 @@
             function returns an empty sequence are excluded from the result; all other items are added to an entry in the result map whose key
             is the computed key value.</p>
          <p>Within each entry in the resulting map, items retain their relative order from the input sequence.</p>
+         <p>Key values <code>k1</code> and <code>k2</code> are considered distinct if <code>op:same-key($k1, $k2)</code> returns false.</p>
       </fos:rules>
       <fos:errors>
          <p>A dynamic error occurs if the <code>$condition</code> function returns an error.</p>
       </fos:errors>
+      <fos:notes>
+         <p>The rule for comparing keys is
+            subtly different from the rule used by <code>xsl:for-each-group/@group-by</code> in XSLT, or by the <code>group by</code> clause in XQuery.</p>
+         <p>To compare keys using a collation, group by the result of calling <code>fn:collation-key()</code>. For example, the way in which timezones
+         are used when comparing <code>xs:dateTime</code> values is different.</p>
+      </fos:notes>
       <fos:implementations>
          <fos:implementation lang="xpath"><![CDATA[
             return map:merge(($in ! (let $k := $key(.) return if (exists($k) then map{$k, .} else ())), map{"duplicates": combine})
@@ -259,6 +268,11 @@
       <fos:errors>
          <p>A dynamic error occurs if the <code>$key</code> function returns an error.</p>
       </fos:errors>
+      <fos:notes>
+         <p>The rule for comparing keys is
+            subtly different from the rule used by <code>xsl:for-each-group/@group-adjacent</code> in XSLT. For example, the way in which timezones
+            are used when comparing <code>xs:dateTime</code> values is different.</p>
+      </fos:notes>
       <fos:implementations>
          <fos:implementation lang="xpath"><![CDATA[
             let $acc := fold-left($in, map{}, function($item, $acc) {

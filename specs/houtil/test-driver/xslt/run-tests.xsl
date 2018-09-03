@@ -168,10 +168,6 @@
                                 <xsl:with-param name="result" as="item()*" select="$outcome?result" tunnel="yes"/>
                             </xsl:apply-templates>
                         </xsl:variable>
-                        <xsl:if test="not($passed)">
-                            <xsl:message>ACTUAL:</xsl:message>
-                            <xsl:message select="$outcome?result"/>
-                        </xsl:if>
                         <r:test-case set="{../@name}" name="{@name}" result="{if ($passed) then 'pass' else 'fail'}"/>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -243,7 +239,7 @@
             <xsl:variable name="test" select="c:test" as="xs:string"/>
             
             <xsl:variable name="xpath-result" as="item()*" xmlns:houtil="http://expath.org/ns/houtil">
-                <xsl:evaluate xpath="$test" base-uri="{base-uri(c:test)}"/>
+                <xsl:evaluate xpath="$test" base-uri="{base-uri(c:test)}" context-item="$options?source-node"/>
             </xsl:variable>
             
             <xsl:message>EVAL RESULT:</xsl:message>

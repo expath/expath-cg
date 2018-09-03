@@ -26,7 +26,9 @@
     
     <xsl:template match="c:error | c:assert-serialization-error" mode="expects-error" as="xs:string">
         <xsl:param name="code" as="xs:string" tunnel="yes"/>
-        <xsl:sequence select="if ($code = @code) then 'pass' else 'wrong-error (expected ' || @code || ', got ' || $code ||')'"/>
+        <xsl:sequence select="if ($code = @code) then 'pass'
+                              else if (starts-with(@code, 'XPST') and $code = 'XTDE3160') then 'pass' (: xsl:evaluate masks XPath static error codes :)
+                              else 'wrong-error (expected ' || @code || ', got ' || $code ||')'"/>
     </xsl:template>
     
     <xsl:template match="c:all-of" mode="expects-error" as="xs:string">
@@ -36,6 +38,7 @@
                 <xsl:apply-templates select="." mode="#current"/>
             </xsl:variable>
             <xsl:if test="$t != 'pass'">
+                <xsl:message select="'Failed assertion ', ."/>
                 <xsl:break select="$t"/>
             </xsl:if>
         </xsl:iterate>
@@ -119,6 +122,7 @@
                 <xsl:apply-templates select="." mode="#current"/>
             </xsl:variable>
             <xsl:if test="not($r)">
+                <xsl:message select="'Failed assertion ', ."/>
                 <xsl:break select="false()"/>
             </xsl:if>
         </xsl:iterate>
@@ -143,7 +147,7 @@
         <xsl:sequence select="not($r)"/>
     </xsl:template>
 
-    <xsl:template match="c:assert-result-document" mode="check-result" as="xs:boolean">
+    <!--<xsl:template match="c:assert-result-document" mode="check-result" as="xs:boolean">
         <xsl:param name="outcome" tunnel="yes"/>
         <xsl:param name="namespaces" as="element()?" tunnel="yes"/>
         <xsl:variable name="absolute-uri" select="string(resolve-uri(ancestor::c:test-case/@name || '/' || @uri, $base-output-dir))"/>
@@ -159,7 +163,7 @@
             </xsl:otherwise>
         </xsl:choose>       
     </xsl:template>
-
+-->
     <xsl:template match="c:assert" mode="check-result" as="xs:boolean">
         <xsl:param name="result" tunnel="yes"/>
         <xsl:param name="namespaces" as="element()?" tunnel="yes"/>
@@ -254,7 +258,7 @@
         <xsl:param name="outcome" tunnel="yes"/>
         <xsl:param name="result" tunnel="yes"/>
         <xsl:variable name="expected" as="item()*">
-            <xsl:evaluate xpath="string(.)" context-item="()" with-params="map{ }"/>
+            <xsl:evaluate xpath="string(.)" context-item="()" with-params="map{ }" xpath-default-namespace=""/>
         </xsl:variable>
         <xsl:message select="'EXPECTED: ', $expected, ' ACTUAL: ', $result"/>
         <xsl:sequence select="not($outcome?error) and $result eq $expected"/>
@@ -263,7 +267,7 @@
     <xsl:template match="c:assert-permutation" mode="check-result" as="item()?">
         <xsl:param name="result" tunnel="yes"/>
         <xsl:variable name="expected" as="item()*">
-            <xsl:evaluate xpath="string(.)" context-item="()" with-params="map{ }"/>
+            <xsl:evaluate xpath="string(.)" context-item="()" with-params="map{ }" xpath-default-namespace=""/>
         </xsl:variable>
         <xsl:try>
             <xsl:sequence
@@ -287,14 +291,14 @@
         <xsl:param name="result" tunnel="yes"/>
         <xsl:variable name="expected" as="item()*">
             <xsl:try>
-                <xsl:evaluate xpath="string(.)" context-item="()" with-params="map{ }"/>
+                <xsl:evaluate xpath="string(.)" context-item="()" with-params="map{ }" xpath-default-namespace=""/>
                 <xsl:catch>
                     <xsl:message select="'Error in evaluation of deep-equal assertion:' || string(.)"/>
                 </xsl:catch>
             </xsl:try>
         </xsl:variable>
-        <!-- <xsl:message select="'EXPECTED:',$expected"/>
-        <xsl:message select="'RESULT:',$result"/>-->
+        <!--<xsl:message select="'EXPECTED:',$expected"/>-->
+        <!--<xsl:message select="'ACTUAL:',$result"/>-->
         <xsl:sequence select="not($result instance of element(err:ERROR)) and deep-equal($result, $expected)"/>
     </xsl:template>
     
@@ -331,14 +335,14 @@
         </xsl:choose>
     </xsl:template>
  
-    <xsl:template match="*:assert-type" mode="check-result" as="xs:boolean">
+    <xsl:template match="c:assert-type" mode="check-result" as="xs:boolean">
         <xsl:param name="result" tunnel="yes"/>
-        <xsl:evaluate xpath="'$result instance of ' || .">
+        <xsl:evaluate xpath="'$result instance of ' || ." xpath-default-namespace="">
             <xsl:with-param name="result" select="$result"/>
         </xsl:evaluate>
     </xsl:template>
 
-    <xsl:template match="*:error" mode="check-result" as="xs:boolean">
+    <xsl:template match="c:error" mode="check-result" as="xs:boolean">
         <xsl:sequence select="false()"/>
     </xsl:template>
     

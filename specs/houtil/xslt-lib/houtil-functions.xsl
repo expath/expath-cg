@@ -4,28 +4,27 @@
     package-version="0.1"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:math="http://www.w3.org/2005/xpath-functions/math" 
-    exclude-result-prefixes="#all" 
-    version="3.0" 
-    expand-text="true" 
+    xmlns:map="http://www.w3.org/2005/xpath-functions/map"
+    xmlns:array="http://www.w3.org/2005/xpath-functions/array"
     xmlns:houtil="http://expath.org/ns/houtil"
-    xmlns:f="MyFunctions">
+    version="3.0" 
+    expand-text="true">
 
     <xsl:output method="xml" indent="true"/>
 
     <xsl:function name="houtil:highest" as="item()*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="key" as="function(item()) as xs:anyAtomicType?"/>
-        <xsl:sequence select="houtil:highestLowest($items, $key, true())"/>
+        <xsl:sequence select="houtil:_highestLowest($items, $key, true())"/>
     </xsl:function>
     
     <xsl:function name="houtil:lowest" as="item()*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="key" as="function(item()) as xs:anyAtomicType?"/>
-        <xsl:sequence select="houtil:highestLowest($items, $key, false())"/>
+        <xsl:sequence select="houtil:_highestLowest($items, $key, false())"/>
     </xsl:function>
 
-    <xsl:function name="houtil:highestLowest" as="item()*">
+    <xsl:function name="houtil:_highestLowest" as="item()*" visibility="private">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="key" as="function(item()) as xs:anyAtomicType?"/>
         <xsl:param name="highest" as="xs:boolean"/>
@@ -38,7 +37,7 @@
             <xsl:choose>
                 <xsl:when test="empty($keyValue)"/>
                 <xsl:when test="$keyValue ne $keyValue (: $keyValue is NaN :)"/>
-                <xsl:when test="empty($value)">
+                <xsl:when test="empty($value) (: first significant item in input :)">
                     <xsl:next-iteration>
                         <xsl:with-param name="chosen" select="."/>
                         <xsl:with-param name="value" select="$keyValue[not(. lt .)] (: force an error if the type is unordered :)"/>
@@ -68,38 +67,50 @@
     <xsl:function name="houtil:before-first" as="item()*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="condition" as="function(item()) as xs:boolean"/>
-        <xsl:sequence select="houtil:afterBefore($items, $condition, false(), true())"/>
+        <xsl:sequence select="houtil:_before($items, $condition, false())"/>
     </xsl:function>
     
     <xsl:function name="houtil:to-first" as="item()*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="condition" as="function(item()) as xs:boolean"/>
-        <xsl:sequence select="houtil:afterBefore($items, $condition, true(), true())"/>
+        <xsl:sequence select="houtil:_before($items, $condition, true())"/>
+    </xsl:function>
+    
+    <xsl:function name="houtil:_before" as="item()*" visibility="private">
+        <xsl:param name="items" as="item()*"/>
+        <xsl:param name="condition" as="function(item()) as xs:boolean"/>
+        <xsl:param name="inclusive" as="xs:boolean"/>
+        <xsl:iterate select="$items">
+            <xsl:choose>
+                <xsl:when test="$condition(.)">
+                    <xsl:break select=".[$inclusive]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="."/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:iterate>
     </xsl:function>
     
     <xsl:function name="houtil:after-first" as="item()*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="condition" as="function(item()) as xs:boolean"/>
-        <xsl:sequence select="houtil:afterBefore($items, $condition, false(), false())"/>
+        <xsl:sequence select="houtil:_after($items, $condition, false())"/>
     </xsl:function>
     
     <xsl:function name="houtil:from-first" as="item()*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="condition" as="function(item()) as xs:boolean"/>
-        <xsl:sequence select="houtil:afterBefore($items, $condition, true(), false())"/>
+        <xsl:sequence select="houtil:_after($items, $condition, true())"/>
     </xsl:function>
 
-    <xsl:function name="houtil:afterBefore" as="item()*">
+    <xsl:function name="houtil:_after" as="item()*" visibility="private">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="condition" as="function(item()) as xs:boolean"/>
         <xsl:param name="inclusive" as="xs:boolean"/>
-        <xsl:param name="before" as="xs:boolean"/>
         <xsl:iterate select="$items">
-            <xsl:param name="take" select="$before" as="xs:boolean"/>
+            <xsl:param name="take" select="false()" as="xs:boolean"/>
             <xsl:choose>
-                <xsl:when test="$before and $condition(.)">
-                    <xsl:break select=".[$inclusive]"/>
-                </xsl:when>
                 <xsl:when test="not($take) and $condition(.)">
                     <xsl:sequence select=".[$inclusive]"/>
                     <xsl:next-iteration>
@@ -116,24 +127,27 @@
     <xsl:function name="houtil:transitive-closure" as="node()*" visibility="public">
         <xsl:param name="node" as="node()"/>
         <xsl:param name="fn" as="function(node()) as node()*"/>
-        <xsl:sequence select="houtil:transitive-closure($node, $fn, ())"/>
+        <xsl:sequence select="houtil:_transitive-closure($node, $fn, ())"/>
     </xsl:function>
-    <xsl:function name="houtil:transitive-closure" as="node()*">
+    
+    <xsl:function name="houtil:_transitive-closure" as="node()*" visibility="private">
         <xsl:param name="node" as="node()"/>
         <xsl:param name="fn" as="function(node()) as node()*"/>
         <xsl:param name="known" as="node()*"/>
         <xsl:variable name="mapped" as="node()*" select="$fn($node)"/>
         <xsl:variable name="new" select="$mapped except $known"/>
         <xsl:variable name="known" select="$known | $new"/>
-        <xsl:sequence select="$known | ($new ! houtil:transitive-closure(., $fn, $known))"/>
+        <xsl:sequence select="$known | ($new ! houtil:_transitive-closure(., $fn, $known))"/>
     </xsl:function>
+    
     <xsl:function name="houtil:is-reachable" as="xs:boolean" visibility="public">
         <xsl:param name="node1" as="node()"/>
         <xsl:param name="node2" as="node()"/>
         <xsl:param name="fn" as="function(node()) as node()*"/>
-        <xsl:sequence select="exists(houtil:is-reachable($node1, $node2, $fn, ()))"/>
+        <xsl:sequence select="exists(houtil:_is-reachable($node1, $node2, $fn, ()))"/>
     </xsl:function>
-    <xsl:function name="houtil:is-reachable" as="node()?" visibility="public">
+    
+    <xsl:function name="houtil:_is-reachable" as="node()?" visibility="private">
         <xsl:param name="node" as="node()"/>
         <xsl:param name="node2" as="node()"/>
         <xsl:param name="fn" as="function(node()) as node()*"/>
@@ -146,53 +160,79 @@
                 if ($new[. is $node2]) then
                     $node2
                 else
-                    ($new ! houtil:is-reachable(., $node2, $fn, $known))"
+                    ($new ! houtil:_is-reachable(., $node2, $fn, $known))"
         />
     </xsl:function>
     <xsl:function name="houtil:is-cyclic" as="xs:boolean" visibility="public">
         <xsl:param name="node" as="node()"/>
         <xsl:param name="fn" as="function(node()) as node()*"/>
-        <xsl:sequence select="exists(houtil:is-reachable($node, $node, $fn, ()))"/>
+        <xsl:sequence select="exists(houtil:_is-reachable($node, $node, $fn, ()))"/>
     </xsl:function>
 
-    <xsl:function name="houtil:group-by" as="array(item()*)*" visibility="public">
+    <xsl:function name="houtil:group-by" as="map(xs:anyAtomicType, item()*)" visibility="public">
+        <xsl:param name="items" as="item()*"/>
+        <xsl:param name="key" as="function(item()) as xs:anyAtomicType?"/>
+        <xsl:sequence select="map:merge($items ! (let $k := $key(.) return (if (exists($k)) then map{$k : .} else ())), map{'duplicates':'combine'})"/>
+    </xsl:function>
+    
+    <xsl:function name="houtil:group-adjacent" as="array(item())*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="key" as="function(item()) as xs:anyAtomicType"/>
-        <xsl:for-each-group select="$items" group-by="$key(.)">
-            <xsl:sequence select="[current-group()]"/>
-        </xsl:for-each-group>
+        <xsl:iterate select="$items">
+            <xsl:param name="prev" as="xs:anyAtomicType?" select="()"/>
+            <xsl:param name="lastGroup" as="array(item())" select="[]"/>
+            <xsl:on-completion select="$lastGroup"/>
+            <xsl:variable name="k" select="$key(.)"/>
+            <xsl:choose>
+                <xsl:when test="empty($prev)">
+                    <xsl:next-iteration>
+                        <xsl:with-param name="prev" select="$k"/>
+                        <xsl:with-param name="lastGroup" select="[.]"/>
+                    </xsl:next-iteration>
+                </xsl:when>
+                <xsl:when test="houtil:_same-key($k, $prev)">
+                    <xsl:next-iteration>
+                        <xsl:with-param name="lastGroup" select="array:append($lastGroup, .)"/>
+                    </xsl:next-iteration>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$lastGroup"/>
+                    <xsl:next-iteration>
+                        <xsl:with-param name="prev" select="$k"/>
+                        <xsl:with-param name="lastGroup" select="[]"/>
+                    </xsl:next-iteration>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:iterate>
     </xsl:function>
-    <xsl:function name="houtil:group-adjacent" as="array(item()*)*" visibility="public">
-        <xsl:param name="items" as="item()*"/>
-        <xsl:param name="key" as="function(item()) as xs:anyAtomicType"/>
-        <xsl:for-each-group select="$items" group-adjacent="$key(.)">
-            <xsl:sequence select="[current-group()]"/>
-        </xsl:for-each-group>
+    
+    <xsl:function name="houtil:_same-key" as="xs:boolean" visibility="private">
+        <xsl:param name="a" as="xs:anyAtomicType"/>
+        <xsl:param name="b" as="xs:anyAtomicType"/>
+        <xsl:sequence select="map:contains(map{$a: 0}, $b)"/>
     </xsl:function>
-    <xsl:function name="houtil:group-starting-with" as="array(item()*)*" visibility="public">
+    
+    <xsl:function name="houtil:group-starting-with" as="array(item())*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="condition" as="function(item()) as xs:boolean"/>
         <xsl:for-each-group select="$items" group-starting-with=".[$condition(.)]">
             <xsl:sequence select="[current-group()]"/>
         </xsl:for-each-group>
     </xsl:function>
-    <xsl:function name="houtil:group-ending-with" as="array(item()*)*" visibility="public">
+    <xsl:function name="houtil:group-ending-with" as="array(item())*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="condition" as="function(item()) as xs:boolean"/>
         <xsl:for-each-group select="$items" group-ending-with=".[$condition(.)]">
             <xsl:sequence select="[current-group()]"/>
         </xsl:for-each-group>
     </xsl:function>
+    
     <xsl:function name="houtil:index-of" as="xs:integer*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="condition" as="function(item()) as xs:boolean"/>
-        <xsl:sequence
-            select="
-                $items ! (let $i := .,
-                    $p := position()
-                return
-                    $p[$condition($i)])"
-        />
+        <xsl:for-each select="$items">
+            <xsl:sequence select="position()[$condition(current())]"/>
+        </xsl:for-each>
     </xsl:function>
 
     <xsl:function name="houtil:replace" as="xs:string*" visibility="public">
@@ -264,97 +304,5 @@
         </xsl:choose>
     </xsl:template>
 
-   
-    <xsl:function name="f:show-trail" as="node()">
-        <xsl:param name="node" as="node()"/>
-        <xsl:for-each select="$node">
-            <xsl:copy>
-                <xsl:sequence select="@*"/>
-                <xsl:attribute name="reach" select="houtil:transitive-closure($node, $next-trail)/name()"/>
-            </xsl:copy>
-        </xsl:for-each>
-    </xsl:function>
-
-    <xsl:variable name="next-trail" select="
-            function ($node) {
-                root($node)//*[name() = $node/@next]
-            }"/>
-
-    <xsl:template name="xsl:initial-template">
-        <xsl:variable name="numbers" select="1, 3, 1, 6, 1, 1, 8, 3, 12, 1, 1"/>
-        <xsl:variable name="number.key" select="
-                function ($val) {
-                    $val mod 2
-                }"/>
-        <xsl:variable name="number.condition" select="
-                function ($val) {
-                    $val mod 2 eq 0
-                }"/>
-        <xsl:variable name="tree">
-            <root>
-                <A next="C"/>
-                <B next="E"/>
-                <C next="F"/>
-                <D/>
-                <E/>
-                <F next="C"/>
-            </root>
-        </xsl:variable>
-
-        <out>
-            <numbers>{$numbers}</numbers>
-            <key xsl:expand-text="false">function ($val) {$val mod 2}</key>
-            <condition xsl:expand-text="false">function ($val) {$val mod 2 eq 0}</condition>
-            <tree-trail xsl:expand-text="false">function($node) {root($node)//*[name() = $node/@next]}</tree-trail>
-            <tree>
-                <xsl:sequence select="$tree"/>
-            </tree>
-            <A>
-                <highest>{houtil:highest($numbers,$number.key)}</highest>
-                <lowest>{houtil:lowest($numbers,$number.key)}</lowest>
-            </A>
-            <B>
-                <before-first>{houtil:before-first($numbers,$number.condition)}</before-first>
-                <to-first>{houtil:to-first($numbers,$number.condition)}</to-first>
-                <after-first>{houtil:after-first($numbers,$number.condition)}</after-first>
-                <from-first>{houtil:from-first($numbers,$number.condition)}</from-first>
-            </B>
-            <C>
-                <transitive-closure>
-                    <xsl:sequence select="houtil:transitive-closure($tree//A, $next-trail)"/>
-                </transitive-closure>
-                <is-reachable from="">
-                    <xsl:for-each select="$tree/root/*">
-                        <xsl:variable name="start" select="."/>
-                        <xsl:copy>
-                            <xsl:sequence select="@*"/>
-                            <xsl:sequence select="$tree/root/*/(name() || ':' || houtil:is-reachable($start, ., $next-trail))"/>
-                        </xsl:copy>
-                    </xsl:for-each>
-                </is-reachable>
-                <is-cyclic>
-                    <xsl:sequence select="$tree/root/*/(name() || ':' || houtil:is-cyclic(., $next-trail))"/>
-                </is-cyclic>
-            </C>
-            <D>
-                <group-by>{houtil:group-by($numbers,$number.key) ! ("["||string-join(.?*,',')||"]")}</group-by>
-                <group-adjacent>{houtil:group-adjacent($numbers,$number.key) ! ("["||string-join(.?*,',')||"]")}</group-adjacent>
-                <group-starting-with>{houtil:group-starting-with($numbers,$number.condition) ! ("["||string-join(.?*,',')||"]")}</group-starting-with>
-                <group-ending-with>{houtil:group-ending-with($numbers,$number.condition) ! ("["||string-join(.?*,',')||"]")}</group-ending-with>
-                <index-of>{houtil:index-of($numbers,$number.condition)}</index-of>
-            </D>
-            <E>
-                <replace>{houtil:replace("a123b56","\d+",'',function($in) {string(number($in)+1)})}</replace>
-                <replace-captured-substrings>{houtil:replace-captured-substrings("a[123]b[56]", "\[(\d+)\]", "",
-                    function($groups){string(number($groups(1))+1)})}</replace-captured-substrings>
-            </E>
-            <F>
-                <transform-node-tree>
-                    <xsl:sequence
-                        select="houtil:transform-node-tree($tree/root, (map{'match': function($node) {exists($node/@next)}, 'action': f:show-trail#1}))"
-                    />
-                </transform-node-tree>
-            </F>
-        </out>
-    </xsl:template>
+ 
 </xsl:package>
