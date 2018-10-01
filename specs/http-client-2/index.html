@@ -3,7 +3,7 @@
   <head>
     <title>HTTP Client Module 2.0</title>
     <meta charset='utf-8'/>
-    <script src='http://www.w3.org/Tools/respec/respec-w3c-common' class='remove'></script>
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove'></script>
     <script class='remove'>
       var respecConfig = {
           // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
@@ -75,6 +75,23 @@
           // alternateFormats:
 
           doRDFa: "1.1",
+
+          // TODO once HTTP Client 1.0 module is on W3C EXPath CG - we should submit it to
+          // specref.org and remove it from here
+          localBiblio: {
+            "expath-http-client-10": {
+              title: "EXPath HTTP Client Module 1.0",
+              href: "https://expath.org/spec/http-client",
+              status: "CR",
+              publisher: "EXPath",
+              authors: [
+                "Florent Georges",
+              ],
+              versions: [
+                "expath-http-client-10-20100109",
+              ]
+            }
+          },
       };
     </script>
     <style>
@@ -106,11 +123,14 @@
   <body>
     <section id='abstract'>
       <p>
-        This specification provides an HTTP client interface for XML languages.
-        It defines several extension functions to perform HTTP requests.
-        It is backward-compliant with version 1.0 of the
-        <a href='http://expath.org/spec/http-client'>HTTP Client Module</a>
-        and has been designed to be compatible with [[!XQUERY-31]] and [[!XPATH-31]].
+        This specification defines an HTTP client interface for XPath based languages, such as but
+        not limited to, XQuery, XSLT, and XProc.
+        The HTTP client interface is provided through extension functions which perform HTTP
+        requests, and associated error codes which define client error states.
+      </p>
+      <p>Version 2.0 is backward-compliant with the [[expath-http-client-10]]
+        and has been designed to be compatible via [[!XPATH-31]] with [[!XQUERY-31]],
+        and [[!XSLT-30]].
       </p>
     </section>
 
@@ -120,21 +140,35 @@
     <section id='introduction'>
       <h2>Introduction</h2>
       <p>
-        The <a href='http://expath.org/spec/http-client'>HTTP Client Module</a> provides an HTTP
-        client interface for XML languages. Version 2.0 provides the following features:
+        The HTTP Client Module 2.0 provides an HTTP client interface for XPath 3.1 languages.
+      </p>
+      <p>
+        Version 2.0 makes the following design decisions over version 1.0:
       </p>
       <ul>
-        <li>Convenience functions are provided to simplify basic requests.</li>
-        <li>Maps and arrays were added to [[!XPATH-31]]. The functions take advantage of the new
-          data structures.</li>
-        <li>In the initial specification, different ways exist to supply some of the arguments, such
-          as the request URI or the payload. In the new functions, single locations are defined for
-          all arguments.</li>
-        <li>Single and multipart bodies are always passed on as items and never passed on as text
-          nodes of an XML body element. This simplifies lazy evaluation and streaming of data in
-          implementations.
-        </li>
+        <li>Convenience functions for the most frequently used HTTP requests,
+          e.g. <a>http:get</a>.</li>
+        <li>The functions in this version make use of the new Map and Array types which were added
+           to the [[!xpath-datamodel-31]]. This both simplifies the function parameters when making
+           an HTTP request, and offers implementers more options for optimizing the parsing of
+           requests and responses.</li>
+        <li>Version 2.0 defines a single position within all function signatures for each named
+          parameter, this provides a cleaner and consistent API when compared to 1.0.</li>
+        <li>The entities composing the entity body of the request in version 2.0 are always passed
+          as items, compared to 1.0 where they were passed as text nodes of an XML <em>body</em>
+          element, this simplifies lazy evaluation and streaming of data for implementers, and
+          therefore should offer better performance for users.</li>
       </ul>
+      <p>
+        An implementation of the module MUST be “backward-compliant” with version 1.0 of the
+        <a href='http://expath.org/spec/http-client'>HTTP Client Module</a>.
+        We define backward-compliant to mean that both versions of HTTP Client Module live in
+        harmony side-by-side, that is to say that their functions, etc. are all in the same
+        namespace. We have intentionally designed 2.0 so that it does not override, replace,
+        or conflict, with any specific behavior of 1.0. Rather, 2.0 complements 1.0, providing
+        a fresh API for newer versions of XPath. The design allows users to conveniently use
+        either version, or to use both 2.0 and 1.0 versions together should they wish.
+      </p>
 
       <section>
         <h2>Namespaces and Prefixes</h2>
@@ -150,7 +184,7 @@
       <h2>Supported HTTP versions</h2>
       <p>Implementations of this module are expected to support HTTP 1.0 [[!rfc1945]],
         1.1 [[!rfc2616]], and 2.0 [[!rfc7540]]. Unless otherwise explicitly stated in this
-        specification, client behaviour is expected to conform to the appropriate HTTP RFC.</p>
+        specification, client behavior is expected to conform to the appropriate HTTP RFC.</p>
       <section id="http1-support">
         <h3>HTTP 1.0 Support</h3>
         <p>This module supports all features of HTTP 1.0. Although we do not provide explicit
@@ -186,10 +220,8 @@
       </ul>
 
       <p>
-        <!-- TODO once HTTP Client 1.0 module is on W3C EXPath CG - we should add it to refspec.org
-          and link http:send-request below using a <dfn data-cite="... -->
-        The legacy function <code>http:send-request</code> is still available; it is explained in
-        detail in the original <a href='http://expath.org/spec/http-client'>HTTP Client Module</a>.
+        The legacy function <code>http:send-request</code> is still available; it is defined in
+        [[!expath-http-client-10]].
       </p>
 
       <section>
@@ -531,7 +563,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         </p>
         <p>
           If the value supplied as the <a>$body</a> parameter is an empty sequence, the
-          corresponding request's <a>entity body</a> will be omitted.
+          corresponding request’s <a>entity body</a> will be omitted.
         </p>
         <p>
           If the supplied value, or the value(s) of a multipart entity body, have any other type
@@ -544,10 +576,10 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
           <h4><dfn>Single Entity Body Request</dfn></h4>
           <p>
             By default, or if the <a>multipart</a> option is set to <code>false</code>,
-            a <dfn>single entity</dfn> will be sent in the request's <a>entity body</a>.
+            a <dfn>single entity</dfn> will be sent in the request’s <a>entity body</a>.
           </p>
           <p>   
-            For a <a>single entity</a>, the value for the <a>$body</a> parameter must have one of
+            For a <a>single entity</a>, the value for the <a>$body</a> parameter MUST have one of
             the following types:
           </p>
 
@@ -618,7 +650,6 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
             If no <code>Content-Type</code> header is supplied in the for the specific part, the resulting
             media type will be assigned.
           </p>
-
           <pre class="example" title="Multipart Entity Request">
 (
   map {
@@ -831,7 +862,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
 
     <section class="appendix informative">
       <h2>Certificates Option format for Java implementations</h2>
-      <pre class="example" title="Certificates with a HTTP Client 2.0 Java Implementation">
+      <pre class="example" title="Certificates with an HTTP Client 2.0 Java Implementation">
 "certificates": (
   map {
     "trust": map {

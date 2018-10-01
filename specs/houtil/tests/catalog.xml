@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="http://www.w3.org/2010/09/qt-fots-catalog" 
+    test-suite="EXPATH" version="0.1">
+   
+    <test-set name="houtil-highest"        file="highest.xml"/>
+    <test-set name="houtil-lowest"         file="lowest.xml"/>
+    
+    <test-set name="houtil-before-first"   file="before-first.xml"/>
+    <test-set name="houtil-to-first"       file="to-first.xml"/>
+    <test-set name="houtil-after-first"    file="after-first.xml"/>
+    <test-set name="houtil-from-first"     file="from-first.xml"/>
+    
+    <test-set name="houtil-index-of"       file="index-of.xml"/>
+    <test-set name="houtil-group-by"       file="group-by.xml"/>
+
+ 
+    
+</catalog>

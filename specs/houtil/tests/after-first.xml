@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="houtil-after-first">
+   <description>Tests for the higher-order houtil:after-first function</description>
+   
+   <!-- Tests derived from the test set for fn:filter -->
+   
+   <link type="spec" document="http://www.w3.org/TR/xpath-functions-30/" idref="func-filter"/>
+
+
+   <dependency type="spec" value="XP30+ XQ30+"/>
+   <dependency type="feature" value="higherOrderFunctions"/>
+
+   <test-case name="houtil-after-first-001">
+      <description>Basic test using starts-with()</description>
+      <created by="Michael Kay" on="2018-08-29"/>
+      <test>houtil:after-first(("apple", "pear", "apricot", "advocado", "orange"), starts-with(?, "p"))</test>
+      <result>
+         <assert-deep-eq>"apricot", "advocado", "orange"</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-after-first-002">
+      <description>Test using an inline user-defined function</description>
+      <created by="Michael Kay" on="2018-08-29"/>
+      <test>houtil:after-first((12, 4, 46, 23, -8), function($x){$x gt 40})</test>
+      <result>
+         <assert-deep-eq>23, -8</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-after-first-003">
+      <description>Test using an inline user-defined function</description>
+      <created by="Michael Kay" on="2018-08-29"/>
+      <environment>
+         <source role="." file="docs/filter003.xml">
+            <description/>
+            <created by="Michael Kay" on="2010-02-10"/>
+         </source>
+      </environment>
+      <test>let $data := (/employees) return houtil:after-first($data/emp, function($x as
+         element(emp)){xs:int($x/@salary) eq 250})</test>
+      <result>
+         <all-of>
+            <assert-count>1</assert-count>
+            <assert-type>element(emp)*</assert-type>
+            <assert>$result/@name = 'kumar'</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-after-first-004">
+      <description>Test using an inline user-defined function</description>
+      <created by="Michael Kay" on="2018-08-29"/>
+      <test>for $n in 1 to 9 return houtil:after-first(1 to 6, function($x){$x eq $n})</test>
+      <result>
+         <assert-deep-eq>2,3,4,5,6, 3,4,5,6, 4,5,6, 5,6, 6</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-after-first-005">
+      <description>Condition not satisfied by any item in the sequence</description>
+      <created by="Michael Kay" on="2018-09-01"/>
+      <environment>
+         <source role="." file="docs/filter003.xml">
+            <description/>
+            <created by="Michael Kay" on="2010-02-10"/>
+         </source>
+      </environment>
+      <test>let $data := (/employees) return houtil:after-first($data/emp, function($x as
+         element(emp)){xs:int($x/@salary) eq 0})</test>
+      <result>
+         <assert-empty/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-after-first-006">
+      <description>Filter returns an untyped node that can be cast to boolean</description>
+      <created by="Michael Kay" on="2018-08-29"/>
+      <test><![CDATA[
+            houtil:after-first((1 to 5), function($i){parse-xml("<a>" || (1 - ($i mod 2)) || "</a>")})
+        ]]></test>
+      <result>
+         <assert-deep-eq>3, 4, 5</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-after-first-901">
+      <description>"after-first" function - not a boolean</description>
+      <created by="Michael Kay" on="2018-08-29"/>
+      <test>houtil:after-first(("apple", "pear", "apricot", "advocado", "orange"), normalize-space#1)</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-after-first-902">
+      <description>"after-first" function - returns empty sequence </description>
+      <created by="Michael Kay" on="2018-08-29"/>
+      <test>houtil:after-first(("apple", "pear", "apricot", "advocado", "orange"),
+         function($x){if(starts-with($x,'o')) then true() else ()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-after-first-903">
+      <description>"after-first" function - returns non-singleton sequence</description>
+      <created by="Michael Kay" on="2018-08-29"/>
+      <test>houtil:after-first( ("apple", "pear", "apricot", "advocado", "orange"),
+         function($x){if(starts-with($x,'a')) then (true(), true()) else false()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-after-first-904">
+      <description>"after-first" function - item in sequence is of wrong type</description>
+      <created by="Michael Kay" on="2018-08-29"/>
+      <test>houtil:after-first(("apple", "pear", current-date(), "apricot", "advocado", "orange"), ends-with(?, 'o'))</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-911">
+      <description>Attempts to evaluate the "after-first" function with no arguments.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <test>houtil:after-first()</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-912">
+      <description>Attempts to reference the "after-first" function with arity zero.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <test>houtil:after-first#0</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-913">
+      <description>Attempts to evaluate the "after-first" function with one argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <test>houtil:after-first( boolean#1 )</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-914">
+      <description>Attempts to reference the "after-first" function with arity one.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <test>houtil:after-first#1</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-915">
+      <description>Attempts to reference the "after-first" function with arity two.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <test>exists( houtil:after-first#2 )</test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-920">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <test>houtil:after-first( 1, function($a as item()) as xs:boolean* { boolean($a), boolean($a) }
+         )</test>
+      <result>
+         <any-of>
+            <error code="XPST0005"/>
+            <error code="XPTY0004"/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-921">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <test>houtil:after-first( 1, function($a as item()) as xs:boolean? { () } )</test>
+      <result>
+         <any-of>
+            <error code="XPST0005"/>
+            <error code="XPTY0004"/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-922">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <modified by="Michael Kay after Tim Mills" on="2012-05-31" change="See bug 17250"/>
+      <test>houtil:after-first( 1, string#1 )</test>
+      <result>
+         <any-of>
+            <error code="XPTY0004"/>
+            <error code="XPST0005"/>
+            <assert-empty/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-923">
+      <description>Evaluates the "after-first" function with $seq set to a mix of item types </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <environment>
+         <source role="." file="docs/filter003.xml">
+            <description/>
+            <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+         </source>
+      </environment>
+      <test>houtil:after-first( (//emp, 1, "string", 3.14, 2.7e0, exists#1), function($arg) { $arg
+         instance of function(*) } )</test>
+      <result>
+         <assert-empty/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-924">
+      <description>Evaluates the "after-first" function with $f set to a function which _could_ (but
+         doesn't) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <test>houtil:after-first( 1 to 10, function($arg) { if ($arg eq 100) then () else false()})</test>
+      <result>
+         <assert-empty/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-925">
+      <description>Evaluates the "after-first" function with $f set to a function which _could_ (and
+         does) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <test>houtil:after-first( 1 to 10, function($arg) { if ($arg eq 5) then () else false()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-after-first-933">
+      <description>Evaluates the "after-first" function with $f set to a function which expects integers,
+         but is supplied with strings.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <test>houtil:after-first( ("1", "2", "3"), function($arg as xs:integer) as xs:boolean { $arg eq 100 }
+         )</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+</test-set>

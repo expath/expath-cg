@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="houtil-highest" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <description>Tests for the array:head function introduced in XPath 3.1</description>
+    <link type="spec" document="http://www.w3.org/TR/xpath-functions-31/" idref="func-array-head"/>
+    <dependency type="spec" value="XP31+ XQ31+"/>
+
+    <environment name="houtil">
+        <namespace prefix="houtil" uri="http://expath.org/ns/houtil"/>
+    </environment>
+
+    <test-case name="houtil-highest-001">
+        <description>Integer with highest square</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest(-5 to +3, function($i){$i*$i})</test>
+        <result>
+            <assert-eq>-5</assert-eq>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-002">
+        <description>Empty sequence</description>
+        <created by="Michael Kay" on="2018-08-27"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest((1 to 100)[. = year-from-date(current-date())], function($i){$i*$i})</test>
+        <result>
+            <assert-empty/>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-003">
+        <description>Longest string</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest(("red", "orange", "yellow", "green", "blue", "indigo", "violet"), string-length#1)</test>
+        <result>
+            <assert-deep-eq>"orange", "yellow", "indigo", "violet"</assert-deep-eq>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-004">
+        <description>Last in alphabetic order</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest(doc(static-base-uri())//*:test-case, function($t){string($t/@name)})/*:description</test>
+        <result>
+            <assert-eq>"Function throws an error"</assert-eq>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-005">
+        <description>Function may return empty sequence</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest(-5 to +10, function($i){if ($i lt 0) then $i*$i else ()})</test>
+        <result>
+            <assert-eq>-5</assert-eq>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-006">
+        <description>Mix numbers with untyped atomic</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest(-5 to +10, function($i){if ($i lt 0) then $i*$i else xs:untypedAtomic($i*$i)})</test>
+        <result>
+            <assert-eq>10</assert-eq>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-007">
+        <description>Items with key:NaN are ignored</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest((-5 to +10, "nanana"), function($i){number($i)})</test>
+        <result>
+            <assert-eq>10</assert-eq>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-008">
+        <description>Binary data types are now ordered</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest(("1a", "0100", "fd", "F1", "dd"), function($i){xs:hexBinary($i)})</test>
+        <result>
+            <assert-eq>"fd"</assert-eq>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-009">
+        <description>Function returns a node (this is atomized by virtue of function coercion)</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test><![CDATA[houtil:highest(3 to 12, function($i){parse-xml("<a>"||$i||"</a>")})]]></test>
+        <result>
+            <assert-eq>12</assert-eq>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-010">
+        <description>Longest duration</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest(doc(static-base-uri())//*:test-case, function($t){current-date() - xs:date($t/*:created/@on)})/*:description</test>
+        <result>
+            <assert-eq>"Empty sequence"</assert-eq>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-011">
+        <description>Non-codepoint collation</description>
+        <!-- Note, this cannot be tested using xsl:evaluate because the default collation cannot be set dynamically -->
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment>
+            <collation uri="http://www.w3.org/2013/collation/UCA?lang=en;strength=primary" default="true"/>
+        </environment>
+        <test>houtil:highest(("a", "A", "z", "Z"), string#1)</test>
+        <result>
+            <assert-deep-eq>"z", "Z"</assert-deep-eq>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-996">
+        <description>Value of unordered type</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest((QName("http://www.w3.org/", "defined"), QName("http://www.w3.org/", "undefined")), function($i){$i})</test>
+        <result>
+            <error code="FORG0006"/>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-997">
+        <description>Singleton value of unordered type</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest(QName("http://www.w3.org/", "undefined"), function($i){$i})</test>
+        <result>
+            <error code="FORG0006"/>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-998">
+        <description>Non-comparable values returned by function</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest(-5 to +3, function($i){if ($i lt 0) then $i else string($i)})</test>
+        <result>
+            <error code="FORG0006"/>
+        </result>
+    </test-case>
+    
+    <test-case name="houtil-highest-999">
+        <description>Function throws an error</description>
+        <created by="Michael Kay" on="2018-08-28"/>
+        <environment ref="houtil"/>
+        <test>houtil:highest(-5 to +3, function($i){10 div $i})</test>
+        <result>
+            <error code="FOAR0001"/>
+        </result>
+    </test-case>
+    
+    
+</test-set>

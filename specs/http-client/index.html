@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HTTP Client Module 1.0</title>
+    <meta charset="utf-8">
+    <script src="https://www.w3.org/Tools/respec/respec-w3c-common" class="remove"></script>
+    <script class="remove">
+      var respecConfig = {
+          // the CG
+          wg: "EXPath Community Group",
+          wgURI: "https://www.w3.org/community/expath/",
+          wgPublicList: "public-expath",
+          //github: "https://github.com/expath/expath-cg/",
+          //repoURL: "https://github.com/expath/expath-cg/",
+
+          // specification status (e.g. WD, LCWD, NOTE, etc.). CG-DRAFT and CG-FINAL for CG reports
+          specStatus: "CG-DRAFT",
+          shortName: "expath-http-client",
+
+          // once the final report is published
+          //publishDate: "2017-09-01",
+
+          // if there a publicly available Editor's Draft, this is the link
+          edDraftURI: "https://expath.github.io/expath-cg/specs/http-client/",
+
+          // editors, add as many as you like, only "name" is required
+          editors: [
+              { name: "Florent Georges", url: "https://linkedin.com/in/fgeorges/",
+                company: "H2O Consulting", companyURL: "http://h2o.consulting/" }
+          ],
+
+          doRDFa: "1.1",
+
+          // references that do not exist on specref
+          // localBiblio: {
+          //   "some-label": {
+          //     title: "The title",
+          //     href: "https://example.org/the-stuff",
+          //     status: "REC",
+          //     publisher: "Xyz",
+          //     authors: [
+          //       "Bla bla",
+          //     ],
+          //     versions: [
+          //       "version-tag-20100109",
+          //     ]
+          //   }
+          // },
+
+	  otherLinks: [{
+	    key: 'Previous versions',
+	    data: [{
+	      value: 'http://expath.org/spec/http-client/20100109',
+	      href: 'http://expath.org/spec/http-client/20100109'
+	    }, {
+	      value: 'http://expath.org/spec/http-client/20090413',
+	      href: 'http://expath.org/spec/http-client/20090413'
+	    }, {
+	      value: 'http://expath.org/spec/http-client/20090302',
+	      href: 'http://expath.org/spec/http-client/20090302'
+	    }, {
+	      value: 'http://expath.org/spec/http-client/20090112',
+	      href: 'http://expath.org/spec/http-client/20090112'
+	    }]
+          }, {
+	    key: 'Participate',
+	    data: [{
+	      value: 'GitHub expath/expath-cg',
+	      href: 'https://github.com/expath/expath-cg/'
+	    }, {
+	      value: 'File a bug',
+	      href: 'https://github.com/expath/expath-cg/issues/'
+	    }]
+	  }],
+
+      };
+    </script>
+    <style type="text/css">
+
+      pre, code, samp {
+          color: black !important;
+          font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
+          font-size: .9em;
+          page-break-inside: avoid;
+          hyphens: none;
+          text-transform: none;
+          text-align: left;
+          text-align: start;
+      }
+
+      div.proto, pre.proto {
+          color: black;
+          border: 0;
+          border-spacing: 0;
+          padding: .5em;
+	  border: .5em;
+	  border-left-style: solid;
+	  page-break-inside: avoid;
+	  margin: 1em auto;
+	  border-color: #ff99ff;
+	  background: #ffe6ff;
+	  overflow: auto;
+      }
+
+      div.proto pre {
+          padding: 0;
+	  margin-bottom: 0;
+	  margin-top: 0;
+      }
+
+      code.function {
+          font-weight: bold;
+      }
+
+      code.return-type, code.type {
+          font-style: italic;
+      }
+
+      code.return-varies {
+          font-weight: bold;
+          font-style: italic;
+      }
+
+      code.as {
+          font-style: normal;
+      }
+
+      code.arg {
+      }
+
+      div.exampleHeader {
+          font-weight: bold;
+          margin: 4px;
+      }
+
+      div.exampleInner {
+          background-color: #d5dee3;
+          padding: 4px;
+          margin: 0em;
+      }
+
+      div.exampleInner pre {
+          margin-left: 1em;
+          margin-top: 0em;
+          margin-bottom: 0em;
+      }
+
+      p>code, li>code {
+	  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+	  box-sizing: border-box;
+	  padding: 0;
+	  padding-top: 0px;
+	  padding-bottom: 0px;
+	  padding-top: 0.2em;
+	  padding-bottom: 0.2em;
+	  margin: 0;
+	  font-size: 85%;
+	  background-color: rgba(0,0,0,0.04);
+	  border-radius: 3px;
+	  color: #333;
+      }
+
+      table.proto td {
+          vertical-align: baseline;
+      }
+
+      var {
+          font-style: italic;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <section id="abstract">
+      <p>
+        This proposal provides an HTTP client interface for XPath 2.0.  It
+        defines one extension function to perform HTTP requests, and has been
+        designed to be compatible with XQuery 1.0 and XSLT 2.0, as well as any
+        other XPath 2.0 usage.
+      </p>
+    </section>
+    <section id="sotd">
+    </section>
+
+    <section>
+      <h2>Introduction</h2>
+      <section>
+	<h3>Namespace conventions</h3>
+        <p>The module defined by this document does define one function in the namespace
+          <code>http://expath.org/ns/http-client</code>. In this document, the
+          <code>http</code> prefix, when used, is bound to this namespace URI.</p>
+        <p>Error codes are defined in the namespace <code>http://expath.org/ns/error</code>. In this
+          document, the <code>err</code> prefix, when used, is bound to this namespace URI.</p>
+      </section>
+      <section>
+        <h3>Error management</h3>
+        <p>Error conditions are identified by a code (a <code>QName</code>). When such an error
+          condition is reached during the execution of the function, a dynamic error is thrown, with
+          the corresponding error code (as if the standard XPath function
+          <code>error</code> had been called).</p>
+        <p>Error codes are defined through the spec. For too many reasons to enumerate here, the
+          HTTP protocol layer can raise an error. In this case, if the error condition is not
+          mentioned explicitly in the spec, the implementation must raise an error with an
+          appropriate message <a href="#dfn-errHC001">err:HC001</a>.</p>
+      </section>
+    </section>
+
+    <section>
+      <h2>The <dfn>http:send-request</dfn> function</h2>
+      <p>This module defines an XPath extension function that sends an HTTP request and return the
+        corresponding response. It supports HTTP multi-part messages. Here is the signature of this
+        function:</p>
+      <div class="proto">
+        <table class="proto">
+          <tbody>
+            <tr>
+              <td rowspan="3"><code class="function">http:send-request</code>(</td>
+              <td><code class="arg">$request</code></td>
+              <td><code class="as"> as </code><code class="type">element(http:request)?</code>,</td>
+            </tr>
+            <tr>
+              <td><code class="arg">$href</code></td>
+              <td><code class="as"> as </code><code class="type">xs:string?</code>,</td>
+            </tr>
+            <tr>
+              <td><code class="arg">$bodies</code></td>
+              <td><code class="as"> as </code><code class="type">item()*</code>)<code class="as"> as </code><code class="return-type">item()+</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ul>
+        <li><code>$request</code> contains the various parameters of the request, for instance the
+          HTTP method to use or the HTTP headers. Among other things, it can also contain the other
+          param's values: the URI and the bodies. If they are not set as parameter to the function,
+          their value in $request, if any, is used instead. See the following section for the
+          detailed definition of the http:request element. If the parameter does not follow the
+          grammar defined in this spec, this is an error <a href="#dfn-errHC005">err:HC005</a>.</li>
+        <li><code>$href</code> is the HTTP or HTTPS URI to send the request to. It is an xs:anyURI,
+          but is declared as a string to be able to pass literal strings (without requiring to
+          explicitly cast it to an xs:anyURI).</li>
+        <li><code>$bodies</code> is the request body content, for HTTP methods that can contain a
+          body in the request (e.g. POST). This is an error if this param is not the empty sequence
+          for methods that must be empty (e.g. DELETE). The details of the methods are defined in
+          their respective specs (e.g. [[!rfc2616]] or [[!rfc4918]]). In case of a multipart
+          request, it can be a sequence of several items, each one is the body of the corresponding
+          body descriptor in
+          <code>$request</code>. See below for details.</li>
+      </ul>
+      <p>Besides the 3-params signature above, there are 2 other signatures that are convenient
+        shortcuts (corresponding to the full version in which corresponding params have been set
+        to the empty sequence). They are:</p>
+      <div class="proto">
+        <code class="function">http:send-request</code>(<code class="arg">$request</code><code class="as"> as </code><code class="type">element(http:request)?</code>, <code class="arg">$href</code><code class="as"> as </code><code class="type">xs:string?</code>) as <code class="return-type">item()+</code>
+      </div>
+      <div class="proto">
+        <code class="function">http:send-request</code>(<code class="arg">$request</code><code class="as"> as </code><code class="type">element(http:request)?</code>, <code class="arg">$href</code>) as <code class="return-type">item()+</code>
+      </div>
+    </section>
+
+    <section>
+      <h2>Sending a request</h2>
+      <p>The functions defined in this module make one able to send a request to an HTTP server and
+        receive the corresponding response.  Here is how the request is represented by the
+        parameters to this function, and how they are used to generate the actual HTTP request to
+        send.</p>
+
+      <section>
+        <h3>The request elements</h3>
+        <p>The <code>http:request</code> element represents all the needed information to send the
+          HTTP request.  So it is always possible to create such an element that will carry over all
+          the needed info for a particular request.  For some of those values though, you can use an
+          additional param instead.  For instance, some signatures define the
+          parameter <code>$href</code>.  If the value of this parameter is not the empty sequence,
+          it will then be used instead of the value of the attribute <code>href</code> on
+          the <code>http:request</code> element.</p>
+
+        <div class="proto">
+          <pre>
+&lt;http:request method = ncname
+              href? = uri
+              http-version? = string
+              status-only? = boolean
+              username? = string
+              password? = string
+              auth-method? = string
+              send-authorization? = boolean
+              override-media-type? = string
+              follow-redirect? = boolean
+              timeout? = integer>
+   &lt;!-- Content: (http:header*, (http:body|http:multipart)?) -->
+&lt;/http:request></pre>
+        </div>
+
+        <ul>
+          <li><code>method</code> is the HTTP verb to use, as GET, POST, etc.  It is case
+            insensitive</li>
+          <li><code>href</code> is the URI the request has to be sent to.  It can be overridden by
+            the parameter <code>$href</code></li>
+          <li><code>http-version</code> is the version of HTTP to use. It must be either the
+            string <code>1.0</code> or <code>1.1</code>. Default is implementation-defined.  An
+            implementation SHOULD support both and the default SHOULD be
+            <code>1.1</code>. If the value specified is not supported by a specific implementation,
+            it should throw an appropriate error message <a href="#dfn-errHC007">err:HC007</a>.</li>
+          <li><code>status-only</code> control how the response will look like; if it is true, only
+            the status code and the headers are returned, the content is not (no http:body nor
+            http:multipart, nor the interpreted additional value in the returned sequence, see
+            hereafter).</li>
+          <li><code>username</code>, <code>password</code>, <code>auth-method</code>
+            and <code>send-authorization</code> are used for authentication (see section
+            below).</li>
+          <li><code>override-media-type</code> is a MIME type.  It can be used only with
+            <code>http:request</code>, and will override the Content-Type header returned by the
+            server.</li>
+          <li><code>follow-redirect</code> control whether an HTTP redirect is automatically
+            followed or not.  If it is false, the HTTP redirect is returned as the response.  If it
+            is true (the default) the function tries to follow the redirect, by sending the same
+            request to the new address (including body, headers, and authentication credentials).
+            Maximum one redirect is followed (there is no attempt to follow a redirect in response
+            to following a first redirect).</li>
+          <li><code>timeout</code> is the maximum number of seconds to wait for the server to
+            respond. If this time duration is reached, an error is thrown
+            <a href="#dfn-errHC006">err:HC006</a>.</li>
+          <li><code>http:header</code> represent an HTTP header, either in the
+            <code>http:request</code> or in the <code>http:response</code> elements, as defined
+            below.</li>
+          <li><code>http:multipart</code> represents a multi-part body, either in a request or a
+            response, as defined below.</li>
+          <li><code>http:body</code> represents the body, either of a request or a response, as
+            defined below.</li>
+        </ul>
+        <p>The <code>http:header</code> element represents an HTTP header, either in a request or in
+          a response:</p>
+        <div class="proto">
+          <pre>
+&lt;http:header name = string
+             value = string>
+   &lt;!-- Content: empty -->
+&lt;/http:header></pre>
+          </div>
+        <p>The <code>http:body</code> element represents the body of either an HTTP request or of an
+          HTTP response (in multipart requests and responses, it represents the body of a single one
+          part):</p>
+        <div class="proto">
+          <pre>
+&lt;http:body media-type = string
+           src? = uri
+           method? = "xml" | "html" | "xhtml" | "text" | "binary"
+             | qname-but-not-ncname
+           byte-order-mark? = "yes" | "no"
+           cdata-section-elements? = qnames
+           doctype-public? = string
+           doctype-system? = string
+           encoding? = string
+           escape-uri-attributes? = "yes" | "no"
+           indent? = "yes" | "no"
+           normalization-form? = "NFC" | "NFD" | "NFKC" | "NFKD"
+             | "fully-normalized" | "none" | nmtoken
+           omit-xml-declaration? = "yes" | "no"
+           standalone? = "yes" | "no" | "omit"
+           suppress-indentation? = qnames
+           undeclare-prefixes? = "yes" | "no"
+           version? = nmtoken>
+   &lt;!-- Content: any* -->
+&lt;/http:body></pre>
+          </div>
+        <p>The <code>media-type</code> is the MIME media type of the body part. It is mandatory.  In
+          a request it is given by the user and is the default value of the Content-Type header if
+          it is not set explicitly. In a response, it is given by the implementation from the
+          Content-Type header returned by the server. The <code>src</code> attribute can be used in
+          a request to set the body content as the content of the linked resource instead of using
+          the children of the <code>http:body</code> element. When this attribute is used, only
+          the <code>media-type</code> attribute must also be present, and there can be neither
+          content in the <code>http:body</code> element, nor any other attribute, or this is an
+          error <a href="#dfn-errHC004">err:HC004</a>.</p>
+        <p>All the attributes, except <code>src</code>, are used to set the corresponding
+          serialization parameter defined in [[!xslt-xquery-serialization]], as defined for the
+          XPath 3.0 function <code>fn:serialize()</code> [[!xpath-functions-30]]. Those attributes
+          can be given by the user on a request to control the way a part body is serialized. In the
+          response, the implementation can, but is not required, to provide some of them if it has
+          the corresponding information (some of them do not make any sense in a response, therefore
+          they will never be on a response element, for instance <code>version</code>).</p>
+        <p>The <code>http:multipart</code> element represents an HTTP multi-part request or
+          response:</p>
+        <div class="proto">
+          <pre>
+&lt;http:multipart media-type = string
+                boundary? = string>
+   &lt;!-- (http:header*, http:body)+ -->
+&lt;/http:multipart></pre>
+        </div>
+        <p>The <code>media-type</code> attribute is the media type of the whole request or response,
+          and has to be a multipart media type (that is, its main type must be
+          <code>multipart</code>). The <code>boundary</code> attribute is the boundary marker used
+          to separate the several parts in the message (the value of the attribute is prefixed with
+          "<code>--</code>" to form the actual boundary marker in the request; on the other way,
+          this prefix is removed from the boundary marker in the response to set the value of the
+          attribute).</p>
+      </section>
+
+      <section>
+        <h3>Serializing the request content</h3>
+        <p>If the request can have content (one body or several body parts), it can be specified by
+          the <code>http:multipart</code> element, the <code>http:body</code> element, and/or the
+          parameter <code>$bodies</code>. For each body, the content of the HTTP body is generated
+          as follow.</p>
+        <p>Except when its attribute <code>src</code> is present, a <code>http:request</code>
+          element can have several attributes representing serialization parameters, as defined in
+          [[!xslt-xquery-serialization]]. This spec defines in addition the method
+          <code>'binary'</code>; in this case the body content must be either an xs:hexBinary or an
+          xs:base64Binary item, and no other serialization parameter can be set
+          besides <code>media-type</code>.</p>
+        <p>The default value of the serialization method depends on the <code>media-type</code>: it
+          is <code>'xml'</code> if it is an XML media type, <code>'html'</code> if it is an HTML
+          media type, <code>'xhtml'</code> if it is <code>application/xhtml+xml</code>,
+          <code>'text'</code> if it is a textual media type, and <code>'binary'</code> for any other
+          case.</p>
+        <p>When a body element has an empty content (i.e. it has no child node at all) its content
+          is given by the parameter <code>$bodies</code>. In a single part request, this param must
+          have at most one item. If the body is empty, the param cannot be the empty sequence. In a
+          multipart request, <code>$bodies</code> must have as many items as there are empty body
+          elements. If there are three empty body elements, the content of the first of them
+          is <code>$bodies[1]</code>, and so on. The number of empty body elements must be equal to
+          the number of items in <code>$bodies</code>.</p>
+      </section>
+
+      <section>
+        <h3>Authentication</h3>
+        <p>HTTP authentication when sending a request is controlled by the attributes 
+          <code>username</code>, <code>password</code>, <code>auth-method</code> and
+          <code>send-authorization</code> on the element <code>http:request</code>.
+          If <code>username</code> has a value, <code>password</code> and
+          <code>auth-method</code> must have a value too.  And if any one of the three other
+          attributes have been set, <code>username</code> must be set too.</p>
+        <p>The attribute <code>auth-method</code> can be either <code>"Basic"</code> or
+          <code>"Digest"</code>, but other values can also be used, in an implementation-defined
+          way.  The handling of those attributes must be done in conformance to [[!rfc2617]].
+          If <code>send-authorization</code> is true (default value is false) and the authentication
+          method supports generating the header <code>Authorization</code> without challenge, the
+          request contains this header.  The default value is to send a non-authenticated request,
+          and if the response is an authentication challenge, then only send the credentials in a
+          second message.</p>
+      </section>
+    </section>
+
+    <section>
+      <h2>Dealing with the response</h2>
+      <p>After having sent the request to the HTTP server, the function waits for the response.
+        It analyses it and returns a sequence representing this response.  This sequence has
+        an <code>http:response</code> element as first item, which is followed be an additional
+        item for each body or body part in the response.</p>
+
+      <section>
+        <h3>The result element</h3>
+        <div class="proto">
+          <pre>
+&lt;http:response status = integer
+               message = string>
+   &lt;!-- Content: (http:header*, (http:body|http:multipart)?) -->
+&lt;/http:response></pre>
+        </div>
+        <p>This is the first item returned by the function defined in this module.
+          The <code>status</code> attribute is the HTTP status code returned by the server,
+          and <code>message</code> is the message coming with the status on the status line.
+          The <code>http:header</code> elements are as defined for the request, but represent
+          instead the response headers.  The <code>http:body</code>
+          and <code>http:multipart</code> elements are also like in the request, but
+          <code>http:body</code> elements must be empty.</p>
+      </section>
+
+      <section>
+        <h3>Representing the result content</h3>
+        <p>Instead of being inserted within the <code>http:response</code> element, the content of
+          each body is returned as a single item in the return sequence.  Each item is in the same
+          order (after the <code>http:response</code> element) than the <code>http:body</code>
+          elements.  For each body, the way this item is built from the HTTP response is as
+          follow.</p>
+        <p>If the <code>status-only</code> attribute has the value <code>true</code> (default
+          is <code>false</code>), the returned sequence will only contain the
+          <code>http:response</code> element (with the headers, but also the empty
+          <code>http:body</code> or <code>http:multipart</code> elements, as if
+          <code>status-only</code> was false), and the following items, representing the bodies
+          content are not generated from the HTTP response.</p>
+        <p>For each body that has to be interpreted, the following rules apply in order to build the
+          corresponding item.  If the body media type is a text media type, the item is a string,
+          containing the body content.  If the media type is an XML media type, the content is
+          parsed and the item is the resulting document node.  If the media type is an HTML type,
+          the content is <emph>tidied up</emph> and parsed (this process is
+          implementation-dependant) and the item is the resulting document node.  If this is a
+          binary media type, the content is returned as a base64Binary item.  From the previous
+          rules, a result item can then be either a document node (from XML or HTML), a string or a
+          base64Binary.</p>
+        <p>When the type of a part is either XML or HTML, its body has to be parsed into a document
+          node. If there is any error when parsing the content, an error is raised with an
+          appropriate message <a href="#dfn-errHC002">err:HC002</a>.</p>
+        <p>If the attribute <code>override-media-type</code> is set on the request, its value is
+          used instead of the Content-Type returned by the HTTP server. If the Content-Type of the
+          response is a multipart type, the value of <code>override-media-type</code> can only be a
+          multipart type, or <code>application/octet-stream</code> (to get the raw entity as a
+          binary item). If it is not, this is an error <a href="#dfn-errHC003">err:HC003</a>.</p>
+      </section>
+    </section>
+
+    <section>
+      <h2>Content types handling</h2>
+      <p>In both requests and responses, MIME type strings are used to choose the way the entity
+        content has to be respectively serialized or parsed.  Four different kinds of type are
+        defined here, which are used in the above text about sending request and receiving response.
+        The intent is to provide the spirit of the entity content handling regarding its content
+        type, but an implementation is encouraged to deviate from those rules if it is obvious that
+        a particular type should be treated in a specific way (normally, that would be the case only
+        to treat a binary type as another type).</p>
+      <ul>
+        <li>An XML media type has a MIME type of <code>text/xml</code>,
+          <code>application/xml</code>, <code>text/xml-external-parsed-entity</code>,
+          or <code>application/xml-external-parsed-entity</code>, as defined in [[!rfc3023]] (except
+          that <code>application/xml-dtd</code> is considered a text media type).  MIME types ending
+          by <code>+xml</code> are also XML media types.</li>
+        <li>An HTML media type has a MIME type of <code>text/html</code>.</li>
+        <li>Text media types are the remaining types beginning with <code>text/</code>.</li>
+        <li>Binary types are all the other types.  An implementation can treat some of those binary
+          types as either an XML, HTML or text media type if it is more appropriate (this is
+          implementation-defined).</li>
+      </ul>
+    </section>
+
+    <section class="appendix">
+      <h2>Summary of Error Conditions</h2>
+      <dl>
+        <dt><dfn id="dfn-errHC001">err:HC001</dfn></dt>
+        <dd>An HTTP error occurred.</dd>
+        <dt><dfn id="dfn-errHC002">err:HC002</dfn></dt>
+        <dd>Error parsing the entity content as XML or HTML.</dd>
+        <dt><dfn id="dfn-errHC003">err:HC003</dfn></dt>
+        <dd>With a multipart response, the override-media-type must be either a multipart media type
+          or application/octet-stream.</dd>
+        <dt><dfn id="dfn-errHC004">err:HC004</dfn></dt>
+        <dd>The src attribute on the body element is mutually exclusive with all other attribute
+          (except the media-type).</dd>
+        <dt><dfn id="dfn-errHC005">err:HC005</dfn></dt>
+        <dd>The request element is not valid.</dd>
+        <dt><dfn id="dfn-errHC006">err:HC006</dfn></dt>
+        <dd>A timeout occurred waiting for the response.</dd>
+        <dt><dfn id="dfn-errHC007">err:HC007</dfn></dt>
+        <dd>The specified HTTP version is not supported by this implementation.</dd>
+      </dl>
+    </section>
+
+  </body>
+</html>
