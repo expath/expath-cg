@@ -127,6 +127,10 @@
       .option-description {
         vertical-align: top;
       }
+      .fake-dfn {
+        font-weight: bolder;
+        font-style: italic;
+      }
     </style>
   </head>
   <body>
@@ -389,7 +393,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
           </thead>
           <tbody>
             <tr>
-              <td><dfn>http-version</dfn></td>
+              <td><dfn id="request-http-version">http-version</dfn></td>
               <td><code>xs:string</code></td>
               <td><code>1.1</code></td>
               <td>
@@ -399,7 +403,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
               </td>
             </tr>
             <tr>
-              <td><dfn>headers</dfn></td>
+              <td><dfn id="request-headers">headers</dfn></td>
               <td><code>map(xs:string, xs:string)</code></td>
               <td><code>empty-sequence()</code></td>
               <td>HTTP header fields.</td>
@@ -476,6 +480,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
                 <p>The value <code>0</code> indicates that no timeout should be imposed.</p>
                 <p>If a negative value is specified, the error code <a>http:invalid-option</a> MUST
                   be raised.</p>
+                <p>When a timeout is set, if the server fails to respond within the timeout period,
+                  the error <a>http:timeout</a> MUST be raised.</p>
               </td>
             </tr>
             <tr>
@@ -532,7 +538,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
               <td><code>true()</code></td>
               <td>
                 <p>Indicates if the response bodies will be parsed (see
-                  <a href="#response-bodies" class="sectionRef"></a>).</p>
+                  <a href="#response-entity-body" class="sectionRef"></a>).</p>
                 <p>When set to <code>true()</code>, if <a>status-only</a> is also set to
                   <code>true()</code>, the error <a>http:invalid-option</a> MUST be raised.</p>
               </td>
@@ -614,7 +620,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
 
           <p>
             The evaluated media type will be assigned as the value of the <code>Content-Type</code>
-            header unless a value has been supplied by the user in <a>headers</a>. For multipart
+            header unless a value has been supplied by the user in <a href="#request-headers">headers</a>. For multipart
             requests, each media type will be sent as the <code>Content-Type</code> header in the
             corresponding multipart header section.
           </p>
@@ -709,144 +715,269 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
     <section id='response'>
       <h2>The Response</h2>
       <p>
-        An HTTP response is returned as a map. It contains the following entries:
-      </p>
-
-      <dl>
-        <dt><code>status</code> (<code>xs:string</code>)</dt>
-        <dd>Status code.</dd>
-
-        <dt><code>message</code> (<code>xs:string</code>)</dt>
-        <dd>Status message (also called <i>reason phrase</i>).</dd>
-
-        <dt><code>http-version</code> (<code>xs:string</code>)</dt>
-        <dd>The HTTP Version of the response.</dd>
-
-        <dt><code>headers</code> (<code>map(xs:string, xs:string)</code>)</dt>
-        <dd>Response headers. The syntax is identical to the request header.</dd>
-
-        <dt><code>body</code> (<code>item()*</code>)</dt>
-        <dd>Optional response body.</dd>
-      </dl>
-
-      <pre class="example" title="Response of a GET request">
-        map {
-          "http-version": "1.1",
-          "status": "200",
-          "message": "OK",
-          "headers": map {
-            "Date": "Fri, 31 Dec 1999 23:59:59 GMT",
-            "Server": "Apache",
-            "Content-Type": "text/plain"
-          },
-          "body": "Happy new year"
-        }
-      </pre>
-
+        When the HTTP request is made to the server indicated by the request <a>$uri</a>, if the
+        server processes the request and responds to the client within the <a>timeout</a> then the
+        HTTP response from the server is returned as the result of the function as a map.</p>
       <p>
-        If no body is returned, there will be no <code>body</code> entry. Otherwise, the value of
-        the <code>Content-Type</code> header defines the media-type of the body. The body will
-        implicitly be parsed and converted:
+        If the server fails to respond to an HTTP request within the <a>timeout</a> then the error
+        <a>http:timeout</a> MUST be raised. If the HTTP request cannot be made to the server then
+        the error <a>http:network-error</a> MUST be raised.
       </p>
 
-      <dl>
-        <dt><code>multipart/</code> prefix</dt>
-        <dd>Multipart body, returned as <code>map(xs:string, item())*</code>.
-          The format of the map items is identical to the request format:
-          <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
-          A part body will have one of the remaining types of this list.</dd>
+      <section id="response-map">
+        <h3>The Response Map</h3>
+        <p>
+          The HTTP response map contains the following entries. Optional entries are entirely absent
+          from the map if the HTTP response does not contain the corresponding data, for example no body is returned, there will be no <code>body</code> entry.
+        </p>
 
-        <dt><code>application/xml</code>, <code>application/xml-external-parsed-entity</code>,
-          <code>text/xml</code>, <code>text/xml-external-parsed-entity</code>, <code>+xml</code>
-          suffix</dt>
-        <dd>Parsed as XML, returned as <code>document-node()</code>.</dd>
+        <table class="minborder">
+          <caption>Response Entries</caption>
+          <colgroup>
+            <col span="1">
+            <col span="1">
+            <col span="1">
+            <col span="1" class="option-description">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Response Key</th>
+              <th>XDM Type</th>
+              <th>Optional</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="fake-dfn">http-version</span></td>
+              <td><code>xs:string</code></td>
+              <td>No</td>
+              <td>
+                <p>The HTTP Version of the response. This may differ from the
+                  <a href="#request-http-version">http-version</a> requested!</p>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="fake-dfn">status-code</span></td>
+              <td><code>xs:string</code></td>
+              <td>No</td>
+              <td>
+                <p>The HTTP status code.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="fake-dfn">reason-phrase</span></td>
+              <td><code>xs:string</code></td>
+              <td>No</td>
+              <td>
+                <p>HTTP reason phrase.</p>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="fake-dfn">headers</span></td>
+              <td><code>map(xs:string, xs:string)</code></td>
+              <td>Yes</td>
+              <td>HTTP response header fields.</td>
+            </tr>
+            <tr>
+              <td><span class="fake-dfn">body</span></td>
+              <td><code>item()+</code></td>
+              <td>Yes</td>
+              <td>HTTP response body.</td>
+            </tr>
+          </tbody>
+        </table>
 
-        <dt><code>application/json</code></dt>
-        <dd>Parsed as JSON, returned as item of type <code>map(*)</code>, <code>array(*)</code>,
-          <code>xs:string</code>, <code>xs:double</code>, <code>xs:boolean</code>,
-          or as <code>empty-sequence()</code>.</dd>
-
-        <dt><code>text/</code> prefix</dt>
-        <dd>Parsed as text, returned as <code>xs:string</code>.</dd>
-
-        <dt>any other value</dt>
-        <dd>No parsing, returned as <code>xs:base64Binary</code>.</dd>
-      </dl>
-
-      <p>
-        The error <a>http:parse</a> will be raised if an error occurs while parsing the body.
-      </p>
-
-      <pre class="example" title="Multipart response">
-        map {
-          "status": "200",
-          "message": "OK",
-          "headers": map {
-            "Content-Type": "multipart/mixed"
-          },
-          "body": [
-            map {
-              "headers" : map {
-                "Content-Type": "application/json"
-              },
-              "body": map { "creator": "John", "year": 2018 }
+        <pre class="example" title="Response of a GET request">
+          map {
+            "http-version": "1.1",
+            "status-code": "200",
+            "reason-phrase": "OK",
+            "headers": map {
+              "Date": "Fri, 31 Dec 1999 23:59:59 GMT",
+              "Server": "Apache",
+              "Content-Type": "text/plain"
             },
-            map {
-              "headers" : map {
-                "Content-Type": "image/png"
-              },
-              "body": xs:base64Binary('abcdefgh')
-            }
-          ]
-        }
-      </pre>
-
-      <section id='response-bodies'>
-        <h3>Parsing of Response Bodies</h3>
-        <p>
-          If requests are sent to the server, the client has full control over creating the request
-          data. This is different for the received response. It can be defective, wrongly typed or
-          encoded or incomplete. A client may know, or may want to know more about the sent data,
-          or the implicit conversion of response bodies might not match the client’s requirements.
-        </p>
-        <p>
-          Parsing of the response body can be disabled via the <a>parse-response-entity-body</a>
-          option. All bodies of single and multipart responses will be returned as binary items
-          of type <code>xs:base64Binary</code>, and the values can be processed (stored, parsed,
-          forwarded) in a second step.
-        </p>
-
-        <pre class="example" title="XQuery example for parsing response bodies">
-          (:~ 
-           : Parses a response and returns the parsed body values.
-           : @param $response response (top-level, multipart)
-           : @return flat sequence with parsed bodies
-           :)
-          declare function local:parse(
-            $response as map(xs:string, item())
-          ) as item()* {
-            let $type := $response?headers?Content-Type
-            let $body := $response?body
-            return if(ends-with($type, '/csv') then (
-              csv:parse($body)
-            ) else if(ends-with($type, '/json') then (
-              json:parse($body)
-            ) else if(ends-with($type, '/html') then (
-              html:parse($body)
-            ) else if(starts-with($type, 'multipart/') then (
-              (: parse multipart entries recursively :)
-              for $part in $body
-              return local:parse($part)
-            ) else (
-              error(xs:QName('http:parse'), 'Type not supported: ' || $type)
-            )
-          };
-        
-          local:parse(
-            http:get('http://expath.org/xyz',
-            map { 'parse-response-entity-body': false() })
-          )
+            "body": "Happy new year"
+          }
         </pre>
+      </section>
+
+      <section id="response-entity-body">
+        <h3>The Response Entity Body</h3>
+
+        <p>
+          HTTP requests sent to the server are under complete the control of the client, as such,
+          the client can carefully dictate the data sent in the request. The opposite is true of
+          the HTTP response returned from the server, over which the client has no control.
+          The majority of the time we can rely on the server to perform as expected and return a
+          meaningful response to our request. However, regardless of whether the server is trusted
+          or not by the user, we cannot rely on it to always operate correctly. Servers can,
+          and often do, return HTTP responses which are not in the spirit of the HTTP request that
+          was made. For example, a server is under no obligation to return data in a format that the
+          client can understand or even read.
+        </p>
+        <p>
+          The request functions of this module are intentionally biased towards the majority case
+          where the server is responding inline with the requests made to it. This bias takes the
+          form of implicitly parsing the response entity body from the server before it is returned
+          in the response map. This approach eases the job of the developer, by allowing them to work
+          with higher-level XDM type representations of the response body as opposed to the raw HTTP
+          response data.
+        </p>
+        <p>
+          For those cases where the server is not responding faithfully to the request, or the developer
+          needs a greater level of control over the response, the implicit parsing of the response entity
+          body can be disabled via the <a>parse-response-entity-body</a> request option,
+          see <a href="#explicit-response-parsing" class="sectionRef"></a>.
+        </p>
+
+        <section id="implicit-response-parsing">
+          <h4>Implicit Parsing</h4>
+          <p>
+            When present in the HTTP response, the entity body will be implicitly parsed to an
+            XDM type based on the media type set in the <code>Content-Type</code> header of the HTTP
+            response headers.
+          </p>
+          <p>If a response entity body cannot be parsed according to the Conversions detailed below, the error <a>http:parse</a> MUST be raised.</a></p>
+          <table class="minborder">
+            <caption>Implicit Parsing Conversions (ordered - most significant first)</caption>
+            <colgroup>
+              <col span="1">
+              <col span="1">
+              <col span="1" class="option-description">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Media Type Pattern(s)</th>
+                <th>XDM Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>multipart/*</code></td>
+                <td><code>map(xs:string, item())*</code></td>
+                <td>
+                  <p>Multipart body, returned as <code>map(xs:string, item())*</code>.
+                    The format of the map items is identical to the request format:
+                    <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
+                    A part body will have one of the remaining types of this list.</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <ul>
+                    <li><code>application/xml*</code></li>
+                    <li><code>text/xml*</code></li>
+                    <li><code>*/*+xml</code></li>
+                  </ul>
+                </td>
+                <td><code>document-node()</code></td>
+                <td>
+                  <p>Parsed as XML.</p>
+                </td>
+              </tr>
+              <tr>
+                <td><code>application/json</code></td>
+                <td>
+                  <ul>
+                    <li><code>map(*)</code></li>
+                    <li><code>array(*)</code></li>
+                    <li><code>xs:string</code></li>
+                    <li><code>xs:double</code></li>
+                    <li><code>xs:boolean</code></li>
+                    <li><code>empty-sequence()</code></li>
+                  </ul>
+                </td>
+                <td>
+                  <p>Parsed as JSON.</p>
+                </td>
+              </tr>
+              <tr>
+                <td><code>text/*</code></td>
+                <td><code>xs:string</code></td>
+                <td>
+                  <p>Parsed as text.</p>
+                </td>
+              </tr>
+              <tr>
+                <td><code>*/*</code></td>
+                <td><code>xs:base64Binary</code></td>
+                <td>
+                  <p>No parsing.</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        <pre class="example" title="Multipart response">
+          map {
+            "status": "200",
+            "message": "OK",
+            "headers": map {
+              "Content-Type": "multipart/mixed"
+            },
+            "body": [
+              map {
+                "headers" : map {
+                  "Content-Type": "application/json"
+                },
+                "body": map { "creator": "John", "year": 2018 }
+              },
+              map {
+                "headers" : map {
+                  "Content-Type": "image/png"
+                },
+                "body": xs:base64Binary('abcdefgh')
+              }
+            ]
+          }
+        </pre>
+      </section>
+
+        <section id="explicit-response-parsing">
+          <h4>Explicit Parsing</h4>
+          <p>
+            Implicit parsing of the response body can be disabled via the <a>parse-response-entity-body</a>
+            request option. All bodies of single and multipart responses will be returned as binary items
+            of type <code>xs:base64Binary</code>, and the values can be processed (stored, parsed,
+            forwarded) in a second step.
+          </p>
+
+          <pre class="example" title="XQuery example for parsing response bodies">
+            (:~
+             : Parses a response and returns the parsed body values.
+             : @param $response response (top-level, multipart)
+             : @return flat sequence with parsed bodies
+             :)
+            declare function local:parse(
+              $response as map(xs:string, item())
+            ) as item()* {
+              let $type := $response?headers?Content-Type
+              let $body := $response?body
+              return if(ends-with($type, '/csv') then (
+                csv:parse($body)
+              ) else if(ends-with($type, '/json') then (
+                json:parse($body)
+              ) else if(ends-with($type, '/html') then (
+                html:parse($body)
+              ) else if(starts-with($type, 'multipart/') then (
+                (: parse multipart entries recursively :)
+                for $part in $body
+                return local:parse($part)
+              ) else (
+                error(xs:QName('http:parse'), 'Type not supported: ' || $type)
+              )
+            };
+
+            local:parse(
+              http:get('http://expath.org/xyz',
+                  map { 'parse-response-entity-body': false() })
+            )
+          </pre>
+        </section>
+
       </section>
 
     </section>
@@ -868,6 +999,10 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         <dd>A response body could not be parsed.</dd>
         <dt><dfn>http:serialize</dfn></dt>
         <dd>A request body could not be serialized.</dd>
+        <dt><dfn>http:timeout</dfn></dt>
+        <dd>The server did not respond to the request within the timeout period.</dd>
+        <dt><dfn>http:network-error</dfn></dt>
+        <dd>A network error occurred whilst making the HTTP request.</dd>
       </dl>
     </section>
 
