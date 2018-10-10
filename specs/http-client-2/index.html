@@ -629,29 +629,27 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         </section>
 
         <section id='multipart-entity-body'>
-  <h4><dfn>Multipart Entity Body Request</dfn></h4>
-  <p>
-    <dfn data-cite="rfc1945#section-3.6.2">Multipart Types</dfn> provides for the encapsulation
-    of several entities (aka <em>parts</em>) within the request’s <a>entity body</a>.
-  </p>
-  <p>
-    An entity body of multiple parts, wherein each part is itself an entity, will be sent
-    if the <a>multipart</a> option is set to <code>true</code>.
-  </p>
-  <p>
-    The <a>$body</a> parameter allows one or more entities to be provided;
-    Each entity MUST have the type <code>map(xs:string, item())</code>, and the format:
-    <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
-    If the <code>body</code> entry is not supplied, or if it is an empty sequence,
-    the error <a>http:body</a> MUST be raised.
-  </p>
-
-  <p>
-    The <code>$part-body</code> value will be parsed as a <a>Single Entity</a>.
-    If no <code>Content-Type</code> header is supplied in the for the specific part, the resulting
-    media type will be assigned.
+          <h4><dfn>Multipart Entity Body Request</dfn></h4>
+          <p>
+            <dfn data-cite="rfc1945#section-3.6.2">Multipart Types</dfn> provide for the encapsulation
+            of several entities (aka <em>parts</em>) within the request's <a>entity body</a>.
           </p>
-
+          <p>
+            An entity body of multiple parts, wherein each part is itself an entity, will be sent
+            if the <a>multipart</a> option is set to <code>true</code>.
+          </p>
+          <p>
+            The <a>$body</a> parameter allows one or more entities to be provided;
+            Each entity MUST have the type <code>map(xs:string, item())</code>, and the format:
+            <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
+            If the <code>body</code> entry is not supplied, or if it is an empty sequence,
+            the error <a>http:body</a> MUST be raised.
+          </p>
+          <p>
+            The <code>$part-body</code> value will be parsed as a <a>Single Entity</a>.
+            If no <code>Content-Type</code> header is supplied in the for the specific part, the resulting
+            media type will be assigned.
+          </p>
           <pre class="example" title="Multipart Entity Request">
 (
   map {
@@ -700,23 +698,23 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
     <section id='response'>
       <h2>The Response</h2>
       <p>
-        An HTTP response is returned as a map, which may contain the following entries:
+        An HTTP response is returned as a map. It contains the following entries:
       </p>
 
       <dl>
-        <dt><code>http-version</code> (<code>xs:string</code>)</dt>
-        <dd>The HTTP Version of the response.</dd>
-
         <dt><code>status</code> (<code>xs:string</code>)</dt>
         <dd>Status code.</dd>
 
         <dt><code>message</code> (<code>xs:string</code>)</dt>
         <dd>Status message (also called <i>reason phrase</i>).</dd>
 
+        <dt><code>http-version</code> (<code>xs:string</code>)</dt>
+        <dd>The HTTP Version of the response.</dd>
+
         <dt><code>headers</code> (<code>map(xs:string, xs:string)</code>)</dt>
         <dd>Response headers. The syntax is identical to the request header.</dd>
 
-        <dt><code>body</code> (<code>item()?</code>)</dt>
+        <dt><code>body</code> (<code>item()*</code>)</dt>
         <dd>Optional response body.</dd>
       </dl>
 
@@ -735,16 +733,17 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
       </pre>
 
       <p>
-        If no body is returned, an empty sequence will be returned as body. Otherwise, the value of
+        If no body is returned, there will be no <code>body</code> entry. Otherwise, the value of
         the <code>Content-Type</code> header defines the media-type of the body. The body will
         implicitly be parsed and converted:
       </p>
 
       <dl>
         <dt><code>multipart/</code> prefix</dt>
-        <dd>Multipart body, returned as <code>array(*)</code>. Similar to the returned reponse map,
-          each array member will be a map with a <code>headers</code> and a <code>body</code>
-          entry. The body will have one of the types of this list.</dd>
+        <dd>Multipart body, returned as <code>map(xs:string, item())*</code>.
+          The format of the map items is identical to the request format:
+          <code>map { 'headers': $part-headers, 'body': $part-body }</code>.
+          A part body will have one of the remaining types of this list.</dd>
 
         <dt><code>application/xml</code>, <code>application/xml-external-parsed-entity</code>,
           <code>text/xml</code>, <code>text/xml-external-parsed-entity</code>, <code>+xml</code>
@@ -752,7 +751,9 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         <dd>Parsed as XML, returned as <code>document-node()</code>.</dd>
 
         <dt><code>application/json</code></dt>
-        <dd>Parsed as JSON, returned as <code>map(*)</code>.</dd>
+        <dd>Parsed as JSON, returned as item of type <code>map(*)</code>, <code>array(*)</code>,
+          <code>xs:string</code>, <code>xs:double</code>, <code>xs:boolean</code>,
+          or as <code>empty-sequence()</code>.</dd>
 
         <dt><code>text/</code> prefix</dt>
         <dd>Parsed as text, returned as <code>xs:string</code>.</dd>
@@ -823,7 +824,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
               html:parse($body)
             ) else if(starts-with($type, 'multipart/') then (
               (: parse multipart entries recursively :)
-              for $part in $body?*
+              for $part in $body
               return local:parse($part)
             ) else (
               error(xs:QName('http:parse'), 'Type not supported: ' || $type)
@@ -835,58 +836,6 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
             map { 'parse-response-entity-body': false() })
           )
         </pre>
-        
-        <div class="ednote" title="CG">
-          These have been my initial suggestions for controlling the parsing of response bodies. In
-          the current version, I have chosen Alternative 4, because it will not require
-          implementations to support higher-order functions.
-
-          <dl>
-            <dt><code>override-media-type</code> (<code>xs:boolean</code>):<br></dt>
-            <dd>
-              Status Quo: Overrides the returned content-type value.<br>
-              + Already available in version 1.0 (adopted from XProc, where is was called
-                <code>override-content-type</code>).<br>
-              – Only works for single bodies.<br>
-            </dd>
-  
-            <dt><code>parse-response-entity-body</code>
-              (<code>function(xs:base64Binary, xs:string) as item()</code>):</dt>
-            <dd>
-              Alternative 2. Override the default parsing behavior. Parameters: body, Content-Type
-              value.<br>
-              + Could be applied to all parts of a multipart response.<br>
-              + Direct access to the binary response stream allows us to handle all potential
-                conversion errors.<br>
-              – String input may possibly be easier to deal with for many XQuery functions.<br>
-              – We may need more header information (Encoding, etc.) to correctly handle the
-                result.<br>
-            </dd>
-  
-            <dt><code>parse-response-entity-body</code>
-              (<code>function(xs:base64Binary, map(xs:string, xs:string)) as item()</code>):</dt>
-            <dd>
-              Alternative 2. Parameters: body, response headers.<br>
-              + Even more control and information on the sent response.<br>
-              – Response handling may get too low-level and technical.<br>
-            </dd>
-  
-            <dt><code>parse-response-entity-body</code> (<code>function(item()) as item()</code>):</dt>
-            <dd>
-              Alternative 3. Parameters: parsed body (xs:string, xs:base64Binary,
-              document-node())<br>
-              + We don’t need to care about binary/string conversion.<br>
-              – May fail if server supplies wrong encoding for string conversions.<br>
-            </dd>
-  
-            <dt><code>parse-response-entity-body</code> (<code>xs:boolean</code>):<br></dt>
-            <dd>
-              Alternative 4: If disabled, return single and multipart bodies as xs:base64Binary.<br>
-              + Multipart responses could still be parsed.<br>
-              – Only works for single bodies.<br>
-            </dd>
-          </dl>
-        </div>
       </section>
 
     </section>
