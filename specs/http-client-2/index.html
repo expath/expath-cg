@@ -398,10 +398,10 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
             <tr>
               <td><dfn>content-encoding</dfn></td>
               <td><code>xs:string</code></td>
-              <td><code>none</code></td>
+              <td><code>empty-sequence()</code></td>
               <td>
                 <p>Uses a specific content encoding for the request body.</p>
-                <p>Supported encodings are <code>none</code>, <code>gzip</code>, and
+                <p>Supported encodings are <code>gzip</code>, <code>compress</code>, and
                   <code>deflate</code>.</p>
                 <p><strong>NOTE:</strong> Setting this option will override any
                   <code>Content-Encoding</code> HTTP header.</p></td>
