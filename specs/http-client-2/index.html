@@ -490,6 +490,15 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
               </td>
             </tr>
             <tr>
+              <td><dfn>preemptive-auth</dfn></td>
+              <td><code>xs:boolean</code></td>
+              <td><code>false</code></td>
+              <td>
+                <p>Indicates that HTTP authentication should be attempted preemptively, i.e. before a challenge from the server.</p>
+                <p>If the chosen <a>auth-method</a> does not support preemptive authentication, then the error <a>http:invalid-option</a> MUST be raised.</p>
+              </td>
+            </tr>
+            <tr>
               <td><dfn>username</dfn></td>
               <td><code>xs:string</code></td>
               <td></td>
