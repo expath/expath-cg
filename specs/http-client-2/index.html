@@ -411,8 +411,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
               <td><code>xs:string</code></td>
               <td>
                 <ul>
-                  <li><code>none</code> for HTTP 1.0</li>
-                  <li><code>chunked</code> for HTTP 1.1, and 2.0</li>
+                  <li><code>empty-sequence()</code> for HTTP 1.0 and 2.0</li>
+                  <li><code>chunked</code> for HTTP 1.1</li>
                 </ul>
               </td>
               <td>
@@ -420,8 +420,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
                 <p>Supported encodings are <code>none</code> and <code>chunked</code>.</p>
                 <p><strong>NOTE</strong>: Setting this option will override any
                   <code>Transfer-Encoding</code> HTTP header.</p>
-                <p><strong>NOTE</strong>: <code>chunked</code> is not supported on HTTP 1.0, such
-                  use MUST raise the <a>http:version</a> error.</p>
+                <p><strong>NOTE</strong>: <code>chunked</code> is not supported by HTTP 1.0 or 2.0,
+                  such use MUST raise the <a>http:version</a> error.</p>
               </td>
             </tr>
             <tr>
