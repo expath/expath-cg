@@ -11,6 +11,18 @@
     expand-text="true">
 
     <xsl:output method="xml" indent="true"/>
+    
+    <xsl:function name="houtil:some" as="xs:boolean" visibility="public">
+        <xsl:param name="items" as="item()*"/>
+        <xsl:param name="condition" as="function(item()) as xs:boolean"/>
+        <xsl:sequence select="some $i in $items satisfies $condition($i)"/>
+    </xsl:function>
+    
+    <xsl:function name="houtil:every" as="xs:boolean" visibility="public">
+        <xsl:param name="items" as="item()*"/>
+        <xsl:param name="condition" as="function(item()) as xs:boolean"/>
+        <xsl:sequence select="every $i in $items satisfies $condition($i)"/>
+    </xsl:function>
 
     <xsl:function name="houtil:highest" as="item()*" visibility="public">
         <xsl:param name="items" as="item()*"/>
@@ -175,13 +187,27 @@
         <xsl:sequence select="map:merge($items ! (let $k := $key(.) return (if (exists($k)) then map{$k : .} else ())), map{'duplicates':'combine'})"/>
     </xsl:function>
     
+    <xsl:function name="houtil:group-by-position" as="map(xs:anyAtomicType, item()*)" visibility="public">
+        <xsl:param name="items" as="item()*"/>
+        <xsl:param name="key" as="function(item(), xs:integer) as xs:anyAtomicType?"/>
+        <xsl:sequence select="map:merge($items ! (let $k := $key(., position()) return (if (exists($k)) then map{$k : .} else ())), map{'duplicates':'combine'})"/>
+    </xsl:function>
+    
+    <xsl:function name="houtil:process-groups" as="map(xs:anyAtomicType, item()*)" visibility="public">
+        <xsl:param name="items" as="item()*"/>
+        <xsl:param name="key" as="function(item()) as xs:anyAtomicType?"/>
+        <xsl:param name="action" as="function(item()*) as item()*"/>
+        <xsl:variable name="groupMap" select="houtil:group-by($items, $key)"/>
+        <xsl:sequence select="map:merge(map:for-each($groupMap, function($k, $v){map{$k: $action($v)}}))"/>
+    </xsl:function>
+    
     <xsl:function name="houtil:group-adjacent" as="array(item())*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="key" as="function(item()) as xs:anyAtomicType"/>
         <xsl:iterate select="$items">
             <xsl:param name="prev" as="xs:anyAtomicType?" select="()"/>
             <xsl:param name="lastGroup" as="array(item())" select="[]"/>
-            <xsl:on-completion select="$lastGroup"/>
+            <xsl:on-completion select="$lastGroup[exists($prev)]"/>
             <xsl:variable name="k" select="$key(.)"/>
             <xsl:choose>
                 <xsl:when test="empty($prev)">
@@ -190,7 +216,7 @@
                         <xsl:with-param name="lastGroup" select="[.]"/>
                     </xsl:next-iteration>
                 </xsl:when>
-                <xsl:when test="houtil:_same-key($k, $prev)">
+                <xsl:when test="houtil:eq($k, $prev)">
                     <xsl:next-iteration>
                         <xsl:with-param name="lastGroup" select="array:append($lastGroup, .)"/>
                     </xsl:next-iteration>
@@ -199,31 +225,41 @@
                     <xsl:sequence select="$lastGroup"/>
                     <xsl:next-iteration>
                         <xsl:with-param name="prev" select="$k"/>
-                        <xsl:with-param name="lastGroup" select="[]"/>
+                        <xsl:with-param name="lastGroup" select="[.]"/>
                     </xsl:next-iteration>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:iterate>
     </xsl:function>
     
-    <xsl:function name="houtil:_same-key" as="xs:boolean" visibility="private">
+    <xsl:function name="houtil:eq" as="xs:boolean" visibility="public">
         <xsl:param name="a" as="xs:anyAtomicType"/>
         <xsl:param name="b" as="xs:anyAtomicType"/>
         <xsl:sequence select="map:contains(map{$a: 0}, $b)"/>
     </xsl:function>
     
+    <xsl:function name="houtil:all-distinct" as="xs:boolean" visibility="public">
+        <xsl:param name="in" as="xs:anyAtomicType*"/>
+        <xsl:param name="key" as="function(item()) as xs:anyAtomicType?"/>
+        <xsl:sequence select="count($in) eq map:size(houtil:group-by($in, $key))"/>
+    </xsl:function>
+    
     <xsl:function name="houtil:group-starting-with" as="array(item())*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="condition" as="function(item()) as xs:boolean"/>
-        <xsl:for-each-group select="$items" group-starting-with=".[$condition(.)]">
-            <xsl:sequence select="[current-group()]"/>
-        </xsl:for-each-group>
+        <!--<xsl:for-each-group select="$items" group-starting-with=".[$condition(.)]">
+            <xsl:sequence select="array{current-group()}"/>
+        </xsl:for-each-group>-->
+        <xsl:variable name="matchPositions" select="houtil:index-of($items, $condition)"/>
+        <xsl:variable name="matchPositions" select="if ($matchPositions[1] eq 1) then $matchPositions else (1, $matchPositions)"/>
+        <xsl:sequence select="for-each-pair($matchPositions, (tail($matchPositions), count($items)+1), function($p, $q){array{subsequence($items, $p, $q - $p)}})"/>
     </xsl:function>
+    
     <xsl:function name="houtil:group-ending-with" as="array(item())*" visibility="public">
         <xsl:param name="items" as="item()*"/>
         <xsl:param name="condition" as="function(item()) as xs:boolean"/>
         <xsl:for-each-group select="$items" group-ending-with=".[$condition(.)]">
-            <xsl:sequence select="[current-group()]"/>
+            <xsl:sequence select="array{current-group()}"/>
         </xsl:for-each-group>
     </xsl:function>
     

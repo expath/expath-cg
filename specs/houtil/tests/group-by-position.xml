@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="houtil-group-by-position">
+   <description>Tests for the higher-order houtil:group-by-position function</description>
+   
+   <!-- Tests derived from the test set for fn:filter -->
+   
+   <link type="spec" document="http://www.w3.org/TR/xpath-functions-30/" idref="func-filter"/>
+
+
+   <dependency type="spec" value="XP30+ XQ30+"/>
+   <dependency type="feature" value="higherOrderFunctions"/>
+
+   <test-case name="houtil-group-by-position-001">
+      <description>Group by first letter</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-by-position(("apple", "pear", "apricot", "avocado", "orange"), function($i, $p){substring($i, 1, 1)})</test>
+      <result>
+         <assert-deep-eq>map{"a":("apple", "apricot", "avocado"), "p":"pear", "o":"orange"}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-by-position-002">
+      <description>Group by numeric value, with multiple numeric types</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-by-position((12, 4.0, 46, 48e0, -8, -2e0), function($x, $p){abs($x mod 4)})</test>
+      <result>
+         <assert-deep-eq>map{0: (12, 4.0, 48e0, -8), 2: (46, -2e0)}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-by-position-003">
+      <description>Group nodes by attribute value</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <environment>
+         <source role="." file="docs/filter003.xml">
+            <description/>
+            <created by="Michael Kay" on="2018-09-03"/>
+         </source>
+      </environment>
+      <test>let $data := (/employees/emp), 
+                $groups := houtil:group-by-position($data, function($x, $p){xs:int($x/@salary) idiv 100})
+            return map:merge(map:for-each($groups, function($key, $value){ map{$key : $value!string(@name)} }))</test>
+      <result>
+         <assert-deep-eq>map{1: "john", 2: ("anne", "kumar"), 3: "mary"}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-by-position-004">
+      <description>Test using an inline user-defined function</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-by-position(1 to 6, function($x, $p){$x mod 2})</test>
+      <result>
+         <assert-deep-eq>map{0: (2, 4, 6), 1: (1, 3, 5)}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-by-position-005">
+      <description>No item in the sequence has a grouping key</description>
+      <created by="Michael Kay" on="2018-09-01"/>
+      <environment>
+         <source role="." file="docs/filter003.xml">
+            <description/>
+            <created by="Michael Kay" on="2018-09-03"/>
+         </source>
+      </environment>
+      <test>let $data := (/employees) return houtil:group-by-position($data/emp, function($x as
+         element(emp), $p as xs:integer){$x/@antiquity})</test>
+      <result>
+         <assert-deep-eq>map{}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-by-position-006">
+      <description>Key function returns an untyped node that can be atomized</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <environment>
+         <source role="." file="docs/group001.xml">
+            <description/>
+            <created by="Michael Kay" on="2018-09-03"/>
+         </source>
+      </environment>
+      <test>let $data := (/cities) return houtil:group-by-position($data/city, function($x as
+         element(city), $p as xs:integer){$x/@country})</test>
+      <result>
+         <all-of>
+            <assert>count($result?italy) = 2</assert>
+            <assert>count($result?france) = 2</assert>
+            <assert>count($result?germany) = 1</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-by-position-007">
+      <description>Empty sequence as input</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-by-position(current-date()[. lt xs:date('1900-01-01')], function($i, $p){year-from-date($i) = 2016})</test>
+      <result>
+         <assert-deep-eq>map{}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-by-position-008">
+      <description>NaN as a key</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test><![CDATA[
+            houtil:group-by-position(("1", "2", "3", "X", "Y"), function($s, $p) {number($s)})
+        ]]></test>
+      <result>
+         <assert-deep-eq>map{1:"1", 2:"2", 3:"3", number("NaN"):("X", "Y")}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-by-position-009">
+      <description>Implicit timezone is not used</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-by-position((xs:dateTime('2018-09-01T12:00:00'), xs:dateTime('2018-09-01T12:00:00') => adjust-dateTime-to-timezone()), function($k, $v){$k})</test>
+      <result>
+         <assert>Q{http://www.w3.org/2005/xpath-functions/map}size($result) = 2</assert>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-by-position-010">
+      <description>Arrange table by rows</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-by-position(1 to 10, function($k, $p){($p - 1) idiv 3})</test>
+      <result>
+         <assert-deep-eq>map{0:(1,2,3), 1:(4,5,6), 2:(7,8,9), 3:(10)}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-by-position-011">
+      <description>Arrange table by columns</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-by-position(1 to 10, function($k, $p){($p - 1) mod 3})</test>
+      <result>
+         <assert-deep-eq>map{0:(1,4,7,10), 1:(2,5,8), 2:(3,6,9)}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+
+   
+   <test-case name="houtil-group-by-position-903">
+      <description>"group-by-position" function - returns non-singleton sequence</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-by-position( ("apple", "pear", "apricot", "advocado", "orange"),
+         function($x, $p){if(starts-with($x,'a')) then (true(), true()) else false()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-by-position-904">
+      <description>"group-by-position" function - item in sequence is of wrong type</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-by-position(("apple", "pear", current-date(), "apricot", "advocado", "orange"), function($k, $p){ends-with($k, 'o')})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-911">
+      <description>Attempts to evaluate the "group-by-position" function with no arguments.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-by-position()</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-912">
+      <description>Attempts to reference the "group-by-position" function with arity zero.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-by-position#0</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-913">
+      <description>Attempts to evaluate the "group-by-position" function with one argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-by-position( boolean#1 )</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-914">
+      <description>Attempts to reference the "group-by-position" function with arity one.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-by-position#1</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-915">
+      <description>Attempts to reference the "group-by-position" function with arity two.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>exists( houtil:group-by-position#2 )</test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-920">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-by-position( 1, function($a as item(), $p as xs:integer) as xs:boolean* { boolean($a), boolean($a) }
+         )</test>
+      <result>
+         <any-of>
+            <error code="XPST0005"/>
+            <error code="XPTY0004"/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-921">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-by-position( 1, function($a) { boolean#1 } )</test>
+      <result>
+         <any-of>
+            <error code="FOTY0013"/>
+            <error code="XPTY0117"/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-922">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <modified by="Michael Kay after Tim Mills" on="2012-05-31" change="See bug 17250"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-by-position( 1, houtil:group-by-position(?, string#1))</test>
+      <result>
+         <any-of>
+            <error code="XPTY0004"/>
+            <error code="XPTY0117"/>
+            <assert-empty/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-923">
+      <description>Evaluates the "group-by-position" function with $seq set to a mix of item types </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <environment>
+         <source role="." file="docs/filter003.xml">
+            <description/>
+            <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+         </source>
+      </environment>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-by-position( (//emp, 1, "string", 3.14, 2.7e0, exists#1), function($arg, $p) { $arg
+         instance of function(*) } )</test>
+      <result>
+         <all-of>
+            <assert>count($result(true())) = 1</assert>
+            <assert>count($result(false())) = 8</assert>
+         </all-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-924">
+      <description>Evaluates the "group-by-position" function with $f set to a function which _could_ (but
+         doesn't) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-by-position( 1 to 10, function($arg, $p) { if ($arg eq 100) then () else false()})</test>
+      <result>
+         <all-of>
+            <assert>count($result(true())) = 0</assert>
+            <assert>count($result(false())) = 10</assert>
+         </all-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-925">
+      <description>Evaluates the "group-by-position" function with $f set to a function which _could_ (and
+         does) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-by-position( 1 to 10, function($arg, $p) { if ($arg eq 5) then () else false()})</test>
+      <result>
+         <assert-deep-eq>map{false(): (1 to 4, 6 to 10)}</assert-deep-eq>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-by-position-933">
+      <description>Evaluates the "group-by-position" function with $f set to a function which expects integers,
+         but is supplied with strings.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="feature" value="staticTyping"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-by-position( ("1", "2", "3"), function($arg as xs:integer, $p as xs:integer) as xs:boolean { $arg eq 100 }
+         )</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+</test-set>

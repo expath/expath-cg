@@ -243,7 +243,7 @@
             </xsl:variable>
             
             <xsl:message>EVAL RESULT:</xsl:message>
-            <xsl:message select="$xpath-result"/>
+            <xsl:message select="serialize($xpath-result, map{'method':'adaptive'})"/>
             
             <xsl:sequence select="map{'result': $xpath-result}"/>
             <xsl:catch errors="*">

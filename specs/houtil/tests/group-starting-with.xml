@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="houtil-group-starting-with">
+   <description>Tests for the higher-order houtil:group-starting-with function</description>
+   
+   <!-- Tests derived from the test set for fn:filter -->
+   
+   <link type="spec" document="http://www.w3.org/TR/xpath-functions-30/" idref="func-filter"/>
+
+
+   <dependency type="spec" value="XP30+ XQ30+"/>
+   <dependency type="feature" value="higherOrderFunctions"/>
+
+   <test-case name="houtil-group-starting-with-001">
+      <description>Group by first letter</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-starting-with(("apple", "pear", "apricot", "avocado", "orange"), starts-with(?, "a"))</test>
+      <result>
+         <assert-deep-eq>["apple", "pear"], ["apricot"], ["avocado", "orange"]</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-starting-with-002">
+      <description>Group by numeric value, with multiple numeric types</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-starting-with((12, 12.0, 12e0, 47e0, -9, 1e0), function($x){abs($x) mod 4 = 0})</test>
+      <result>
+         <assert-deep-eq>[12], [12.0], [12e0, 47e0, -9, 1e0]</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-starting-with-003">
+      <description>Group nodes by name</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <environment>
+         <source role="." file="docs/group005.xml">
+            <description/>
+            <created by="Michael Kay" on="2018-09-03"/>
+         </source>
+      </environment>
+      <test>houtil:group-starting-with(/body/*, function($x){exists($x/self::h2)})</test>
+      <result>
+         <!--<body>
+  <h2>heading1</h2>
+  <p>para1</p>
+  <p>para2</p>
+  <h2>heading2</h2>
+  <p>para3</p>
+  <p>para4</p>
+  <p>para5</p>
+</body>-->
+         <all-of>
+            <assert-count>2</assert-count>
+            <assert>deep-equal(data($result[1]),  ("heading1", "para1", "para2"))</assert>
+            <assert>deep-equal(data($result[2]),  ("heading2", "para3", "para4", "para5"))</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-starting-with-004">
+      <description>Test using an inline user-defined function</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-starting-with(1 to 6, function($x){$x idiv 3})</test>
+      <result>
+         <assert-deep-eq>[1, 2], [3, 4, 5], [6]</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-starting-with-007">
+      <description>Empty sequence as input</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-starting-with(current-date()[. lt xs:date('1900-01-01')], function($i){year-from-date($i) = 2016})</test>
+      <result>
+         <assert-empty/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-starting-with-008">
+      <description>NaN as a key</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-starting-with(("1", "2", "3", "X", "Y"), function($s) {number($s)})</test>
+      <result>
+         <assert-deep-eq>["1"], ["2"], ["3"], ["X", "Y"]</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-starting-with-009">
+      <description>Implicit timezone is not used</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-starting-with((xs:dateTime('2018-09-01T12:00:00'), xs:dateTime('2018-09-01T12:00:00') => adjust-dateTime-to-timezone()), data#1)</test>
+      <result>
+         <assert-count>2</assert-count>
+      </result>
+   </test-case>
+   
+
+   
+   <test-case name="houtil-group-starting-with-903">
+      <description>"group-starting-with" function - returns non-singleton sequence</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-starting-with( ("apple", "pear", "apricot", "advocado", "orange"),
+         function($x){if(starts-with($x,'a')) then (true(), true()) else false()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-starting-with-904">
+      <description>"group-starting-with" function - item in sequence is of wrong type</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-starting-with(("apple", "pear", current-date(), "apricot", "advocado", "orange"), ends-with(?, 'o'))</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-911">
+      <description>Attempts to evaluate the "group-starting-with" function with no arguments.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-starting-with()</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-912">
+      <description>Attempts to reference the "group-starting-with" function with arity zero.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-starting-with#0</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-913">
+      <description>Attempts to evaluate the "group-starting-with" function with one argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-starting-with( boolean#1 )</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-914">
+      <description>Attempts to reference the "group-starting-with" function with arity one.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-starting-with#1</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-915">
+      <description>Attempts to reference the "group-starting-with" function with arity two.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>exists( houtil:group-starting-with#2 )</test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-920">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-starting-with( 1, function($a as item()) as xs:boolean* { boolean($a), boolean($a) }
+         )</test>
+      <result>
+         <any-of>
+            <error code="XPST0005"/>
+            <error code="XPTY0004"/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-921">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-starting-with( 1, function($a) { boolean#1 } )</test>
+      <result>
+         <any-of>
+            <error code="FOTY0013"/>
+            <error code="XPTY0117"/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-922">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <modified by="Michael Kay after Tim Mills" on="2012-05-31" change="See bug 17250"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-starting-with( 1, houtil:group-by(?, string#1))</test>
+      <result>
+         <any-of>
+            <error code="XPTY0004"/>
+            <error code="XPTY0117"/>
+            <assert-empty/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-923">
+      <description>Evaluates the "group-starting-with" function with $seq set to a mix of item types </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <environment>
+         <source role="." file="docs/filter003.xml">
+            <description/>
+            <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+         </source>
+      </environment>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-starting-with( (//emp, 1, "string", 3.14, 2.7e0, exists#1), function($arg) { $arg
+         instance of function(*) } )</test>
+      <result>
+         <all-of>
+            <assert-count>2</assert-count>
+            <assert>count($result[1]?*) = 8</assert>
+            <assert>count($result[2]?*) = 1</assert>
+         </all-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-924">
+      <description>Evaluates the "group-starting-with" function with $f set to a function which _could_ (but
+         doesn't) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-starting-with( 1 to 10, function($arg) { if ($arg eq 100) then () else false()})</test>
+      <result>
+         <assert-deep-eq>array{1 to 10}</assert-deep-eq>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-925">
+      <description>Evaluates the "group-starting-with" function with $f set to a function which _could_ (and
+         does) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-starting-with( 1 to 10, function($arg) { if ($arg eq 5) then 42 else false()})</test>
+      <result>
+         <assert-deep-eq>array{1 to 4}, [5], array{6 to 10}</assert-deep-eq>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-starting-with-933">
+      <description>Evaluates the "group-starting-with" function with $f set to a function which expects integers,
+         but is supplied with strings.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="feature" value="staticTyping"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-starting-with( ("1", "2", "3"), function($arg as xs:integer) as xs:boolean { $arg eq 100 }
+         )</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+</test-set>

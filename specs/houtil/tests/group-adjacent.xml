@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="houtil-group-adjacent">
+   <description>Tests for the higher-order houtil:group-adjacent function</description>
+   
+   <!-- Tests derived from the test set for fn:filter -->
+   
+   <link type="spec" document="http://www.w3.org/TR/xpath-functions-30/" idref="func-filter"/>
+
+
+   <dependency type="spec" value="XP30+ XQ30+"/>
+   <dependency type="feature" value="higherOrderFunctions"/>
+
+   <test-case name="houtil-group-adjacent-001">
+      <description>Group by first letter</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-adjacent(("apple", "pear", "apricot", "avocado", "orange"), substring(?, 1, 1))</test>
+      <result>
+         <assert-deep-eq>["apple"], ["pear"], ["apricot", "avocado"], ["orange"]</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-adjacent-002">
+      <description>Group by numeric value, with multiple numeric types</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-adjacent((12, 12.0, 12e0, 47e0, -9, 1e0), function($x){abs($x) mod 4})</test>
+      <result>
+         <assert-deep-eq>[12, 12.0, 12e0], [47e0], [-9, 1e0]</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-adjacent-003">
+      <description>Group nodes by attribute value</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <environment>
+         <source role="." file="docs/group001.xml">
+            <description/>
+            <created by="Michael Kay" on="2018-09-03"/>
+         </source>
+      </environment>
+      <test>let $data := sort(/cities/city, (), function($c){$c/@country}) 
+                return houtil:group-adjacent($data, function($x){$x/@country})</test>
+      <result>
+         <all-of>
+            <assert-count>3</assert-count>
+            <assert>$result[1]?*/@name = ("paris", "lyon")</assert>
+            <assert>$result[2]?*/@name = ("munich")</assert>
+            <assert>$result[3]?*/@name = ("milan", "venice")</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-adjacent-004">
+      <description>Test using an inline user-defined function</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-adjacent(1 to 6, function($x){$x idiv 3})</test>
+      <result>
+         <assert-deep-eq>[1, 2], [3, 4, 5], [6]</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-adjacent-007">
+      <description>Empty sequence as input</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-adjacent(current-date()[. lt xs:date('1900-01-01')], function($i){year-from-date($i) = 2016})</test>
+      <result>
+         <assert-empty/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-adjacent-008">
+      <description>NaN as a key</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-adjacent(("1", "2", "3", "X", "Y"), function($s) {number($s)})</test>
+      <result>
+         <assert-deep-eq>["1"], ["2"], ["3"], ["X", "Y"]</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-adjacent-009">
+      <description>Implicit timezone is not used</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-adjacent((xs:dateTime('2018-09-01T12:00:00'), xs:dateTime('2018-09-01T12:00:00') => adjust-dateTime-to-timezone()), data#1)</test>
+      <result>
+         <assert-count>2</assert-count>
+      </result>
+   </test-case>
+   
+
+   
+   <test-case name="houtil-group-adjacent-903">
+      <description>"group-adjacent" function - returns non-singleton sequence</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-adjacent( ("apple", "pear", "apricot", "advocado", "orange"),
+         function($x){if(starts-with($x,'a')) then (true(), true()) else false()})</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-group-adjacent-904">
+      <description>"group-adjacent" function - item in sequence is of wrong type</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:group-adjacent(("apple", "pear", current-date(), "apricot", "advocado", "orange"), ends-with(?, 'o'))</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-911">
+      <description>Attempts to evaluate the "group-adjacent" function with no arguments.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-adjacent()</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-912">
+      <description>Attempts to reference the "group-adjacent" function with arity zero.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-adjacent#0</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-913">
+      <description>Attempts to evaluate the "group-adjacent" function with one argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-adjacent( boolean#1 )</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-914">
+      <description>Attempts to reference the "group-adjacent" function with arity one.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-adjacent#1</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-915">
+      <description>Attempts to reference the "group-adjacent" function with arity two.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>exists( houtil:group-adjacent#2 )</test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-920">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-adjacent( 1, function($a as item()) as xs:boolean* { boolean($a), boolean($a) }
+         )</test>
+      <result>
+         <any-of>
+            <error code="XPST0005"/>
+            <error code="XPTY0004"/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-921">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-adjacent( 1, function($a) { boolean#1 } )</test>
+      <result>
+         <any-of>
+            <error code="FOTY0013"/>
+            <error code="XPTY0117"/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-922">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <modified by="Michael Kay after Tim Mills" on="2012-05-31" change="See bug 17250"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-adjacent( 1, houtil:group-by(?, string#1))</test>
+      <result>
+         <any-of>
+            <error code="XPTY0004"/>
+            <error code="XPTY0117"/>
+            <assert-empty/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-923">
+      <description>Evaluates the "group-adjacent" function with $seq set to a mix of item types </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <environment>
+         <source role="." file="docs/filter003.xml">
+            <description/>
+            <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+         </source>
+      </environment>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-adjacent( (//emp, 1, "string", 3.14, 2.7e0, exists#1), function($arg) { $arg
+         instance of function(*) } )</test>
+      <result>
+         <all-of>
+            <assert-count>2</assert-count>
+            <assert>count($result[1]?*) = 8</assert>
+            <assert>count($result[2]?*) = 1</assert>
+         </all-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-924">
+      <description>Evaluates the "group-adjacent" function with $f set to a function which _could_ (but
+         doesn't) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-adjacent( 1 to 10, function($arg) { if ($arg eq 100) then () else false()})</test>
+      <result>
+         <assert-deep-eq>array{1 to 10}</assert-deep-eq>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-925">
+      <description>Evaluates the "group-adjacent" function with $f set to a function which _could_ (and
+         does) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-adjacent( 1 to 10, function($arg) { if ($arg eq 5) then 42 else false()})</test>
+      <result>
+         <assert-deep-eq>array{1 to 4}, [5], array{6 to 10}</assert-deep-eq>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-group-adjacent-933">
+      <description>Evaluates the "group-adjacent" function with $f set to a function which expects integers,
+         but is supplied with strings.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="feature" value="staticTyping"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:group-adjacent( ("1", "2", "3"), function($arg as xs:integer) as xs:boolean { $arg eq 100 }
+         )</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+</test-set>

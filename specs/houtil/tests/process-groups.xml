@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="houtil-process-groups">
+   <description>Tests for the higher-order houtil:process-groups function</description>
+   
+   <!-- Tests derived from the test set for fn:filter -->
+   
+   <link type="spec" document="http://www.w3.org/TR/xpath-functions-30/" idref="func-filter"/>
+
+
+   <dependency type="spec" value="XP30+ XQ30+"/>
+   <dependency type="feature" value="higherOrderFunctions"/>
+
+   <test-case name="houtil-process-groups-001">
+      <description>Group by first letter and truncate</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:process-groups(("apple", "pear", "apricot", "avocado", "orange"), substring(?, 1, 1), function($g){$g!substring(., 1, 4)})</test>
+      <result>
+         <assert-deep-eq>map{"a":("appl", "apri", "avoc"), "p":"pear", "o":"oran"}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-process-groups-002">
+      <description>Group by numeric value, with multiple numeric types, and sum over group</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:process-groups((12, 4.0, 46, 48e0, -8, -2e0), function($x){abs($x mod 4)}, sum#1)</test>
+      <result>
+         <assert-deep-eq>map{0: 56, 2: 44}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-process-groups-003">
+      <description>Group nodes by attribute value, string-join the group values</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <environment>
+         <source role="." file="docs/filter003.xml">
+            <description/>
+            <created by="Michael Kay" on="2018-09-03"/>
+         </source>
+      </environment>
+      <test>houtil:process-groups(/employees/emp, function($x){xs:int($x/@salary) idiv 100}, function($g){string-join($g/@name, '|')})</test>
+      <result>
+         <assert-deep-eq>map{1: "john", 2: "anne|kumar", 3: "mary"}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-process-groups-004">
+      <description>Test using an inline user-defined function; apply min and max to the groups</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:process-groups(1 to 6, function($x){$x mod 2}, function($g){min($g), max($g)})</test>
+      <result>
+         <assert-deep-eq>map{0: (2, 6), 1: (1, 5)}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-process-groups-005">
+      <description>No item in the sequence has a grouping key</description>
+      <created by="Michael Kay" on="2018-09-01"/>
+      <environment>
+         <source role="." file="docs/filter003.xml">
+            <description/>
+            <created by="Michael Kay" on="2018-09-03"/>
+         </source>
+      </environment>
+      <test>let $data := (/employees) return houtil:process-groups($data/emp, function($x as
+         element(emp)){$x/@antiquity}, count#1)</test>
+      <result>
+         <assert-deep-eq>map{}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-process-groups-006">
+      <description>Key function returns an untyped node that can be atomized</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <environment>
+         <source role="." file="docs/group001.xml">
+            <description/>
+            <created by="Michael Kay" on="2018-09-03"/>
+         </source>
+      </environment>
+      <test>let $data := (/cities) return houtil:process-groups($data/city, function($x as
+         element(city)){$x/@country}, string-join(?, '|'))</test>
+      <result>
+         <all-of>
+            <assert>count($result?italy) = 1</assert>
+            <assert>count($result?france) = 1</assert>
+            <assert>count($result?germany) = 1</assert>
+         </all-of>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-process-groups-007">
+      <description>Empty sequence as input</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test><![CDATA[
+            houtil:process-groups(current-date()[. lt xs:date('1900-01-01')], function($i){year-from-date($i) = 2016}, count#1)
+        ]]></test>
+      <result>
+         <assert-deep-eq>map{}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-process-groups-008">
+      <description>NaN as a key</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:process-groups(("1", "2", "3", "X", "Y"), function($s) {number($s)}, string-join(?, '|'))</test>
+      <result>
+         <assert-deep-eq>map{1:"1", 2:"2", 3:"3", number("NaN"):("X|Y")}</assert-deep-eq>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-process-groups-009">
+      <description>Implicit timezone is not used</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:process-groups((xs:dateTime('2018-09-01T12:00:00'), xs:dateTime('2018-09-01T12:00:00') => adjust-dateTime-to-timezone()), data#1, data#1)</test>
+      <result>
+         <assert>Q{http://www.w3.org/2005/xpath-functions/map}size($result) = 2</assert>
+      </result>
+   </test-case>
+   
+
+   
+   <test-case name="houtil-process-groups-903">
+      <description>"process-groups" function - returns non-singleton sequence</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:process-groups( ("apple", "pear", "apricot", "advocado", "orange"),
+         function($x){if(starts-with($x,'a')) then (true(), true()) else false()}, data#1)</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-process-groups-904">
+      <description>"process-groups" function - item in sequence is of wrong type</description>
+      <created by="Michael Kay" on="2018-09-03"/>
+      <test>houtil:process-groups(("apple", "pear", current-date(), "apricot", "advocado", "orange"), ends-with(?, 'o'), data#1)</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-911">
+      <description>Attempts to evaluate the "process-groups" function with no arguments.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:process-groups()</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-912">
+      <description>Attempts to reference the "process-groups" function with arity zero.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:process-groups#0</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-913">
+      <description>Attempts to evaluate the "process-groups" function with one argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:process-groups( boolean#1 )</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-914">
+      <description>Attempts to reference the "process-groups" function with arity one.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:process-groups#1</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-915">
+      <description>Attempts to reference the "process-groups" function with arity two.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>exists( houtil:process-groups#2 )</test>
+      <result>
+         <error code="XPST0017"/>
+      </result>
+   </test-case>
+   
+   <test-case name="houtil-process-groups-916">
+      <description>Attempts to reference the "process-groups" function with arity three.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>exists( houtil:process-groups#3 )</test>
+      <result>
+         <assert-true/>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-920">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:process-groups( 1, function($a as item()) as xs:boolean* { boolean($a), boolean($a) }, data#1)</test>
+      <result>
+         <any-of>
+            <error code="XPST0005"/>
+            <error code="XPTY0004"/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-921">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:process-groups( 1, function($a) { boolean#1 }, data#1 )</test>
+      <result>
+         <any-of>
+            <error code="FOTY0013"/>
+            <error code="XPTY0117"/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-922">
+      <description>Tests the type checking of the $f argument.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <modified by="Michael Kay after Tim Mills" on="2012-05-31" change="See bug 17250"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:process-groups( 1, houtil:process-groups(?, string#1, data#1), data#1)</test>
+      <result>
+         <any-of>
+            <error code="XPTY0004"/>
+            <error code="XPTY0117"/>
+            <assert-empty/>
+         </any-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-923">
+      <description>Evaluates the "process-groups" function with $seq set to a mix of item types </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <environment>
+         <source role="." file="docs/filter003.xml">
+            <description/>
+            <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+         </source>
+      </environment>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:process-groups( (//emp, 1, "string", 3.14, 2.7e0, exists#1), function($arg) { $arg
+         instance of function(*) }, function($g){$g} )</test>
+      <result>
+         <all-of>
+            <assert>count($result(true())) = 1</assert>
+            <assert>count($result(false())) = 8</assert>
+         </all-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-924">
+      <description>Evaluates the "process-groups" function with $f set to a function which _could_ (but
+         doesn't) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:process-groups( 1 to 10, function($arg) { if ($arg eq 100) then () else false()}, data#1)</test>
+      <result>
+         <all-of>
+            <assert>count($result(true())) = 0</assert>
+            <assert>count($result(false())) = 10</assert>
+         </all-of>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-925">
+      <description>Evaluates the "process-groups" function with $f set to a function which _could_ (and
+         does) return a non-boolean value </description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:process-groups( 1 to 10, function($arg) { if ($arg eq 5) then () else false()}, data#1)</test>
+      <result>
+         <assert-deep-eq>map{false(): (1 to 4, 6 to 10)}</assert-deep-eq>
+      </result>
+   </test-case>
+
+   <test-case name="houtil-process-groups-933">
+      <description>Evaluates the "process-groups" function with $f set to a function which expects integers,
+         but is supplied with strings.</description>
+      <created by="Michael Kay after Tim Mills" on="2018-08-29"/>
+      <dependency type="feature" value="staticTyping"/>
+      <dependency type="spec" value="XP30+ XQ30+"/>
+      <test>houtil:process-groups( ("1", "2", "3"), function($arg as xs:integer) as xs:boolean { $arg eq 100 }, data#1)</test>
+      <result>
+         <error code="XPTY0004"/>
+      </result>
+   </test-case>
+
+</test-set>

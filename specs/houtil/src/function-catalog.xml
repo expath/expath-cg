@@ -4,6 +4,50 @@
                xmlns:fos="http://www.w3.org/xpath-functions/spec/namespace"
                xmlns:doc="http://jwlresearch.net/2012/doc"
                xsi:schemaLocation="http://www.w3.org/xpath-functions/spec/namespace fos.xsd">
+   <fos:function name="some" prefix="houtil">
+      <fos:signatures>
+         <fos:proto name="some" return-type="item()*">
+            <fos:arg type="item()*" name="in"/>
+            <fos:arg type="function(item()) as xs:boolean" name="condition"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns true if some item in the input sequence satisfies the condition.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>The result is true if there is at least one item in <code>$in</code> for which the result of <code>$condition($in)</code>
+         is true.</p>
+      </fos:rules>
+      <fos:errors>
+         <p>A dynamic error occurs if the <code>$condition</code> function returns an error, or if applying the <code>fn:max</code>
+            function returns an error.</p>
+      </fos:errors>
+      <fos:notes>
+         <p>If the input sequence is empty then the result is always false.</p>
+      </fos:notes>
+   </fos:function>
+   <fos:function name="every" prefix="houtil">
+      <fos:signatures>
+         <fos:proto name="some" return-type="item()*">
+            <fos:arg type="item()*" name="in"/>
+            <fos:arg type="function(item()) as xs:boolean" name="condition"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns true if every item in the input sequence satisfies the condition.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>The result is true if there is at least no item in <code>$in</code> for which the result of <code>$condition($in)</code>
+            is false.</p>
+      </fos:rules>
+      <fos:errors>
+         <p>A dynamic error occurs if the <code>$condition</code> function returns an error, or if applying the <code>fn:max</code>
+            function returns an error.</p>
+      </fos:errors>
+      <fos:notes>
+         <p>If the input sequence is empty then the result is always true.</p>
+      </fos:notes>
+   </fos:function>
    <fos:function name="highest" prefix="houtil">
       <fos:signatures>
          <fos:proto name="highest" return-type="item()*">
@@ -197,6 +241,67 @@
    
    (C1) houtil:transitive-closure($node, function($node) as node()*) => node()*
    
+   <fos:function name="transitive-closure" prefix="houtil">
+      <fos:signatures>
+         <fos:proto name="transitive-closure" return-type="item()*">
+            <fos:arg type="node()?" name="node"/>
+            <fos:arg type="function(node()) as node()*" name="step"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns all nodes that are reachable from the supplied <code>$node</code> by applying the supplied <code>$step</code>
+            function one or more times.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>If <code>$node</code> is empty then the result is empty.</p>
+         <p>Otherwise, the function returns all nodes present in the result of <code>$step($node)</code>, and all nodes that
+            are present in the result of applying the <code>$step</code> function to any node in the result.</p>
+         <p>Duplicates are eliminated. The order of the nodes in the result is undefined.</p>
+         <p>The function works even if there are cycles in the data, for example if there is a set of nodes (A, B, C) such that
+         <code>$step(A)</code> includes B, <code>$step(B)</code> includes C, and <code>$step(C)</code> includes A. This includes
+         the case of a trivial cycle in which the result of <code>$step(A)</code> includes A.</p>         
+      </fos:rules>
+      <fos:errors>
+         <p>A dynamic error occurs if the <code>$step</code> function returns an error.</p>
+         <p>A catastrophic failure may occur (for example, non-termination or memory exhaustion) if the <code>$step</code>
+         function creates new nodes, causing the transitive closure to be unbounded.</p>
+      </fos:errors>
+      <fos:notes>
+         <p>The origin node <code>$node</code> is not included in the result unless it is reached by one or more applications
+            of the <code>$step</code> function.</p>
+      </fos:notes>
+   </fos:function>
+   
+   <fos:function name="reachable" prefix="houtil">
+      <fos:signatures>
+         <fos:proto name="reachable" return-type="xs:boolean">
+            <fos:arg type="node()" name="start"/>
+            <fos:arg type="node()" name="end"/>
+            <fos:arg type="function(node()) as node()*" name="step"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns true if the <code>$end</code> node is reachable by applying the supplied <code>$step</code>
+            function one or more times to the <code>$start</code> node.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>The function returns true if and only if <code>($end intersect foutil:transitive-closure($start, $step))</code>
+            is non-empty.</p>
+         <p>The function works even if there are cycles in the data, for example if there is a set of nodes (A, B, C) such that
+            <code>$step(A)</code> includes B, <code>$step(B)</code> includes C, and <code>$step(C)</code> includes A. This includes
+            the case of a trivial cycle in which the result of <code>$step(A)</code> includes A.</p>         
+      </fos:rules>
+      <fos:errors>
+         <p>A dynamic error occurs if the <code>$step</code> function returns an error.</p>
+         <p>A catastrophic failure may occur (for example, non-termination or memory exhaustion) if the <code>$step</code>
+            function creates new nodes, causing the transitive closure to be unbounded.</p>
+      </fos:errors>
+      <fos:notes>
+         <p>This function may be more efficient than computing the transitive closure, because (for example) paths that have
+            been unsuccessfully explored do not need to be retained in memory.</p>
+      </fos:notes>
+   </fos:function>
+   
    Returns a sequence, in undefined order, of all nodes reachable from the supplied starting node by one or more repeated applications of the function. Duplicates are eliminated and cycles are tolerated.
    
    Note: may fail catastrophically (e.g non termination or out of memory) if the supplied function creates new nodes rather than selecting existing nodes.
@@ -211,6 +316,30 @@
    
    D. Grouping
    
+   <fos:function name="all-distinct" prefix="houtil">
+      <fos:signatures>
+         <fos:proto name="all-distinct" return-type="xs:boolean">
+            <fos:arg type="item()*" name="in"/>
+         </fos:proto>
+         <fos:proto name="all-distinct" return-type="xs:boolean">
+            <fos:arg type="item()*" name="in"/>
+            <fos:arg type="function(item()) as xs:anyAtomicType?" name="key"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns true if all the items from <code>$in</code> have distinct values for the computed key.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>If <code>$in</code> is empty then the result is true.</p>
+         <p>The single argument function <code>houtil:all-distinct($X)</code> has the same result as <code>houtil:all-distinct($X, fn:data#1)</code>.</p>
+         <p>The result of the two-argument function is false if and only if there is a pair of two items <code>$M</code>
+         and <code>$N</code> at different positions in the input sequence such that <code>op:same-key($key($M), $key($N))</code> is true.</p>
+      </fos:rules>
+      <fos:errors>
+         <p>A dynamic error occurs if the <code>$key</code> function returns an error.</p>
+      </fos:errors>
+   </fos:function>
+   
    <fos:function name="group-by" prefix="houtil">
       <fos:signatures>
          <fos:proto name="group-by" return-type="map(xs:anyAtomicType, item()*)">
@@ -219,7 +348,7 @@
          </fos:proto>
       </fos:signatures>
       <fos:summary>
-         <p>Returns a map in which there is one entry for each distinct key value, whose corresponding value contains the
+         <p>Returns a map in which there is one entry for each distinct key value, where the corresponding value contains the
             items from the input that have that key value.</p>
       </fos:summary>
       <fos:rules>
@@ -231,7 +360,7 @@
          <p>Key values <code>k1</code> and <code>k2</code> are considered distinct if <code>op:same-key($k1, $k2)</code> returns false.</p>
       </fos:rules>
       <fos:errors>
-         <p>A dynamic error occurs if the <code>$condition</code> function returns an error.</p>
+         <p>A dynamic error occurs if the <code>$key</code> function returns an error.</p>
       </fos:errors>
       <fos:notes>
          <p>The rule for comparing keys is
@@ -244,6 +373,124 @@
             return map:merge(($in ! (let $k := $key(.) return if (exists($k) then map{$k, .} else ())), map{"duplicates": combine})
          ]]></fos:implementation>
       </fos:implementations>
+      <fos:examples>
+         <fos:example>
+            <fos:test>
+               <fos:expression>("apple", "banana", "cherry", "damson") => group-by(string-length#1)</fos:expression>
+               <fos:result>map{5: "apple", 6: ("banana", "cherry", "damson")}</fos:result>
+            </fos:test>
+            <fos:test>
+               <fos:expression>("apple", "banana", "cherry", "damson") => group-by(contains(?, "a"))</fos:expression>
+               <fos:result>map{true(): ("apple", "banana", "damson"), false(): "cherry"}</fos:result>
+            </fos:test>
+            <fos:test>
+               <fos:expression>(1 to 10) => group-by(function($n){$n idiv 3})</fos:expression>
+               <fos:result>map{0: (1, 2), 1: (3, 4, 5), 2: (6, 7, 8), 3: (9, 10)}</fos:result>
+            </fos:test>
+         </fos:example>
+      </fos:examples>
+   </fos:function>
+   
+   <fos:function name="group-by-position" prefix="houtil">
+      <fos:signatures>
+         <fos:proto name="group-by-position" return-type="map(xs:anyAtomicType, item()*)">
+            <fos:arg type="item()*" name="in"/>
+            <fos:arg type="function(item(), xs:integer) as xs:anyAtomicType?" name="key"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Returns a map in which there is one entry for each distinct key value, whose corresponding value contains the
+            items from the input that have that key value; the key value is a function of the item itself together with its
+            position in the input sequence.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>If <code>$in</code> is empty then the result is an empty map.</p>
+         <p>Otherwise, the <code>$key</code> function is computed for each item in <code>$in</code>. The <code>$key</code> function is applied
+            to each item in the input sequence, and takes two arguments: the item itself, and its (1-based) position in the input sequence.
+            Items for which the <code>$key</code> function returns an empty sequence are excluded from the result; all other items are added 
+            to an entry in the result map whose key is the computed key value.</p>
+         <p>Within each entry in the resulting map, items retain their relative order from the input sequence.</p>
+         <p>Key values <code>k1</code> and <code>k2</code> are considered distinct if <code>op:same-key($k1, $k2)</code> returns false.</p>
+      </fos:rules>
+      <fos:errors>
+         <p>A dynamic error occurs if the <code>$key</code> function returns an error.</p>
+      </fos:errors>
+      <fos:notes>
+         <p>The rule for comparing keys is
+            subtly different from the rule used by <code>xsl:for-each-group/@group-by</code> in XSLT, or by the <code>group by</code> clause in XQuery.</p>
+         <p>To compare keys using a collation, group by the result of calling <code>fn:collation-key()</code>. For example, the way in which timezones
+            are used when comparing <code>xs:dateTime</code> values is different.</p>
+      </fos:notes>
+      <fos:implementations>
+         <fos:implementation lang="xpath"><![CDATA[
+            return map:merge(($in ! (let $k := $key(.) return if (exists($k) then map{$k, .} else ())), map{"duplicates": combine})
+         ]]></fos:implementation>
+      </fos:implementations>
+      <fos:examples>
+         <fos:example>
+            <fos:test>
+               <fos:expression>("athens", "moscow", "berlin", "paris", "rome", "london", "brussels") => houtil:group-by(function($item, $pos){($pos - 1) idiv 3)})</fos:expression>
+               <fos:result>map{0: ("athens", "moscow", "berlin"), 1: ("paris", "rome", "london"), 2: "brussels"}</fos:result>
+            </fos:test>
+            <fos:test>
+               <fos:expression>("athens", "moscow", "berlin", "paris", "rome", "london", "brussels") => houtil:group-by(function($item, $pos){($pos - 1) mod 3)})</fos:expression>
+               <fos:result>map{0: ("athens", "paris", "brussels"), 1: ("moscow", "rome"), 2: ("berlin", "london")}</fos:result>
+            </fos:test>
+         </fos:example>
+      </fos:examples>
+   </fos:function>
+   
+   <fos:function name="process-groups" prefix="houtil">
+      <fos:signatures>
+         <fos:proto name="process-groups" return-type="map(xs:anyAtomicType, item()*)">
+            <fos:arg type="item()*" name="in"/>
+            <fos:arg type="function(item()) as xs:anyAtomicType?" name="key"/>
+            <fos:arg type="function(item()*) as item()*" name="action"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Groups the items in the input sequence <code>$in</code> according to the value of a computed key <code>$key</code>, processing
+         each of the groups using the function supplied in <code>$action</code>.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>The effect of the function is equivalent to performing a grouping of the items in the input sequence using <code>foutil:group-by($in, $key)</code>,
+            and then applying the <code>$action</code> to each group. The result is a map in which the keys are the grouping keys computed using <code>$key</code>,
+            and the corresponding values are the results of applying <code>$action</code> to the contents of the group.</p>
+         
+         <p>The result is equivalent to the result of the expression <code>foutil:group-by($in, $key) 
+            => map:for-each(function($key, $value){map{$key, $action($key, $value)})
+            => map:merge()</code></p>
+           
+         <p>That is, the input sequence is first grouped according the result of applying the <code>key</code> function to each item in the input sequence,
+         and then each group is processed using the <code>$action</code> function, whose argument is the contents of the group.</p>
+      </fos:rules>
+      <fos:errors>
+         <p>A dynamic error occurs if either the <code>$key</code> or <code>$action</code> function returns an error.</p>
+      </fos:errors>
+      <fos:notes>
+         <p>The rule for comparing keys is
+            subtly different from the rule used by <code>xsl:for-each-group/@group-by</code> in XSLT, or by the <code>group by</code> clause in XQuery.</p>
+         <p></p>
+      </fos:notes>
+      <fos:examples>
+         <fos:example>
+            <fos:test>
+               <fos:expression>("apple", "cherry", "damson", "banana") => houtil:process-groups(string-length#1, sort#1)</fos:expression>
+               <fos:result>map{5: "apple", 6: ("banana", "cherry", "damson")}</fos:result>
+            </fos:test>
+            <fos:test>
+               <fos:expression>("apple", "cherry", "damson", "banana") => houtil:process-groups(contains(?, "a"), count#1)</fos:expression>
+               <fos:result>map{true(): 3, false(): 1}</fos:result>
+            </fos:test>
+            <fos:test>
+               <fos:expression>(1 to 10) => houtil:process-groups(function($n){$n idiv 3}, function($g){min($g), max($g)})</fos:expression>
+               <fos:result>map{0: (1, 2), 1: (3, 5), 2: (6, 8), 3: (9, 10)}</fos:result>
+            </fos:test>
+         </fos:example>
+         <fos:example><p>Consider a document containing <code>employee</code> elements. The following expression finds the highest
+            paid employee(s) in each department: <code>houtil:process-groups(//employee, function($e){$e/department}, houtil:highest(?, function($e){$e/salary})</code>.
+         </p></fos:example>
+      </fos:examples>
    </fos:function>
    
    <fos:function name="group-adjacent" prefix="houtil">
@@ -273,21 +520,22 @@
             subtly different from the rule used by <code>xsl:for-each-group/@group-adjacent</code> in XSLT. For example, the way in which timezones
             are used when comparing <code>xs:dateTime</code> values is different.</p>
       </fos:notes>
-      <fos:implementations>
-         <fos:implementation lang="xpath"><![CDATA[
-            let $acc := fold-left($in, map{}, function($item, $acc) {
-                let $k := $key($item)
-                return if ($k eq $acc?key) 
-                         then map{"key": $acc?key,
-                                  "completed": $acc?completed,
-                                  "last": array:append($acc?last, $item)}
-                         else map{"key": $k,
-                                  "completed": ($acc?completed, $acc?last),
-                                  "last": [$item]}
-            })
-            return ($acc?completed, $acc?last)                
-         ]]></fos:implementation>
-      </fos:implementations>
+      <fos:examples>
+         <fos:example>
+            <fos:test>
+               <fos:expression>("apple", "cherry", "damson", "banana") => houtil:group-adjacent(string-length#1)</fos:expression>
+               <fos:result>["apple"], ["cherry", "damson", "banana"]</fos:result>
+            </fos:test>
+            <fos:test>
+               <fos:expression>("apple", "cherry", "damson", "banana") => houtil:group-adjacent(contains(?, "a"))</fos:expression>
+               <fos:result>["apple"], ["cherry"], ["damson", "banana"]</fos:result>
+            </fos:test>
+            <fos:test>
+               <fos:expression>(1 to 10) => houtil:group-adjacent(function($n){($n - 1) idiv 3}</fos:expression>
+               <fos:result>[1, 2, 3], [4, 5, 6], [7, 8, 9], [10]</fos:result>
+            </fos:test>
+         </fos:example>
+      </fos:examples>
    </fos:function>
    
    <fos:function name="group-starting-with" prefix="houtil">
@@ -301,23 +549,20 @@
          <p>Returns a sequence of arrays, partitioning the input sequence immediately before any item that matches the supplied condition.</p>
       </fos:summary>
       <fos:rules>
-         <p>The first array in the result sequence is always present and may be empty. It contains all items from the
-         input sequence up to (and not including) the first item for which <code>$condition</code> evaluates to true.</p>
-         <p>The second and subsequent arrays in the result sequence contain consecutive items from the input sequence in which (a)
-         the first item in each array is an item for which <code>$condition</code> evaluates to true, and (b) subsequent items
-         in each array are items for which <code>$condition</code> evaluates to false.</p>
+         <p>The input sequence is partitioned into a sequence of arrays. An item becomes the first item in an output array if either
+         (a) it is the first item in the input sequence, or (b) the result of applying the <code>$condition</code> function to that
+         item is <code>true</code>. Items that do not satisfy either of these conditions are added to the same array as the immediately preceding
+         item, retaining order.</p>
          <p>Together, the sequence of returned arrays partition the input sequence, in the sense that <code>array:flatten()</code>
             applied to the result will return the original sequence.</p>
       </fos:rules>
       <fos:errors>
          <p>A dynamic error occurs if the <code>$condition</code> function returns an error.</p>
       </fos:errors>
-      <fos:implementations>
-         <fos:implementation lang="xpath"><![CDATA[
-            let $matches := (1, houtil:index-of($in, $condition), count($in)+1)
-            return for-each-pair($matches, tail($matches), function($i, $j) {subsequence($in, $i, $j - $i)}) 
-         ]]></fos:implementation>
-      </fos:implementations>
+      <fos:notes>
+         <p>It may sometimes be convenient first to split the sequence at the first matching item using <code>houtil:before-first</code>
+         and/or <code>houtil:from-first</code>.</p>
+      </fos:notes>
    </fos:function>
    
    <fos:function name="group-ending-with" prefix="houtil">
@@ -331,21 +576,52 @@
          <p>Returns a sequence of arrays, partitioning the input sequence immediately after any item that matches the supplied condition.</p>
       </fos:summary>
       <fos:rules>
-         <p>All arrays in the result sequence other than the last contain consecutive items from the input sequence in which (a)
-            the last item in each array is an item for which <code>$condition</code> evaluates to true, and (b) previous items
-            in each array are items for which <code>$condition</code> evaluates to false.</p>
-         <p>The last array in the result sequence is always present and may be empty. It contains all items from the
-            input sequence after (and not including) the last item in <code>$in</code> for which <code>$condition</code> evaluates to true.</p>
+         <p>The input sequence is partitioned into a sequence of arrays. An item becomes the first item in an output array if either
+            (a) it is the first item in the input sequence, or (b) the result of applying the <code>$condition</code> function to the immediately preceding
+            item in the input sequence is <code>true</code>. Items that do not satisfy either of these conditions are added to the same array as the immediately preceding
+            item, retaining order.</p>
          <p>Together, the sequence of returned arrays partition the input sequence, in the sense that <code>array:flatten()</code>
             applied to the result will return the original sequence.</p>
       </fos:rules>
       <fos:errors>
          <p>A dynamic error occurs if the <code>$condition</code> function returns an error.</p>
       </fos:errors>
+   </fos:function>
+   
+   <fos:function name="eq" prefix="houtil">
+      <fos:signatures>
+         <fos:proto name="eq" return-type="xs:boolean">
+            <fos:arg type="xs:anyAtomicType" name="a"/>
+            <fos:arg type="xs:anyAtomicType" name="b"/>
+         </fos:proto>
+      </fos:signatures>
+      <fos:summary>
+         <p>Compares two atomic values for equality using the rules of the <code>op:same-key</code> function.</p>
+      </fos:summary>
+      <fos:rules>
+         <p>The function <code>houtil:eq($a, $b)</code> returns true if and only <code>op:same-key($a, $b)</code> returns true.</p>
+         <p>The detailed rules for <code>op:same-key</code> are given in <loc href="https://www.w3.org/TR/xpath-functions-31/#func-same-key">Section 17.1.1</loc>
+         of the XPath 3.1 Functions and Operators specification.</p>
+      </fos:rules>
+      <fos:note>
+         <p>The function is included in this library because (although it is not itself higher-order) it is often useful when constructing
+         predicates to be supplied as arguments to other functions such as <code>houtil:index-of</code>.</p>
+         <p>The equality function <code>houtil:eq</code>, unlike the <code>=</code> or <code>eq</code> operators in XPath, has the
+         properties that it is:</p>
+         <ul>
+            <li>Error-free: comparing two atomic values always returns true or false, never an error.</li>
+            <li>Context-free: the result does not depend in any way on the static or dynamic context (for example, collations and timezones).</li>
+            <li>Transitive: if <code>houtil:eq(A, B)</code> and <code>houtil:eq(B, C)</code> then <code>houtil:eq(A, C)</code>.</li>
+         </ul>
+         <p>The function can be implemented using the expression <code>map{$a:0}($b)=0</code>, but a native implementation
+         may be more efficient.</p>
+      </fos:note>
+      <fos:errors>
+         <p>A dynamic error occurs if the <code>$condition</code> function returns an error.</p>
+      </fos:errors>
       <fos:implementations>
          <fos:implementation lang="xpath"><![CDATA[
-            let $matches := (1, houtil:index-of($in, $condition), count($in)+1)
-            return for-each-pair($matches, tail($matches), function($i, $j) {subsequence($in, $i, $j - $i + 1)}) 
+            (1 to count($in))[$condition(subsequence($in, ., 1))]
          ]]></fos:implementation>
       </fos:implementations>
    </fos:function>
@@ -378,11 +654,6 @@
          ]]></fos:implementation>
       </fos:implementations>
    </fos:function>
-   
-   
-   E. String Processing
-   
-   (For these functions, an implementation in XQuery/XSLT might be challenging...)
    
    <fos:function name="replace" prefix="houtil">
       <fos:signatures>
@@ -421,16 +692,8 @@
          ]]></fos:implementation>
       </fos:implementations>
    </fos:function>
-   
-   (E1) houtil:replace($string, $regex, $flags, function(xs:string) as xs:string) => xs:string
-   
-   Replaces every substring that matches $regex with the result of applying the function to that substring.
-   
-   For example
-   
-   houtil:replace("a123b56", "\d+", "", function($in){string(number($in)+1)})) => "a124b57"
-   
-   <fos:function name="replace-substrings" prefix="houtil">
+
+   <fos:function name="replace-regex-groups" prefix="houtil">
       <fos:signatures>
          <fos:proto name="replace" return-type="xs:integer*">
             <fos:arg type="xs:string?" name="in"/>
