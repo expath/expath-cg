@@ -473,7 +473,9 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
                 <p>Maximum number of seconds to wait for a response. Milliseconds may be specified
                   using the fractional digits of an <code>xs:decimal</code> e.g. <code>0.200</code>
                   is 200 milliseconds.</p>
-                <p>The value <code>-1</code> indicates that no timeout should be imposed</p>
+                <p>The value <code>0</code> indicates that no timeout should be imposed.</p>
+                <p>If a negative value is specified, the error code <a>http:invalid-option</a> MUST
+                  be raised.</p>
               </td>
             </tr>
             <tr>
