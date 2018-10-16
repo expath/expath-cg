@@ -721,7 +721,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
       <p>
         If the server fails to respond to an HTTP request within the <a>timeout</a> then the error
         <a>http:timeout</a> MUST be raised. If the HTTP request cannot be made to the server then
-        the error <a>http:network-error</a> MUST be raised.
+        the error <a>http:network</a> MUST be raised.
       </p>
 
       <section id="response-map">
@@ -1001,7 +1001,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         <dd>A request body could not be serialized.</dd>
         <dt><dfn>http:timeout</dfn></dt>
         <dd>The server did not respond to the request within the timeout period.</dd>
-        <dt><dfn>http:network-error</dfn></dt>
+        <dt><dfn>http:network</dfn></dt>
         <dd>A network error occurred whilst making the HTTP request.</dd>
       </dl>
     </section>
