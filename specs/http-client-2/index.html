@@ -452,17 +452,13 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
             </tr>
             <tr>
               <td><dfn>follow-redirect</dfn></td>
-              <td><code>item()</code></td>
+              <td><code>xs:int</code></td>
               <td><code>20</code></td>
               <td>
                 <p>Follow HTTP redirects from the server.</p>
                 <p>0 indicates that redirects are not to be followed, -1 indicates that redirects
                   are to be followed indefinitely, a specific number indicates the maximum number
                   of redirects to follow.</p>
-                <p>The value MUST be either an <code>xs:int</code>, or an <code>xs:boolean</code>
-                  any other type MUST raise the error <a>http:inavlid-option</a>. The boolean
-                  values <code>true()</code> and <code>false()</code> correspond to <code>20</code>
-                  and <code>0</code> respectively.</p>
               </td>
             </tr>
             <tr>
