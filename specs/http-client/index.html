@@ -18,7 +18,7 @@
           shortName: "expath-http-client",
 
           // once the final report is published
-          //publishDate: "2017-09-01",
+          publishDate: "2018-10-20",
 
           // if there a publicly available Editor's Draft, this is the link
           edDraftURI: "https://expath.github.io/expath-cg/specs/http-client/",
@@ -243,7 +243,7 @@
           definition of the <a>http:request</a> element. If the parameter does not follow the
           grammar defined in this spec, the error <a>err:HC005</a> MUST be raised.</li>
         <li><code>$href</code> is the HTTP or HTTPS URI to send the request to. It is an <code>xs:anyURI</code>,
-          but is declared as an xs:string so that literal strings may be used; in other words, the parameter does not
+          but is declared as an <code>xs:string</code> so that literal strings may be used; in other words, the parameter does not
           need to be explicitly cast as <code>xs:anyURI</code>).</li>
         <li><code>$bodies</code> is the request body content, for HTTP methods that can contain a
           body in the request (e.g. POST). It is an error if this parameter is not the empty sequence
@@ -251,7 +251,7 @@
           their respective specifications (e.g. [[!rfc2616]] or [[!rfc4918]]). In case of a multipart
           request, it can be a sequence of several items, each one is the body of the corresponding
           body descriptor in
-          <code>$request</code>; see <a>http:multipart</a>.</li>
+          <code>$request</code>: see <a>http:multipart</a>.</li>
       </ul>
       <p>Besides the arity-three signature above, there are two other signatures that are convenient
         shortcuts (corresponding to the full version in which corresponding parameters have been set
