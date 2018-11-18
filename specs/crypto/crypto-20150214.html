@@ -1,0 +1,1359 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <title>Cryptographic Module 1.0</title>
+      <link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/TR/base.css" /><style type="text/css">
+code           { font-family: monospace; }
+
+div.constraint,
+div.issue,
+div.note,
+div.notice     { margin-left: 2em; }
+
+ol.enumar      { list-style-type: decimal; }
+ol.enumla      { list-style-type: lower-alpha; }
+ol.enumlr      { list-style-type: lower-roman; }
+ol.enumua      { list-style-type: upper-alpha; }
+ol.enumur      { list-style-type: upper-roman; }
+
+
+div.exampleInner pre { margin-left: 1em;
+                       margin-top: 0em; margin-bottom: 0em}
+div.exampleOuter {border: 4px double gray;
+                  margin: 0em; padding: 0em}
+div.exampleInner { background-color: #d5dee3;
+                   border-top-width: 4px;
+                   border-top-style: double;
+                   border-top-color: #d3d3d3;
+                   border-bottom-width: 4px;
+                   border-bottom-style: double;
+                   border-bottom-color: #d3d3d3;
+                   padding: 4px; margin: 0em }
+div.exampleWrapper { margin: 4px }
+div.exampleHeader { font-weight: bold;
+                    margin: 4px}
+
+      code.function { font-weight: bold; }
+      code.type { font-style: italic; }
+      /* h1, h2, h3 { color: #84001C; background: white } */
+      /* a, :link, :visited, a:active { color: #84005C; background: white } */
+      body {
+        background-image: url(http://expath.org/images/logo-candidate.png);
+      }
+   </style></head>
+   <body>
+      <p><a href="http://w3.org/"><img src="http://w3.org/Icons/w3c_home" alt="W3C" height="48" width="72" /></a></p>
+      <div class="head">
+         
+         <h1><a name="title" id="title"></a>Cryptographic Module 1.0
+         </h1>
+         
+         <h2><a name="w3c-doctype" id="w3c-doctype"></a>EXPath Candidate Module 14 February 2015
+         </h2>
+         <dl>
+            <dt>This version:</dt>
+            <dd>
+               <a href="http://expath.org/spec/crypto/20150214">http://expath.org/spec/crypto/20150214</a>
+               
+            </dd>
+            <dt>Latest version:</dt>
+            <dd>
+               <a href="http://expath.org/spec/crypto">http://expath.org/spec/crypto</a>
+               
+            </dd>
+            <dt>Editor:</dt>
+            <dd>Claudius Teodorescu, XML Consultant</dd>
+            <dt>Contributor:</dt>
+            <dd>Joe Wicentowski, U.S. Department Of State, Historian Office</dd>
+         </dl>
+         <p>This document is also available in these non-normative formats: <a href="http://expath.org/spec/crypto/20150214.xml">XML</a>.
+         </p>
+         <p class="copyright">
+            			Copyright © 2012-2013 Claudius Teodorescu, published by the
+            			<a href="http://w3.org/community/expath/">EXPath Community Group</a>
+            			under the
+            			<a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+               				License Agreement (CLA)</a>
+            			. A human-readable
+            			<a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a>
+            			is
+            			available.
+            		
+         </p>
+         <p class="copyright">
+            			This specification was published by the
+            			<a href="http://www.w3.org/community/expath/">EXPath Community Group</a>
+            			. It is not a W3C Standard nor is it on the W3C
+            			Standards Track. Please note that under the
+            			<a href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor
+               				License Agreement (CLA)</a>
+            			there is a limited opt-out and other conditions apply.
+            			Learn more about
+            			<a href="http://www.w3.org/community/">W3C Community and Business
+               				Groups</a>
+            			.
+            		
+         </p>
+      </div>
+      <hr />
+      <div>
+         
+         <h2><a name="abstract" id="abstract"></a>Abstract
+         </h2>
+         <p>This proposal defines a set of XPath 3.0 extension functions to perform cryptographic
+            operations. It defines extension functions related to XML Digital Signature, to
+            encryption and decryption, and to hash and digest messages. It has been designed to
+            be
+            compatible with XQuery 3.0 and XSLT 3.0, as well as any other standard based on XPath
+            3.0.
+         </p>
+      </div>
+      <div class="toc">
+         
+         <h2><a name="contents" id="contents"></a>Table of Contents
+         </h2>
+         <p class="toc">1 <a href="#d4e80">Introduction</a><br />
+            1.1 <a href="#d4e89">Namespace conventions</a><br />
+            1.2 <a href="#d4e108">Error management</a><br />
+            2 <a href="#d4e119">Cryptographic Service Providers</a><br />
+            2.1 <a href="#d4e148">The crypto:list-providers function</a><br />
+            2.1.1 <a href="#d4e164">The crypto:providers-list element</a><br />
+            2.1.2 <a href="#d4e177">The crypto:provider element</a><br />
+            2.2 <a href="#d4e190">The crypto:list-services function</a><br />
+            2.2.1 <a href="#d4e215">The crypto:services-list element</a><br />
+            2.2.2 <a href="#d4e228">The crypto:service element</a><br />
+            3 <a href="#d4e241">Integrity and Authentication of Data</a><br />
+            3.1 <a href="#hash-function">The crypto:hash function</a><br />
+            3.2 <a href="#hmac-function">The crypto:hmac function</a><br />
+            4 <a href="#d4e376">Key Management</a><br />
+            4.1 <a href="#d4e381">The crypto:generate-key-pair function</a><br />
+            4.2 <a href="#d4e389">The crypto:generate-secret-key function</a><br />
+            4.3 <a href="#d4e397">The crypto:compare-keys function</a><br />
+            4.4 <a href="#d4e404">The crypto:key-agrement function</a><br />
+            4.5 <a href="#d4e411">The crypto:convert-key-specification-to-key-object, crypto:convert-key-object-to-key-specification
+               function</a><br />
+            5 <a href="#d4e420">Digital Signature</a><br />
+            5.1 <a href="#d4e425">The crypto:generate-signature function</a><br />
+            5.2 <a href="#d4e544">The crypto:validate-signature function</a><br />
+            6 <a href="#d4e570">Encryption and Decryption</a><br />
+            6.1 <a href="#d4e579">The crypto:encrypt function</a><br />
+            6.2 <a href="#d4e667">The crypto:decrypt function</a><br />
+            7 <a href="#d4e754">Secure Storing of Sensitive Keying and Data Material</a><br />
+            7.1 <a href="#d4e759">The crypto:create-secure-store function</a><br />
+            7.2 <a href="#d4e791">The crypto:load-secure-store function</a><br />
+            7.3 <a href="#d4e823">The crypto:convert-secure-store function</a><br />
+            7.4 <a href="#d4e863">The crypto:get-secure-store-metadata function</a><br />
+            7.4.1 <a href="#d4e887">The crypto:metadata element</a><br />
+            7.5 <a href="#d4e925">The crypto:add-entry function</a><br />
+            7.6 <a href="#d4e974">The crypto:get-entry function</a><br />
+            7.7 <a href="#d4e1014">The crypto:delete-entry function</a><br />
+            7.8 <a href="#d4e1054">The crypto:get-entry-metadata function</a><br />
+            7.8.1 <a href="#d4e1086">The crypto:metadata element</a><br />
+            7.9 <a href="#d4e1112">The crypto:list-trusted-certificate-authorities function</a><br />
+            8 <a href="#d4e1120">Digital Certificates</a><br />
+            8.1 <a href="#d4e1125">The crypto:generate-certificate function</a><br />
+            8.2 <a href="#d4e1138">The crypto:validate-certificate function</a><br />
+            8.3 <a href="#d4e1146">The crypto:parse-certificate function</a><br />
+            8.4 <a href="#d4e1154">The crypto:generate-certification-path function</a><br />
+            8.5 <a href="#d4e1163">The crypto:validate-certification-path function</a><br />
+            8.6 <a href="#d4e1171">The crypto:generate-certification-request function</a><br />
+            8.7 <a href="#d4e1179">The crypto:validate-certification-request function</a><br />
+            8.8 <a href="#d4e1187">The crypto:validate-certificate-revocation-list function</a><br />
+            9 <a href="#d4e1195">Cryptographic Hardware</a><br />
+            10 <a href="#d4e1200">Random Sequences Generation</a><br />
+            10.1 <a href="#d4e1205">The crypto:generate-random-number function</a><br />
+            11 <a href="#d4e1213">The crypto:options element</a><br />
+            11.1 <a href="#provider-option">The provider option</a><br />
+            11.2 <a href="#canonicalization-algorithm">The canonicalization-algorithm option</a><br />
+            11.3 <a href="#digest-algorithm">The digest-algorithm option</a><br />
+            11.4 <a href="#signature-algorithm">The signature-algorithm option</a><br />
+            11.5 <a href="#signature-namespace-prefix">The signature-namespace-prefix option</a><br />
+            
+         </p>
+         
+         <h3><a name="appendices" id="appendices"></a>Appendices
+         </h3>
+         <p class="toc">A <a href="#d4e1288">References</a><br />
+            B <a href="#d4e1373">Summary of Error Conditions</a><br />
+            
+         </p>
+      </div>
+      <hr />
+      <div class="body">
+         <div class="div1">
+            
+            <h2><a name="d4e80" id="d4e80"></a>1 Introduction
+            </h2>
+            <p>Cryptography is the science of communicating in secret code, by conversion of data
+               with
+               the help of a key. In modern times, cryptography is necessary when communicating over
+               any untrusted medium, particularly the Internet.
+            </p>
+            <p>Encryption of data can be of two types: symmetric and asymmetric. Symmetric encryption
+               means that the same key is used for encryption and decryption. Asymmetric encryption
+               means that a message can be encrypted by using a key that is public, but the decryption
+               can be made only by using a private key, which form a pair with the respective public
+               key.
+            </p>
+            <p>A related technique of cryptography is to apply a one-way hash or digest function
+               to
+               data; replicating the operation with the same data and function can check the integrity
+               and authentication of the data.
+            </p>
+            <div class="div2">
+               
+               <h3><a name="d4e89" id="d4e89"></a>1.1 Namespace conventions
+               </h3>
+               <p>The module defined by this document defines functions and elements in the namespace
+                  <code>http://expath.org/ns/crypto</code>. In this document, the
+                  <code>crypto</code> prefix, when used, is bound to this namespace URI.
+               </p>
+               <p>Error codes are defined in the same namespace (<code>http://expath.org/ns/crypto</code>),
+                  and in this document are displayed with the same prefix, <code>crypto</code>.
+               </p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e108" id="d4e108"></a>1.2 Error management
+               </h3>
+               <p>Error conditions are identified by a code (a <code>QName</code>). When such an error
+                  condition is reached during the execution of the function, a dynamic error is thrown,
+                  with the corresponding error code (as if the standard XPath function
+                  <code>error</code> had been called).
+               </p>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e119" id="d4e119"></a>2 Cryptographic Service Providers
+            </h2>
+            <p>Cryptographic providers provide cryptographic services, involving cryptographic operations
+               (encryption, digital signatures, message digests, message authentication), 
+               generators and converters of cryptographic material and cryptographic objects (keystores
+               or certificates) containing the cryptographic data. They can be implemented
+               using software, hardware, or both.
+            </p>
+            <table border="1" frame="border">
+               <caption>Cryptographic services described by this specification</caption>
+               <thead>
+                  <tr>
+                     <th>Cryptographic Service QName</th>
+                     <th>Cryptographic Service Description</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>crypto:hash</td>
+                     <td>See <a href="#hash-function"><b>3.1 The crypto:hash function</b></a>.
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>crypto:hmac</td>
+                     <td>See <a href="#hmac-function"><b>3.2 The crypto:hmac function</b></a>.
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+            <div class="div2">
+               
+               <h3><a name="d4e148" id="d4e148"></a>2.1 The <code>crypto:list-providers</code> function
+               </h3>
+               <p>This function lists the available cryptographic providers.</p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:list-providers</code>() as <code class="type">element(crypto:provider-list)</code>
+</pre></div>
+               <div class="div3">
+                  
+                  <h4><a name="d4e164" id="d4e164"></a>2.1.1 The <code>crypto:providers-list</code> element
+                  </h4>
+                  <p>The <code>crypto:providers-list</code> element represents the list of the available cryptographic providers:
+                  </p>
+                  <div class="exampleInner"><pre>
+&lt;crypto:providers-list&gt;
+    (crypto:provider*)
+&lt;/crypto:providers-list&gt;
+    </pre></div>
+               </div>
+               <div class="div3">
+                  
+                  <h4><a name="d4e177" id="d4e177"></a>2.1.2 The <code>crypto:provider</code> element
+                  </h4>
+                  <p>The <code>crypto:provider</code> element contains the name of an available cryptographic provider:
+                  </p>
+                  <div class="exampleInner"><pre>
+&lt;crypto:provider name = xs:string
+    version = xs:string&gt;
+&lt;/crypto:provider&gt;
+                </pre></div>
+               </div>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e190" id="d4e190"></a>2.2 The <code>crypto:list-services</code> function
+               </h3>
+               <p>This function lists the cryptographic services a provider provides.</p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:list-services</code>($provider-name as <code class="type">xs:string</code>) as <code class="type">element(crypto:service-list)</code>
+</pre></div>
+               <ul>
+                  <li>
+                     <p><code>$provider-name</code> is the provider's name. TBD: case when provider is not registered, etc.
+                     </p>
+                  </li>
+               </ul>
+               <div class="div3">
+                  
+                  <h4><a name="d4e215" id="d4e215"></a>2.2.1 The <code>crypto:services-list</code> element
+                  </h4>
+                  <p>The <code>crypto:services-list</code> element represents the list of the available cryptographic services for a provider:
+                  </p>
+                  <div class="exampleInner"><pre>
+&lt;crypto:services-list&gt;
+    (crypto:service*)
+&lt;/crypto:services-list&gt;
+    </pre></div>
+               </div>
+               <div class="div3">
+                  
+                  <h4><a name="d4e228" id="d4e228"></a>2.2.2 The <code>crypto:service</code> element
+                  </h4>
+                  <p>The <code>crypto:service</code> element contains details about an available cryptographic service:
+                  </p>
+                  <div class="exampleInner"><pre>
+&lt;crypto:service qname = xsd:QName
+    algorithm? = xs:string
+    type? = xs:string
+    format? = xs:string?/&gt;
+                </pre></div>
+               </div>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e241" id="d4e241"></a>3 Integrity and Authentication of Data
+            </h2>
+            <div class="div2">
+               
+               <h3><a name="hash-function" id="hash-function"></a>3.1 The <code>crypto:hash</code> function
+               </h3>
+               <p>This function generates a "message digest" of the input data, by using a cryptographic
+                  algorithm. It returns the hash value as a string.
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:hash</code>($data     as <code class="type">xs:anyAtomicType</code>,
+	     $algorithm as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
+</pre></div>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:hash</code>($data    as <code class="type">xs:anyAtomicType</code>,
+            $algorithm as <code class="type">xs:string</code>,
+            $format    as <code class="type">xs:string</code>?) as <code class="type">xs:string</code>
+</pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the data to be hashed. This parameter can be of type xs:string, xs:base64Binary,
+                        or xs:hexBinary.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm,
+                        this
+                        is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default
+                        value is "base64". 
+                        If the format is not supprted, this is an error <a href="#error.outputFormat">[crypto.output-format]</a>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="hmac-function" id="hmac-function"></a>3.2 The <code>crypto:hmac</code> function
+               </h3>
+               <p>HMAC (Keyed-Hashing for Message Authentication) is a mechanism for message authentication
+                  using
+                  cryptographic hash functions. HMAC can be used with any iterative cryptographic hash
+                  function, e.g.
+                  MD5 or SHA-1, in combination with a secret shared key. Typically, message authentication
+                  codes are
+                  used between two parties that share a secret key in order to validate information
+                  transmitted
+                  between these parties.
+               </p>
+               <p>This function generates a message authentication code, based on the input message,
+                  by using a cryptographic algorithm and a secret key.
+                  It returns the hash-based message authentication code as base64 string.
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:hmac</code>($data     as <code class="type">xs:anyAtomicType</code>,
+            $key        as <code class="type">xs:anyAtomicType</code>,
+            $algorithm  as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
+</pre></div>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:hmac</code>($data     as <code class="type">xs:anyAtomicType</code>,
+            $key        as <code class="type">xs:anyAtomicType</code>,
+            $algorithm  as <code class="type">xs:string</code>,
+            $format     as <code class="type">xs:string</code>) as <code class="type">xs:string</code>
+</pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the data to be authenticated. This parameter can be of type xs:string, xs:base64Binary,
+                        or xs:hexBinary.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$key</code> is the secret key used for calculating the authentication code. This parameter can
+                        be of type
+                        xs:string, xs:base64Binary, or xs:hexBinary.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$algorithm</code> is the cryptographic hashing algorithm. If it is specified an unsupported algorithm,
+                        this
+                        is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$format</code> is the format of the output. The legal values are "hex" and "base64". The default
+                        value is "base64". 
+                        If the format is not supprted, this is an error <a href="#error.outputFormat">[crypto.output-format]</a>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e376" id="d4e376"></a>4 Key Management
+            </h2>
+            <p>TBD.</p>
+            <div class="div2">
+               
+               <h3><a name="d4e381" id="d4e381"></a>4.1 The <code>crypto:generate-key-pair</code> function
+               </h3>
+               <p>This function generates a new pair of public and private cryptographic keys, to be
+                  used with a specific cryptographic algorithm.
+               </p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e389" id="d4e389"></a>4.2 The <code>crypto:generate-secret-key</code> function
+               </h3>
+               <p>This function generates a new secret key, to be used with a specific cryptographic
+                  algorithm.
+               </p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e397" id="d4e397"></a>4.3 The <code>crypto:compare-keys</code> function
+               </h3>
+               <p></p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e404" id="d4e404"></a>4.4 The <code>crypto:key-agrement</code> function
+               </h3>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e411" id="d4e411"></a>4.5 The <code>crypto:convert-key-specification-to-key-object, crypto:convert-key-object-to-key-specification</code> function
+               </h3>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e420" id="d4e420"></a>5 Digital Signature
+            </h2>
+            <p>The XML Signature is a method of associating a key with referenced data (octets);
+               it
+               does not normatively specify how keys are associated with persons or institutions,
+               nor
+               the meaning of the data being referenced and signed. XML Signatures are applied to
+               arbitrary digital content (data objects) via an indirection. Data objects are digested,
+               the resulting value is placed in an element (with other information) and that element
+               is
+               then digested and cryptographically signed.
+            </p>
+            <div class="div2">
+               
+               <h3><a name="d4e425" id="d4e425"></a>5.1 The <code>crypto:generate-signature</code> function
+               </h3>
+               <p>The function has its parameters passed as a <code class="type">map(xs:string, item())</code>. If any of these parameters is missing, a default value will be used
+                  instead. After the function's signature, an example of parameters is given. The syntax
+                  for the <code>$references</code> parameter is inspired by <a href="#xml-dig-sig-core">[XML Signature]</a>.
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:generate-signature</code>($data     as <code class="type">node()*</code>,
+    			    $parameters as <code class="type">map(xs:string, item()+)?</code>) as <code class="type">node()+</code> 
+</pre></div>
+               <p>Example of parameters:</p>
+               <div class="exampleInner"><pre>
+map {
+	"canonicalization-algorithm" := "inclusive-with-comments",
+ 	"digest-algorithm" := "SHA1",
+ 	"signature-algorithm" := "RSA_SHA1",
+ 	"signature-namespace-prefix" := "dsig",
+ 	"signature-type" := "enveloped",
+ 	"references" :=
+ 		( 
+			&lt;Reference xmlns="http://www.w3.org/2000/09/xmldsig#" URI=""&gt;
+				&lt;Transforms&gt;
+					&lt;Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2"&gt;
+						&lt;XPath Filter="intersect"&gt;//ToBeSigned&lt;/XPath&gt;
+						&lt;XPath Filter="subtract"&gt;//NotToBeSigned&lt;/XPath&gt;
+						&lt;XPath Filter="union"&gt;//ReallyToBeSigned&lt;/XPath&gt;
+					&lt;/Transform&gt;
+				&lt;/Transforms&gt;
+			&lt;/Reference&gt;,
+			&lt;Reference xmlns="http://www.w3.org/2000/09/xmldsig#" URI="#id"&gt;
+				&lt;Transforms&gt;
+					&lt;Transform Algorithm="http://www.w3.org/TR/2001/10/xml-exc-c14n" /&gt;
+				&lt;/Transforms&gt;
+			&lt;/Reference&gt;
+		)			
+ 	"digital-certificate" :=
+ 		map {
+ 			"keystore-type" := "JKS",
+ 			"keystore-password" := "password",
+ 			"key-alias" := "alias",
+ 			"private-key-password" := "password",
+ 			"keystore-url" := "/db/mykeystore"
+ 		} 	
+}
+</pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the data to be signed.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$canonicalization-algorithm</code> is the canonicalization algorithm
+                        applied to the SignedInfo element prior to performing signature calculations.
+                        Possible values are: "exclusive", "exclusive-with-comments", "inclusive", and
+                        "inclusive-with-comments". The default value is "inclusive-with-comments". If
+                        the parameter specifies an unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$digest-algorithm</code> is the digest algorithm to be applied to the
+                        signed object. Possible values are: "SHA1", "SHA256", and "SHA512". The default
+                        value is "SHA1". If the parameter specifies an unsupported algorithm, this is
+                        an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$signature-algorithm</code> is the algorithm used for signature
+                        generation and validation. Possible values are: "DSA_SHA1", and "RSA_SHA1". The
+                        default value is "RSA_SHA1". If the parameter specifies an unsupported
+                        algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$signature-namespace-prefix</code> is the namespace prefix for signature.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$signature-type</code> is the method used for signing the content of signature. Possible values are: 'enveloping',
+                        'enveloped', and 'detached'. The
+                        default value is 'enveloped'. If the parameter specifies an unsupported signature
+                        type, this is an error <a href="#error.signatureType">[crypto:signature-type]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$references</code> represents the resources to be signed. If this parameter is missing, the whole input
+                        document will be signed.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$digital-certificate</code> is the digital certificate to be used for signing the references. If this parameter
+                        is missing, an auto-generated key pair
+                        will be used. The components of this parameter are:
+                     </p>
+                     <ul>
+                        <li>
+                           <p><code>keystore-type</code> is the keystore type. If the type is not supported, this is an error <a href="#error.keystoreType">[crypto:keystore-type]</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>keystore-password</code> is the keystore's password. If the keystore cannot be loaded or the password is incorrect,
+                              this is an error
+                              		                  <a href="#error.readKeystore">[crypto:unreadable-keystore]</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>key-alias</code> is the alias for the key pair used for signing. If no key pair exists for this alias,
+                              this is an error <a href="#error.aliasKey">[crypto:alias-key]</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>private-key-password</code> is the password for the selected key.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>keystore-url</code> is the URL of the keystore. If the URL is not correct, this is an error <a href="#error.keystoreUrl">[crypto:keystore-url]</a>. If the user has no
+                              		                  acces to the keystore, this is an error <a href="#error.deniedKeystore">[crypto:denied-keystore]</a>. 
+                              		                  
+                           </p>
+                        </li>
+                     </ul>
+                  </li>
+               </ul>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e544" id="d4e544"></a>5.2 The <code>crypto:validate-signature</code> function
+               </h3>
+               <p>This function validates an XML Digital Signature.</p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:validate-signature</code>($data as <code class="type">node()</code>) as <code class="type">xs:boolean</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the enveloped, enveloping, or detached signature. If
+                        the Signature element cannot be found, this is an error <a href="#error.sigElem">[crypto:signature-element]</a>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e570" id="d4e570"></a>6 Encryption and Decryption
+            </h2>
+            <p>Encryption represents the process of conversion of data, by using a secret key (a
+               cipher), in a form (called cipher text) that cannot be understood by unautorized
+               persons.
+            </p>
+            <p>The decryption represents the reverse process, of converting encrypted data back to
+               plain text (original text).
+            </p>
+            <p>There are two main types of encryption: symmetric encryption, when both parties, the
+               sender and the receiver, use the same secret key, previously exchanged,
+               and asymmetric encryption, when a key pair, consisting of a private key and a private
+               key, is used, of which the public key is used by sender to encrypt a message that
+               can only be decrypted by the receiver, who holds the private key of that key pair.
+            </p>
+            <div class="div2">
+               
+               <h3><a name="d4e579" id="d4e579"></a>6.1 The <code>crypto:encrypt</code> function
+               </h3>
+               <p>This function encrypts data.</p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:encrypt</code>($data     as <code class="type">xs:anyAtomicType</code>,
+               $type       as <code class="type">xs:string</code>,
+               $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">xs:anyAtomicType</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the data to be encrypted. This parameter can be of type xs:string, xs:base64Binary,
+                        or xs:hexBinary. When a particular padding mechanism
+                        is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:inexistent-padding]</a>. Also, when a particular padding mechanism is expected, but the data is not
+                        padded properly, this is an error <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p>
+                        <code>$type</code> is the type of encryption. Legal values: "symmetric", and "asymmetric". If the parameter
+                        has an illegal value, this is an error
+                        <a href="#error.encType">[crypto:encryption-type]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$parameters</code> represents the parameters needed for the current operation. The parameters are the
+                        following:
+                     </p>
+                     <ul>
+                        <li>
+                           <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for encryption. This parameter can be of type xs:string,
+                              xs:base64Binary, or xs:hexBinary.
+                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:ecret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              		                  <a href="#error.blockSize">[crypto:block-size]</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for encryption. For symmetric encryption, a transformation
+                              name can be used.
+                              		                  If the parameter specifies an unsupported algorithm or transformation
+                              name, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>iv</code> as <code class="type">xs:string</code> is the initialization vector for symmetric encryption.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>provider</code> as <code class="type">xs:string</code> is the cryptographic provider for the current operation. If the provider is not specified,
+                              the implementation will use the
+                              		                  default provider. If the provider does not exist, this is an error
+                              <a href="#error.noProvider">[crypto:no-provider]</a>.
+                           </p>
+                        </li>
+                     </ul>
+                  </li>
+               </ul>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e667" id="d4e667"></a>6.2 The <code>crypto:decrypt</code> function
+               </h3>
+               <p>This function decrypts data.</p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:decrypt</code>($data     as <code class="type">xs:anyAtomicType</code>,
+               $type       as <code class="type">xs:string</code>,
+               $parameters as <code class="type">map(xs:string, item())?</code>) as <code class="type">xs:anyAtomicType</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$data</code> is the data to be decrypted. This parameter can be of type xs:string, xs:base64Binary,
+                        or xs:hexBinary. When a particular padding mechanism
+                        is requested, but is not available, this is an error <a href="#error.noPadding">[crypto:inexistent-padding]</a>. Also, when a particular padding mechanism is expected, but the data is not
+                        padded properly, this is an error <a href="#error.incorrectPadding">[crypto:incorrect-padding]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$type</code> is the type of decryption. Legal values: "symmetric", and "asymmetric". If the parameter
+                        has an illegal value, this is an error
+                        <a href="#error.decryptionType">[crypto:decryption-type]</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$parameters</code> represents the parameters needed for the current operation. The parameters are the
+                        following:
+                     </p>
+                     <ul>
+                        <li>
+                           <p><code>key</code> as <code class="type">xs:anyAtomicType</code> is the cryptographic key used for decryption. This parameter can be of type xs:string,
+                              xs:base64Binary, or xs:hexBinary.
+                              		                  If the key is invalid, this is an error <a href="#error.cryptoKey">[crypto:ecret-key]</a>. If the length of data provided to the block cipher is incorrect, this is an error
+                              		                  <a href="#error.blockSize">[crypto:block-size]</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>algorithm</code> as <code class="type">xs:string</code> is the cryptographic algorithm used for decryption. For symmetric decryption, a transformation
+                              name can be used.
+                              		                  If the parameter specifies an unsupported algorithm or transformation
+                              name, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+                              		                  
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>iv</code> as <code class="type">xs:string?</code> is the initialization vector for symmetric encryption.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code>provider</code> as <code class="type">xs:string</code> is the cryptographic provider for the current operation. If the provider is not specified,
+                              the implementation will use the
+                              		                  default provider. If the provider does not exist, this is an error
+                              <a href="#error.noProvider">[crypto:no-provider]</a>.
+                           </p>
+                        </li>
+                     </ul>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e754" id="d4e754"></a>7 Secure Storing of Sensitive Keying and Data Material
+            </h2>
+            <p>A secure storage is a collection of CRLs, cryptographic keys, cryptographic certificates,
+               cryptographic certificate chains,
+               various secrets, and extensions. It may have different implementation, according to
+               different cryptographic providers.
+               Every entry has a unique alias name and can be protected by its own password.
+            </p>
+            <div class="div2">
+               
+               <h3><a name="d4e759" id="d4e759"></a>7.1 The <code>crypto:create-secure-store</code> function
+               </h3>
+               <p>This function creates a secure store. It returns the store as xs:base64binary if successfully
+                  completed, empty sequence if not.
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:create-secure-store</code>($store-format as <code class="type">xs:string</code>,
+               $store-password as <code class="type">xs:string</code>) as <code class="type">xs:base64binary</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$store-format</code> is the format of the secure store.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$store-password</code> is the password for the secure store.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e791" id="d4e791"></a>7.2 The <code>crypto:load-secure-store</code> function
+               </h3>
+               <p>This function loads a secure store in order to operate against it. It returns an xs:long
+                  representing the secure store handle.
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:load-secure-store</code>($secure-store as <code class="type">xs:base64binary</code>,
+               $store-password as <code class="type">xs:string</code>) as <code class="type">xs:long</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$secure-store</code> is the secure store.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$store-password</code> is the password for the secure store.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e823" id="d4e823"></a>7.3 The <code>crypto:convert-secure-store</code> function
+               </h3>
+               <p>This function converts a secure store from one format to another. It returns the converted
+                  store as xs:base64binary
+                  if successfully completed, empty sequence if not.
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:convert-secure-store</code>($input-store as <code class="type">xs:base64binary</code>,
+               $input-format as <code class="type">xs:string</code>,
+               $output-format as <code class="type">xs:string</code>) as <code class="type">xs:base64binary</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$input-store</code> is the secure store to be converted.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$input-format</code> is the format of the input secure store.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$output-format</code> is the format of the output secure store.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e863" id="d4e863"></a>7.4 The <code>crypto:get-secure-store-metadata</code> function
+               </h3>
+               <p>This function gets metadata for a secure store. It returns a crypto:metadata element.</p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:get-secure-store-metadata</code>($secure-store-handle as <code class="type">xs:long</code>) as <code class="type">element(crypto:metadata)</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$secure-store-handle</code> is the secure store handle.
+                     </p>
+                  </li>
+               </ul>
+               <div class="div3">
+                  
+                  <h4><a name="d4e887" id="d4e887"></a>7.4.1 The <code>crypto:metadata</code> element
+                  </h4>
+                  <p>The <code>crypto:metadata</code> element contains metadata about a resource.
+                  </p>
+                  <div class="exampleInner"><pre>
+&lt;crypto:metadata&gt;
+    &lt;crypto:secure-store-type&gt;xs:string&lt;/crypto:secure-store-type&gt;
+    &lt;crypto:provider&gt;xs:string&lt;/crypto:provider&gt;
+    &lt;crypto:aliases-list&gt;xs:string&lt;/crypto:aliases-list&gt;
+    &lt;crypto:size&gt;xs:integer&lt;/crypto:size&gt;
+&lt;/crypto:metadata&gt;
+    </pre></div>
+                  <ul>
+                     <li>
+                        <p>
+                           <code>secure-store-type</code> is the type of the secure store.
+                           
+                        </p>
+                     </li>
+                     <li>
+                        <p>
+                           <code>provider</code> is the provider that generated the secure store.
+                        </p>
+                     </li>
+                     <li>
+                        <p>
+                           <code>aliases-list</code> is the list of all the aliases in the secure store.
+                           
+                        </p>
+                     </li>
+                     <li>
+                        <p>
+                           <code>size</code> is the number of entries in the secure store.
+                           
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e925" id="d4e925"></a>7.5 The <code>crypto:add-entry</code> function
+               </h3>
+               <p>This function adds an entry to a secure store. It returns true if successfully completed,
+                  false if not.
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:add-entry</code>($secure-store-handle as <code class="type">xs:long</code>,
+               $data as <code class="type">xs:base64binary</code>,
+               $alias as <code class="type">xs:string</code>,
+               $entry-password as <code class="type">xs:string?</code>) as <code class="type">xs:boolean</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$secure-store-handle</code> is the secure store handle.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$data</code> is the data to be stored.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$alias</code> is the alias for the data to be stored.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$entry-password</code> is the password for the entry.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e974" id="d4e974"></a>7.6 The <code>crypto:get-entry</code> function
+               </h3>
+               <p>This function gets an entry from a secure store. It returns the entry.</p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:get-entry</code>($secure-store-handle as <code class="type">xs:long</code>,
+               $alias as <code class="type">xs:string</code>,
+               $entry-password as <code class="type">xs:string?</code>) as <code class="type">xs:base64binary</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$secure-store-handle</code> is the secure store handle.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$alias</code> is the alias for the data to be stored.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$entry-password</code> is the password for the entry.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1014" id="d4e1014"></a>7.7 The <code>crypto:delete-entry</code> function
+               </h3>
+               <p>This function delets an entry from a secure store. It returns true if successfully
+                  completed, false if not.
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:delete-entry</code>($secure-store-handle as <code class="type">xs:long</code>,
+               $alias as <code class="type">xs:string</code>,
+               $entry-password as <code class="type">xs:string?</code>) as <code class="type">xs:boolean</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$secure-store-handle</code> is the secure store handle.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$alias</code> is the alias for the data to be stored.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$entry-password</code> is the password for the entry.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1054" id="d4e1054"></a>7.8 The <code>crypto:get-entry-metadata</code> function
+               </h3>
+               <p>This function gets metadata for a secure store entry. It returns a crypto:metadata
+                  element if entry exists, empty sequence if
+                  the entry does not exist.
+               </p>
+               <div class="exampleInner"><pre>
+<code class="function">crypto:get-entry-metadata</code>($secure-store-handle as <code class="type">xs:long</code>,
+               $alias as <code class="type">xs:string</code>) as <code class="type">element(crypto:metadata)?</code></pre></div>
+               <ul>
+                  <li>
+                     <p><code>$secure-store-handle</code> is the secure store handle.
+                     </p>
+                  </li>
+                  <li>
+                     <p><code>$alias</code> is the alias for the data to be stored.
+                     </p>
+                  </li>
+               </ul>
+               <div class="div3">
+                  
+                  <h4><a name="d4e1086" id="d4e1086"></a>7.8.1 The <code>crypto:metadata</code> element
+                  </h4>
+                  <p>The <code>crypto:metadata</code> element contains metadata about a resource.
+                  </p>
+                  <div class="exampleInner"><pre>
+&lt;crypto:metadata&gt;
+    &lt;crypto:creation-date&gt;xs:dateTime&lt;/crypto:creation-date&gt;
+    &lt;crypto:type&gt;("certificate" | "key" | "other")&lt;/crypto:provider&gt;
+&lt;/crypto:metadata&gt;
+    </pre></div>
+                  <ul>
+                     <li>
+                        <p>
+                           <code>creation-date</code> is the entry's creation date.
+                           
+                        </p>
+                     </li>
+                     <li>
+                        <p>
+                           <code>type</code> is the entry's type.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1112" id="d4e1112"></a>7.9 The <code>crypto:list-trusted-certificate-authorities</code> function
+               </h3>
+               <p>This function lists the most-trusted certificate authorities in a secure store.</p>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e1120" id="d4e1120"></a>8 Digital Certificates
+            </h2>
+            <p>TBD.</p>
+            <div class="div2">
+               
+               <h3><a name="d4e1125" id="d4e1125"></a>8.1 The <code>crypto:generate-certificate</code> function
+               </h3>
+               <p>This function generates a digital certificate.</p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1138" id="d4e1138"></a>8.2 The <code>crypto:validate-certificate</code> function
+               </h3>
+               <p>This function validates a digital certificate.</p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1146" id="d4e1146"></a>8.3 The <code>crypto:parse-certificate</code> function
+               </h3>
+               <p>This function parses a digital certificate.</p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1154" id="d4e1154"></a>8.4 The <code>crypto:generate-certification-path</code> function
+               </h3>
+               <p>This function validates the certification path for a digital certificate.</p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1163" id="d4e1163"></a>8.5 The <code>crypto:validate-certification-path</code> function
+               </h3>
+               <p>This function validates the certification path for a digital certificate.</p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1171" id="d4e1171"></a>8.6 The <code>crypto:generate-certification-request</code> function
+               </h3>
+               <p>This function generates a certificate signing request, in order to apply for a digital
+                  identity certificate, which is to be issued by a Certificate Authority .
+               </p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1179" id="d4e1179"></a>8.7 The <code>crypto:validate-certification-request</code> function
+               </h3>
+               <p>This function validates a certificate signing request.</p>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="d4e1187" id="d4e1187"></a>8.8 The <code>crypto:validate-certificate-revocation-list</code> function
+               </h3>
+               <p>This function validates a certificate revocation list.</p>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e1195" id="d4e1195"></a>9 Cryptographic Hardware
+            </h2>
+            <p>TBD.</p>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e1200" id="d4e1200"></a>10 Random Sequences Generation
+            </h2>
+            <p>TBD.</p>
+            <div class="div2">
+               
+               <h3><a name="d4e1205" id="d4e1205"></a>10.1 The <code>crypto:generate-random-number</code> function
+               </h3>
+               <p>This function generates a random number that is cryptographically strong.</p>
+            </div>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e1213" id="d4e1213"></a>11 The <code>crypto:options</code> element
+            </h2>
+            <p>The <code>crypto:options</code> element represents the options needed for the functions included in this module.
+               Users will specify for a certain functions only the options mentioned in function's
+               description above. In case a needed option
+               is not mentioned for a function, its default value will be used.
+            </p>
+            <div class="exampleInner"><pre>
+&lt;crypto:options&gt;
+    &lt;crypto:option name = xs:string value? = xs:string&gt;
+        any*
+    &lt;/crypto:option&gt; *
+&lt;/crypto:options&gt; ?
+</pre></div>
+            <div class="div2">
+               
+               <h3><a name="provider-option" id="provider-option"></a>11.1 The <code>provider</code> option
+               </h3>
+               <p>Represents the provider for the current operation. If the provider does not exist,
+                  this is an error <a href="#error.noProvider">[crypto:no-provider]</a>.
+               </p>
+               <div class="exampleInner"><pre>
+&lt;crypto:option name = "provider"
+    value = xs:string/&gt;
+</pre></div>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="canonicalization-algorithm" id="canonicalization-algorithm"></a>11.2 The <code>canonicalization-algorithm</code> option
+               </h3>
+               <p>This option represents the canonicalization algorithm applied to the <code>SignedInfo</code> element prior to performing
+                  signature calculations. The default value is "inclusive-with-comments". If the parameter
+                  specifies an unsupported algorithm,
+                  this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+               </p>
+               <div class="exampleInner"><pre>
+&lt;crypto:option name = "canonicalization-algorithm"
+    value = "exclusive" | "exclusive-with-comments" | "inclusive" | "inclusive-with-comments" /&gt; ?
+</pre></div>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="digest-algorithm" id="digest-algorithm"></a>11.3 The <code>digest-algorithm</code> option
+               </h3>
+               <p>This option represents the digest algorithm to be applied to the signed object. If
+                  the parameter specifies an unsupported
+                  algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+               </p>
+               <div class="exampleInner"><pre>
+&lt;crypto:option name = "digest-algorithm" value = xs:string /&gt;
+</pre></div>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="signature-algorithm" id="signature-algorithm"></a>11.4 The <code>signature-algorithm</code> option
+               </h3>
+               <p>This option represents the algorithm used for signature generation and validation.
+                  If the parameter specifies an
+                  unsupported algorithm, this is an error <a href="#error.unknownAlgorithm">[crypto:unknown-algorithm]</a>.
+               </p>
+               <div class="exampleInner"><pre>
+&lt;crypto:option name = "signature-algorithm" value = xs:string /&gt;
+</pre></div>
+            </div>
+            <div class="div2">
+               
+               <h3><a name="signature-namespace-prefix" id="signature-namespace-prefix"></a>11.5 The <code>signature-namespace-prefix</code> option
+               </h3>
+               <p>This option represents the namespace prefix for signature.</p>
+               <div class="exampleInner"><pre>
+&lt;crypto:option name = "signature-namespace-prefix" value = xs:string /&gt;
+</pre></div>
+            </div>
+         </div>
+      </div>
+      <div class="back">
+         <div class="div1">
+            
+            <h2><a name="d4e1288" id="d4e1288"></a>A References
+            </h2>
+            <dl>
+               <dt class="label"><a name="xpath-30" id="xpath-30"></a>XPath 3.0
+               </dt>
+               <dd>
+                  <a href="http://w3.org/TR/xpath-30/">XML Path Language (XPath) 3.0</a>.
+                  Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft,
+                  13 December 2011.
+               </dd>
+               <dt class="label"><a name="xslt-30" id="xslt-30"></a>XSLT 3.0
+               </dt>
+               <dd>                        
+                  <a href="http://w3.org/TR/xslt-30/">XSL Transformations (XSLT) Version 3.0</a>.
+                  Michael Kay, editor. W3C Working Draft, 10 July 2012.
+               </dd>
+               <dt class="label"><a name="xquery-30" id="xquery-30"></a>XQuery 3.0
+               </dt>
+               <dd>                        
+                  <a href="http://w3.org/TR/xquery-30/">XQuery 3.0: An XML Query Language</a>.
+                  Jonathan Robie, Don Chamberlin, Michael Dyck, John Snelson, editors. W3C Working Draft,
+                  13 December 2011.
+               </dd>
+               <dt class="label"><a name="xpath-functions-30" id="xpath-functions-30"></a>XPath and XQuery Functions and Operators 3.0
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xpath-functions-30/">XPath and XQuery Functions and Operators 3.0</a>.
+                  		Michael Kay, editor. W3C Working Draft, 13 December 2011.
+               </dd>
+               <dt class="label"><a name="xpath-datamodel-30" id="xpath-datamodel-30"></a>XQuery and XPath Data Model 3.0
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xpath-datamodel-30/">XQuery and XPath Data Model 3.0</a>.
+                  		Norman Walsh, Anders Berglund, John Snelson, editors. W3C Working Draft, 13 December
+                  2011.
+               </dd>
+               <dt class="label"><a name="xml-dig-sig-core" id="xml-dig-sig-core"></a>XML Signature
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing
+                     	(Second Edition)</a>. Donald Eastlake, Joseph Reagle, David Solo, Frederick
+                  		Hirsch, Thomas Roessler, editors. Mark Bartel, John Boyer, Barb Fox, Brian LaMacchia,
+                  		Ed Simon, authors. W3C Recommendation, 10 June 2008.
+               </dd>
+               <dt class="label"><a name="xml-dig-sig-xpath-filer20" id="xml-dig-sig-xpath-filer20"></a>XML-Signature XPath Filter 2.0
+               </dt>
+               <dd>
+                  		<a href="http://w3.org/TR/xmldsig-filter2/">XML-Signature XPath Filter 2.0</a>.
+                  		John Boyer, Merlin Hughes, Joseph Reagle, authors/editors. W3C Recommendation, 08
+                  		November 2002.
+               </dd>
+               <dt class="label"><a name="rfc1321" id="rfc1321"></a>RFC 1321
+               </dt>
+               <dd>
+                  		<a href="http://ietf.org/rfc/rfc1321.txt">RFC 1321: The MD5 Message-Digest Algorithm</a>. 
+                  		Ronald L. Rivest, editor. Network Working Group. April 1992.
+               </dd>
+               <dt class="label"><a name="fips-pub-180-1" id="fips-pub-180-1"></a>FIPS PUB 180-1
+               </dt>
+               <dd>
+                  		<a href="http://itl.nist.gov/fipspubs/fip180-1.htm">Secure Hash Standard</a>. 
+                  		U.S. Department Of Commerce, National Institute of Standards and Technology. 1995
+                  April 17.
+               </dd>
+               <dt class="label"><a name="fips-pub-186" id="fips-pub-186"></a>FIPS PUB 186
+               </dt>
+               <dd>
+                  		<a href="http://itl.nist.gov/fipspubs/fip186.htm">Digital Signature Standard (DSS)</a>. 
+                  		U.S. Department Of Commerce, National Institute of Standards and Technology. 1994
+                  May 19.
+               </dd>
+               <dt class="label"><a name="rfc1750" id="rfc1750"></a>RFC 1750
+               </dt>
+               <dd>
+                  		<a href="http://ietf.org/rfc/rfc1750.txt">RFC 1750: Randomness Recommendations for Security</a>. 
+                  		D. Eastlake, 3rd, S. Crocker, J. Schiller, editors. Network Working Group. December
+                  1994.
+               </dd>
+               <dt class="label"><a name="rfc3852" id="rfc3852"></a>RFC 3852
+               </dt>
+               <dd>
+                  		<a href="http://ietf.org/rfc/rfc3852.txt">RFC 3852: Cryptographic Message Syntax (CMS)</a>. 
+                  		R. Housley, editor. Network Working Group. July 2004.
+               </dd>
+               <dt class="label"><a name="rfc5958" id="rfc5958"></a>RFC 5958
+               </dt>
+               <dd>
+                  		<a href="http://tools.ietf.org/html/rfc5958">RFC 5958: Asymmetric Key Packages</a>. 
+                  		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.
+               </dd>
+               <dt class="label"><a name="rfc5959" id="rfc5959"></a>RFC 5959
+               </dt>
+               <dd>
+                  		<a href="http://tools.ietf.org/html/rfc5959">RFC 5959: Algorithms for Asymmetric Key Package Content Type</a>. 
+                  		S. Turner, editor. Internet Engineering Task Force (IETF). August 2010.
+               </dd>
+               <dt class="label"><a name="rfc2104" id="rfc2104"></a>RFC 2104
+               </dt>
+               <dd>
+                  		<a href="http://ietf.org/rfc/rfc2104.txt">RFC 2104: HMAC: Keyed-Hashing for Message
+                     	Authentication</a>. H. Krawczyk, M. Bellare, R. Canetti, editors. Network
+                  		Working Group. February, 1997.
+               </dd>
+               <dt class="label"><a name="rfc2617" id="rfc2617"></a>RFC 2617
+               </dt>
+               <dd>
+                  		<a href="http://ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Authentication: Basic and
+                     	Digest Access Authentication</a>. J. Franks, P. Hallam-Baker, J. Hostetler, S.
+                  		Lawrence, P. Leach, A. Luotonen, L. Stewart. June, 1999.
+               </dd>
+            </dl>
+         </div>
+         <div class="div1">
+            
+            <h2><a name="d4e1373" id="d4e1373"></a>B Summary of Error Conditions
+            </h2>
+            <dl>
+               <dt class="label"><a name="error.unknownAlgorithm" id="error.unknownAlgorithm"></a>crypto:unknown-algorithm
+               </dt>
+               <dd>The specified algorithm is not supported.</dd>
+               <dt class="label"><a name="error.signatureType" id="error.signatureType"></a>crypto:signature-type
+               </dt>
+               <dd>The specified signature type is not supported.</dd>
+               <dt class="label"><a name="error.readKeystore" id="error.readKeystore"></a>crypto:unreadable-keystore
+               </dt>
+               <dd>I/O error while reading keystore, or the password is incorrect.</dd>
+               <dt class="label"><a name="error.deniedKeystore" id="error.deniedKeystore"></a>crypto:denied-keystore
+               </dt>
+               <dd>Permission denied to read keystore.</dd>
+               <dt class="label"><a name="error.keystoreUrl" id="error.keystoreUrl"></a>crypto:keystore-url
+               </dt>
+               <dd>The keystore URL is invalid.</dd>
+               <dt class="label"><a name="error.keystoreType" id="error.keystoreType"></a>crypto:keystore-type
+               </dt>
+               <dd>The keystore type is not supported.</dd>
+               <dt class="label"><a name="error.aliasKey" id="error.aliasKey"></a>crypto:alias-key
+               </dt>
+               <dd>Cannot find key for alias in given keystore.</dd>
+               <dt class="label"><a name="error.sigElem" id="error.sigElem"></a>crypto:signature-element
+               </dt>
+               <dd>Cannot find Signature element.</dd>
+               <dt class="label"><a name="error.noPadding" id="error.noPadding"></a>crypto:inexistent-padding
+               </dt>
+               <dd>No such padding.</dd>
+               <dt class="label"><a name="error.incorrectPadding" id="error.incorrectPadding"></a>crypto:incorrect-padding
+               </dt>
+               <dd>Incorrect padding.</dd>
+               <dt class="label"><a name="error.encType" id="error.encType"></a>crypto:encryption-type
+               </dt>
+               <dd>The encryption type is not supported.</dd>
+               <dt class="label"><a name="error.cryptoKey" id="error.cryptoKey"></a>crypto:ecret-key
+               </dt>
+               <dd>The secret key is invalid.</dd>
+               <dt class="label"><a name="error.blockSize" id="error.blockSize"></a>crypto:block-size
+               </dt>
+               <dd>Illegal block size.</dd>
+               <dt class="label"><a name="error.decryptionType" id="error.decryptionType"></a>crypto:decryption-type
+               </dt>
+               <dd>The decryption type is not supported.</dd>
+               <dt class="label"><a name="error.noProvider" id="error.noProvider"></a>crypto:no-provider
+               </dt>
+               <dd>The provider is not set.</dd>
+               <dt class="label"><a name="error.outputFormat" id="error.outputFormat"></a>crypto.output-format
+               </dt>
+               <dd>The output format is not supported.</dd>
+            </dl>
+         </div>
+      </div><script type="text/javascript">
+					var _gaq = _gaq || [];
+					_gaq.push(['_setAccount', 'UA-43293529-1']);
+					_gaq.push(['_trackPageview']);
+					(function() {
+					var ga = document.createElement('script'); ga.type =
+					'text/javascript';
+					ga.async = true;
+					ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www')
+					+
+					'.google-analytics.com/ga.js';
+					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga,
+					s);
+					})();
+				</script></body>
+</html>
