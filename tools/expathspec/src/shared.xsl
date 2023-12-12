@@ -29,7 +29,7 @@
    <xsl:param name="analytics-id" select="'UA-5463082-2'"/>
    <xsl:param name="offline" select="false()"/>
 
-   <xsl:variable name="base-css"         select="'https://www.w3.org/StyleSheets/TR/base.css'"/>
+   <xsl:variable name="base-css"         select="'//www.w3.org/StyleSheets/TR/base.css'"/>
    <xsl:variable name="base-css-offline" select="'../../process/xmlspec/base.css'"/>
 
    <xsl:variable name="final-spec"   select="/spec/@role eq 'spec'"/>
