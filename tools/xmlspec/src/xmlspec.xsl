@@ -49,7 +49,7 @@
 
      14 August 2001: Hugo Haas <hugo@w3.org>
        - If w3c-doctype is not a W3C TR, do not use a Note style
-         sheet, use <http://www.w3.org/StyleSheets/TR/base.css>
+         sheet, use <https://www.w3.org/StyleSheets/TR/base.css>
          instead.
        - If the other-doctype is "editors-copy", do not use the W3C
          logo and mark the document as such in the status section.
