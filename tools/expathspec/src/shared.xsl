@@ -35,9 +35,9 @@
    <xsl:variable name="final-spec"   select="/spec/@role eq 'spec'"/>
    <xsl:variable name="logo"         select="
        if ( $final-spec ) then
-         'http://expath.org/images/logo-module.png'
-       else 
-         'http://expath.org/images/logo-candidate.png'"/>
+         '//expath.org/images/logo-module.png'
+       else
+         '//expath.org/images/logo-candidate.png'"/>
    <xsl:variable name="logo-offline" select="
        if ( $final-spec ) then
          '../../website/src/images/logo-module.png'
@@ -196,14 +196,14 @@
       <p>
          <xsl:choose>
             <xsl:when test="$is-w3c">
-               <a href="http://w3.org/">
-                  <img src="http://w3.org/Icons/w3c_home"
+               <a href="//w3.org/">
+                  <img src="//w3.org/Icons/w3c_home"
                        alt="W3C" height="48" width="72"/>
                </a>
             </xsl:when>
             <xsl:otherwise>
-               <a href="http://expath.org/">
-                  <img src="http://expath.org/images/expath-logo.png"
+               <a href="//expath.org/">
+                  <img src="//expath.org/images/expath-logo.png"
                        alt="EXPath" height="32" width="32"/>
                </a>
             </xsl:otherwise>
