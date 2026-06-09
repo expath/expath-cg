@@ -131,6 +131,12 @@
         font-weight: bolder;
         font-style: italic;
       }
+      .constants-table th:nth-child(3) {
+        text-align: right;
+      }
+      .constants-table td:nth-child(3) {
+        text-align: right;
+      }
     </style>
   </head>
   <body>
@@ -537,28 +543,169 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
               </td>
             </tr>
             <tr>
-              <td><dfn>status-only</dfn></td>
-              <td><code>xs:boolean</code></td>
-              <td><code>false()</code></td>
+              <td><dfn>parse-response</dfn></td>
+              <td><code>map(xs:string, *)</code></td>
+              <td><code><pre>
+map {
+  "mode": $http:parse-mode-full,
+  "entity": $http:parse-entity-auto
+}</pre></code></td>
               <td>
-                <p>Ignore the headers and body in the HTTP response.</p>
-                <p>This may be used to save resources on parsing the response when the user is
-                  only interested in the response code.</p>
-              </td>
-            </tr>
-            <tr>
-              <td><dfn>parse-response-entity-body</dfn></td>
-              <td><code>xs:boolean</code></td>
-              <td><code>true()</code></td>
-              <td>
-                <p>Indicates if the response bodies will be parsed (see
-                  <a href="#response-entity-body" class="sectionRef"></a>).</p>
-                <p>When set to <code>true()</code>, if <a>status-only</a> is also set to
-                  <code>true()</code>, the error <a>http:invalid-option</a> MUST be raised.</p>
+                <p>Controls the parsing of the HTTP response. Entries for the map are detailed in
+                  <a href="#parse-response-options" class="sectionRef"></a>.</p>
               </td>
             </tr>
           </tbody>
         </table>
+
+        <section id='parse-response-options'>
+          <h4>Parse Response Options</h4>
+          <p>
+            The following <a>parse-response</a> options can be specified to control HTTP response parsing:
+          </p>
+
+          <table class="minborder">
+            <caption>parse-response map entries</caption>
+            <colgroup>
+              <col span="1">
+              <col span="1">
+              <col span="1">
+              <col span="1" class="option-description">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Entry Key</th>
+                <th>XDM Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><dfn>mode</dfn></td>
+                <td><code>xs:string</code></td>
+                <td><code>$http:parse-mode-full</code></td>
+                <td>
+                  <p>Determines the extent to which the HTTP response is parsed before being returned from the function
+                    call as the <a>response map</a>. Parsing of the HTTP response requires processing, so some
+                    implementations may be able to optimize for some of the simpler parsing modes. Valid values are:</p>
+                  <ul>
+                    <li>
+                        <a>$http:parse-mode-raw</a>
+                        <p>No parsing of the HTTP response is performed. The entire response is returned as
+                          <code>xs:base64Binary</code> in the <code>body</code> of the <a>response map</a>, all other
+                          entries of the <a>response map</a> are omitted.</p>
+                    </li>
+                    <li>
+                        <a>$http:parse-mode-status</a>
+                        <p>Only the <a data-cite="rfc1945#section-6.1">status line</a> from the HTTP response is
+                          parsed. Only the <code>http-version</code>, <code>status</code>, and <code>message</code>
+                          entries will be present in the <a>response map</a>.</p>
+                    </li>
+                    <li>
+                        <a>$http:parse-mode-headers</a>
+                        <p>From the HTTP response, only the <a data-cite="rfc1945#section-6.1">status line</a>,
+                          <a data-cite="rfc1945#section-4.3">general headers</a>,
+                          <a data-cite="rfc1945#section-6.2">response headers</a>, and
+                          <a data-cite="rfc1945#section-7.1">entity headers</a> will all be parsed. All fields apart
+                          from the <code>body</code> will be present in the <a>response map</a>.</p>
+                    </li>
+                    <li>
+                      <a>$http:parse-mode-multipart-raw</a>
+                      <p>When the HTTP response is a multipart response, first the
+                        <a data-cite="rfc1945#section-6.1">status line</a>,
+                        <a data-cite="rfc1945#section-4.3">general headers</a>,
+                        <a data-cite="rfc1945#section-6.2">response headers</a>, and
+                        <a data-cite="rfc1945#section-7.1">entity headers</a> of the HTTP response will be parsed,
+                        setting the <code>http-version</code>, <code>status</code>, and <code>message</code> in the
+                        <a>response map</a>.</p>
+                      <p>Secondly the response's entity body will be minimally parsed; Only extracting each entity from
+                        the body in raw form. That is to say, that each multipart entity within the entity body will not
+                        have its headers parsed. The entity will be delivered in its raw form in the <code>body</code>
+                        entry of the part body and the part body's <code>headers</code> entry will be omitted. Each
+                        part body will be set in the <code>body</code> entry of the <a>response map</a>.</p>
+                      <p>If the response is not a multipart response, and this mode is set, then the error
+                        <a>http:parse</a> MUST be raised.</p>
+                    </li>
+                    <li>
+                      <a>$http:parse-mode-multipart-headers</a>
+                      <p>When the HTTP response is a multipart response, first the
+                        <a data-cite="rfc1945#section-6.1">status line</a>,
+                        <a data-cite="rfc1945#section-4.3">general headers</a>,
+                        <a data-cite="rfc1945#section-6.2">response headers</a>, and
+                        <a data-cite="rfc1945#section-7.1">entity headers</a> of the HTTP response will be parsed,
+                        setting the <code>http-version</code>, <code>status</code>, and <code>message</code> in the
+                        <a>response map</a>.</p>
+                      <p>Secondly the response's entity body will only be minimally parsed; Only extracting the headers
+                        of each entity within the body. That is to say, that each multipart entity within the entity
+                        body will have its body ignored. Only the <code>headers</code> of the part body entry will be
+                        set, and each part body will be set in the <code>body</code> entry of the <a>response map</a>.</p>
+                      <p>If the response is not a multipart response, and this mode is set, then the error
+                        <a>http:parse</a> MUST be raised.</p>
+                    </li>
+                    <li>
+                      <a>$http:parse-mode-full</a>
+                      <p>The entire HTTP response is parsed automatically according to the rules in
+                        <a href="#implicit-response-parsing" class="sectionRef"></a>, and all the entries in the <a>response
+                          map</a> are set (apart from the <code>body</code> entry when the HTTP response has no body).</p>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><dfn>entity</dfn></td>
+                <td><code>xs:string+</code></td>
+                <td><code>$http:parse-entity-auto</code></td>
+                <td>
+                  <p>Overrides the implicit automatic parsing defined in
+                    <a href="#implicit-response-parsing" class="sectionRef"></a>.</p>
+                  <p>If this option is specified and the <a>mode</a> is not set to <code>$http:parse-mode-full</code>,
+                  then the error <code>http:invalid-option</code> MUST be raised.</p>
+                  <p>Where a multipart response is expected, a sequence of values may be specified.
+                    If there are less values than multipart parts, then the last value will apply to the remaining
+                    multipart parts.</p>
+                  <p>Valid values are:</p>
+                  <ul>
+                    <li>
+                      <a>$http:parse-entity-auto</a>
+                      <p>Determines the parser based on the the rules defined in
+                        <a href="#implicit-response-parsing" class="sectionRef"></a>.</p>
+                    </li>
+                    <li>
+                      <a>$http:parse-entity-xml</a>
+                      <p>The entity will be parsed as XML. The result is a <code>document-node()</code>.</p>
+                    </li>
+                    <li>
+                      <a>$http:parse-entity-html-to-xml</a>
+                      <p>The entity will be parsed using a HTML parser which can produce XML output.
+                        The result is a <code>document-node()</code>.</p>
+                      <p>Implementations are not required to support this option. If an implementation does not support
+                        this it MUST raise the error <a>http:invalid-option</a>.</p>
+                    </li>
+                    <li>
+                      <a>$http:parse-entity-json</a>
+                      <p>The entity will be parsed using a JSON parser. The result is either a <code>map(*)</code>,
+                        <code>array(*)</code>, <code>xs:string</code>, <code>xs:double</code>, <code>xs:boolean</code>,
+                          or <code>empty-sequence()</code>.</p>
+                    </li>
+                    <li>
+                      <a>$http:parse-entity-text</a>
+                      <p>The entity will be parsed as text. The result is an <code>xs:string</code>.</p>
+                    </li>
+                    <li>
+                      <a>$http:parse-entity-raw</a>
+                      <p>The entity will be extracted as is. The result is an <code>xs:base64Binary</code>.</p>
+                    </li>
+                    <li>
+                      <a>$http:parse-entity-none</a>
+                      <p>The entity will be not be parsed. The result is an <code>empty-sequence()</code>.</p>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
 
         <pre class="example" title="GET request with User-Agent header, skip body in response">
           http:get('http://expath.org/xyz', map {
@@ -731,7 +878,8 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
       <p>
         When the HTTP request is made to the server indicated by the request <a>$uri</a>, if the
         server processes the request and responds to the client within the <a>timeout</a> then the
-        HTTP response from the server is returned as the result of the function as a map.</p>
+        HTTP response from the server is returned as the result of the function as a map, this is  known as the
+        <a>Response Map</a>.</p>
       <p>
         If the server fails to respond to an HTTP request within the <a>timeout</a> then the error
         <a>http:timeout</a> MUST be raised. If the HTTP request cannot be made to the server then
@@ -741,7 +889,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
       <section id="response-map">
         <h3>The Response Map</h3>
         <p>
-          The HTTP response map contains the following entries. Optional entries are entirely absent
+          The HTTP <dfn>Response Map</dfn> contains the following entries. Optional entries are entirely absent
           from the map if the HTTP response does not contain the corresponding data, for example no body is returned, there will be no <code>body</code> entry.
         </p>
 
@@ -750,14 +898,12 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
           <colgroup>
             <col span="1">
             <col span="1">
-            <col span="1">
             <col span="1" class="option-description">
           </colgroup>
           <thead>
             <tr>
               <th>Response Key</th>
               <th>XDM Type</th>
-              <th>Optional</th>
               <th>Description</th>
             </tr>
           </thead>
@@ -765,7 +911,6 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
             <tr>
               <td><span class="fake-dfn">http-version</span></td>
               <td><code>xs:string</code></td>
-              <td>No</td>
               <td>
                 <p>The HTTP Version of the response. This may differ from the
                   <a href="#request-http-version">http-version</a> requested!</p>
@@ -774,7 +919,6 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
             <tr>
               <td><span class="fake-dfn">status</span></td>
               <td><code>xs:string</code></td>
-              <td>No</td>
               <td>
                 <p>The HTTP status code.</p>
               </td>
@@ -782,7 +926,6 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
             <tr>
               <td><span class="fake-dfn">message</span></td>
               <td><code>xs:string</code></td>
-              <td>No</td>
               <td>
                 <p>HTTP reason phrase.</p>
               </td>
@@ -790,13 +933,11 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
             <tr>
               <td><span class="fake-dfn">headers</span></td>
               <td><code>map(xs:string, xs:string)</code></td>
-              <td>Yes</td>
               <td>HTTP response header fields.</td>
             </tr>
             <tr>
               <td><span class="fake-dfn">body</span></td>
               <td><code>item()+</code></td>
-              <td>Yes</td>
               <td>HTTP response body.</td>
             </tr>
           </tbody>
@@ -842,7 +983,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         <p>
           For those cases where the server is not responding faithfully to the request, or the developer
           needs a greater level of control over the response, the implicit parsing of the response entity
-          body can be disabled via the <a>parse-response-entity-body</a> request option,
+          body can be disabled via the <a>parse-response</a> request option,
           see <a href="#explicit-response-parsing" class="sectionRef"></a>.
         </p>
 
@@ -892,6 +1033,7 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
                 <td><code>document-node()</code></td>
                 <td>
                   <p>Parsed as XML.</p>
+                  <p><b>NOTE</b>: this will logically also include XHTML with the mimetype <code>application/xhtml+xml</code>.
                 </td>
               </tr>
               <tr>
@@ -955,13 +1097,11 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
         <section id="explicit-response-parsing">
           <h4>Explicit Parsing</h4>
           <p>
-            Implicit parsing of the response body can be disabled via the <a>parse-response-entity-body</a>
-            request option. All bodies of single and multipart responses will be returned as binary items
-            of type <code>xs:base64Binary</code>, and the values can be processed (stored, parsed,
-            forwarded) in a second step.
+            Implicit parsing of the response body can be disabled via the <a>parse-response</a>
+            request option, which allows the parsing to be explicitly specified.
           </p>
 
-          <pre class="example" title="XQuery example for parsing response bodies">
+          <pre class="example" title="XQuery example for parsing raw response body">
             (:~
              : Parses a response and returns the parsed body values.
              : @param $response response (top-level, multipart)
@@ -989,13 +1129,109 @@ http:send($uri as xs:string, $method as xs:string, $body as item()*, $options as
 
             local:parse(
               http:get('http://expath.org/xyz',
-                  map { 'parse-response-entity-body': false() })
+                  map { 'parse-response':
+                      map {
+                          'entity': $http:parse-entity-raw()
+                      }
+                  }
+              )
             )
           </pre>
         </section>
 
       </section>
 
+    </section>
+
+    <section id='constants'>
+      <h2>Constants</h2>
+      <p>This section defines the constants which are defined by the HTTP module. Each constant is
+      defined as a variable. The purpose of these constants is to reduce developer error where otherwise
+      common strings or values would have to be reproduced.</p>
+
+      <table class="minborder constants-table">
+        <caption>Constants</caption>
+        <colgroup>
+          <col span="1">
+          <col span="1">
+          <col span="1">
+          <col span="1" class="option-description">
+        </colgroup>
+        <thead>
+        <tr>
+          <th>Variable</th>
+          <th>XDM Type</th>
+          <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><dfn>$http:parse-entity-auto</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>auto</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-entity-xml</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>xml</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-entity-html-to-xml</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>html2xml</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-entity-json</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>json</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-entity-text</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>text</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-entity-raw</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>raw</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-entity-none</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>none</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-mode-raw</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>raw</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-mode-status</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>status</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-mode-headers</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>headers</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-mode-multipart-raw</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>multipart-raw</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-mode-multipart-headers</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>multipart-headers</code></td>
+          </tr>
+          <tr>
+            <td><dfn>$http:parse-mode-full</dfn></td>
+            <td><code>xs:string</code></td>
+            <td><code>full</code></td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
     <section id='errors'>
