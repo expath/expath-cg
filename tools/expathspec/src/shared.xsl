@@ -29,15 +29,15 @@
    <xsl:param name="analytics-id" select="'UA-5463082-2'"/>
    <xsl:param name="offline" select="false()"/>
 
-   <xsl:variable name="base-css"         select="'https://www.w3.org/StyleSheets/TR/base.css'"/>
+   <xsl:variable name="base-css"         select="'//www.w3.org/StyleSheets/TR/base.css'"/>
    <xsl:variable name="base-css-offline" select="'../../process/xmlspec/base.css'"/>
 
    <xsl:variable name="final-spec"   select="/spec/@role eq 'spec'"/>
    <xsl:variable name="logo"         select="
        if ( $final-spec ) then
-         'https://expath.org/images/logo-module.png'
+         '//expath.org/images/logo-module.png'
        else
-         'https://expath.org/images/logo-candidate.png'"/>
+         '//expath.org/images/logo-candidate.png'"/>
    <xsl:variable name="logo-offline" select="
        if ( $final-spec ) then
          '../../website/src/images/logo-module.png'
@@ -196,14 +196,14 @@
       <p>
          <xsl:choose>
             <xsl:when test="$is-w3c">
-               <a href="https://w3.org/">
-                  <img src="https://w3.org/Icons/w3c_home"
+               <a href="//w3.org/">
+                  <img src="//w3.org/Icons/w3c_home"
                        alt="W3C" height="48" width="72"/>
                </a>
             </xsl:when>
             <xsl:otherwise>
-               <a href="https://expath.org/">
-                  <img src="https://expath.org/images/expath-logo.png"
+               <a href="//expath.org/">
+                  <img src="//expath.org/images/expath-logo.png"
                        alt="EXPath" height="32" width="32"/>
                </a>
             </xsl:otherwise>
